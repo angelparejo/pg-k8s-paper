@@ -37,10 +37,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-be788d54854417ccf85972ce5a1e216a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb133401eb1928132202f6efeefbc5fe.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-fdd259eaf9296a602f9f2594b91304b4.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb133401eb1928132202f6efeefbc5fe.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-4a343adb3e348b0dfb90aadcb4eb116e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-45f38feec4c6d3ad185969c2b5aa4b3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-b9862f91d0a1d344de8539a32e8a5ff2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-45f38feec4c6d3ad185969c2b5aa4b3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -73,7 +77,169 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -99,20 +265,28 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">User Guide</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./agents.html"> 
-<span class="menu-text">Agents</span></a>
+    <a class="nav-link active" href="./reference.html" aria-current="page"> 
+<span class="menu-text">Reference</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./architecture.html"> 
 <span class="menu-text">Architecture</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./customization.html"> 
-<span class="menu-text">Customization</span></a>
+    <a class="nav-link" href="./agents.html"> 
+<span class="menu-text">Agents</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./reference.html" aria-current="page"> 
-<span class="menu-text">Reference</span></a>
+    <a class="nav-link" href="./rules.html"> 
+<span class="menu-text">Rules</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./hooks.html"> 
+<span class="menu-text">Hooks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./customization.html"> 
+<span class="menu-text">Customization</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./changelog.html"> 
@@ -128,6 +302,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -142,6 +317,8 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#quick-lookup" id="toc-quick-lookup" class="nav-link active" data-scroll-target="#quick-lookup">Quick Lookup</a></li>
+  <li><a href="#detailed-skill-reference" id="toc-detailed-skill-reference" class="nav-link" data-scroll-target="#detailed-skill-reference">Detailed Skill Reference</a>
+  <ul class="collapse">
   <li><a href="#new-project" id="toc-new-project" class="nav-link" data-scroll-target="#new-project"><code>/new-project</code></a></li>
   <li><a href="#discover" id="toc-discover" class="nav-link" data-scroll-target="#discover"><code>/discover</code></a></li>
   <li><a href="#strategize" id="toc-strategize" class="nav-link" data-scroll-target="#strategize"><code>/strategize</code></a></li>
@@ -152,16 +329,21 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#talk" id="toc-talk" class="nav-link" data-scroll-target="#talk"><code>/talk</code></a></li>
   <li><a href="#submit" id="toc-submit" class="nav-link" data-scroll-target="#submit"><code>/submit</code></a></li>
   <li><a href="#tools" id="toc-tools" class="nav-link" data-scroll-target="#tools"><code>/tools</code></a></li>
+  <li><a href="#freeze" id="toc-freeze" class="nav-link" data-scroll-target="#freeze"><code>/freeze</code></a></li>
+  <li><a href="#careful" id="toc-careful" class="nav-link" data-scroll-target="#careful"><code>/careful</code></a></li>
+  <li><a href="#checkpoint" id="toc-checkpoint" class="nav-link" data-scroll-target="#checkpoint"><code>/checkpoint</code></a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Command Reference</h1>
-<p class="subtitle lead">Every Command, Flag, and Subcommand</p>
+<p class="subtitle lead">Every command, what it dispatches, and what it produces</p>
 </div>
 
 
@@ -201,13 +383,13 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="even">
 <td><code>/discover</code></td>
-<td><code>--lit</code>, <code>--data</code>, <code>--ideate</code></td>
-<td>Discovery phase: interview, literature, data</td>
+<td><code>interview</code>, <code>lit</code>, <code>data</code>, <code>ideate</code></td>
+<td>Discovery phase: interview, literature, data, ideation</td>
 </tr>
 <tr class="odd">
 <td><code>/strategize</code></td>
-<td><code>--pap</code>, <code>theory</code></td>
-<td>Empirical strategy (4 paper types), pre-analysis plan, or formal theory section</td>
+<td><code>strategy</code>, <code>pap</code>, <code>pap interactive</code>, <code>theory</code></td>
+<td>Empirical strategy, pre-analysis plan, or formal theory section</td>
 </tr>
 <tr class="even">
 <td><code>/analyze [dataset]</code></td>
@@ -216,8 +398,8 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="odd">
 <td><code>/write [section]</code></td>
-<td><code>--humanize</code>, <code>style-guide</code></td>
-<td>Draft sections, strip AI patterns, or extract personal voice from prior papers</td>
+<td><code>intro</code>, <code>strategy</code>, <code>results</code>, <code>conclusion</code>, <code>data</code>, <code>model</code>, <code>abstract</code>, <code>full</code>, <code>humanize</code>, <code>style-guide</code></td>
+<td>Draft sections, strip AI patterns, or extract personal voice</td>
 </tr>
 <tr class="even">
 <td><code>/review [file]</code></td>
@@ -231,282 +413,672 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="even">
 <td><code>/talk</code></td>
-<td><code>create</code>, <code>audit</code>, <code>compile</code></td>
-<td>Beamer presentations</td>
+<td><code>create</code>, <code>audit</code>, <code>compile</code>; formats: <code>job-market</code>, <code>seminar</code>, <code>short</code>, <code>lightning</code>; <code>--beamer</code></td>
+<td>Presentations (Quarto RevealJS default, Beamer opt-in)</td>
 </tr>
 <tr class="odd">
 <td><code>/submit</code></td>
-<td><code>--target</code>, <code>--package</code>, <code>--audit</code>, <code>--final</code></td>
+<td><code>target</code>, <code>package</code>, <code>audit</code>, <code>final</code></td>
 <td>Submission pipeline</td>
 </tr>
 <tr class="even">
 <td><code>/tools</code></td>
-<td><code>commit</code>, <code>compile</code>, <code>validate-bib</code>, <code>journal</code>, <code>context</code>, <code>deploy</code>, <code>learn</code>, <code>lint</code>, <code>upgrade</code></td>
+<td><code>commit</code>, <code>compile</code>, <code>validate-bib</code>, <code>lint</code>, <code>journal</code>, <code>context</code>, <code>deploy</code>, <code>learn</code>, <code>dashboard</code>, <code>upgrade</code></td>
 <td>Utilities</td>
 </tr>
 <tr class="odd">
 <td><code>/checkpoint</code></td>
 <td><code>--auto</code>, <code>--memory-only</code>, <code>--scaffold-only</code>, <code>--dry-run</code>, <code>--setup-obsidian</code></td>
-<td>Session handoff: memory + SESSION_REPORT + research journal (+ Obsidian if configured)</td>
+<td>Session handoff: memory + logs + Obsidian</td>
+</tr>
+<tr class="even">
+<td><code>/freeze [dirs]</code></td>
+<td><code>off</code></td>
+<td>Block edits outside specified directories for this session</td>
+</tr>
+<tr class="odd">
+<td><code>/careful</code></td>
+<td><code>off</code></td>
+<td>Block destructive bash commands for this session</td>
 </tr>
 </tbody>
 </table>
 <hr>
 </section>
-<section id="new-project" class="level1">
-<h1><code>/new-project</code></h1>
-<pre><code>/new-project [topic]</code></pre>
-<p>Launches the full orchestrated pipeline. Claude conducts a research interview, builds a spec, then runs Discovery → Strategy → Execution → Peer Review → Submission autonomously.</p>
-<p><strong>Agents:</strong> All (orchestrator-managed) <strong>Output:</strong> Complete project scaffold + research spec + domain profile</p>
-<hr>
-</section>
-<section id="discover" class="level1">
-<h1><code>/discover</code></h1>
-<pre><code>/discover                       Interactive research interview (default)
-/discover --lit [topic]         Literature review
-/discover --data [question]     Data source discovery
-/discover --ideate [topic]      Research question generation</code></pre>
+<section id="detailed-skill-reference" class="level1">
+<h1>Detailed Skill Reference</h1>
+<section id="new-project" class="level2">
+<h2 class="anchored" data-anchor-id="new-project"><code>/new-project</code></h2>
+<p><strong>Syntax:</strong> <code>/new-project [topic]</code> or <code>/new-project interactive</code></p>
+<p><strong>What happens:</strong></p>
+<ol type="1">
+<li>Enter plan mode. Create the folder scaffold (<code>data/</code>, <code>scripts/</code>, <code>paper/</code>, <code>quality_reports/</code>). Draft a high-level plan and save it to <code>quality_reports/plans/</code>. Wait for user approval.</li>
+<li>Run <code>/discover interview</code> to produce the research specification and domain profile.</li>
+<li>Run <code>/discover lit</code> and <code>/discover data</code> in parallel — librarian and explorer agents search for literature and datasets.</li>
+<li>Run <code>/strategize</code> to design the identification strategy. If the paper type calls for formal theory, also run <code>/strategize theory</code>.</li>
+<li>Run <code>/analyze</code> and <code>/write</code> to implement the strategy in code and draft the manuscript.</li>
+<li>Run <code>/review --all</code> and <code>/review --peer</code> for quality scoring and simulated peer review.</li>
+<li>Optionally run <code>/submit</code> for journal targeting and replication packaging.</li>
+</ol>
+<p><strong>Modes / Flags:</strong> None. This skill is always orchestrated through the full pipeline.</p>
+<p><strong>Agents dispatched:</strong></p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 27%">
-<col style="width: 36%">
-<col style="width: 36%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Mode</th>
-<th>Agents</th>
-<th>Output</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><em>(default)</em></td>
-<td>Direct conversation</td>
-<td>Research spec + domain profile</td>
-</tr>
-<tr class="even">
-<td><code>--lit</code></td>
-<td>Librarian → librarian-critic</td>
-<td>Annotated bibliography + BibTeX + frontier map</td>
-</tr>
-<tr class="odd">
-<td><code>--data</code></td>
-<td>Explorer → explorer-critic</td>
-<td>Ranked data sources with feasibility grades (A/B/C/D)</td>
-</tr>
-<tr class="even">
-<td><code>--ideate</code></td>
-<td>Direct generation</td>
-<td>3–5 research questions with strategies</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Saves to:</strong> <code>quality_reports/</code></p>
-<hr>
-</section>
-<section id="strategize" class="level1">
-<h1><code>/strategize</code></h1>
-<pre><code>/strategize [question]          Design identification strategy
-/strategize --pap [spec]        Draft pre-analysis plan (AEA/OSF/EGAP format)</code></pre>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 27%">
-<col style="width: 36%">
-<col style="width: 36%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Mode</th>
-<th>Agents</th>
-<th>Output</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><em>(default)</em></td>
-<td>Strategist → strategist-critic</td>
-<td>Strategy memo (paper-type aware) + robustness plan + falsification tests</td>
-</tr>
-<tr class="even">
-<td><code>--pap</code></td>
-<td>Strategist (PAP mode)</td>
-<td>Pre-analysis plan in AEA/OSF/EGAP format <em>(primarily experimental/RCT)</em></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Saves to:</strong> <code>quality_reports/strategy_memo_[topic].md</code></p>
-<hr>
-</section>
-<section id="analyze" class="level1">
-<h1><code>/analyze</code></h1>
-<pre><code>/analyze [dataset path or goal]
-/analyze --dual r,python        Parallel analysis in two languages</code></pre>
-<p>End-to-end analysis: data cleaning → main specification → robustness → publication tables and figures. Reads the strategy memo (if it exists) and implements it faithfully.</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 27%">
-<col style="width: 36%">
-<col style="width: 36%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Mode</th>
-<th>Agents</th>
-<th>Output</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><em>(default)</em></td>
-<td>Data-engineer + Coder → coder-critic</td>
-<td>Scripts, tables, figures in one language</td>
-</tr>
-<tr class="even">
-<td><code>--dual [langs]</code></td>
-<td>Data-engineer + 2 Coders in parallel → 2 coder-critics + comparison</td>
-<td>Same outputs in both languages + convergence report</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Languages:</strong> R, Python, Julia <strong>Saves to:</strong> <code>scripts/</code>, <code>paper/tables/</code>, <code>paper/figures/</code>, <code>quality_reports/cross_language_comparison.md</code></p>
-<p><strong>Cross-language replication:</strong> When <code>--dual</code> is used, both implementations run the same specification independently. Results are compared against tolerances in <code>domain-profile.md</code>. Divergences are flagged. Inspired by Scott Cunningham’s approach: if two independent implementations agree, neither has a bug.</p>
-<hr>
-</section>
-<section id="write" class="level1">
-<h1><code>/write</code></h1>
-<pre><code>/write intro                    Introduction (paper-type-specific moves)
-/write strategy                 Empirical strategy / Model (design-specific)
-/write results                  Results (narration by output type)
-/write conclusion               Conclusion (type-specific ending)
-/write data                     Data section (expanded for descriptive papers)
-/write model                    Model section (structural / theory+empirics only)
-/write abstract                 Abstract (100-150 words)
-/write full                     All sections
-/write --humanize [file]        Strip AI writing patterns only</code></pre>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 28%">
 <col style="width: 33%">
 <col style="width: 38%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Phase</th>
+<th>Agents</th>
+<th>Gate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Discovery</td>
+<td>Direct interview; librarian + librarian-critic; explorer + explorer-critic</td>
+<td>Research spec exists</td>
+</tr>
+<tr class="even">
+<td>Strategy</td>
+<td>Strategist + strategist-critic; optionally theorist + theorist-critic</td>
+<td>Score &gt;= 80</td>
+</tr>
+<tr class="odd">
+<td>Execution</td>
+<td>Data-engineer + coder + coder-critic; writer</td>
+<td>Score &gt;= 80</td>
+</tr>
+<tr class="even">
+<td>Peer Review</td>
+<td>Editor + domain-referee + methods-referee; all critics in parallel</td>
+<td>Editorial decision</td>
+</tr>
+<tr class="odd">
+<td>Submission</td>
+<td>Coder + verifier; orchestrator</td>
+<td>Score &gt;= 95, all components &gt;= 80</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output artifacts:</strong></p>
+<ul>
+<li><code>quality_reports/research_spec_[topic].md</code></li>
+<li><code>.claude/references/domain-profile.md</code></li>
+<li><code>quality_reports/strategy_memo_[topic].md</code></li>
+<li><code>scripts/R/</code> (analysis scripts)</li>
+<li><code>paper/sections/</code> (LaTeX drafts)</li>
+<li><code>quality_reports/reviews/</code> (referee reports)</li>
+</ul>
+<p><strong>What to do next:</strong> The pipeline pauses at each phase transition for your approval. Review the research spec, strategy memo, analysis results, and referee feedback at each gate before proceeding.</p>
+<hr>
+</section>
+<section id="discover" class="level2">
+<h2 class="anchored" data-anchor-id="discover"><code>/discover</code></h2>
+<p><strong>Syntax:</strong> <code>/discover [mode] [topic or query]</code></p>
+<p><strong>What happens:</strong></p>
+<ol type="1">
+<li>Detect mode from arguments: <code>interview</code> (default), <code>lit</code>, <code>data</code>, or <code>ideate</code>.</li>
+<li>Read <code>.claude/references/domain-profile.md</code> for field calibration.</li>
+<li>Dispatch the appropriate agent(s).</li>
+<li>Run the paired critic (for <code>lit</code> and <code>data</code> modes).</li>
+<li>Save outputs to <code>quality_reports/</code>.</li>
+</ol>
+<p><strong>Modes / Flags:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>interview</code> (default)</td>
+<td>Structured 5–8 exchange conversation to formalize a research idea</td>
+</tr>
+<tr class="even">
+<td><code>lit [topic]</code></td>
+<td>Literature search with citation chains, proximity scores (1–5), and critic review</td>
+</tr>
+<tr class="odd">
+<td><code>data [question]</code></td>
+<td>Dataset discovery with feasibility grades (A/B/C/D) and 5-point critique</td>
+</tr>
+<tr class="even">
+<td><code>ideate [topic]</code></td>
+<td>Generate 3–5 ranked research questions with strategies</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Agents dispatched:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 29%">
+<col style="width: 48%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>Agents</th>
+<th>Output Path</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>interview</code></td>
+<td>Direct conversation (no agent dispatch)</td>
+<td><code>quality_reports/research_spec_[topic].md</code>, <code>.claude/references/domain-profile.md</code>, <code>quality_reports/decisions/discovery_[topic].md</code></td>
+</tr>
+<tr class="even">
+<td><code>lit</code></td>
+<td>Librarian + librarian-critic</td>
+<td><code>quality_reports/lit_review_[topic].md</code> + HTML report + BibTeX entries</td>
+</tr>
+<tr class="odd">
+<td><code>data</code></td>
+<td>Explorer + explorer-critic</td>
+<td><code>quality_reports/data_exploration_[topic].md</code></td>
+</tr>
+<tr class="even">
+<td><code>ideate</code></td>
+<td>Direct generation</td>
+<td><code>quality_reports/research_ideas_[topic].md</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output artifacts:</strong></p>
+<ul>
+<li><strong>Interview:</strong> Research specification, domain profile (if still template), decision record documenting rejected alternatives.</li>
+<li><strong>Literature:</strong> Annotated bibliography with proximity scores, BibTeX entries, frontier map, interactive HTML report. Unverified citations marked <code>% UNVERIFIED</code>.</li>
+<li><strong>Data:</strong> Ranked dataset list with feasibility grades. Each dataset assessed on measurement validity, sample selection, external validity, identification compatibility, and known issues. Includes a rejection table for discarded datasets.</li>
+<li><strong>Ideation:</strong> 3–5 research questions ranked by feasibility and novelty, each with a candidate identification strategy.</li>
+</ul>
+<p><strong>What to do next:</strong> After <code>interview</code>, review the research spec and confirm it matches your vision. After <code>lit</code> or <code>data</code>, check coverage gaps flagged by the critic. Proceed to <code>/strategize</code> once discovery outputs exist.</p>
+<hr>
+</section>
+<section id="strategize" class="level2">
+<h2 class="anchored" data-anchor-id="strategize"><code>/strategize</code></h2>
+<p><strong>Syntax:</strong> <code>/strategize [mode] [question or spec path]</code></p>
+<p><strong>What happens:</strong></p>
+<ol type="1">
+<li>Read discovery outputs (research spec, literature review, data assessment) and domain profile.</li>
+<li>Output a mandatory Pre-Strategy Report (or Pre-Theory Report) proving inputs were loaded.</li>
+<li>Dispatch the creator agent (Strategist or Theorist).</li>
+<li>Dispatch the paired critic for adversarial review (4 sequential phases, early-stop on critical gaps).</li>
+<li>Iterate up to 3 rounds if critical issues found.</li>
+<li>Save the memo, review, and decision record.</li>
+</ol>
+<p><strong>Modes / Flags:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>strategy</code> (default)</td>
+<td>Design identification strategy for any of the 4 paper types</td>
+</tr>
+<tr class="even">
+<td><code>pap [spec]</code></td>
+<td>Draft pre-analysis plan in AEA/OSF/EGAP format</td>
+</tr>
+<tr class="odd">
+<td><code>pap interactive</code></td>
+<td>Guided 6-question PAP interview, then draft</td>
+</tr>
+<tr class="even">
+<td><code>theory [target]</code></td>
+<td>Formal theory section: assumptions, theorems, proofs</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Agents dispatched:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 29%">
+<col style="width: 48%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>Agents</th>
+<th>Output Path</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>strategy</code></td>
+<td>Strategist + strategist-critic</td>
+<td><code>quality_reports/strategy_memo_[topic].md</code>, <code>quality_reports/strategy_memo_[topic]_review.md</code>, <code>quality_reports/decisions/strategy_[topic].md</code></td>
+</tr>
+<tr class="even">
+<td><code>pap</code></td>
+<td>Strategist (PAP mode); optionally strategist-critic</td>
+<td><code>quality_reports/pre_analysis_plan_[topic].md</code></td>
+</tr>
+<tr class="odd">
+<td><code>theory</code></td>
+<td>Theorist + theorist-critic</td>
+<td><code>quality_reports/theory/[topic]/theory_memo.md</code>, <code>assumptions.tex</code>, <code>results.tex</code>, <code>proofs.tex</code>, <code>notation_glossary.md</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output artifacts:</strong></p>
+<ul>
+<li><strong>Strategy:</strong> Strategy memo (design choice, estimand, assumptions, pseudo-code, robustness plan, falsification tests, top 5 referee objections). Decision record with rejected alternatives and invalidation conditions. HTML report.</li>
+<li><strong>PAP:</strong> Full pre-analysis plan with 10 standard sections. Platform-adapted for AEA/OSF/EGAP. ASSUMED placeholders flagged with a pre-registration checklist. Adapted for observational studies when applicable.</li>
+<li><strong>Theory:</strong> Theory memo, LaTeX files for assumptions/results/proofs, notation glossary. Decision record linking each theorem to its empirical claim. Theorist-critic score contributes 20% to weighted aggregate when present.</li>
+</ul>
+<p><strong>What to do next:</strong> Review the strategy memo carefully — it becomes the contract the Coder implements. Confirm the identification strategy, assumptions, and robustness plan. For theory mode, verify proof correctness and assumption minimality before proceeding.</p>
+<hr>
+</section>
+<section id="analyze" class="level2">
+<h2 class="anchored" data-anchor-id="analyze"><code>/analyze</code></h2>
+<p><strong>Syntax:</strong> <code>/analyze [dataset path or goal]</code> or <code>/analyze --dual r,python</code></p>
+<p><strong>What happens:</strong></p>
+<ol type="1">
+<li>Output a mandatory Pre-Code Report proving the strategy memo, domain profile, and naming map were loaded.</li>
+<li>If raw data provided, dispatch Data-engineer for cleaning, variable construction, and summary statistics.</li>
+<li>Dispatch Coder for the main specification, robustness checks, and publication-ready output.</li>
+<li>Dispatch coder-critic for the full 12-category review.</li>
+<li>Iterate up to 3 rounds on critical or major issues.</li>
+<li>Present results summary with estimates, scripts, outputs, and code review score.</li>
+</ol>
+<p><strong>Modes / Flags:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>default</td>
+<td>Single-language analysis (R by default, or as declared in <code>CLAUDE.md</code>)</td>
+</tr>
+<tr class="even">
+<td><code>--dual [lang1,lang2]</code></td>
+<td>Parallel analysis in two languages with cross-language comparison</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Agents dispatched:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 29%">
+<col style="width: 48%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>Agents</th>
+<th>Output Path</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>default</td>
+<td>Data-engineer + Coder + coder-critic</td>
+<td><code>scripts/R/</code>, <code>paper/tables/</code>, <code>paper/figures/</code>, <code>quality_reports/results_summary.md</code></td>
+</tr>
+<tr class="even">
+<td><code>--dual</code></td>
+<td>Data-engineer + 2 Coders (parallel) + 2 coder-critics + comparison</td>
+<td>Same as above for both languages + <code>quality_reports/cross_language_comparison.md</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output artifacts:</strong></p>
+<ul>
+<li>Numbered scripts in <code>scripts/R/</code> (or language-appropriate directory) following the standard layout: <code>00_master</code>, <code>01_setup</code>, <code>02_data_preparation</code>, <code>03_descriptive</code>, <code>04_estimation</code>, <code>05_robustness</code>, <code>06_figures</code>, <code>07_tables</code>.</li>
+<li>Publication-ready tables (<code>.tex</code>) in <code>paper/tables/</code>. Bare <code>tabular</code> environments only — no <code>\begin{table}</code> wrappers.</li>
+<li>Publication-ready figures (<code>.pdf</code>) in <code>paper/figures/</code>. No titles inside figures.</li>
+<li><code>results_summary.md</code> with all point estimates, standard errors, sample sizes, and anomaly flags. This is the mandatory handoff artifact to the Writer.</li>
+<li><code>.rds</code> files for every computed object (model fits, cleaned data, summary statistics).</li>
+<li>Code review report in <code>quality_reports/</code>.</li>
+</ul>
+<p><strong>What to do next:</strong> Read <code>results_summary.md</code> to understand the findings. Check that estimates align with your expectations. Review the code review report for any unresolved issues. Proceed to <code>/write</code> to draft the paper.</p>
+<hr>
+</section>
+<section id="write" class="level2">
+<h2 class="anchored" data-anchor-id="write"><code>/write</code></h2>
+<p><strong>Syntax:</strong> <code>/write [section or mode] [file path]</code></p>
+<p><strong>What happens:</strong></p>
+<ol type="1">
+<li>Read all available context: existing draft, research spec, strategy memo, domain profile, bibliography, generated tables and figures, <code>results_summary.md</code>.</li>
+<li>Detect paper type (reduced-form, structural, theory+empirics, descriptive) from the strategy memo.</li>
+<li>Load personal style guide from <code>.claude/references/personal-style-guide.md</code> if it exists.</li>
+<li>Dispatch Writer with type-specific section templates and paragraph-level argument moves.</li>
+<li>Run cleanup pass to strip AI writing patterns.</li>
+<li>Present through drafting gates, pausing for approval.</li>
+</ol>
+<p><strong>Modes / Flags:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>intro</code></td>
+<td>Introduction with type-specific moves (preview, result, contribution)</td>
+</tr>
+<tr class="even">
+<td><code>strategy</code></td>
+<td>Empirical strategy (reduced-form), model + estimation (structural), or model + tests (theory+empirics)</td>
+</tr>
+<tr class="odd">
+<td><code>results</code></td>
+<td>Results narration adapted to output type (tables, event studies, counterfactuals)</td>
+</tr>
+<tr class="even">
+<td><code>conclusion</code></td>
+<td>Conclusion with type-appropriate ending</td>
+</tr>
+<tr class="odd">
+<td><code>data</code></td>
+<td>Data section (expanded for descriptive papers)</td>
+</tr>
+<tr class="even">
+<td><code>model</code></td>
+<td>Model section (structural or theory+empirics only)</td>
+</tr>
+<tr class="odd">
+<td><code>abstract</code></td>
+<td>Abstract, 100–150 words (requires other sections first)</td>
+</tr>
+<tr class="even">
+<td><code>full</code></td>
+<td>All sections in sequence with 3 drafting gates</td>
+</tr>
+<tr class="odd">
+<td><code>humanize [file]</code></td>
+<td>Strip 24 AI writing patterns without rewriting content</td>
+</tr>
+<tr class="even">
+<td><code>style-guide [dir]</code></td>
+<td>One-shot extraction of personal voice from prior papers</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Agents dispatched:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 26%">
+<col style="width: 50%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Mode</th>
 <th>Agent</th>
-<th>Output</th>
+<th>Output Path</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>[section]</code></td>
+<td><code>[section]</code> / <code>full</code></td>
 <td>Writer</td>
-<td>LaTeX section in <code>paper/sections/</code></td>
+<td><code>paper/sections/[section].tex</code></td>
 </tr>
 <tr class="even">
-<td><code>--humanize</code></td>
+<td><code>humanize</code></td>
 <td>Writer (cleanup mode)</td>
-<td>Edited file with 24 AI patterns stripped</td>
+<td>Edited file in place</td>
+</tr>
+<tr class="odd">
+<td><code>style-guide</code></td>
+<td>Writer (style-extraction mode)</td>
+<td><code>.claude/references/personal-style-guide.md</code></td>
 </tr>
 </tbody>
 </table>
-<p>The Writer first identifies the paper type (reduced-form, structural, theory+empirics, descriptive), then drafts using paragraph-level argument moves with type-specific section templates. Cleanup pass runs automatically after drafting.</p>
+<p><strong>Output artifacts:</strong></p>
+<ul>
+<li>LaTeX section files in <code>paper/sections/</code>.</li>
+<li>Claim-source map in <code>quality_reports/claim_source_map_[project].md</code> linking every numerical claim to its source table, figure, or computation.</li>
+<li>Personal style guide (for <code>style-guide</code> mode) documenting sentence-length distribution, passive-voice frequency, lexicon patterns, and citation conventions.</li>
+</ul>
+<p><strong>What to do next:</strong> Review each drafted section for accuracy and voice. The Writer uses TBD placeholders for missing results — fill these in or re-run after <code>/analyze</code> completes. Run <code>/review --proofread</code> for manuscript polish, or <code>/review --peer</code> for simulated peer review.</p>
 <hr>
 </section>
-<section id="review" class="level1">
-<h1><code>/review</code></h1>
-<pre><code>/review paper/main.tex          Comprehensive (auto-detect paper)
-/review scripts/R/analysis.R    Code review (auto-detect script)
-/review --peer                  Blind peer review (generic)
-/review --peer JHR              Blind peer review (calibrated to JHR)
-/review --peer --r2             R&amp;R round 2 (referees remember prior reports)
-/review --stress JHR            Maximum-severity stress test (max 3 rounds)
-/review --methods [file]        Causal audit only
-/review --proofread [file]      Manuscript polish only
-/review --code [file]           Code quality only
-/review --replicate python      Re-implement in another language, compare
-/review --all                   All critics in parallel + weighted score</code></pre>
+<section id="review" class="level2">
+<h2 class="anchored" data-anchor-id="review"><code>/review</code></h2>
+<p><strong>Syntax:</strong> <code>/review [file path or --flag] [journal]</code></p>
+<p>The most polymorphic skill in the system. Routing depends on file type and flags.</p>
+<p><strong>What happens:</strong></p>
+<ol type="1">
+<li>Detect review mode from arguments: auto-detect by file extension, or use explicit flag.</li>
+<li>Dispatch the appropriate critic agent(s).</li>
+<li>Run mechanical lint (for code reviews) before the judgment review.</li>
+<li>Produce scored reports. Critics never edit files — they produce reports only.</li>
+<li>Save reports to <code>quality_reports/</code> with HTML versions and dashboard refresh.</li>
+</ol>
+<p><strong>Modes / Flags:</strong></p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 20%">
-<col style="width: 27%">
-<col style="width: 51%">
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Flag</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>(auto <code>.tex</code> paper)</em></td>
+<td>Comprehensive review: writer-critic + strategist-critic + verifier in parallel</td>
+</tr>
+<tr class="even">
+<td><em>(auto <code>.R</code>/<code>.py</code>/<code>.jl</code>)</em></td>
+<td>Code review: coder-critic standalone (categories 4–12)</td>
+</tr>
+<tr class="odd">
+<td><em>(auto <code>.tex</code> in <code>talks/</code>)</em></td>
+<td>Talk review: storyteller-critic</td>
+</tr>
+<tr class="even">
+<td><code>--peer [journal]</code></td>
+<td>Full simulated peer review: editor desk review, referee dispatch, editorial decision</td>
+</tr>
+<tr class="odd">
+<td><code>--peer --r2 [journal]</code></td>
+<td>R&amp;R round 2: same referees remember prior reports</td>
+</tr>
+<tr class="even">
+<td><code>--stress [journal]</code></td>
+<td>Hostile stress test: adversarial dispositions, double critical pet peeves</td>
+</tr>
+<tr class="odd">
+<td><code>--methods [file]</code></td>
+<td>Causal audit only: strategist-critic 4-phase review</td>
+</tr>
+<tr class="even">
+<td><code>--theory [file]</code></td>
+<td>Proof audit only: theorist-critic 4-phase review (logical validity, assumption minimality, citations, linkage)</td>
+</tr>
+<tr class="odd">
+<td><code>--proofread [file]</code></td>
+<td>Manuscript polish only: writer-critic 6-category review</td>
+</tr>
+<tr class="even">
+<td><code>--code [file]</code></td>
+<td>Code review only: coder-critic categories 4–12 (no strategy comparison)</td>
+</tr>
+<tr class="odd">
+<td><code>--replicate [lang]</code></td>
+<td>Cross-language replication: re-implement in target language, compare outputs</td>
+</tr>
+<tr class="even">
+<td><code>--all</code></td>
+<td>All critics in parallel + weighted aggregate score</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Flag combinations:</strong> <code>--peer</code> and <code>--r2</code> combine (for R&amp;R second round). <code>--peer</code> and <code>--stress</code> are mutually exclusive — <code>--stress</code> replaces the peer flow with adversarial dispositions. All other flags are standalone and do not combine.</p>
+<p><strong>Agents dispatched:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 29%">
+<col style="width: 48%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Flag</th>
 <th>Agents</th>
-<th>What It Checks</th>
+<th>Output Path</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><em>(auto .tex)</em></td>
-<td>writer-critic + strategist-critic + Verifier</td>
-<td>Writing + identification + compilation</td>
+<td><em>(auto <code>.tex</code>)</em></td>
+<td>writer-critic + strategist-critic + verifier</td>
+<td><code>quality_reports/</code></td>
 </tr>
 <tr class="even">
-<td><em>(auto .R/.py)</em></td>
+<td><em>(auto code)</em></td>
 <td>coder-critic</td>
-<td>Code quality and reproducibility</td>
+<td><code>quality_reports/[file]_code_review.md</code></td>
 </tr>
 <tr class="odd">
 <td><code>--peer</code></td>
-<td>Editor + domain-referee + methods-referee</td>
-<td>Editor desk review → referee assignment with dispositions → blind reports → editorial decision</td>
+<td>Editor + domain-referee + methods-referee (3 sequential phases)</td>
+<td><code>quality_reports/reviews/YYYY-MM-DD_desk_review.md</code>, <code>_referee_domain.md</code>, <code>_referee_methods.md</code>, <code>_editorial_decision.md</code></td>
 </tr>
 <tr class="even">
-<td><code>--peer [journal]</code></td>
-<td>Editor + domain-referee + methods-referee</td>
-<td>Same, calibrated to that journal’s review culture</td>
-</tr>
-<tr class="odd">
 <td><code>--peer --r2</code></td>
-<td>Editor + domain-referee + methods-referee</td>
-<td>R&amp;R round 2 — referees remember prior reports</td>
-</tr>
-<tr class="even">
-<td><code>--stress [journal]</code></td>
-<td>Editor + domain-referee + methods-referee</td>
-<td>Maximum-severity stress test (max 3 rounds)</td>
+<td>Same referees (reload dispositions from round 1)</td>
+<td><code>quality_reports/reviews/</code> with <code>_r2</code> suffix</td>
 </tr>
 <tr class="odd">
+<td><code>--stress</code></td>
+<td>Editor + 2 adversarial referees (SKEPTIC disposition, 2 critical pet peeves each)</td>
+<td><code>quality_reports/reviews/</code></td>
+</tr>
+<tr class="even">
 <td><code>--methods</code></td>
 <td>strategist-critic</td>
-<td>4-phase causal design review</td>
+<td><code>quality_reports/[file]_strategy_review.md</code></td>
+</tr>
+<tr class="odd">
+<td><code>--theory</code></td>
+<td>theorist-critic</td>
+<td><code>quality_reports/theory_[topic]_review.md</code></td>
 </tr>
 <tr class="even">
 <td><code>--proofread</code></td>
 <td>writer-critic</td>
-<td>Notation, hedging, LaTeX, claims vs evidence</td>
+<td><code>quality_reports/[file]_proofread_report.md</code></td>
 </tr>
 <tr class="odd">
 <td><code>--code</code></td>
 <td>coder-critic</td>
-<td>Code quality (no strategy comparison)</td>
+<td><code>quality_reports/[file]_code_review.md</code></td>
 </tr>
 <tr class="even">
-<td><code>--replicate [lang]</code></td>
+<td><code>--replicate</code></td>
 <td>Coder (replication) + coder-critic</td>
-<td>Re-implement in target language, compare outputs</td>
+<td>Replicated script + comparison report</td>
 </tr>
 <tr class="odd">
 <td><code>--all</code></td>
-<td>All critics in parallel</td>
-<td>Weighted aggregate score</td>
+<td>All critics in parallel (theorist-critic included when theory section exists)</td>
+<td><code>quality_reports/</code> + weighted aggregate score</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Referee dispositions:</strong> Each referee is assigned one of 6 dispositions (Structuralist, Credibility, Measurement, Policy, Theory, Skeptic) plus pet peeves (1 critical + 1 constructive). Every major comment includes “what would change my mind.”</p>
-<p><strong>Editorial decision:</strong> The Editor classifies each issue as FATAL (rejection-worthy), ADDRESSABLE (fixable in revision), or TASTE (referee preference, not binding).</p>
-<p><strong>Journal calibration:</strong> When a journal name is provided with <code>--peer</code>, the Editor and both referees read <code>.claude/references/journal-profiles.md</code> and adapt their priorities, bar, and checklist to that journal. 30 journals are pre-populated (economics and adjacent fields); unknown journals still get adapted review using the journal name + your domain profile. You can add custom profiles.</p>
-<p><strong>Saves to:</strong> <code>quality_reports/</code></p>
+<p><strong>Peer review details:</strong> The editor reads the paper and decides DESK REJECT or SEND TO REFEREES. If sent, the editor assigns each referee a disposition (STRUCTURAL, CREDIBILITY, MEASUREMENT, POLICY, THEORY, or SKEPTIC) plus one critical and one constructive pet peeve from the journal’s referee pool. Both referees review independently and blind. Every major comment must include “what would change my mind.” The editor then classifies each concern as FATAL, ADDRESSABLE, or TASTE and produces an editorial decision: Accept / Minor Revisions / Major Revisions / Reject. When a journal name is provided, the entire flow calibrates to that journal’s profile.</p>
+<p><strong>R&amp;R rounds:</strong> Round 2 skips desk review. Same referees check whether each prior concern was resolved, partially resolved, or not addressed. Round 3 (max) allows Accept, Minor, or Reject only.</p>
+<p><strong>Scoring:</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>Blocking?</th>
+<th>Gate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Comprehensive</td>
+<td>Yes</td>
+<td>80 commit, 90 PR</td>
+</tr>
+<tr class="even">
+<td>Peer Review</td>
+<td>Yes</td>
+<td>Editorial decision</td>
+</tr>
+<tr class="odd">
+<td>Stress Test</td>
+<td>Advisory</td>
+<td>Non-blocking</td>
+</tr>
+<tr class="even">
+<td>Code Review</td>
+<td>Yes</td>
+<td>80 commit</td>
+</tr>
+<tr class="odd">
+<td>Causal Audit</td>
+<td>Yes</td>
+<td>80 commit</td>
+</tr>
+<tr class="even">
+<td>Proofread</td>
+<td>Yes (paper), advisory (talks)</td>
+<td>80 commit</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What to do next:</strong> Read the reports. For peer review, address MUST items first, then SHOULD items. For code review, fix critical and major issues, then re-run. For <code>--all</code>, check which components are below 80 and focus there.</p>
 <hr>
 </section>
-<section id="revise" class="level1">
-<h1><code>/revise</code></h1>
-<pre><code>/revise [referee-report-path]</code></pre>
-<p>For <strong>real</strong> R&amp;R responses (not the simulated <code>/review --peer</code>). Give it your actual referee report and Claude classifies each comment, then routes to the right agent:</p>
+<section id="revise" class="level2">
+<h2 class="anchored" data-anchor-id="revise"><code>/revise</code></h2>
+<p><strong>Syntax:</strong> <code>/revise [referee-report-path] [paper-path]</code></p>
+<p><strong>What happens:</strong></p>
+<ol type="1">
+<li>Read the referee report(s) and the current paper.</li>
+<li>Classify every referee comment into one of 5 categories.</li>
+<li>Build a tracking document with counts and priorities.</li>
+<li>Dispatch agents for routable items (Writer for text changes, flag Coder tasks for user approval).</li>
+<li>Draft a point-by-point LaTeX response letter.</li>
+<li>Flag all DISAGREE items for mandatory user review.</li>
+</ol>
+<p><strong>Modes / Flags:</strong> None. This skill handles real R&amp;R responses (not simulated reviews — use <code>/review --peer</code> for that).</p>
+<p><strong>Agents dispatched:</strong></p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 44%">
@@ -522,146 +1094,481 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>NEW ANALYSIS</strong></td>
-<td>Coder agent</td>
-<td>Flag for user, create analysis task</td>
+<td>NEW ANALYSIS</td>
+<td>Coder (flagged for user approval first)</td>
+<td>Create analysis task</td>
 </tr>
 <tr class="even">
-<td><strong>CLARIFICATION</strong></td>
-<td>Writer agent</td>
-<td>Draft revised text</td>
+<td>CLARIFICATION</td>
+<td>Writer</td>
+<td>Draft rewritten section</td>
 </tr>
 <tr class="odd">
-<td><strong>REWRITE</strong></td>
-<td>Writer agent</td>
+<td>REWRITE</td>
+<td>Writer</td>
 <td>Structural revision</td>
 </tr>
 <tr class="even">
-<td><strong>DISAGREE</strong></td>
-<td>You (the user)</td>
-<td>Draft diplomatic pushback (flagged for your review)</td>
+<td>DISAGREE</td>
+<td>User (mandatory)</td>
+<td>Diplomatic pushback drafted, flagged for review</td>
 </tr>
 <tr class="odd">
-<td><strong>MINOR</strong></td>
-<td>Writer agent</td>
+<td>MINOR</td>
+<td>Writer</td>
 <td>Fix directly</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Output:</strong> Point-by-point response letter + revised sections + tracking document <strong>Saves to:</strong> <code>quality_reports/referee_response_[journal]_[date].tex</code></p>
+<p><strong>Output artifacts:</strong></p>
+<ul>
+<li><code>quality_reports/referee_response_tracker.md</code> — summary counts, action items by priority (HIGH/MEDIUM/FLAGGED/LOW)</li>
+<li><code>quality_reports/referee_response_[journal]_[date].tex</code> — LaTeX response letter with referee quotes, color-coded responses, page references</li>
+<li>Revised section files in <code>paper/sections/</code> (for CLARIFICATION and REWRITE items)</li>
+</ul>
+<p><strong>What to do next:</strong> Review all DISAGREE items — these require your judgment. Approve NEW ANALYSIS tasks before they execute. Check the response letter tone matches your voice. Proceed to <code>/review --peer --r2</code> to simulate the next referee round.</p>
 <hr>
 </section>
-<section id="talk" class="level1">
-<h1><code>/talk</code></h1>
-<pre><code>/talk create job-market          Full talk (45-60 min, 40-50 slides)
-/talk create seminar             Standard seminar (30-45 min, 25-35 slides)
-/talk create short               Conference session (15 min, 10-15 slides)
-/talk create lightning           Elevator pitch (5 min, 3-5 slides)
-/talk create [format] --quarto   Quarto RevealJS version (output to paper/quarto/)
-/talk audit [file]               Visual layout check
-/talk compile [file]             XeLaTeX or Quarto compilation</code></pre>
+<section id="talk" class="level2">
+<h2 class="anchored" data-anchor-id="talk"><code>/talk</code></h2>
+<p><strong>Syntax:</strong> <code>/talk [mode] [format] [--beamer] [file]</code></p>
+<p>Quarto RevealJS is the default output format. Beamer is available via <code>--beamer</code> for departments or conferences that require PDF slides.</p>
+<p><strong>What happens:</strong></p>
+<ol type="1">
+<li>Parse mode (<code>create</code>, <code>audit</code>, <code>compile</code>) and format (<code>job-market</code>, <code>seminar</code>, <code>short</code>, <code>lightning</code>).</li>
+<li>For <code>create</code>: read the paper, extract key content, dispatch Storyteller to build the slide file, then dispatch storyteller-critic for review.</li>
+<li>For <code>audit</code>: run visual quality checks on existing slides.</li>
+<li>For <code>compile</code>: run <code>quarto render</code> (default) or <code>latexmk</code> (Beamer).</li>
+</ol>
+<p><strong>Modes / Flags:</strong></p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 27%">
-<col style="width: 36%">
-<col style="width: 36%">
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>create job-market</code></td>
+<td>40–50 slides, 45–60 min, full story (Quarto RevealJS)</td>
+</tr>
+<tr class="even">
+<td><code>create seminar</code></td>
+<td>25–35 slides, 30–45 min, motivation + main result + robustness</td>
+</tr>
+<tr class="odd">
+<td><code>create short</code></td>
+<td>10–15 slides, 15 min, question + method + key result</td>
+</tr>
+<tr class="even">
+<td><code>create lightning</code></td>
+<td>3–5 slides, 5 min, hook + one result + so-what</td>
+</tr>
+<tr class="odd">
+<td><code>create [format] --beamer</code></td>
+<td>Beamer LaTeX instead of Quarto RevealJS</td>
+</tr>
+<tr class="even">
+<td><code>audit [file]</code></td>
+<td>Visual layout check (overflow, fonts, sizing)</td>
+</tr>
+<tr class="odd">
+<td><code>compile [file]</code></td>
+<td>Quarto or XeLaTeX compilation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Agents dispatched:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 29%">
+<col style="width: 48%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Mode</th>
 <th>Agents</th>
-<th>Output</th>
+<th>Output Path</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><code>create</code></td>
-<td>Storyteller → storyteller-critic</td>
-<td>Beamer <code>.tex</code> in <code>paper/talks/</code></td>
+<td>Storyteller + storyteller-critic</td>
+<td><code>paper/quarto/[format]_talk.qmd</code></td>
 </tr>
 <tr class="even">
-<td><code>create --quarto</code></td>
-<td>Storyteller → storyteller-critic</td>
-<td>Quarto <code>.qmd</code> in <code>paper/quarto/</code></td>
+<td><code>create --beamer</code></td>
+<td>Storyteller + storyteller-critic</td>
+<td><code>paper/talks/[format]_talk.tex</code></td>
 </tr>
 <tr class="odd">
 <td><code>audit</code></td>
-<td>Visual checks</td>
-<td>Layout issues report</td>
+<td>Visual checks (no agent dispatch)</td>
+<td>Advisory report</td>
 </tr>
 <tr class="even">
 <td><code>compile</code></td>
-<td>XeLaTeX or Quarto</td>
-<td>Compiled PDF or HTML</td>
+<td>Compilation only</td>
+<td>Compiled HTML or PDF</td>
 </tr>
 </tbody>
 </table>
-<p>Talk scores are <strong>advisory</strong> (non-blocking).</p>
+<p><strong>Output artifacts:</strong></p>
+<ul>
+<li>Quarto <code>.qmd</code> (default) or Beamer <code>.tex</code> file.</li>
+<li>Storyteller-critic review in <code>quality_reports/[format]_talk_review.md</code>.</li>
+<li>Talk scores are <strong>advisory</strong> (non-blocking).</li>
+</ul>
+<p><strong>What to do next:</strong> Review the generated slides against your paper. Check that all claims are traceable to the manuscript. Run <code>/talk audit</code> to catch overflow and sizing issues. Compile with <code>/talk compile</code>.</p>
 <hr>
 </section>
-<section id="submit" class="level1">
-<h1><code>/submit</code></h1>
-<pre><code>/submit --target                 Journal recommendations
-/submit --package                Build AEA replication package
-/submit --audit                  Audit replication package (10 checks)
-/submit --final [journal]        Final gate: score &gt;= 95, all components &gt;= 80</code></pre>
+<section id="submit" class="level2">
+<h2 class="anchored" data-anchor-id="submit"><code>/submit</code></h2>
+<p><strong>Syntax:</strong> <code>/submit [mode] [journal]</code></p>
+<p><strong>What happens:</strong></p>
+<ol type="1">
+<li>Detect mode from arguments: <code>target</code>, <code>package</code>, <code>audit</code>, or <code>final</code>.</li>
+<li>For <code>target</code>: analyze contribution and recommend journals.</li>
+<li>For <code>package</code>: build AEA-compliant replication package with master script and documentation.</li>
+<li>For <code>audit</code>: run 10-point replication verification.</li>
+<li>For <code>final</code>: run comprehensive review + replication audit + score gate enforcement.</li>
+</ol>
+<p><strong>Modes / Flags:</strong></p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 27%">
-<col style="width: 36%">
-<col style="width: 36%">
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>target</code></td>
+<td>Rank 3 journals by contribution fit, methodology fit, audience, desk rejection risk</td>
+</tr>
+<tr class="even">
+<td><code>package</code></td>
+<td>Build replication package: master script, README, data docs, codebook</td>
+</tr>
+<tr class="odd">
+<td><code>audit</code></td>
+<td>10-check verification of replication package</td>
+</tr>
+<tr class="even">
+<td><code>final [journal]</code></td>
+<td>Full gate: score &gt;= 95, all components &gt;= 80. Produces cover letter or blocks with issues</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Agents dispatched:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 29%">
+<col style="width: 48%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Mode</th>
 <th>Agents</th>
-<th>Output</th>
+<th>Output Path</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>--target</code></td>
-<td>Orchestrator</td>
-<td>Ranked list of 3 journals with rationale</td>
+<td><code>target</code></td>
+<td>Orchestrator (journal selection)</td>
+<td><code>quality_reports/journal_recommendations_[date].md</code></td>
 </tr>
 <tr class="even">
-<td><code>--package</code></td>
+<td><code>package</code></td>
 <td>Coder + Verifier</td>
-<td>Master script + README + data docs in <code>Replication/</code></td>
+<td><code>paper/replication/</code></td>
 </tr>
 <tr class="odd">
-<td><code>--audit</code></td>
+<td><code>audit</code></td>
 <td>Verifier (10 checks)</td>
-<td>Pass/fail replication audit</td>
+<td>Pass/fail audit report</td>
 </tr>
 <tr class="even">
-<td><code>--final</code></td>
-<td>All + gate enforcement</td>
-<td>Cover letter draft + submission checklist (or blocking issues)</td>
+<td><code>final</code></td>
+<td>All agents + gate enforcement</td>
+<td><code>quality_reports/quality_gate_[date].md</code> + HTML report</td>
 </tr>
 </tbody>
 </table>
+<p><strong>Output artifacts:</strong></p>
+<ul>
+<li><strong>Target:</strong> Ranked journal list with rationale.</li>
+<li><strong>Package:</strong> Master script, README, data documentation, codebook in <code>paper/replication/</code>.</li>
+<li><strong>Audit:</strong> Pass/fail on 10 checks (master script runs, tables reproduce, figures reproduce, README complete, data docs present, numbered script order, dependencies listed, runtime documented, output paths match, no hardcoded paths).</li>
+<li><strong>Final:</strong> Quality gate report. If PASS: cover letter draft + submission checklist. If FAIL: blocking issues listed.</li>
+</ul>
+<p><strong>What to do next:</strong> For <code>target</code>, pick a journal and confirm before proceeding. For <code>package</code>, run <code>audit</code> to verify completeness. For <code>final</code>, if it passes, review the cover letter draft and submit. If it fails, fix blocking issues and re-run.</p>
 <hr>
 </section>
-<section id="tools" class="level1">
-<h1><code>/tools</code></h1>
-<pre><code>/tools commit [message]          Stage + commit (+ optional PR)
-/tools compile [file]            latexmk compilation (XeLaTeX + biber)
-/tools validate-bib              Cross-reference all \cite{} keys
-/tools journal                   Research journal timeline
-/tools context                   Context status + session health
-/tools deploy                    Render guide + push to GitHub Pages
-/tools learn                     Extract session discoveries to MEMORY.md
-/tools lint [file|dir]           Mechanical code linting for R/Python/Julia
-/tools upgrade                   Upgrade clo-author infrastructure</code></pre>
+<section id="tools" class="level2">
+<h2 class="anchored" data-anchor-id="tools"><code>/tools</code></h2>
+<p><strong>Syntax:</strong> <code>/tools [subcommand] [args]</code></p>
 <p>Each subcommand is lightweight — no multi-agent orchestration.</p>
+<p><strong>Subcommands:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 48%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Subcommand</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>commit [message]</code></td>
+<td>Stage changes, create commit. Notes quality score if available. Never stages <code>.env</code> or credentials.</td>
+</tr>
+<tr class="even">
+<td><code>compile [file]</code></td>
+<td>LaTeX compilation via latexmk. Routes to <code>paper/</code> or <code>paper/talks/</code> based on file location.</td>
+</tr>
+<tr class="odd">
+<td><code>validate-bib</code></td>
+<td>Cross-reference all <code>\cite{}</code> keys against <code>Bibliography_base.bib</code>. Reports missing, unused, and duplicate entries.</td>
+</tr>
+<tr class="even">
+<td><code>lint [file\|dir]</code></td>
+<td>Grep-based mechanical linting for R/Python/Julia against prohibited patterns. Catches <code>setwd()</code>, absolute paths, missing seed, <code>T</code>/<code>F</code> literals, <code>sapply()</code>, and more. Severity-graded (HIGH/MEDIUM/LOW). Always advisory.</td>
+</tr>
+<tr class="odd">
+<td><code>journal</code></td>
+<td>Regenerate the research journal timeline from quality reports and git history.</td>
+</tr>
+<tr class="even">
+<td><code>context</code></td>
+<td>Show current context usage and session health. Check whether auto-compact is approaching.</td>
+</tr>
+<tr class="odd">
+<td><code>dashboard [--open]</code></td>
+<td>Regenerate the project dashboard HTML. Opens in browser by default.</td>
+</tr>
+<tr class="even">
+<td><code>deploy</code></td>
+<td>Render Quarto guide site and publish to GitHub Pages.</td>
+</tr>
+<tr class="odd">
+<td><code>learn</code></td>
+<td>Extract reusable knowledge from the current session into auto-memory.</td>
+</tr>
+<tr class="even">
+<td><code>upgrade</code></td>
+<td>Upgrade <code>.claude/</code> to the latest clo-author release. Preserves domain profile, custom journal profiles, and settings. Does not touch <code>paper/</code>, <code>scripts/</code>, <code>data/</code>, or any user content.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What to do next:</strong> Run <code>validate-bib</code> before commits to catch broken citations. Run <code>lint</code> before <code>/review --code</code> to clear mechanical violations. Run <code>dashboard</code> after any significant work to refresh the project overview.</p>
+<hr>
+</section>
+<section id="freeze" class="level2">
+<h2 class="anchored" data-anchor-id="freeze"><code>/freeze</code></h2>
+<p><strong>Syntax:</strong> <code>/freeze [dirs]</code> or <code>/freeze off</code></p>
+<p>Session-scoped edit guard. Blocks Write and Edit operations on files outside the specified directories.</p>
+<p><strong>What happens:</strong></p>
+<ol type="1">
+<li>Parse directory arguments from the command.</li>
+<li>Write guard configuration to <code>.claude/state/session-guards.json</code>.</li>
+<li>The <code>session-guard.py</code> PreToolUse hook enforces the restriction on every subsequent Edit or Write.</li>
+<li>Confirm what is frozen and what remains editable.</li>
+</ol>
+<p><strong>Examples:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 52%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>/freeze paper/</code></td>
+<td>Only allow edits in <code>paper/</code></td>
+</tr>
+<tr class="even">
+<td><code>/freeze scripts/ data/</code></td>
+<td>Only allow edits in <code>scripts/</code> and <code>data/</code></td>
+</tr>
+<tr class="odd">
+<td><code>/freeze off</code></td>
+<td>Deactivate — all paths editable again</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li><code>.claude/</code> is always editable regardless of freeze scope (we cannot freeze ourselves out of configuration changes)</li>
+<li>Paths are relative to the project root</li>
+<li>Session-scoped — resets when the conversation ends</li>
+<li>Only blocks Claude’s Edit and Write tools, not the user’s editor</li>
+</ul>
+<p><strong>When to use:</strong> During focused writing sessions (freeze everything except <code>paper/</code>), during code review (freeze everything except notes), or when editing data pipelines (freeze <code>paper/</code> to prevent accidental manuscript changes).</p>
+<hr>
+</section>
+<section id="careful" class="level2">
+<h2 class="anchored" data-anchor-id="careful"><code>/careful</code></h2>
+<p><strong>Syntax:</strong> <code>/careful</code> or <code>/careful off</code></p>
+<p>Session-scoped destructive command guard. Blocks Bash commands matching dangerous patterns before they execute.</p>
+<p><strong>What happens:</strong></p>
+<ol type="1">
+<li>Write guard configuration to <code>.claude/state/session-guards.json</code>.</li>
+<li>The <code>session-guard.py</code> PreToolUse hook tests every Bash command against destructive patterns.</li>
+<li>Matching commands are blocked with an explanation.</li>
+</ol>
+<p><strong>Blocked patterns:</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Pattern</th>
+<th>What It Catches</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>rm -rf</code> / <code>rm -r</code></td>
+<td>Recursive force delete</td>
+</tr>
+<tr class="even">
+<td><code>git reset --hard</code></td>
+<td>Discard all uncommitted changes</td>
+</tr>
+<tr class="odd">
+<td><code>git push --force</code> / <code>-f</code></td>
+<td>Overwrite remote history</td>
+</tr>
+<tr class="even">
+<td><code>git clean -f</code></td>
+<td>Delete untracked files</td>
+</tr>
+<tr class="odd">
+<td><code>git checkout -- .</code></td>
+<td>Discard all working tree changes</td>
+</tr>
+<tr class="even">
+<td><code>git branch -D</code></td>
+<td>Force-delete branch</td>
+</tr>
+<tr class="odd">
+<td><code>DROP TABLE</code> / <code>DROP DATABASE</code></td>
+<td>SQL destruction</td>
+</tr>
+<tr class="even">
+<td><code>chmod 777</code></td>
+<td>Overly permissive permissions</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Session-scoped — resets when the conversation ends</li>
+<li>Only blocks Claude’s Bash tool, not the user’s terminal</li>
+<li>Non-destructive commands pass through without delay</li>
+<li><code>rm</code> without <code>-rf</code> (single file deletion) is still allowed</li>
+</ul>
+<p><strong>When to use:</strong> Before deadlines, on critical branches, or whenever an extra safety net is worth the occasional blocked command. The cost is near-zero — the hook only fires on Bash calls, and pattern matching takes microseconds.</p>
+<hr>
+</section>
+<section id="checkpoint" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint"><code>/checkpoint</code></h2>
+<p><strong>Syntax:</strong> <code>/checkpoint [--flag]</code></p>
+<p><strong>What happens:</strong></p>
+<ol type="1">
+<li>Gather context: run <code>git log</code>, <code>git diff</code>, scan today’s plans and session logs.</li>
+<li>Detect Obsidian configuration (<code>.claude/state/obsidian-config.md</code>).</li>
+<li>Draft a compact checkpoint summary: what happened, memory updates, scaffold updates, Obsidian updates.</li>
+<li>Present for user confirmation (one prompt, not five).</li>
+<li>Save to all targets in parallel: auto-memory, SESSION_REPORT, research journal, Obsidian (if configured), dashboard refresh.</li>
+<li>Confirm what was saved.</li>
+</ol>
+<p><strong>Flags:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 42%">
+<col style="width: 57%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Flag</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>--auto</code></td>
+<td>Skip user confirmation, save immediately</td>
+</tr>
+<tr class="even">
+<td><code>--memory-only</code></td>
+<td>Only update Claude Code auto-memory</td>
+</tr>
+<tr class="odd">
+<td><code>--scaffold-only</code></td>
+<td>Memory + SESSION_REPORT + research journal, skip Obsidian</td>
+</tr>
+<tr class="even">
+<td><code>--dry-run</code></td>
+<td>Show what would be saved without saving</td>
+</tr>
+<tr class="odd">
+<td><code>--setup-obsidian</code></td>
+<td>Walk through creating <code>.claude/state/obsidian-config.md</code> from the example template</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Agents dispatched:</strong> None. This is a direct operation with no agent dispatch.</p>
+<p><strong>Output artifacts:</strong></p>
+<ul>
+<li><code>~/.claude/projects/.../memory/</code> — auto-memory files for future conversations.</li>
+<li><code>SESSION_REPORT.md</code> (project root) — append-only session log entry.</li>
+<li><code>quality_reports/research_journal.md</code> — agent-invocation trail (only if agent work happened).</li>
+<li>Obsidian vault updates (only if configured): project-note journal entry, dashboard row, daily journal.</li>
+<li>Refreshed <code>project_dashboard.html</code>.</li>
+</ul>
+<p><strong>What to do next:</strong> Run this before <code>/compact</code>, before ending a session, or whenever the user says “checkpoint,” “save progress,” or “wrap up.” The next session reads these artifacts to resume context.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {

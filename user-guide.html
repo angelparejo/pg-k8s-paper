@@ -72,10 +72,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-be788d54854417ccf85972ce5a1e216a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb133401eb1928132202f6efeefbc5fe.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-fdd259eaf9296a602f9f2594b91304b4.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb133401eb1928132202f6efeefbc5fe.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-4a343adb3e348b0dfb90aadcb4eb116e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-45f38feec4c6d3ad185969c2b5aa4b3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-b9862f91d0a1d344de8539a32e8a5ff2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-45f38feec4c6d3ad185969c2b5aa4b3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -104,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
-<meta name="mermaid-theme" content="dark">
+<meta name="mermaid-theme" content="neutral">
 <script src="site_libs/quarto-diagram/mermaid.min.js"></script>
 <script src="site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
@@ -112,7 +116,169 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -138,20 +304,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">User Guide</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./agents.html"> 
-<span class="menu-text">Agents</span></a>
+    <a class="nav-link" href="./reference.html"> 
+<span class="menu-text">Reference</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./architecture.html"> 
 <span class="menu-text">Architecture</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./customization.html"> 
-<span class="menu-text">Customization</span></a>
+    <a class="nav-link" href="./agents.html"> 
+<span class="menu-text">Agents</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./reference.html"> 
-<span class="menu-text">Reference</span></a>
+    <a class="nav-link" href="./rules.html"> 
+<span class="menu-text">Rules</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./hooks.html"> 
+<span class="menu-text">Hooks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./customization.html"> 
+<span class="menu-text">Customization</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./changelog.html"> 
@@ -167,6 +341,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -180,20 +355,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link active" data-scroll-target="#how-it-works">How It Works</a></li>
-  <li><a href="#a-typical-workflow" id="toc-a-typical-workflow" class="nav-link" data-scroll-target="#a-typical-workflow">A Typical Workflow</a></li>
+  <li><a href="#a-typical-workflow" id="toc-a-typical-workflow" class="nav-link active" data-scroll-target="#a-typical-workflow">A Typical Workflow</a></li>
   <li><a href="#your-first-review" id="toc-your-first-review" class="nav-link" data-scroll-target="#your-first-review">Your First Review</a></li>
   <li><a href="#your-first-draft" id="toc-your-first-draft" class="nav-link" data-scroll-target="#your-first-draft">Your First Draft</a></li>
-  <li><a href="#the-research-pipeline" id="toc-the-research-pipeline" class="nav-link" data-scroll-target="#the-research-pipeline">The Research Pipeline</a>
-  <ul class="collapse">
-  <li><a href="#discovery" id="toc-discovery" class="nav-link" data-scroll-target="#discovery">Discovery</a></li>
-  <li><a href="#strategy" id="toc-strategy" class="nav-link" data-scroll-target="#strategy">Strategy</a></li>
-  <li><a href="#execution" id="toc-execution" class="nav-link" data-scroll-target="#execution">Execution</a></li>
-  <li><a href="#review-and-revision" id="toc-review-and-revision" class="nav-link" data-scroll-target="#review-and-revision">Review and Revision</a></li>
-  <li><a href="#presentations" id="toc-presentations" class="nav-link" data-scroll-target="#presentations">Presentations</a></li>
-  <li><a href="#submission" id="toc-submission" class="nav-link" data-scroll-target="#submission">Submission</a></li>
-  <li><a href="#utilities" id="toc-utilities" class="nav-link" data-scroll-target="#utilities">Utilities</a></li>
-  </ul></li>
+  <li><a href="#running-the-full-pipeline" id="toc-running-the-full-pipeline" class="nav-link" data-scroll-target="#running-the-full-pipeline">Running the Full Pipeline</a></li>
+  <li><a href="#revising-after-referee-reports" id="toc-revising-after-referee-reports" class="nav-link" data-scroll-target="#revising-after-referee-reports">Revising After Referee Reports</a></li>
+  <li><a href="#creating-a-talk" id="toc-creating-a-talk" class="nav-link" data-scroll-target="#creating-a-talk">Creating a Talk</a></li>
+  <li><a href="#session-guards" id="toc-session-guards" class="nav-link" data-scroll-target="#session-guards">Session Guards</a></li>
   <li><a href="#quality-gates" id="toc-quality-gates" class="nav-link" data-scroll-target="#quality-gates">Quality Gates</a></li>
   <li><a href="#troubleshooting" id="toc-troubleshooting" class="nav-link" data-scroll-target="#troubleshooting">Troubleshooting</a>
   <ul class="collapse">
@@ -210,10 +378,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">User Guide</h1>
-<p class="subtitle lead">What You Can Do with the Clo-Author</p>
+<p class="subtitle lead">Common workflows and what to expect</p>
 </div>
 
 
@@ -230,57 +399,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="how-it-works" class="level1">
-<h1>How It Works</h1>
-<p>You describe what you want in plain English. Claude handles the rest.</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>You Do</th>
-<th>Happens Automatically</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Describe what you want</td>
-<td>Claude selects and runs the right skills</td>
-</tr>
-<tr class="even">
-<td>Approve plans</td>
-<td>Orchestrator coordinates agents via dependency graph</td>
-</tr>
-<tr class="odd">
-<td>Review final output</td>
-<td>Worker-critic pairs ensure quality</td>
-</tr>
-<tr class="even">
-<td>Say “commit” when ready</td>
-<td>Quality gates enforce score thresholds</td>
-</tr>
-</tbody>
-</table>
-<p>For complex or ambiguous tasks, Claude may ask 3–5 clarifying questions to create a <strong>requirements specification</strong> before planning. Each requirement is tagged MUST/SHOULD/MAY, and each aspect is marked CLEAR/ASSUMED/BLOCKED.</p>
-<hr>
-</section>
-<section id="a-typical-workflow" class="level1">
-<h1>A Typical Workflow</h1>
+<section id="a-typical-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="a-typical-workflow">A Typical Workflow</h2>
+<p><strong>Every interaction follows the same loop: you describe, agents execute, critics score, you approve.</strong> Claude plans the work, dispatches specialized agents, and presents results for your sign-off. For complex tasks, it asks 3–5 clarifying questions before committing to a plan.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
-<pre class="mermaid mermaid-js">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+<pre class="mermaid mermaid-js">%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0eee6', 'primaryTextColor': '#141413', 'primaryBorderColor': '#d1cfc5', 'lineColor': '#d97757', 'secondaryColor': '#faf9f5', 'tertiaryColor': '#e6e3da', 'edgeLabelBackground': '#faf9f5', 'clusterBkg': '#f0eee6', 'clusterBorder': '#d1cfc5'}}}%%
 flowchart LR
     D(Discovery&lt;br/&gt;Literature + Data):::phase1 --&gt; S(Strategy&lt;br/&gt;Identification Design):::phase2
     S --&gt; E(Execution&lt;br/&gt;Code + Paper):::phase3
     E --&gt; R(Review&lt;br/&gt;Simulated Peer Review):::phase4
     R --&gt;|score &gt;= 95| SUB(Submission&lt;br/&gt;Package + Gate):::phase5
 
-    classDef phase1 fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
-    classDef phase2 fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
-    classDef phase3 fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
-    classDef phase4 fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
-    classDef phase5 fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
+    classDef phase1 fill:#f0eee6,stroke:#788c5d,color:#141413,stroke-width:2px
+    classDef phase2 fill:#f0eee6,stroke:#4d7c5a,color:#141413,stroke-width:2px
+    classDef phase3 fill:#f0eee6,stroke:#d97757,color:#141413,stroke-width:2px
+    classDef phase4 fill:#f0eee6,stroke:#b85c3e,color:#141413,stroke-width:2px
+    classDef phase5 fill:#f0eee6,stroke:#87867f,color:#141413,stroke-width:2px
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -290,13 +428,12 @@ flowchart LR
 <p>You can enter at any stage. Each phase produces structured output saved to <code>quality_reports/</code>.</p>
 <hr>
 </section>
-<section id="your-first-review" class="level1">
-<h1>Your First Review</h1>
-<p>Here is what happens when you run a simulated peer review.</p>
-<p><strong>Step 1.</strong> You type <code>/review --peer JHR paper/main.tex</code></p>
-<p><strong>Step 2.</strong> The <strong>Editor</strong> does a desk review — checks scope, assigns each referee a disposition (Credibility, Policy, Structuralist, etc.) and pet peeves that shape their personality.</p>
-<p><strong>Step 3.</strong> Two blind referees review independently — a <strong>domain-referee</strong> (subject expertise) and a <strong>methods-referee</strong> (empirical methods). Neither sees the other’s report.</p>
-<p><strong>Step 4.</strong> The editorial decision arrives, classifying every concern as FATAL, ADDRESSABLE, or TASTE:</p>
+<section id="your-first-review" class="level2">
+<h2 class="anchored" data-anchor-id="your-first-review">Your First Review</h2>
+<p><strong>Simulated peer review catches fatal problems before real referees do.</strong> One command dispatches two independent reviewers calibrated to your target journal.</p>
+<p><strong>What you type:</strong> <code>/review --peer JHR paper/main.tex</code></p>
+<p><strong>What happens behind the scenes:</strong> The editor does a desk review — checks scope, assigns each referee a disposition (Credibility, Policy, Skeptic, etc.) and pet peeves that shape their review personality. Two blind referees then review independently: a domain-referee (subject expertise) and a methods-referee (empirical methods). Neither sees the other’s report.</p>
+<p><strong>What you see:</strong> An editorial decision that classifies every concern as FATAL, ADDRESSABLE, or TASTE:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Editorial Decision --- Journal of Human Resources</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>**Decision:** Major Revisions</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -315,104 +452,145 @@ flowchart LR
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>MUST: Add wild bootstrap standard errors</span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>SHOULD: Add sensitivity bounds</span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>SHOULD: Cite Garcia &amp; Santos (2024)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This is what you work with. Each concern has a classification and a specific fix. Use <code>/revise</code> to route each comment to the right agent — new analysis goes to the Coder, clarifications go to the Writer, disagreements get flagged for your review.</p>
-<p>For the full peer review architecture (dispositions, pet peeves, journal calibration), see <a href="./agents.html">Meet the Agents</a>.</p>
+<p><strong>What to do next:</strong> Work through MUST items first. Use <code>/revise</code> to route each comment to the right agent — new analysis goes to the coder, clarifications go to the writer, disagreements get flagged for your review. For more on the peer review architecture (dispositions, pet peeves, journal calibration), see <a href="./agents.html#peer-review">Agents</a>.</p>
 <hr>
 </section>
-<section id="your-first-draft" class="level1">
-<h1>Your First Draft</h1>
-<p>Here is what happens when you draft a paper section.</p>
-<p><strong>Step 1.</strong> You type <code>/write intro</code></p>
-<p><strong>Step 2.</strong> Claude reads your paper type (reduced-form, structural, descriptive, or theory+empirics), your strategy memo, and any existing sections.</p>
-<p><strong>Step 3.</strong> The Writer drafts using <strong>paragraph-level argument moves</strong> — each paragraph has one job:</p>
+<section id="your-first-draft" class="level2">
+<h2 class="anchored" data-anchor-id="your-first-draft">Your First Draft</h2>
+<p><strong>What you type:</strong> <code>/write intro</code></p>
+<p><strong>What happens behind the scenes:</strong> Claude reads your paper type (reduced-form, structural, descriptive, or theory+empirics), your strategy memo, and any existing sections. The writer drafts using paragraph-level argument moves — each paragraph has one job:</p>
 <pre><code>Paragraph 1 [MOTIVATION]: Big question --- why this matters for policy
 Paragraph 2 [GAP]: What the literature hasn't answered
 Paragraph 3 [THIS PAPER]: "We estimate..." --- result preview with magnitude
 Paragraph 4 [IDENTIFICATION]: Source of variation, one-sentence design
 Paragraph 5 [PREVIEW]: Key finding with effect size
 Paragraph 6 [ROADMAP]: Section-by-section guide</code></pre>
-<p><strong>Step 4.</strong> A cleanup pass strips 24 known AI writing patterns (hedging, filler phrases, over-signposting).</p>
-<p>Each paragraph has one job. The Writer adapts this structure to your paper type — reduced-form leads with identification preview and result, structural leads with the model and counterfactual, descriptive leads with the data innovation and key fact.</p>
-<p>For all available sections and flags, see the <a href="./reference.html">Command Reference</a>.</p>
+<p>A cleanup pass then strips 24 known AI writing patterns (hedging, filler phrases, over-signposting). The argument structure adapts to your paper type — reduced-form leads with identification and result, structural leads with the model and counterfactual, descriptive leads with the data innovation and key fact.</p>
+<p><strong>What you see:</strong> A LaTeX section file saved to <code>paper/sections/intro.tex</code>, plus a claim-source map linking every numerical claim to a specific script and output file.</p>
+<p><strong>What to do next:</strong> Review for accuracy and voice. If you have prior papers, run <code>/write style-guide [dir]</code> first to calibrate the writer to your voice. For all available sections and flags, see the <a href="./reference.html">Command Reference</a>.</p>
 <hr>
 </section>
-<section id="the-research-pipeline" class="level1">
-<h1>The Research Pipeline</h1>
-<section id="discovery" class="level2">
-<h2 class="anchored" data-anchor-id="discovery">Discovery</h2>
-<p><code>/discover</code> runs an interactive interview that builds your research specification and produces a <strong>decision record</strong> documenting alternatives considered. Use <code>/discover --lit</code> for literature synthesis (Librarian + librarian-critic) or <code>/discover --data</code> for data assessment (Explorer + explorer-critic). See the <a href="./reference.html">Command Reference</a> for all flags.</p>
-</section>
-<section id="strategy" class="level2">
-<h2 class="anchored" data-anchor-id="strategy">Strategy</h2>
-<p><code>/strategize</code> proposes your identification design via the Strategist + strategist-critic pair. It first produces a <strong>pre-strategy report</strong> (paper type classification, candidate designs), then the full strategy memo with robustness plan and falsification tests. Use <code>/strategize --pap</code> for Pre-Analysis Plans (RCT/experimental only). For how strategy adapts to paper types, see <a href="./agents.html">Meet the Agents</a>.</p>
-</section>
-<section id="execution" class="level2">
-<h2 class="anchored" data-anchor-id="execution">Execution</h2>
-<p><code>/analyze</code> handles end-to-end data analysis: cleaning, main specification, robustness, publication-ready tables and figures. The Coder produces a <strong>pre-code report</strong> (naming map, script structure, numerical guards) before writing any code. Use <code>/review --code</code> to run a mechanical lint pass before the full code review. <code>/write</code> drafts paper sections using argument moves (see “Your First Draft” above). Supports R, Python, and Julia.</p>
-</section>
-<section id="review-and-revision" class="level2">
-<h2 class="anchored" data-anchor-id="review-and-revision">Review and Revision</h2>
-<p><code>/review</code> routes automatically based on file type — paper files get writer-critic + strategist-critic + Verifier; scripts get coder-critic; <code>--peer</code> dispatches the full editorial pipeline (see “Your First Review” above). <code>/revise</code> classifies each referee comment as NEW ANALYSIS, CLARIFICATION, DISAGREE, or MINOR, and routes to the right agent. See <a href="./agents.html">Meet the Agents</a> for the peer review architecture and <a href="./reference.html">Command Reference</a> for all flags.</p>
-</section>
-<section id="presentations" class="level2">
-<h2 class="anchored" data-anchor-id="presentations">Presentations</h2>
-<p><code>/talk create [format]</code> generates talks derived from your paper in 4 formats: job market (45–60 min), seminar (30–45 min), short (15 min), and lightning (5 min). Supports both <strong>Beamer</strong> (output to <code>paper/talks/</code>) and <strong>Quarto RevealJS</strong> (<code>--quarto</code>, output to <code>paper/quarto/</code>). Talk scores are advisory (non-blocking). See the <a href="./reference.html">Command Reference</a> for subcommands.</p>
-</section>
-<section id="submission" class="level2">
-<h2 class="anchored" data-anchor-id="submission">Submission</h2>
-<p><code>/submit --target</code> recommends journals. <code>/submit --package</code> builds an AEA-format replication package. <code>/submit --audit</code> runs the Verifier’s 10-check audit. <code>/submit --final</code> enforces the submission gate (aggregate &gt;= 95, all components &gt;= 80). See the <a href="./reference.html">Command Reference</a> for details.</p>
-</section>
-<section id="utilities" class="level2">
-<h2 class="anchored" data-anchor-id="utilities">Utilities</h2>
-<p><code>/tools</code> provides commit, compile, validate-bib, lint, journal, deploy, learn, and upgrade subcommands. Use <code>/tools lint</code> for mechanical code linting (R, Python, Julia) — runs prohibited-pattern checks before the full coder-critic review.</p>
+<section id="running-the-full-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="running-the-full-pipeline">Running the Full Pipeline</h2>
+<p><strong>What you type:</strong> <code>/new-project [topic]</code></p>
+<p><strong>What happens behind the scenes:</strong> The pipeline runs through all five phases, pausing for your approval at each transition:</p>
+<ol type="1">
+<li><strong>Discovery</strong> — librarian and explorer run in parallel, searching for literature and datasets. Their critics review coverage and feasibility. You see an annotated bibliography and ranked dataset list.</li>
+<li><strong>Strategy</strong> — the strategist classifies your paper type and designs the identification strategy. The strategist-critic runs a 4-phase adversarial review. You see a strategy memo with assumptions, pseudo-code, and a robustness plan.</li>
+<li><strong>Execution</strong> — the coder translates the strategy memo into numbered scripts; the writer drafts the manuscript from actual results. Both are reviewed by their paired critics. You see scripts, tables, figures, and LaTeX sections.</li>
+<li><strong>Review</strong> — the editor dispatches two blind referees. You see an editorial decision with classified concerns and action items.</li>
+<li><strong>Submission</strong> — the verifier runs a 10-check audit on the replication package. The final gate enforces score &gt;= 95 with all components &gt;= 80.</li>
+</ol>
+<p><strong>What you see:</strong> At each gate, a summary with scores and the next decision point. The pipeline never advances without your approval.</p>
+<p><strong>What to do next:</strong> Read the strategy memo carefully — it becomes the contract the coder implements. Review referee reports as you would real ones. For details on any phase, see the <a href="./reference.html">Command Reference</a>.</p>
 <hr>
 </section>
-</section>
-<section id="quality-gates" class="level1">
-<h1>Quality Gates</h1>
-<p>Every file gets a quality score from 0 to 100, computed as a <strong>weighted aggregate</strong> across components. The orchestrator manages this automatically.</p>
+<section id="revising-after-referee-reports" class="level2">
+<h2 class="anchored" data-anchor-id="revising-after-referee-reports">Revising After Referee Reports</h2>
+<p><strong>What you type:</strong> <code>/revise [referee-report.pdf]</code></p>
+<p><strong>What happens behind the scenes:</strong> Each referee comment is classified into one of five categories and routed to the appropriate agent:</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 42%">
+<col style="width: 31%">
+<col style="width: 25%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Score</th>
-<th>Gate</th>
-<th>Applies To</th>
+<th>Classification</th>
+<th>Routed to</th>
+<th>Example</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>95+</strong></td>
-<td>Submission</td>
-<td>Aggregate + all components &gt;= 80</td>
+<td>NEW ANALYSIS</td>
+<td>Coder (flagged for your approval first)</td>
+<td>“Control for X” or “Show results by subgroup”</td>
 </tr>
 <tr class="even">
-<td><strong>90+</strong></td>
-<td>PR</td>
-<td>Weighted aggregate (blocking)</td>
+<td>CLARIFICATION</td>
+<td>Writer</td>
+<td>“Explain your exclusion restriction more clearly”</td>
 </tr>
 <tr class="odd">
-<td><strong>80+</strong></td>
-<td>Commit</td>
-<td>Weighted aggregate (blocking)</td>
+<td>REWRITE</td>
+<td>Writer</td>
+<td>“Restructure Section 4”</td>
 </tr>
 <tr class="even">
-<td><strong>&lt; 80</strong></td>
-<td>Blocked</td>
-<td>Must fix before committing</td>
+<td>DISAGREE</td>
+<td>You (mandatory review)</td>
+<td>“Your identification assumption is violated”</td>
 </tr>
 <tr class="odd">
-<td>–</td>
-<td>Advisory</td>
-<td>Talks (reported, non-blocking)</td>
+<td>MINOR</td>
+<td>Writer</td>
+<td>Typos, formatting, citation additions</td>
 </tr>
 </tbody>
 </table>
-<p>These run in the background. You will rarely think about them — they just prevent broken work from being committed.</p>
-<p>See the full <a href="./architecture.html#scoring-protocol">scoring formula</a> in the Architecture Reference.</p>
+<p><strong>What you see:</strong> A tracking document with counts and priorities, plus a draft point-by-point LaTeX response letter. DISAGREE items are always flagged — Claude never autonomously pushes back on referees.</p>
+<p><strong>What to do next:</strong> Review DISAGREE items and decide your response. Approve NEW ANALYSIS tasks before they execute. Run <code>/review --peer --r2</code> to simulate the next referee round with the same dispositions.</p>
 <hr>
 </section>
-<section id="troubleshooting" class="level1">
-<h1>Troubleshooting</h1>
+<section id="creating-a-talk" class="level2">
+<h2 class="anchored" data-anchor-id="creating-a-talk">Creating a Talk</h2>
+<p><strong>A talk is not a paper read aloud — it is a narrative with a different arc.</strong> The storyteller agent builds format-aware slide decks that respect this distinction.</p>
+<p><strong>What you type:</strong> <code>/talk create seminar</code></p>
+<p><strong>What happens behind the scenes:</strong> The storyteller reads your paper and builds a slide deck in the specified format (seminar: 25–35 slides, 30–45 min). It applies format-specific narrative arcs — reduced-form talks lead with the policy question, structural talks build the model step by step, descriptive talks open with the data innovation. The storyteller-critic reviews for overflow, content fidelity, and narrative flow.</p>
+<p><strong>What you see:</strong> A Quarto RevealJS <code>.qmd</code> file in <code>paper/quarto/</code> with speaker notes on every slide, plus a critic review report. Talk scores are advisory — they do not block commits.</p>
+<p><strong>What to do next:</strong> Review the slides against your paper. Run <code>/talk audit</code> to catch text overflow and sizing issues. Run <code>/talk compile</code> to build the HTML presentation. For Beamer LaTeX output, add <code>--beamer</code> — that produces a <code>.tex</code> file in <code>paper/talks/</code> instead. For all format options, see the <a href="./reference.html">Command Reference</a>.</p>
+<hr>
+</section>
+<section id="session-guards" class="level2">
+<h2 class="anchored" data-anchor-id="session-guards">Session Guards</h2>
+<p><strong>Two commands protect you from expensive mistakes.</strong> Both are session-scoped — they reset when the conversation ends.</p>
+<p><code>/freeze paper/</code> locks a directory from edits for the rest of the session. Use it when you are reviewing code but jotting notes about the paper — the system will refuse to modify frozen paths, preventing accidental overwrites while your attention is elsewhere.</p>
+<p><code>/careful</code> activates confirmation prompts before every file write. Use it before working on a critical branch, during final pre-submission edits, or any time the cost of a wrong edit exceeds the cost of an extra confirmation step.</p>
+<p>Neither command persists across sessions. Start a new conversation and all guards are cleared.</p>
+<hr>
+</section>
+<section id="quality-gates" class="level2">
+<h2 class="anchored" data-anchor-id="quality-gates">Quality Gates</h2>
+<p>Three thresholds govern what actions the system allows:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 41%">
+<col style="width: 41%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Gate</th>
+<th>Score required</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Commit</strong></td>
+<td>&gt;= 80</td>
+<td>Work can be committed to the repository</td>
+</tr>
+<tr class="even">
+<td><strong>PR</strong></td>
+<td>&gt;= 90</td>
+<td>Work can be opened as a pull request</td>
+</tr>
+<tr class="odd">
+<td><strong>Submission</strong></td>
+<td>&gt;= 95 + all components &gt;= 80</td>
+<td>Work can be submitted to a journal</td>
+</tr>
+</tbody>
+</table>
+<p>Scores are weighted aggregates of individual critic scores. Each critic starts at 100 and deducts for issues found. The system manages this automatically — you will rarely think about it unless a score drops below 80, which blocks commits until the flagged issues are fixed.</p>
+<p><strong>Recovering from a low score:</strong> Run <code>/review --all</code> to get a per-component breakdown. Fix critical issues first (they carry the largest deductions). Re-run the relevant review to update the score. For the full scoring formula and component weights, see <a href="./rules.html#sec-gates">Rules &amp; Invariants</a>.</p>
+<hr>
+</section>
+<section id="troubleshooting" class="level2">
+<h2 class="anchored" data-anchor-id="troubleshooting">Troubleshooting</h2>
 <section id="latex-wont-compile" class="level3">
 <h3 class="anchored" data-anchor-id="latex-wont-compile">LaTeX Won’t Compile</h3>
 <p><strong>Symptom:</strong> <code>latexmk</code> or <code>xelatex</code> errors, missing packages.</p>
@@ -430,6 +608,7 @@ Paragraph 6 [ROADMAP]: Section-by-section guide</code></pre>
 <li>Check hooks are configured in <code>.claude/settings.json</code></li>
 <li>Ensure Python 3 is available: <code>which python3</code></li>
 <li>Check hook file permissions: <code>ls -la .claude/hooks/</code></li>
+<li>Hook blocking an edit you want to make? See <a href="./hooks.html#protect-files">Hooks &amp; Automation</a> for how to customize protected patterns.</li>
 </ol>
 </section>
 <section id="claude-ignores-rules" class="level3">
@@ -447,7 +626,7 @@ Paragraph 6 [ROADMAP]: Section-by-section guide</code></pre>
 <ol type="1">
 <li>Point Claude to the plan: “Read <code>quality_reports/plans/[latest].md</code>”</li>
 <li>Check session log: “Read <code>quality_reports/session_logs/[latest].md</code>”</li>
-<li>The <code>post-compact-restore.py</code> hook should print recovery info automatically</li>
+<li>The <code>post-compact-restore.py</code> hook should print recovery info automatically. See <a href="./hooks.html#post-compact-restore">Hooks &amp; Automation</a> for details.</li>
 </ol>
 </section>
 <section id="quality-score-too-low" class="level3">
@@ -461,8 +640,8 @@ Paragraph 6 [ROADMAP]: Section-by-section guide</code></pre>
 <hr>
 </section>
 </section>
-<section id="sec-upgrading" class="level1">
-<h1>Upgrading</h1>
+<section id="sec-upgrading" class="level2">
+<h2 class="anchored" data-anchor-id="sec-upgrading">Upgrading</h2>
 <p>Run <code>/tools upgrade</code> to upgrade your project to the latest clo-author version. It replaces <code>.claude/</code> and <code>templates/</code>, preserving your paper, scripts, data, bibliography, and CLAUDE.md.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -485,6 +664,19 @@ Note
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {

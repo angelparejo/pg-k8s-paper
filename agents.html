@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Meet the Agents – The Clo-Author</title>
+<title>Agents – The Clo-Author</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,41 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -72,10 +37,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-be788d54854417ccf85972ce5a1e216a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb133401eb1928132202f6efeefbc5fe.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-fdd259eaf9296a602f9f2594b91304b4.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb133401eb1928132202f6efeefbc5fe.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-4a343adb3e348b0dfb90aadcb4eb116e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-45f38feec4c6d3ad185969c2b5aa4b3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-b9862f91d0a1d344de8539a32e8a5ff2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-45f38feec4c6d3ad185969c2b5aa4b3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -105,10 +74,201 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -134,20 +294,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">User Guide</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./agents.html" aria-current="page"> 
-<span class="menu-text">Agents</span></a>
+    <a class="nav-link" href="./reference.html"> 
+<span class="menu-text">Reference</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./architecture.html"> 
 <span class="menu-text">Architecture</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./customization.html"> 
-<span class="menu-text">Customization</span></a>
+    <a class="nav-link active" href="./agents.html" aria-current="page"> 
+<span class="menu-text">Agents</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./reference.html"> 
-<span class="menu-text">Reference</span></a>
+    <a class="nav-link" href="./rules.html"> 
+<span class="menu-text">Rules</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./hooks.html"> 
+<span class="menu-text">Hooks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./customization.html"> 
+<span class="menu-text">Customization</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./changelog.html"> 
@@ -163,6 +331,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -176,60 +345,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#how-agents-work" id="toc-how-agents-work" class="nav-link active" data-scroll-target="#how-agents-work">How Agents Work</a></li>
-  <li><a href="#the-researchers-discovery-phase" id="toc-the-researchers-discovery-phase" class="nav-link" data-scroll-target="#the-researchers-discovery-phase">The Researchers (Discovery Phase)</a>
+  <li><a href="#how-agents-work" id="toc-how-agents-work" class="nav-link active" data-scroll-target="#how-agents-work">Four Architectural Rules</a>
   <ul class="collapse">
-  <li><a href="#librarian" id="toc-librarian" class="nav-link" data-scroll-target="#librarian">Librarian</a></li>
-  <li><a href="#librarian-critic" id="toc-librarian-critic" class="nav-link" data-scroll-target="#librarian-critic">librarian-critic</a></li>
-  <li><a href="#explorer" id="toc-explorer" class="nav-link" data-scroll-target="#explorer">Explorer</a></li>
-  <li><a href="#explorer-critic" id="toc-explorer-critic" class="nav-link" data-scroll-target="#explorer-critic">explorer-critic</a></li>
+  <li><a href="#worker-critic-pairing" id="toc-worker-critic-pairing" class="nav-link" data-scroll-target="#worker-critic-pairing">Worker-Critic Pairing</a></li>
+  <li><a href="#separation-of-powers" id="toc-separation-of-powers" class="nav-link" data-scroll-target="#separation-of-powers">Separation of Powers</a></li>
+  <li><a href="#cold-read-protocol" id="toc-cold-read-protocol" class="nav-link" data-scroll-target="#cold-read-protocol">Cold-Read Protocol</a></li>
+  <li><a href="#three-round-limit-and-escalation" id="toc-three-round-limit-and-escalation" class="nav-link" data-scroll-target="#three-round-limit-and-escalation">Three-Round Limit and Escalation</a></li>
   </ul></li>
-  <li><a href="#the-strategist-strategy-phase" id="toc-the-strategist-strategy-phase" class="nav-link" data-scroll-target="#the-strategist-strategy-phase">The Strategist (Strategy Phase)</a>
+  <li><a href="#skill-centric" id="toc-skill-centric" class="nav-link" data-scroll-target="#skill-centric">The Skill-Centric Model</a></li>
+  <li><a href="#agent-groups" id="toc-agent-groups" class="nav-link" data-scroll-target="#agent-groups">Agent Groups</a>
   <ul class="collapse">
-  <li><a href="#strategist" id="toc-strategist" class="nav-link" data-scroll-target="#strategist">Strategist</a></li>
-  <li><a href="#strategist-critic" id="toc-strategist-critic" class="nav-link" data-scroll-target="#strategist-critic">strategist-critic</a></li>
-  <li><a href="#theorist" id="toc-theorist" class="nav-link" data-scroll-target="#theorist">Theorist</a></li>
-  <li><a href="#theorist-critic" id="toc-theorist-critic" class="nav-link" data-scroll-target="#theorist-critic">theorist-critic</a></li>
+  <li><a href="#discovery-pair" id="toc-discovery-pair" class="nav-link" data-scroll-target="#discovery-pair">Discovery Pair</a></li>
+  <li><a href="#strategy-pair" id="toc-strategy-pair" class="nav-link" data-scroll-target="#strategy-pair">Strategy Pair</a></li>
+  <li><a href="#execution-trio" id="toc-execution-trio" class="nav-link" data-scroll-target="#execution-trio">Execution Trio</a></li>
+  <li><a href="#review-team" id="toc-review-team" class="nav-link" data-scroll-target="#review-team">Review Team</a></li>
+  <li><a href="#presentation-pair" id="toc-presentation-pair" class="nav-link" data-scroll-target="#presentation-pair">Presentation Pair</a></li>
+  <li><a href="#infrastructure" id="toc-infrastructure" class="nav-link" data-scroll-target="#infrastructure">Infrastructure</a></li>
   </ul></li>
-  <li><a href="#the-builders-execution-phase" id="toc-the-builders-execution-phase" class="nav-link" data-scroll-target="#the-builders-execution-phase">The Builders (Execution Phase)</a>
-  <ul class="collapse">
-  <li><a href="#data-engineer" id="toc-data-engineer" class="nav-link" data-scroll-target="#data-engineer">Data-engineer</a></li>
-  <li><a href="#coder" id="toc-coder" class="nav-link" data-scroll-target="#coder">Coder</a></li>
-  <li><a href="#coder-critic" id="toc-coder-critic" class="nav-link" data-scroll-target="#coder-critic">coder-critic</a>
-  <ul class="collapse">
-  <li><a href="#score-breakdown-example" id="toc-score-breakdown-example" class="nav-link" data-scroll-target="#score-breakdown-example">Score Breakdown Example</a></li>
-  </ul></li>
-  <li><a href="#writer" id="toc-writer" class="nav-link" data-scroll-target="#writer">Writer</a></li>
-  <li><a href="#writer-critic" id="toc-writer-critic" class="nav-link" data-scroll-target="#writer-critic">writer-critic</a></li>
-  </ul></li>
-  <li><a href="#the-reviewers-peer-review-phase" id="toc-the-reviewers-peer-review-phase" class="nav-link" data-scroll-target="#the-reviewers-peer-review-phase">The Reviewers (Peer Review Phase)</a>
-  <ul class="collapse">
-  <li><a href="#editor" id="toc-editor" class="nav-link" data-scroll-target="#editor">Editor</a></li>
-  <li><a href="#domain-referee" id="toc-domain-referee" class="nav-link" data-scroll-target="#domain-referee">domain-referee</a></li>
-  <li><a href="#methods-referee" id="toc-methods-referee" class="nav-link" data-scroll-target="#methods-referee">methods-referee</a></li>
-  </ul></li>
-  <li><a href="#the-infrastructure" id="toc-the-infrastructure" class="nav-link" data-scroll-target="#the-infrastructure">The Infrastructure</a>
-  <ul class="collapse">
-  <li><a href="#verifier" id="toc-verifier" class="nav-link" data-scroll-target="#verifier">Verifier</a></li>
-  <li><a href="#orchestrator" id="toc-orchestrator" class="nav-link" data-scroll-target="#orchestrator">Orchestrator</a></li>
-  </ul></li>
+  <li><a href="#phase-flow" id="toc-phase-flow" class="nav-link" data-scroll-target="#phase-flow">Phase Flow</a></li>
   <li><a href="#agent-catalog" id="toc-agent-catalog" class="nav-link" data-scroll-target="#agent-catalog">Quick Reference</a></li>
-  <li><a href="#multi-model-strategy" id="toc-multi-model-strategy" class="nav-link" data-scroll-target="#multi-model-strategy">Multi-Model Strategy</a></li>
-  <li><a href="#talks-presentation-phase" id="toc-talks-presentation-phase" class="nav-link" data-scroll-target="#talks-presentation-phase">Talks (Presentation Phase)</a>
-  <ul class="collapse">
-  <li><a href="#storyteller" id="toc-storyteller" class="nav-link" data-scroll-target="#storyteller">Storyteller</a></li>
-  <li><a href="#storyteller-critic" id="toc-storyteller-critic" class="nav-link" data-scroll-target="#storyteller-critic">storyteller-critic</a></li>
-  </ul></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading">Where the Details Live</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Meet the Agents</h1>
-<p class="subtitle lead">17 Specialists That Do the Work</p>
+<h1 class="title">Agents</h1>
+<p class="subtitle lead">Twenty specialists that never edit each other’s work</p>
 </div>
 
 
@@ -247,573 +393,337 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <section id="how-agents-work" class="level1">
-<h1>How Agents Work</h1>
-<p>When you ask Claude to analyze data or draft a paper, it doesn’t do everything itself. It dispatches <strong>specialized agents</strong> — think of them as 17 different research assistants, each with a specific skill.</p>
-<p>The key pattern: every agent that creates something (a literature review, analysis code, paper text) has a <strong>paired critic</strong> that checks its work. The critic can read but never edit — so it has no reason to go easy. If the critic finds problems, the worker fixes them. If they can’t agree after 3 rounds, you get asked to decide.</p>
-<p>This is what prevents Claude from saying “looks good” about its own work.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="What to Expect">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>What to Expect
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The critics catch structural problems reliably — wrong clustering, missing citations, broken LaTeX, design-specific gaps. The creators produce solid first drafts that follow economics conventions. You bring the field knowledge and editorial judgment. Notes on each agent’s strengths and limits are below.</p>
-</div>
-</div>
-<hr>
-</section>
-<section id="the-researchers-discovery-phase" class="level1">
-<h1>The Researchers (Discovery Phase)</h1>
-<p>These agents help you find the literature and data you need before designing your empirical strategy.</p>
-<section id="librarian" class="level2">
-<h2 class="anchored" data-anchor-id="librarian">Librarian</h2>
-<p>Searches top-5 journals, NBER working papers, SSRN, and RePEC for papers related to your topic. Produces an annotated bibliography with BibTeX entries, maps where the research frontier is, and identifies where your paper fits in the conversation. Calibrated to your field via the domain profile.</p>
-</section>
-<section id="librarian-critic" class="level2">
-<h2 class="anchored" data-anchor-id="librarian-critic">librarian-critic</h2>
-<p>Reads the bibliography the Librarian produced and looks for blind spots. Are there important recent papers missing? Is the review biased toward one methodology or subfield? Does it cover the right adjacent literatures? Scores the bibliography and sends it back for fixes if needed.</p>
-</section>
-<section id="explorer" class="level2">
-<h2 class="anchored" data-anchor-id="explorer">Explorer</h2>
-<p>Searches for public, administrative, and survey datasets that could answer your research question. Evaluates each source for variable coverage, sample size, time span, access restrictions, and how well it fits your identification strategy. Produces a ranked list with feasibility grades.</p>
-</section>
-<section id="explorer-critic" class="level2">
-<h2 class="anchored" data-anchor-id="explorer-critic">explorer-critic</h2>
-<p>Reviews the Explorer’s data assessment with a skeptical eye. Checks whether the recommended datasets actually measure what you need, whether the sample is representative enough for your question, and whether the data limitations would threaten your identification strategy.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="What to Expect">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>What to Expect
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Good starting lists for literature and data. Verify access status and check for recent working papers yourself.</p>
-</div>
-</div>
-<hr>
-</section>
-</section>
-<section id="the-strategist-strategy-phase" class="level1">
-<h1>The Strategist (Strategy Phase)</h1>
-<p>These agents design and validate your empirical approach before you write a single line of code.</p>
-<section id="strategist" class="level2">
-<h2 class="anchored" data-anchor-id="strategist">Strategist</h2>
-<p>Given your research question, literature, and available data, designs the empirical strategy. <strong>Paper-type aware</strong> — first classifies the paper, then applies the right strategy template:</p>
+<h1>Four Architectural Rules</h1>
+<p>The system uses 20 specialized agents organized into worker-critic pairs. Four rules explain most of the system’s behavior.</p>
+<section id="worker-critic-pairing" class="level2">
+<h2 class="anchored" data-anchor-id="worker-critic-pairing">Worker-Critic Pairing</h2>
+<p><strong>Every creator has a paired destroyer.</strong> The critic reads the artifact, scores it against a rubric, and lists what must change — but never edits the file itself. If the score falls below 80, the worker revises and the critic re-evaluates. This cycle repeats up to 3 rounds.</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 42%">
-<col style="width: 57%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 51%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Paper Type</th>
-<th>Strategy Focus</th>
+<th>Worker</th>
+<th>Critic</th>
+<th>What’s Reviewed</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Reduced-form</td>
-<td>Estimand, estimator (DiD/IV/RDD/SC), assumptions, robustness, falsification</td>
+<td>librarian</td>
+<td>librarian-critic</td>
+<td>Literature coverage, gaps, recency</td>
 </tr>
 <tr class="even">
-<td>Structural</td>
-<td>Model environment, parameter identification, estimation method, counterfactuals</td>
+<td>explorer</td>
+<td>explorer-critic</td>
+<td>Data feasibility, quality, identification fit</td>
 </tr>
 <tr class="odd">
-<td>Theory+empirics</td>
-<td>Testable predictions, mapping to data, test power</td>
+<td>strategist</td>
+<td>strategist-critic</td>
+<td>Identification validity, assumptions, robustness</td>
 </tr>
 <tr class="even">
-<td>Descriptive</td>
-<td>Construct definition, validation plan, decomposition</td>
+<td>theorist</td>
+<td>theorist-critic</td>
+<td>Proof validity, assumption minimality, notation</td>
+</tr>
+<tr class="odd">
+<td>data-engineer</td>
+<td>coder-critic</td>
+<td>Data pipeline quality, reproducibility</td>
+</tr>
+<tr class="even">
+<td>coder</td>
+<td>coder-critic</td>
+<td>Code quality, strategy alignment, numerical discipline</td>
+</tr>
+<tr class="odd">
+<td>writer</td>
+<td>writer-critic</td>
+<td>Manuscript polish, claims-evidence, LaTeX format</td>
+</tr>
+<tr class="even">
+<td>storyteller</td>
+<td>storyteller-critic</td>
+<td>Talk structure, visual quality, content fidelity</td>
 </tr>
 </tbody>
 </table>
-<p>Can also draft Pre-Analysis Plans in AEA/OSF/EGAP format (<code>/strategize --pap</code>).</p>
+<p>Three agents have no paired critic because they are infrastructure (orchestrator, verifier) or already serve as reviewers (editor, domain-referee, methods-referee).</p>
 </section>
-<section id="strategist-critic" class="level2">
-<h2 class="anchored" data-anchor-id="strategist-critic">strategist-critic</h2>
-<p>The toughest reviewer in the system. <strong>Paper-type aware</strong> — uses different checklists per type:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 45%">
-<col style="width: 54%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Paper Type</th>
-<th>Critic Focus</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Reduced-form</td>
-<td>Design-specific assumptions (parallel trends, exclusion restriction, manipulation test), sanity checks, inference, package-specific code</td>
-</tr>
-<tr class="even">
-<td>Structural</td>
-<td>Model specification, parameter identification (data variation vs.&nbsp;functional form), convergence, model fit, counterfactual credibility</td>
-</tr>
-<tr class="odd">
-<td>Theory+empirics</td>
-<td>Prediction sharpness (do they rule things out?), test power, honesty about failures</td>
-</tr>
-<tr class="even">
-<td>Descriptive</td>
-<td>Construct validity, measurement error, representativeness, decomposition assumptions</td>
-</tr>
-</tbody>
-</table>
-<p>Sends it back with specific objections until the design is sound.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="What to Expect">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>What to Expect
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Strong on checklists and modern estimator recommendations. The institutional story behind your variation is yours to evaluate — the Strategist tells you what to check, not whether your setting is convincing.</p>
-</div>
-</div>
+<section id="separation-of-powers" class="level2">
+<h2 class="anchored" data-anchor-id="separation-of-powers">Separation of Powers</h2>
+<p><strong>Critics never create. Creators never self-score.</strong> If a critic invocation produces a file in <code>scripts/</code>, <code>paper/</code>, or <code>paper/talks/</code>, the orchestrator flags it as a violation. If a creator reports its own score, the orchestrator discards it and dispatches the critic.</p>
+<p>This prevents the system from rubber-stamping its own output. A critic who fixes their own findings has incentive to find only fixable issues. Separation keeps criticism honest.</p>
 </section>
-<section id="theorist" class="level2">
-<h2 class="anchored" data-anchor-id="theorist">Theorist</h2>
-<p>The methods coauthor for formal theory sections. Drafts assumptions, definitions, lemmas, theorems, and proofs at the rigor level of <em>Econometrica</em>, <em>Journal of Econometrics</em>, <em>Quantitative Economics</em>, and <em>Annals of Statistics</em>. <strong>Paper-type aware</strong> — activates primarily for:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 29%">
-<col style="width: 70%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Paper Type</th>
-<th>When Theorist Contributes</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Econometric methods</td>
-<td>Identification + asymptotic theory + inference validity</td>
-</tr>
-<tr class="even">
-<td>Theory+empirics</td>
-<td>Model, propositions, comparative statics, mapping to data</td>
-</tr>
-<tr class="odd">
-<td>Structural</td>
-<td>Identification of structural parameters + estimation theory</td>
-</tr>
-<tr class="even">
-<td>Methodological reduced-form</td>
-<td>Identification + asymptotic distribution of proposed estimator</td>
-</tr>
-</tbody>
-</table>
-<p>Covers identification results, consistency, asymptotic normality, non-standard rates, influence functions and efficiency bounds, uniform validity, double/debiased ML, bootstrap validity, test properties, and signed comparative-static propositions. Field-specific citation anchors come from <code>domain-profile.md</code>; broad defaults cover DiD, IV, RDD, DML, semiparametric efficiency, GMM, and bootstrap. Invoke via <code>/strategize theory [target]</code>.</p>
+<section id="cold-read-protocol" class="level2">
+<h2 class="anchored" data-anchor-id="cold-read-protocol">Cold-Read Protocol</h2>
+<p><strong>Critics evaluate blind.</strong> On every round, the critic receives only the artifact, its scoring rubric, the severity level, and the content invariants. It does not receive: what round this is, what the worker struggled with, prior critic reports, or the research journal. A critic that knows the worker has already tried twice will soften its evaluation. The cold-read protocol prevents this drift.</p>
 </section>
-<section id="theorist-critic" class="level2">
-<h2 class="anchored" data-anchor-id="theorist-critic">theorist-critic</h2>
-<p>A top methods-journal referee. Reviews through <strong>4 sequential phases with early-stop on critical gaps</strong> — the proof-validity phase gates everything downstream, so a broken proof doesn’t get buried under citation nits:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Phase</th>
-<th>Focus</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1. Claim identification</td>
-<td>Object type, target parameter, estimator, assumption list, paper-type fit</td>
-</tr>
-<tr class="even">
-<td>2. Proof validity</td>
-<td>Logical validity, measurability / integrability, expansions + remainders, design-specific identification checks, asymptotic distribution</td>
-</tr>
-<tr class="odd">
-<td>3. Assumptions + statements</td>
-<td>Minimality (each assumption used), primitiveness, over/under-claim, pointwise vs.&nbsp;uniform, notation consistency (INV-7)</td>
-</tr>
-<tr class="even">
-<td>4. Citations + linkage + polish</td>
-<td>Citation fidelity, orphan theorems, linkage to empirical claims, exposition</td>
-</tr>
-</tbody>
-</table>
-<p>Deduction rubric: -20 per logic gap, -25 circular, -15 overclaim, -10 unjustified limit interchange, -5 per never-used assumption. Score ≥ 80 to approve.</p>
-<p><strong>Authorship-aware calibration</strong>: reads the <code>Paper Author Team</code> table in <code>domain-profile.md</code>; if the paper’s authors are themselves among the reference literature on the topic, the critic avoids lecturing them on their own contributions. Audit via <code>/review --theory [target]</code>.</p>
+<section id="three-round-limit-and-escalation" class="level2">
+<h2 class="anchored" data-anchor-id="three-round-limit-and-escalation">Three-Round Limit and Escalation</h2>
+<p><strong>Three strikes, then escalation.</strong> If a worker-critic pair cannot converge after 3 rounds, the orchestrator routes the problem elsewhere — either to a different agent or to the user. Escalation targets are declared per agent in <code>permissions.md</code>. When the coder and coder-critic deadlock, the issue escalates to the strategist-critic (is the memo implementable?). When the strategist and strategist-critic deadlock, it escalates to the user (fundamental design question). This prevents infinite loops while ensuring hard problems get human judgment.</p>
 <hr>
 </section>
 </section>
-<section id="the-builders-execution-phase" class="level1">
-<h1>The Builders (Execution Phase)</h1>
-<p>These agents produce the actual analysis code, data pipelines, and paper manuscript.</p>
-<section id="data-engineer" class="level2">
-<h2 class="anchored" data-anchor-id="data-engineer">Data-engineer</h2>
-<p>Handles the unglamorous but critical work: data cleaning, variable construction, panel building, merges, and missing data. Also creates publication-quality figures (ggplot2 themes, multi-panel layouts, accessibility-conscious colors). Paired with coder-critic for review.</p>
+<section id="skill-centric" class="level1">
+<h1>The Skill-Centric Model</h1>
+<p><strong>Agents used to be monolithic.</strong> Each agent file contained identity, checklists, templates, rubrics, and scoring tables — 200 to 474 lines of coupled operational knowledge. Updating a checklist meant editing an agent. Adding a paper type meant editing every agent that touches paper types.</p>
+<p><strong>The problem:</strong> operational knowledge evolved faster than identity. A new estimator package required updating checklists, not changing who the coder <em>is</em>. Coupling them meant agent files churned constantly.</p>
+<p><strong>Now agents are lean identity files.</strong> Each one is 50–140 lines declaring: role, voice, constraints, tool access, paper-type awareness, and pointers to where the operational knowledge lives. The coder file says “read <code>analyze/templates/pre-code-report.md</code> before writing code” — it does not contain the pre-code report template itself.</p>
+<p>The operational knowledge — checklists, rubrics, scoring tables, templates, gotchas — lives in <strong>skill folders</strong>. When the orchestrator dispatches an agent, it tells the agent which skill invoked it and the agent reads the relevant templates from that skill’s directory. This means:</p>
+<ul>
+<li>Agent files change rarely (identity is stable)</li>
+<li>Skill folders evolve freely (knowledge improves every project)</li>
+<li>The same agent can serve multiple skills with different templates</li>
+<li>Adding a new paper type means adding templates, not rewriting agents</li>
+</ul>
+<p>A concrete example: the coder agent file (136 lines) declares its role, tool access, workflow stages, engineering standards, and output expectations. But when <code>/analyze</code> dispatches it, the coder reads <code>analyze/templates/pre-code-report.md</code> for the pre-code report format, <code>analyze/templates/r-script-structure.R</code> for the scaffold, and <code>analyze/gotchas.md</code> for known pitfalls. None of that lives in the agent file. If we learn a new gotcha tomorrow, we add one line to <code>analyze/gotchas.md</code> — the agent file never changes.</p>
+<p>The strategist-critic works the same way. Its identity file (62 lines) says: “You are a top-5 journal referee. Run 4 sequential phases. Read the causal audit template.” The 4-phase audit protocol, the design-specific checklists, and the scoring rubric all live in <code>review/templates/</code> and <code>review/config/</code>. Updating how we evaluate RDD papers means editing a template, not touching the critic’s identity.</p>
+<p>For full agent specifications, see the <code>.claude/agents/</code> directory — each file is self-contained and authoritative.</p>
+<hr>
 </section>
-<section id="coder" class="level2">
-<h2 class="anchored" data-anchor-id="coder">Coder</h2>
-<p>Translates the strategy memo into working analysis scripts. <strong>Paper-type aware:</strong></p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 42%">
-<col style="width: 57%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Paper Type</th>
-<th>Implementation</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Reduced-form</td>
-<td>DiD/IV/RDD with design-specific packages</td>
-</tr>
-<tr class="even">
-<td>Structural</td>
-<td>MLE/GMM/SMM/BLP with convergence diagnostics and counterfactual simulation</td>
-</tr>
-<tr class="odd">
-<td>Theory+empirics</td>
-<td>Prediction-by-prediction tests</td>
-</tr>
-<tr class="even">
-<td>Descriptive</td>
-<td>Construction, validation, decomposition</td>
-</tr>
-</tbody>
-</table>
-<p>Enforces engineering discipline: paper-to-code naming maps, numbered script structure with master runner, function-per-file, numerical guards (float comparison, CDF clamping, inverse link protection), and bootstrap/parallel patterns. Supports R, Python, and Julia.</p>
+<section id="agent-groups" class="level1">
+<h1>Agent Groups</h1>
+<p>Rather than profiling each agent individually (those profiles live in <code>.claude/agents/</code>), we organize by function. Each group activates at a specific pipeline phase, produces specific artifacts, and has specific quality gates.</p>
+<section id="discovery-pair" class="level2">
+<h2 class="anchored" data-anchor-id="discovery-pair">Discovery Pair</h2>
+<p>The <strong>librarian</strong> searches top-5 general-interest journals, field journals, NBER working papers, and citation chains to produce an annotated bibliography, a BibTeX file, a frontier map (what has been done), and a positioning statement (where the new paper fits). The <strong>explorer</strong> searches for datasets — public, administrative, survey — and grades each by feasibility: variable coverage, access requirements, panel structure, and known data issues.</p>
+<p>Both run in parallel from the start of a project. Neither depends on the other. The librarian-critic checks for coverage gaps (missing seminal papers, missing methods literature, over-reliance on working papers). The explorer-critic checks measurement validity (does the proposed variable actually capture the concept?) and identification compatibility (does this data support the likely design?).</p>
+<p>Together they answer a single question: <em>what has been done, and what data could let us do something new?</em></p>
+<p><strong>Activates:</strong> From a research idea or spec. No prerequisites. <strong>Produces:</strong> <code>quality_reports/literature/</code> and <code>quality_reports/data-assessment/</code> <strong>Quality gate:</strong> Both critics must score &gt;= 80 before Strategy activates.</p>
 </section>
-<section id="coder-critic" class="level2">
-<h2 class="anchored" data-anchor-id="coder-critic">coder-critic</h2>
-<p>Reviews all code — from both the Data-engineer and the Coder. When invoked via <code>/review --code</code>, a mechanical <strong>grep-based linter</strong> runs first (Step 1) to catch prohibited patterns and style violations before the full review. <strong>16 check categories</strong> including strategy alignment, numerical discipline (float guards, CDF clamping, pre-allocation, NaN/Inf checks), paper-to-code naming map, function design, reproducibility, and paper-type-specific checks (convergence for structural, seed handling for simulations). Also enforces prohibited patterns (<code>setwd()</code>, <code>sapply()</code>, <code>&lt;&lt;-</code>, <code>T</code>/<code>F</code>, hardcoded paths).</p>
-<section id="score-breakdown-example" class="level3">
-<h3 class="anchored" data-anchor-id="score-breakdown-example">Score Breakdown Example</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Starting: 100</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Code-strategy alignment: OK</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Numerical discipline: -10 (float comparison with == on line 47)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reproducibility: -10 (no set.seed() found)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Console hygiene: -3 (print() on lines 23, 89)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Final: 77/100** --- Below commit threshold (80). Fix numerical discipline and reproducibility.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="strategy-pair" class="level2">
+<h2 class="anchored" data-anchor-id="strategy-pair">Strategy Pair</h2>
+<p>The <strong>strategist</strong> is paper-type aware. Given the literature and data assessment, it classifies the paper type (reduced-form, structural, theory+empirics, descriptive) and applies the corresponding strategy template. For reduced-form papers, it assesses the identification landscape, proposes designs ranked by credibility, and specifies design-specific estimation guidance (modern DiD estimators for staggered treatment, effective F for IV, MSE-optimal bandwidth for RDD). For structural papers, it specifies the model environment, decision problem, equilibrium concept, identification of each parameter, and counterfactual design. It always anticipates the top 5 referee objections.</p>
+<p>The <strong>theorist</strong> activates conditionally — only for papers that need formal proofs. It drafts assumptions, definitions, propositions, and proofs at journal-publication rigor, with every theorem linked to the empirical strategy. Its critic runs a 4-phase proof review with early stopping on logical gaps.</p>
+<p>The <strong>strategist-critic</strong> is the system’s most important gatekeeper. It runs a 4-phase sequential audit: identify the design, check whether the core assumptions hold (design-specific checklists), evaluate inference and code-theory alignment, then check robustness. Critical finding in Phase 2 stops the review — no point checking robustness if parallel trends are violated.</p>
+<p><strong>Activates:</strong> After at least one Discovery output (literature OR data assessment). <strong>Produces:</strong> <code>quality_reports/strategy/</code> and (when activated) <code>quality_reports/theory/</code> <strong>Quality gate:</strong> Strategist-critic score &gt;= 80 before Execution activates.</p>
 </section>
+<section id="execution-trio" class="level2">
+<h2 class="anchored" data-anchor-id="execution-trio">Execution Trio</h2>
+<p>The <strong>data-engineer</strong> takes raw data and produces clean, analysis-ready datasets. It documents every sample restriction with counts, constructs variables per strategy memo definitions, merges datasets with documented merge rates, and produces publication-quality figures (custom themes, colorblind-safe palettes, no titles inside plots).</p>
+<p>The <strong>coder</strong> translates the strategy memo into numbered analysis scripts (<code>00_master.R</code> through <code>07_tables.R</code>) with engineering discipline: numerical guards, pre-allocation, a single seed, <code>here()</code> for all paths, and a paper-to-code naming map linking every <span class="math inline">\(\beta\)</span> and <span class="math inline">\(Y_{it}\)</span> to its code variable. It implements the main specification, all robustness checks from the memo, and exports bare <code>tabular</code> environments for tables.</p>
+<p>The <strong>writer</strong> drafts the manuscript after code is approved. It refuses to write Results without actual output files in <code>paper/tables/</code> — this gate exists because the distinction between “the strategy predicts X” and “the data shows X” is the difference between a proposal and a paper. It maintains a claim-source map tracing every numerical claim to a specific script line and output file.</p>
+<p>The <strong>coder-critic</strong> reviews both the data-engineer and coder across 16 categories: strategic alignment (does the code match the memo?), code quality (reproducibility, numerics, function design), and infrastructure (checkpointing, error handling, prohibited patterns). The <strong>writer-critic</strong> runs 8 checks: structure, claims-evidence, identification fidelity, AI-pattern detection, LaTeX format, compilation, voice fidelity, and notation consistency.</p>
+<p><strong>Activates:</strong> Data-engineer and coder after strategist-critic score &gt;= 80. Writer after coder-critic score &gt;= 80. <strong>Produces:</strong> <code>data/cleaned/</code>, <code>scripts/R/</code>, <code>paper/tables/</code>, <code>paper/figures/</code>, <code>paper/sections/</code> <strong>Quality gate:</strong> Coder-critic and writer-critic both &gt;= 80 before Peer Review.</p>
 </section>
-<section id="writer" class="level2">
-<h2 class="anchored" data-anchor-id="writer">Writer</h2>
-<p>Drafts paper sections using <strong>paragraph-level argument moves</strong> — each paragraph has one job (motivation, result statement, mechanism, robustness narration, qualification). <strong>Paper-type aware</strong> with full section templates:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 39%">
-<col style="width: 60%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Paper Type</th>
-<th>Section Templates</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Reduced-form</td>
-<td>DiD parallel trends, IV exclusion restriction, RDD manipulation</td>
-</tr>
-<tr class="even">
-<td>Structural</td>
-<td>Model environment, estimation, counterfactual simulations, welfare</td>
-</tr>
-<tr class="odd">
-<td>Theory+empirics</td>
-<td>Model predictions, empirical tests, honest assessment</td>
-</tr>
-<tr class="even">
-<td>Descriptive</td>
-<td>Data construction, validation, key facts</td>
-</tr>
-</tbody>
-</table>
-<p>Results narration adapts to output type (regression table, event study figure, IV first stage + 2SLS, counterfactual simulation). Cleanup pass strips AI writing patterns after drafting.</p>
+<section id="review-team" class="level2">
+<h2 class="anchored" data-anchor-id="review-team">Review Team</h2>
+<p>The <strong>editor</strong> performs desk review: reads the abstract and introduction, skims the contribution, verifies novelty, and decides whether to send to referees or desk reject. When it sends, it assigns each referee a contrasting intellectual disposition — STRUCTURAL (“where’s the mechanism?”), CREDIBILITY (“show me the pre-trends”), MEASUREMENT (“how is this measured?”), POLICY (“does this generalize?”), THEORY (“what does the model predict?”), or SKEPTIC (“what would make this go away?”). Each referee also receives randomized pet peeves drawn from pools of critical and constructive tendencies.</p>
+<p>The <strong>domain-referee</strong> evaluates substance: contribution and novelty (30%), literature positioning (25%), substantive arguments (20%), external validity (15%), and journal fit (10%). The <strong>methods-referee</strong> evaluates methods with paper-type-specific weights: identification strategy, estimation, inference, robustness, and replication readiness. Neither sees the other’s report.</p>
+<p>After both reports arrive, the editor classifies each concern as FATAL (cannot be fixed), ADDRESSABLE (fixable with revision), or TASTE (referee preference), resolves disagreements with explicit reasoning, and issues a decision.</p>
+<p><strong>Activates:</strong> After writer-critic and coder-critic both &gt;= 80. Invoked via <code>/review --peer</code>. <strong>Produces:</strong> <code>quality_reports/reviews/</code> <strong>Quality gate:</strong> Editorial decision of Accept or Minor Revisions to proceed to Submission.</p>
 </section>
-<section id="writer-critic" class="level2">
-<h2 class="anchored" data-anchor-id="writer-critic">writer-critic</h2>
-<p><strong>8 check categories</strong> including argument structure (each paragraph has identifiable purpose, findings lead sentences), claims-evidence alignment, paper-type coherence (does the introduction promise match the strategy delivery?), design-specific completeness (DiD must have parallel trends discussion, IV must have LATE interpretation, structural must estimate and simulate), results narration quality, notation consistency, and LaTeX compilation. Sends it back for fixes.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="What to Expect">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>What to Expect
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The Coder produces well-structured, reproducible scripts. The Writer produces structured first drafts using argument moves — your voice and field knowledge turn them into a paper. Both critics catch mechanical issues reliably; you bring the substance.</p>
-</div>
-</div>
+<section id="presentation-pair" class="level2">
+<h2 class="anchored" data-anchor-id="presentation-pair">Presentation Pair</h2>
+<p>The <strong>storyteller</strong> creates talks from the paper in four formats (job market 40–50 slides, seminar 25–35, short 10–15, lightning 3–5) and two output types (Beamer PDF, Quarto RevealJS HTML). Paper-type aware: reduced-form talks lead with the policy question and show variation; structural talks build the model step by step with progressive reveal and pay off with the counterfactual; theory+empirics talks present competing explanations and a distinguishing prediction; descriptive talks lead with what is missing in current measures.</p>
+<p>The <strong>storyteller-critic</strong> checks narrative flow (does the hook work?), visual quality (text overflow, font sizes, one idea per slide), content fidelity (numbers match the paper), and compilation. Presentation scores are advisory — they do not block commits or PRs.</p>
+<p><strong>Activates:</strong> After writer-critic score &gt;= 80. Can run parallel with Peer Review. <strong>Produces:</strong> <code>paper/talks/</code> or <code>paper/quarto/</code> <strong>Quality gate:</strong> Advisory only.</p>
+</section>
+<section id="infrastructure" class="level2">
+<h2 class="anchored" data-anchor-id="infrastructure">Infrastructure</h2>
+<p>The <strong>orchestrator</strong> is the project manager. It reads <code>permissions.md</code> to determine which agents can activate, validates pre-dispatch (do REQUIRES artifacts exist?) and post-completion (do PRODUCES artifacts exist with required sections?), launches worker-critic pairs in parallel when independent, tracks strike counts, computes weighted overall scores, and maintains structured pipeline state in <code>pipeline_state.json</code>. It makes no research decisions — when judgment is needed, it escalates to the user with a clear question.</p>
+<p>The <strong>verifier</strong> checks mechanical correctness in two modes. Standard mode (between phases): LaTeX compilation, script execution, file integrity, output freshness. Submission mode (before journal deposit): package inventory, dependency verification, data provenance, end-to-end execution, output cross-reference, and AEA-format README completeness. It scores binary — 0 or 100, contributing 5% weight to the overall project score.</p>
+<p><strong>Activates:</strong> Orchestrator runs throughout. Verifier runs between phases and at submission. <strong>Produces:</strong> <code>quality_reports/pipeline_state.json</code>, <code>quality_reports/verification_report.md</code> <strong>Quality gate:</strong> Verifier must PASS (100) for submission.</p>
 <hr>
 </section>
 </section>
-<section id="the-reviewers-peer-review-phase" class="level1">
-<h1>The Reviewers (Peer Review Phase)</h1>
-<p>These agents simulate what happens when you submit to a journal. An Editor does desk review, then two independent referees review your paper — neither sees the other’s report. Invoked via <code>/review --peer [journal]</code>.</p>
-<section id="editor" class="level2">
-<h2 class="anchored" data-anchor-id="editor">Editor</h2>
-<p>The <strong>desk reviewer</strong>. Screens the paper before sending it to referees: checks scope fit, minimum quality, and assigns each referee a <strong>disposition</strong> (Structuralist, Credibility, Measurement, Policy, Theory, or Skeptic) plus <strong>pet peeves</strong> (1 critical + 1 constructive per referee) that shape their review personality. After referee reports return, the Editor synthesizes the editorial decision, classifying each issue as FATAL (rejection-worthy), ADDRESSABLE (fixable in revision), or TASTE (referee preference, not binding).</p>
-</section>
-<section id="domain-referee" class="level2">
-<h2 class="anchored" data-anchor-id="domain-referee">domain-referee</h2>
-<p>The <strong>subject expert</strong>. Evaluates whether your paper makes a real contribution to the literature, whether you’ve positioned it correctly relative to existing work, whether your substantive arguments hold up, and whether your results generalize beyond the specific setting. Calibrated to your research field via the domain profile. When you specify a target journal (<code>/review --peer JHR</code>), it emulates that journal’s review culture using <a href="../.claude/references/journal-profiles.md">journal profiles</a>. Every major comment includes a “what would change my mind” statement.</p>
-</section>
-<section id="methods-referee" class="level2">
-<h2 class="anchored" data-anchor-id="methods-referee">methods-referee</h2>
-<p>The <strong>empirical methods expert</strong>. <strong>Paper-type aware</strong> with separate evaluation dimensions per type. Reduced-form: identification strategy, estimation, inference, robustness, replication. Structural: model specification, parameter identification, estimation and computation, model fit, counterfactual credibility. Theory+empirics: model quality, prediction sharpness, test design and power, honesty of assessment. Descriptive: construct validity, construction replicability, validation, analysis quality. Calibrates to target journal when specified. Like the domain-referee, includes “what would change my mind” on every major comment.</p>
-<p><strong>R&amp;R memory:</strong> When invoked with <code>--peer --r2</code>, referees remember their prior reports and check whether their concerns were addressed. Max 3 rounds.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="What to Expect">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>What to Expect
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Catches real structural problems and produces actionable revision plans. The disposition system creates useful reviewer variation. Not a substitute for actual field referees — use it for pre-submission stress testing.</p>
-</div>
-</div>
+<section id="phase-flow" class="level1">
+<h1>Phase Flow</h1>
+<p><strong>Research is not a waterfall, but it has a direction.</strong> Agents activate by dependency, not by sequence number. If you already have data and a draft, you can enter at Peer Review. If a referee says “control for X,” the orchestrator routes back to the coder alone — not through the entire pipeline.</p>
+<p>The dependency chain:</p>
+<pre><code>Discovery ──→ Strategy ──→ Execution ──→ Peer Review ──→ Submission
+(librarian,    (strategist,   (data-engineer,  (editor,         (verifier)
+ explorer)      theorist)      coder, writer)   referees)
+
+                                                    ↕
+                                              Presentation
+                                              (storyteller)</code></pre>
+<p>Each arrow is gated by a critic score. The orchestrator checks <code>permissions.md</code> before every dispatch: are the REQUIRES artifacts present? Has the prerequisite critic scored &gt;= 80? If not, the agent does not activate.</p>
+<p>Re-entry is allowed at any phase except Submission (terminal). A Major Revisions decision from Peer Review triggers re-entry at whatever phase the referee comments require — sometimes just the writer (clarification), sometimes back to the coder (new analysis), sometimes back to the strategist (fundamental design challenge).</p>
+<p>The system distinguishes between phases (sequential gates) and parallel groups (concurrent work within a phase). The librarian and explorer run concurrently. The data-engineer and coder run concurrently. But the writer waits for the coder to finish. These relationships are all declared in one file — <code>permissions.md</code> — not hardcoded in agent logic.</p>
 <hr>
-</section>
-</section>
-<section id="the-infrastructure" class="level1">
-<h1>The Infrastructure</h1>
-<p>These agents coordinate and verify — they don’t produce research content.</p>
-<section id="verifier" class="level2">
-<h2 class="anchored" data-anchor-id="verifier">Verifier</h2>
-<p>Runs in two modes. <strong>Standard mode</strong> (4 checks): does the paper compile? Do the scripts run? Are output files fresh? Are file references valid? <strong>Submission mode</strong> (10 checks): adds a full AEA replication package audit — numbered script order, README completeness, data provenance, and dependency documentation. Pass/fail only.</p>
-</section>
-<section id="orchestrator" class="level2">
-<h2 class="anchored" data-anchor-id="orchestrator">Orchestrator</h2>
-<p>The general contractor. Manages the entire pipeline: dispatches worker-critic pairs based on what phase you’re in, enforces quality gates (80 to commit, 90 for PRs, 95 for submission), escalates when pairs can’t converge, synthesizes referee reports into editorial decisions, and recommends target journals at submission time. You rarely interact with it directly — it works behind the scenes when you run <code>/new-project</code> or when Claude plans a complex task.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="What to Expect">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>What to Expect
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The Verifier checks compilation and file integrity. The Orchestrator dispatches agents and enforces quality gates. Scores track issue resolution — use them directionally, not as absolute quality measures. For non-standard projects, invoke agents directly.</p>
-</div>
-</div>
-<hr>
-</section>
 </section>
 <section id="agent-catalog" class="level1">
 <h1>Quick Reference</h1>
-<p>All 19 agents at a glance:</p>
+<p>All 20 agents at a glance.</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 26%">
-<col style="width: 23%">
-<col style="width: 50%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 40%">
+<col style="width: 28%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Agent</th>
-<th>File</th>
-<th>What It Does</th>
+<th>Phase</th>
+<th>Creates / Checks</th>
+<th>Paired With</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Librarian</td>
-<td><code>librarian.md</code></td>
-<td>Literature collection, bibliography, frontier mapping</td>
+<td>librarian</td>
+<td>Discovery</td>
+<td>Annotated bibliography, BibTeX, frontier map</td>
+<td>librarian-critic</td>
 </tr>
 <tr class="even">
 <td>librarian-critic</td>
-<td><code>librarian-critic.md</code></td>
-<td>Reviews bibliography for coverage, gaps, recency</td>
+<td>Discovery</td>
+<td>Checks coverage, gaps, journal quality, recency</td>
+<td>librarian</td>
 </tr>
 <tr class="odd">
-<td>Explorer</td>
-<td><code>explorer.md</code></td>
-<td>Data source discovery, feasibility scoring</td>
+<td>explorer</td>
+<td>Discovery</td>
+<td>Ranked data sources, feasibility grades</td>
+<td>explorer-critic</td>
 </tr>
 <tr class="even">
 <td>explorer-critic</td>
-<td><code>explorer-critic.md</code></td>
-<td>Reviews data for measurement validity, ID fit</td>
+<td>Discovery</td>
+<td>Checks measurement validity, sample selection, ID fit</td>
+<td>explorer</td>
 </tr>
 <tr class="odd">
-<td>Strategist</td>
-<td><code>strategist.md</code></td>
-<td>Empirical strategy (4 paper types), Pre-Analysis Plans</td>
+<td>strategist</td>
+<td>Strategy</td>
+<td>Strategy memo, pseudo-code, robustness plan</td>
+<td>strategist-critic</td>
 </tr>
 <tr class="even">
 <td>strategist-critic</td>
-<td><code>strategist-critic.md</code></td>
-<td>Validates assumptions, inference, robustness (4 paper types)</td>
+<td>Strategy</td>
+<td>Checks assumptions, inference, robustness (4 paper types)</td>
+<td>strategist</td>
 </tr>
 <tr class="odd">
-<td>Theorist</td>
-<td><code>theorist.md</code></td>
-<td>Formal theory: assumptions, theorems, proofs (paper-type aware)</td>
+<td>theorist</td>
+<td>Strategy</td>
+<td>Assumptions, theorems, proofs, notation glossary</td>
+<td>theorist-critic</td>
 </tr>
 <tr class="even">
 <td>theorist-critic</td>
-<td><code>theorist-critic.md</code></td>
+<td>Strategy</td>
 <td>4-phase proof review with early-stop on critical gaps</td>
+<td>theorist</td>
 </tr>
 <tr class="odd">
-<td>Data-engineer</td>
-<td><code>data-engineer.md</code></td>
-<td>Data cleaning, wrangling, publication figures</td>
+<td>data-engineer</td>
+<td>Execution</td>
+<td>Clean datasets, codebooks, publication figures</td>
+<td>coder-critic</td>
 </tr>
 <tr class="even">
-<td>Coder</td>
-<td><code>coder.md</code></td>
-<td>Analysis implementation (4 paper types, numerical discipline)</td>
+<td>coder</td>
+<td>Execution</td>
+<td>Analysis scripts, tables, figures, results summary</td>
+<td>coder-critic</td>
 </tr>
 <tr class="odd">
 <td>coder-critic</td>
-<td><code>coder-critic.md</code></td>
-<td>16 checks: code quality, numerical discipline, strategy alignment</td>
+<td>Execution</td>
+<td>16 checks: strategy alignment, code quality, numerics</td>
+<td>coder, data-engineer</td>
 </tr>
 <tr class="even">
-<td>Writer</td>
-<td><code>writer.md</code></td>
-<td>Argument-move drafting (4 paper types, design-specific)</td>
+<td>writer</td>
+<td>Execution</td>
+<td>Paper manuscript, claim-source map</td>
+<td>writer-critic</td>
 </tr>
 <tr class="odd">
 <td>writer-critic</td>
-<td><code>writer-critic.md</code></td>
-<td>8 checks: structure, coherence, design completeness, LaTeX</td>
+<td>Execution</td>
+<td>8 checks: structure, claims, format, voice, notation</td>
+<td>writer</td>
 </tr>
 <tr class="even">
-<td>Editor</td>
-<td><code>editor.md</code></td>
+<td>editor</td>
+<td>Peer Review</td>
 <td>Desk review, referee dispatch, editorial decision</td>
+<td>None</td>
 </tr>
 <tr class="odd">
 <td>domain-referee</td>
-<td><code>domain-referee.md</code></td>
-<td>Blind peer review (subject expertise)</td>
+<td>Peer Review</td>
+<td>Blind review (substance: contribution, literature, scope)</td>
+<td>None</td>
 </tr>
 <tr class="even">
 <td>methods-referee</td>
-<td><code>methods-referee.md</code></td>
-<td>Blind peer review (methods, 4 paper types)</td>
+<td>Peer Review</td>
+<td>Blind review (methods: ID, estimation, inference, robustness)</td>
+<td>None</td>
 </tr>
 <tr class="odd">
-<td>Storyteller</td>
-<td><code>storyteller.md</code></td>
-<td>Beamer + Quarto talk creation (4 formats)</td>
+<td>storyteller</td>
+<td>Presentation</td>
+<td>Beamer / Quarto talks in 4 formats</td>
+<td>storyteller-critic</td>
 </tr>
 <tr class="even">
 <td>storyteller-critic</td>
-<td><code>storyteller-critic.md</code></td>
-<td>Talk narrative, visuals, content fidelity</td>
+<td>Presentation</td>
+<td>Checks narrative, visuals, content fidelity, scope</td>
+<td>storyteller</td>
 </tr>
 <tr class="odd">
-<td>Verifier</td>
-<td><code>verifier.md</code></td>
-<td>Compilation + AEA replication audit</td>
+<td>orchestrator</td>
+<td>All</td>
+<td>Agent dispatch, quality gates, pipeline state</td>
+<td>None</td>
 </tr>
 <tr class="even">
-<td>Orchestrator</td>
-<td><code>orchestrator.md</code></td>
-<td>Agent dispatch, quality gates, editorial synthesis</td>
+<td>verifier</td>
+<td>Submission</td>
+<td>Compilation, execution, file integrity, AEA audit</td>
+<td>None</td>
 </tr>
 </tbody>
 </table>
 <hr>
 </section>
-<section id="multi-model-strategy" class="level1">
-<h1>Multi-Model Strategy</h1>
-<p>Not all agents need the same model. Each agent file has a <code>model:</code> field that controls which Claude model it uses:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 31%">
-<col style="width: 54%">
-<col style="width: 14%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Task Type</th>
-<th>Recommended Model</th>
-<th>Why</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Deep reasoning (strategy, peer review)</td>
-<td><code>model: opus</code></td>
-<td>Needs nuanced judgment</td>
-</tr>
-<tr class="even">
-<td>Fast, constrained work (code review, compilation)</td>
-<td><code>model: sonnet</code></td>
-<td>Speed matters more</td>
-</tr>
-<tr class="odd">
-<td>Default</td>
-<td><code>model: inherit</code></td>
-<td>Uses whatever model your session is running</td>
-</tr>
-</tbody>
-</table>
-<p>This saves cost and time — a Verifier checking if LaTeX compiles doesn’t need the most powerful model. A strategist-critic stress-testing your identification design does.</p>
-<hr>
-</section>
-<section id="talks-presentation-phase" class="level1">
-<h1>Talks (Presentation Phase)</h1>
-<p>These agents create and review Beamer presentations derived from your paper.</p>
-<section id="storyteller" class="level2">
-<h2 class="anchored" data-anchor-id="storyteller">Storyteller</h2>
-<p>Creates presentations from <code>paper/main.tex</code> in 4 formats: <strong>job market talk</strong> (45–60 min, full results), <strong>seminar</strong> (30–45 min, standard format), <strong>short talk</strong> (15 min, conference session), and <strong>lightning</strong> (5 min, elevator pitch). Supports both <strong>Beamer</strong> (output to <code>paper/talks/</code>) and <strong>Quarto RevealJS</strong> (output to <code>paper/quarto/</code> via <code>--quarto</code> flag). All content derives from the paper — the Storyteller never invents results.</p>
-</section>
-<section id="storyteller-critic" class="level2">
-<h2 class="anchored" data-anchor-id="storyteller-critic">storyteller-critic</h2>
-<p>Reviews the talk for narrative flow (does the argument build?), visual quality (readable slides, not text walls), content fidelity (does the talk match the paper?), and format appropriateness (is a 15-min talk actually 15 minutes?). Scored as advisory — talks don’t block the pipeline.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="What to Expect">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>What to Expect
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Good narrative structure derived from the paper. Expect to cut content and add whitespace — talks need less on each slide than the Storyteller tends to produce.</p>
-</div>
-</div>
+<section id="further-reading" class="level1">
+<h1>Where the Details Live</h1>
+<p>This page teaches the architecture — the four rules, the skill-centric model, the group relationships, and the phase flow. The operational specifics (rubrics, scoring tables, checklists, deduction schedules) live elsewhere:</p>
+<ul>
+<li><strong>Agent identity files:</strong> <code>.claude/agents/*.md</code> — role, voice, constraints, paper-type awareness</li>
+<li><strong>Skill templates:</strong> <code>{skill}/templates/</code> — checklists, protocols, report formats</li>
+<li><strong>Skill config:</strong> <code>{skill}/config/</code> — scoring rubrics, tolerance thresholds</li>
+<li><strong>Permission registry:</strong> <code>.claude/rules/permissions.md</code> — REQUIRES, PRODUCES, escalation targets, quality weights</li>
+<li><strong>Lifecycle validation:</strong> <code>.claude/rules/lifecycle.md</code> — pre-dispatch and post-completion checks</li>
+</ul>
+<p>The permission registry is the single source of truth for agent dispatch. Adding a new agent means adding one entry there and one file in <code>.claude/agents/</code>. No other file needs to change.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {

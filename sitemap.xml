@@ -2,30 +2,38 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://hugosantanna.github.io/clo-author/changelog.html</loc>
-    <lastmod>2026-04-17T21:25:56.554Z</lastmod>
+    <lastmod>2026-05-09T23:22:01.538Z</lastmod>
   </url>
   <url>
     <loc>https://hugosantanna.github.io/clo-author/user-guide.html</loc>
-    <lastmod>2026-04-11T21:42:21.598Z</lastmod>
+    <lastmod>2026-05-09T22:56:10.370Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hugosantanna.github.io/clo-author/hooks.html</loc>
+    <lastmod>2026-05-09T22:56:46.790Z</lastmod>
   </url>
   <url>
     <loc>https://hugosantanna.github.io/clo-author/reference.html</loc>
-    <lastmod>2026-04-17T21:26:02.335Z</lastmod>
+    <lastmod>2026-05-09T23:00:00.555Z</lastmod>
   </url>
   <url>
     <loc>https://hugosantanna.github.io/clo-author/customization.html</loc>
-    <lastmod>2026-04-11T21:42:46.661Z</lastmod>
+    <lastmod>2026-05-09T22:56:52.605Z</lastmod>
   </url>
   <url>
     <loc>https://hugosantanna.github.io/clo-author/agents.html</loc>
-    <lastmod>2026-04-17T21:26:34.634Z</lastmod>
+    <lastmod>2026-05-09T22:58:33.672Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hugosantanna.github.io/clo-author/rules.html</loc>
+    <lastmod>2026-05-09T19:04:18.062Z</lastmod>
   </url>
   <url>
     <loc>https://hugosantanna.github.io/clo-author/index.html</loc>
-    <lastmod>2026-04-09T16:54:52.114Z</lastmod>
+    <lastmod>2026-05-09T22:56:24.738Z</lastmod>
   </url>
   <url>
     <loc>https://hugosantanna.github.io/clo-author/architecture.html</loc>
-    <lastmod>2026-04-09T16:56:19.556Z</lastmod>
+    <lastmod>2026-05-09T22:56:13.950Z</lastmod>
   </url>
 </urlset>

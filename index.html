@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>The Clo-Author</title>
+<title>Quick Start – The Clo-Author</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,10 +72,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-be788d54854417ccf85972ce5a1e216a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb133401eb1928132202f6efeefbc5fe.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-fdd259eaf9296a602f9f2594b91304b4.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb133401eb1928132202f6efeefbc5fe.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-4a343adb3e348b0dfb90aadcb4eb116e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-45f38feec4c6d3ad185969c2b5aa4b3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-b9862f91d0a1d344de8539a32e8a5ff2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-45f38feec4c6d3ad185969c2b5aa4b3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -108,7 +112,169 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -134,20 +300,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">User Guide</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./agents.html"> 
-<span class="menu-text">Agents</span></a>
+    <a class="nav-link" href="./reference.html"> 
+<span class="menu-text">Reference</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./architecture.html"> 
 <span class="menu-text">Architecture</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./customization.html"> 
-<span class="menu-text">Customization</span></a>
+    <a class="nav-link" href="./agents.html"> 
+<span class="menu-text">Agents</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./reference.html"> 
-<span class="menu-text">Reference</span></a>
+    <a class="nav-link" href="./rules.html"> 
+<span class="menu-text">Rules</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./hooks.html"> 
+<span class="menu-text">Hooks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./customization.html"> 
+<span class="menu-text">Customization</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./changelog.html"> 
@@ -163,6 +337,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -176,14 +351,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#get-started-in-5-minutes" id="toc-get-started-in-5-minutes" class="nav-link active" data-scroll-target="#get-started-in-5-minutes">Get Started in 5 Minutes</a>
-  <ul class="collapse">
+  <li><a href="#what-to-expect" id="toc-what-to-expect" class="nav-link active" data-scroll-target="#what-to-expect">What to Expect</a></li>
   <li><a href="#step-1-fork-clone" id="toc-step-1-fork-clone" class="nav-link" data-scroll-target="#step-1-fork-clone">Step 1: Fork &amp; Clone</a></li>
   <li><a href="#step-2-start-claude-code" id="toc-step-2-start-claude-code" class="nav-link" data-scroll-target="#step-2-start-claude-code">Step 2: Start Claude Code</a></li>
   <li><a href="#step-3-paste-the-starter-prompt" id="toc-step-3-paste-the-starter-prompt" class="nav-link" data-scroll-target="#step-3-paste-the-starter-prompt">Step 3: Paste the Starter Prompt</a></li>
   <li><a href="#step-4-start-working" id="toc-step-4-start-working" class="nav-link" data-scroll-target="#step-4-start-working">Step 4: Start Working</a></li>
-  </ul></li>
-  <li><a href="#what-happens-behind-the-scenes" id="toc-what-happens-behind-the-scenes" class="nav-link" data-scroll-target="#what-happens-behind-the-scenes">What Happens Behind the Scenes</a></li>
+  <li><a href="#guide-navigation" id="toc-guide-navigation" class="nav-link" data-scroll-target="#guide-navigation">Guide Navigation</a></li>
   <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
   <li><a href="#origin" id="toc-origin" class="nav-link" data-scroll-target="#origin">Origin</a></li>
   </ul>
@@ -192,10 +365,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">The Clo-Author</h1>
-<p class="subtitle lead">AI Research Architecture for Economics</p>
+<h1 class="title">Quick Start</h1>
+<p class="subtitle lead">Get running in 5 minutes</p>
 </div>
 
 
@@ -212,34 +386,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>An open-source <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> scaffold for empirical economics research — from literature review to journal submission. Can be adapted to adjacent fields (finance, accounting, marketing, management) by customizing the domain profile and journal profiles.</p>
+<p><strong>Research papers have a production function: identify, estimate, write, submit.</strong> This scaffold automates each stage with specialized agents that create, review, and gate-check every artifact before it advances. One <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> configuration handles the full pipeline — from literature review to journal submission.</p>
+<p>Works for empirical economics out of the box. Adapts to finance, accounting, marketing, and management by customizing the domain profile and journal profiles.</p>
 <p><strong>Built on</strong> <a href="https://github.com/pedrohcgs/claude-code-my-workflow">Pedro Sant’Anna’s claude-code-my-workflow</a>, reoriented for empirical research publication.</p>
-<p>You describe a task in plain English. Claude plans the approach (you approve), dispatches specialized agents, reviews quality, fixes issues, and presents results — 17 agents, 10 commands, all running behind the scenes. You review the output at each stage.</p>
-<section id="get-started-in-5-minutes" class="level2">
-<h2 class="anchored" data-anchor-id="get-started-in-5-minutes">Get Started in 5 Minutes</h2>
-<section id="step-1-fork-clone" class="level3">
-<h3 class="anchored" data-anchor-id="step-1-fork-clone">Step 1: Fork &amp; Clone</h3>
+<section id="what-to-expect" class="level2">
+<h2 class="anchored" data-anchor-id="what-to-expect">What to Expect</h2>
+<p>When you run a command, Claude enters plan mode, dispatches specialized agents, scores output against quality gates, and presents results for your approval. This is not autocomplete — it is an orchestrated pipeline where every artifact is created by one agent and reviewed by another before advancing.</p>
+<p><strong>The pipeline at a glance:</strong></p>
+<ol type="1">
+<li><strong>Discovery</strong> — literature search and data assessment, producing an annotated bibliography and ranked dataset list.</li>
+<li><strong>Strategy</strong> — identification design, producing a strategy memo with assumptions, pseudo-code, and robustness plan.</li>
+<li><strong>Execution</strong> — analysis code and paper manuscript, producing scripts, tables, figures, and LaTeX sections.</li>
+<li><strong>Review</strong> — simulated peer review, producing scored referee reports and an editorial decision.</li>
+<li><strong>Submission</strong> — replication packaging and quality gate enforcement (aggregate score &gt;= 95, all components &gt;= 80).</li>
+</ol>
+<p>You can enter at any stage. Each phase produces structured output saved to <code>quality_reports/</code>.</p>
+<hr>
+</section>
+<section id="step-1-fork-clone" class="level2">
+<h2 class="anchored" data-anchor-id="step-1-fork-clone">Step 1: Fork &amp; Clone</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> repo fork hugosantanna/clo-author <span class="at">--clone</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> clo-author</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="step-2-start-claude-code" class="level3">
-<h3 class="anchored" data-anchor-id="step-2-start-claude-code">Step 2: Start Claude Code</h3>
+<section id="step-2-start-claude-code" class="level2">
+<h2 class="anchored" data-anchor-id="step-2-start-claude-code">Step 2: Start Claude Code</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Using VS Code? Open the Claude Code panel instead. Everything works the same.</p>
 </section>
-<section id="step-3-paste-the-starter-prompt" class="level3">
-<h3 class="anchored" data-anchor-id="step-3-paste-the-starter-prompt">Step 3: Paste the Starter Prompt</h3>
+<section id="step-3-paste-the-starter-prompt" class="level2">
+<h2 class="anchored" data-anchor-id="step-3-paste-the-starter-prompt">Step 3: Paste the Starter Prompt</h2>
 <p>Fill in the <strong>bolded placeholders</strong> with your project details:</p>
 <blockquote class="blockquote">
-<p>I am starting a new empirical research project in <strong>[YOUR FIELD]</strong> on <strong>[YOUR TOPIC]</strong>. Read CLAUDE.md and help me set up the project structure. Start with <code>/discover --lit [YOUR TOPIC]</code>.</p>
+<p>I am starting a new empirical research project in <strong>[YOUR FIELD]</strong> on <strong>[YOUR TOPIC]</strong>. Read CLAUDE.md and help me set up the project structure. Start with <code>/discover lit [YOUR TOPIC]</code>.</p>
 </blockquote>
-<p>Claude reads the configuration, fills in your project details, and enters contractor mode — planning, implementing, reviewing, and verifying autonomously.</p>
+<p>Claude reads the configuration, fills in your project details, and begins planning — it will present a plan for your approval before doing anything.</p>
 </section>
-<section id="step-4-start-working" class="level3">
-<h3 class="anchored" data-anchor-id="step-4-start-working">Step 4: Start Working</h3>
-<p>Once setup is done, just describe what you need:</p>
+<section id="step-4-start-working" class="level2">
+<h2 class="anchored" data-anchor-id="step-4-start-working">Step 4: Start Working</h2>
+<p>Once setup is done, describe what you need:</p>
 <ul>
-<li>“Review my paper” — checks your identification strategy, code, writing, and LaTeX in parallel</li>
+<li>“Review my paper” — checks identification strategy, code, writing, and LaTeX in parallel</li>
 <li><code>/review --methods paper/main.tex</code> — validates your causal design assumptions, clustering, and inference</li>
 <li><code>/analyze Data/cleaned/survey.csv</code> — cleans data, runs your specification, produces tables and figures</li>
 <li><code>/new-project health insurance</code> — walks you through the full pipeline from literature review to submission</li>
@@ -254,14 +440,52 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Already have a paper? <code>/review paper/main.tex</code> checks your identification, code, writing, and LaTeX. Want to draft a section? <code>/write intro</code> produces a structured first draft adapted to your paper type. Everything else is optional — explore when you’re ready.</p>
+<p>Already have a paper? <code>/review paper/main.tex</code> runs writer-critic, strategist-critic, and the verifier. Want to draft a section? <code>/write intro</code> produces a structured first draft adapted to your paper type. Everything else is optional — explore when you’re ready.</p>
 </div>
 </div>
+<hr>
 </section>
-</section>
-<section id="what-happens-behind-the-scenes" class="level2">
-<h2 class="anchored" data-anchor-id="what-happens-behind-the-scenes">What Happens Behind the Scenes</h2>
-<p>You describe tasks in plain English. Claude dispatches specialized agents — one creates, another reviews — and presents results for your approval. Quality gates run in the background so broken work never ships. For the full picture: <a href="./user-guide.html">Walkthrough</a>, <a href="./agents.html">Agents</a>, <a href="./architecture.html">Architecture</a>, <a href="./reference.html">Commands</a>.</p>
+<section id="guide-navigation" class="level2">
+<h2 class="anchored" data-anchor-id="guide-navigation">Guide Navigation</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Page</th>
+<th>What you will find</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="./user-guide.html">User Guide</a></td>
+<td>Common workflows: first review, first draft, full pipeline, R&amp;R, talks</td>
+</tr>
+<tr class="even">
+<td><a href="./agents.html">Agents</a></td>
+<td>What each of the 19 agents does, checks, and assumes</td>
+</tr>
+<tr class="odd">
+<td><a href="./rules.html">Rules &amp; Invariants</a></td>
+<td>The 22 content invariants, severity gradient, and quality gates</td>
+</tr>
+<tr class="even">
+<td><a href="./hooks.html">Hooks &amp; Automation</a></td>
+<td>Event-driven scripts: file protection, linting, context survival</td>
+</tr>
+<tr class="odd">
+<td><a href="./reference.html">Command Reference</a></td>
+<td>Every command, its flags, agents dispatched, and output artifacts</td>
+</tr>
+<tr class="even">
+<td><a href="./architecture.html">Architecture</a></td>
+<td>Dependency graph, scoring formula, lifecycle validation</td>
+</tr>
+<tr class="odd">
+<td><a href="./customization.html">Customization</a></td>
+<td>Adapting the scaffold to your field, journal, and preferences</td>
+</tr>
+</tbody>
+</table>
+<hr>
 <div class="callout callout-style-default callout-note callout-titled" title="Day 1 Checklist">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -280,7 +504,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><label><input type="checkbox">Paste the starter prompt (fill in your project details)</label></li>
 <li><label><input type="checkbox">Wait for Claude to customize <code>CLAUDE.md</code> for your project</label></li>
 <li><label><input type="checkbox">Approve the configuration plan</label></li>
-<li><label><input type="checkbox">Ask Claude to do something: “Review my paper” or <code>/discover --lit [topic]</code></label></li>
+<li><label><input type="checkbox">Ask Claude to do something: “Review my paper” or <code>/discover lit [topic]</code></label></li>
 <li><label><input type="checkbox">Approve the task plan, watch it work, review the output</label></li>
 </ul>
 <p>That’s it. Everything else — agents, hooks, rules — runs automatically in the background.</p>
@@ -368,6 +592,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Architecture Reference – The Clo-Author</title>
+<title>Architecture – The Clo-Author</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -37,10 +72,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-be788d54854417ccf85972ce5a1e216a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb133401eb1928132202f6efeefbc5fe.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-fdd259eaf9296a602f9f2594b91304b4.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb133401eb1928132202f6efeefbc5fe.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-4a343adb3e348b0dfb90aadcb4eb116e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-45f38feec4c6d3ad185969c2b5aa4b3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-b9862f91d0a1d344de8539a32e8a5ff2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-45f38feec4c6d3ad185969c2b5aa4b3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -69,15 +108,206 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
-<meta name="mermaid-theme" content="dark">
+<meta name="mermaid-theme" content="neutral">
 <script src="site_libs/quarto-diagram/mermaid.min.js"></script>
 <script src="site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -103,20 +333,28 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">User Guide</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./agents.html"> 
-<span class="menu-text">Agents</span></a>
+    <a class="nav-link" href="./reference.html"> 
+<span class="menu-text">Reference</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./architecture.html" aria-current="page"> 
 <span class="menu-text">Architecture</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./customization.html"> 
-<span class="menu-text">Customization</span></a>
+    <a class="nav-link" href="./agents.html"> 
+<span class="menu-text">Agents</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./reference.html"> 
-<span class="menu-text">Reference</span></a>
+    <a class="nav-link" href="./rules.html"> 
+<span class="menu-text">Rules</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./hooks.html"> 
+<span class="menu-text">Hooks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./customization.html"> 
+<span class="menu-text">Customization</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./changelog.html"> 
@@ -132,6 +370,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -146,51 +385,88 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#system-overview" id="toc-system-overview" class="nav-link active" data-scroll-target="#system-overview">System Overview</a></li>
-  <li><a href="#agent-workflow-diagram" id="toc-agent-workflow-diagram" class="nav-link" data-scroll-target="#agent-workflow-diagram">Agent Workflow Diagram</a>
+  <li><a href="#sec-skill-folders" id="toc-sec-skill-folders" class="nav-link" data-scroll-target="#sec-skill-folders">The Skill-Folder Architecture</a>
   <ul class="collapse">
-  <li><a href="#the-pipeline" id="toc-the-pipeline" class="nav-link" data-scroll-target="#the-pipeline">The Pipeline</a></li>
-  <li><a href="#agents-by-phase" id="toc-agents-by-phase" class="nav-link" data-scroll-target="#agents-by-phase">Agents by Phase</a>
+  <li><a href="#three-level-progressive-loading" id="toc-three-level-progressive-loading" class="nav-link" data-scroll-target="#three-level-progressive-loading">Three-level progressive loading</a></li>
+  <li><a href="#skill-folder-structure" id="toc-skill-folder-structure" class="nav-link" data-scroll-target="#skill-folder-structure">Skill folder structure</a></li>
+  <li><a href="#the-wiring" id="toc-the-wiring" class="nav-link" data-scroll-target="#the-wiring">The wiring</a></li>
+  <li><a href="#gotchas-as-first-class-content" id="toc-gotchas-as-first-class-content" class="nav-link" data-scroll-target="#gotchas-as-first-class-content">Gotchas as first-class content</a></li>
+  <li><a href="#what-this-means-in-practice" id="toc-what-this-means-in-practice" class="nav-link" data-scroll-target="#what-this-means-in-practice">What this means in practice</a></li>
+  </ul></li>
+  <li><a href="#sec-permissions" id="toc-sec-permissions" class="nav-link" data-scroll-target="#sec-permissions">The Permission Registry</a>
   <ul class="collapse">
-  <li><a href="#phase-1-discovery" id="toc-phase-1-discovery" class="nav-link" data-scroll-target="#phase-1-discovery">Phase 1: Discovery</a></li>
-  <li><a href="#phase-2-strategy" id="toc-phase-2-strategy" class="nav-link" data-scroll-target="#phase-2-strategy">Phase 2: Strategy</a></li>
-  <li><a href="#phase-3-execution" id="toc-phase-3-execution" class="nav-link" data-scroll-target="#phase-3-execution">Phase 3: Execution</a></li>
-  <li><a href="#phase-4-peer-review" id="toc-phase-4-peer-review" class="nav-link" data-scroll-target="#phase-4-peer-review">Phase 4: Peer Review</a></li>
-  <li><a href="#phase-5-submission" id="toc-phase-5-submission" class="nav-link" data-scroll-target="#phase-5-submission">Phase 5: Submission</a></li>
-  <li><a href="#talks-parallel-with-peer-review" id="toc-talks-parallel-with-peer-review" class="nav-link" data-scroll-target="#talks-parallel-with-peer-review">Talks (parallel with Peer Review)</a></li>
+  <li><a href="#reading-an-entry" id="toc-reading-an-entry" class="nav-link" data-scroll-target="#reading-an-entry">Reading an entry</a></li>
+  <li><a href="#adding-an-agent" id="toc-adding-an-agent" class="nav-link" data-scroll-target="#adding-an-agent">Adding an agent</a></li>
   </ul></li>
-  <li><a href="#the-worker-critic-loop" id="toc-the-worker-critic-loop" class="nav-link" data-scroll-target="#the-worker-critic-loop">The Worker-Critic Loop</a></li>
-  </ul></li>
-  <li><a href="#sec-orchestrator" id="toc-sec-orchestrator" class="nav-link" data-scroll-target="#sec-orchestrator">The Orchestrator (Contractor Mode)</a>
+  <li><a href="#sec-orchestrator-loop" id="toc-sec-orchestrator-loop" class="nav-link" data-scroll-target="#sec-orchestrator-loop">The Orchestrator Loop</a>
   <ul class="collapse">
-  <li><a href="#the-mental-model" id="toc-the-mental-model" class="nav-link" data-scroll-target="#the-mental-model">The Mental Model</a></li>
-  <li><a href="#dependency-driven-dispatch" id="toc-dependency-driven-dispatch" class="nav-link" data-scroll-target="#dependency-driven-dispatch">Dependency-Driven Dispatch</a></li>
-  <li><a href="#the-loop" id="toc-the-loop" class="nav-link" data-scroll-target="#the-loop">The Loop</a>
+  <li><a href="#step-1-identify" id="toc-step-1-identify" class="nav-link" data-scroll-target="#step-1-identify">Step 1: IDENTIFY</a></li>
+  <li><a href="#step-2-dispatch" id="toc-step-2-dispatch" class="nav-link" data-scroll-target="#step-2-dispatch">Step 2: DISPATCH</a></li>
+  <li><a href="#step-3-review" id="toc-step-3-review" class="nav-link" data-scroll-target="#step-3-review">Step 3: REVIEW</a></li>
+  <li><a href="#step-4-verify" id="toc-step-4-verify" class="nav-link" data-scroll-target="#step-4-verify">Step 4: VERIFY</a></li>
+  <li><a href="#step-5-score" id="toc-step-5-score" class="nav-link" data-scroll-target="#step-5-score">Step 5: SCORE</a></li>
+  <li><a href="#limits" id="toc-limits" class="nav-link" data-scroll-target="#limits">Limits</a></li>
+  <li><a href="#modes" id="toc-modes" class="nav-link" data-scroll-target="#modes">Modes</a></li>
+  </ul></li>
+  <li><a href="#sec-lifecycle" id="toc-sec-lifecycle" class="nav-link" data-scroll-target="#sec-lifecycle">Lifecycle Validation</a>
   <ul class="collapse">
-  <li><a href="#three-strikes-escalation" id="toc-three-strikes-escalation" class="nav-link" data-scroll-target="#three-strikes-escalation">Three-Strikes Escalation</a></li>
-  <li><a href="#just-do-it-mode" id="toc-just-do-it-mode" class="nav-link" data-scroll-target="#just-do-it-mode">“Just Do It” Mode</a></li>
+  <li><a href="#pre-dispatch-checks" id="toc-pre-dispatch-checks" class="nav-link" data-scroll-target="#pre-dispatch-checks">PRE-dispatch checks</a></li>
+  <li><a href="#post-completion-checks" id="toc-post-completion-checks" class="nav-link" data-scroll-target="#post-completion-checks">POST-completion checks</a></li>
+  <li><a href="#what-failure-looks-like" id="toc-what-failure-looks-like" class="nav-link" data-scroll-target="#what-failure-looks-like">What failure looks like</a></li>
   </ul></li>
-  </ul></li>
-  <li><a href="#sec-plan-first" id="toc-sec-plan-first" class="nav-link" data-scroll-target="#sec-plan-first">Plan-First Workflow</a>
+  <li><a href="#sec-worker-critic" id="toc-sec-worker-critic" class="nav-link" data-scroll-target="#sec-worker-critic">Worker-Critic Protocol</a>
   <ul class="collapse">
-  <li><a href="#the-protocol" id="toc-the-protocol" class="nav-link" data-scroll-target="#the-protocol">The Protocol</a></li>
-  <li><a href="#session-logging-3-triggers" id="toc-session-logging-3-triggers" class="nav-link" data-scroll-target="#session-logging-3-triggers">Session Logging (3 Triggers)</a></li>
+  <li><a href="#the-3-round-loop" id="toc-the-3-round-loop" class="nav-link" data-scroll-target="#the-3-round-loop">The 3-round loop</a></li>
+  <li><a href="#cold-read-enforcement" id="toc-cold-read-enforcement" class="nav-link" data-scroll-target="#cold-read-enforcement">Cold-read enforcement</a></li>
+  <li><a href="#separation-of-powers" id="toc-separation-of-powers" class="nav-link" data-scroll-target="#separation-of-powers">Separation of powers</a></li>
+  <li><a href="#escalation-routing" id="toc-escalation-routing" class="nav-link" data-scroll-target="#escalation-routing">Escalation routing</a></li>
   </ul></li>
-  <li><a href="#parallel-agents" id="toc-parallel-agents" class="nav-link" data-scroll-target="#parallel-agents">Parallel Agents</a>
+  <li><a href="#sec-dual-critic" id="toc-sec-dual-critic" class="nav-link" data-scroll-target="#sec-dual-critic">Dual-Critic Dispatch</a>
   <ul class="collapse">
-  <li><a href="#when-to-use" id="toc-when-to-use" class="nav-link" data-scroll-target="#when-to-use">When to Use</a></li>
-  <li><a href="#practical-limits" id="toc-practical-limits" class="nav-link" data-scroll-target="#practical-limits">Practical Limits</a></li>
+  <li><a href="#gate-artifacts" id="toc-gate-artifacts" class="nav-link" data-scroll-target="#gate-artifacts">Gate artifacts</a></li>
+  <li><a href="#synthesis-rules" id="toc-synthesis-rules" class="nav-link" data-scroll-target="#synthesis-rules">Synthesis rules</a></li>
+  <li><a href="#independence" id="toc-independence" class="nav-link" data-scroll-target="#independence">Independence</a></li>
+  <li><a href="#scope" id="toc-scope" class="nav-link" data-scroll-target="#scope">Scope</a></li>
   </ul></li>
-  <li><a href="#scoring-protocol" id="toc-scoring-protocol" class="nav-link" data-scroll-target="#scoring-protocol">Scoring Protocol</a></li>
+  <li><a href="#sec-pipeline-state" id="toc-sec-pipeline-state" class="nav-link" data-scroll-target="#sec-pipeline-state">Pipeline State and Session Recovery</a>
+  <ul class="collapse">
+  <li><a href="#the-state-file" id="toc-the-state-file" class="nav-link" data-scroll-target="#the-state-file">The state file</a></li>
+  <li><a href="#write-triggers" id="toc-write-triggers" class="nav-link" data-scroll-target="#write-triggers">Write triggers</a></li>
+  <li><a href="#read-triggers" id="toc-read-triggers" class="nav-link" data-scroll-target="#read-triggers">Read triggers</a></li>
+  <li><a href="#session-recovery-order" id="toc-session-recovery-order" class="nav-link" data-scroll-target="#session-recovery-order">Session recovery order</a></li>
+  <li><a href="#execution-traces" id="toc-execution-traces" class="nav-link" data-scroll-target="#execution-traces">Execution traces</a></li>
+  <li><a href="#relationship-to-the-research-journal" id="toc-relationship-to-the-research-journal" class="nav-link" data-scroll-target="#relationship-to-the-research-journal">Relationship to the research journal</a></li>
+  </ul></li>
+  <li><a href="#sec-scoring" id="toc-sec-scoring" class="nav-link" data-scroll-target="#sec-scoring">Scoring Protocol</a>
+  <ul class="collapse">
+  <li><a href="#weighted-aggregation" id="toc-weighted-aggregation" class="nav-link" data-scroll-target="#weighted-aggregation">Weighted aggregation</a></li>
+  <li><a href="#missing-components" id="toc-missing-components" class="nav-link" data-scroll-target="#missing-components">Missing components</a></li>
+  <li><a href="#gate-thresholds" id="toc-gate-thresholds" class="nav-link" data-scroll-target="#gate-thresholds">Gate thresholds</a></li>
+  <li><a href="#severity-gradient" id="toc-severity-gradient" class="nav-link" data-scroll-target="#severity-gradient">Severity gradient</a></li>
+  </ul></li>
+  <li><a href="#sec-plan-first" id="toc-sec-plan-first" class="nav-link" data-scroll-target="#sec-plan-first">Plan-First Protocol</a>
+  <ul class="collapse">
+  <li><a href="#the-protocol" id="toc-the-protocol" class="nav-link" data-scroll-target="#the-protocol">The protocol</a></li>
+  <li><a href="#simplified-mode" id="toc-simplified-mode" class="nav-link" data-scroll-target="#simplified-mode">Simplified mode</a></li>
+  <li><a href="#just-do-it-mode" id="toc-just-do-it-mode" class="nav-link" data-scroll-target="#just-do-it-mode">“Just do it” mode</a></li>
+  </ul></li>
+  <li><a href="#sec-learning-loop" id="toc-sec-learning-loop" class="nav-link" data-scroll-target="#sec-learning-loop">Learning Loop</a>
+  <ul class="collapse">
+  <li><a href="#pattern-detection" id="toc-pattern-detection" class="nav-link" data-scroll-target="#pattern-detection">Pattern detection</a></li>
+  <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link" data-scroll-target="#how-it-works">How it works</a></li>
+  <li><a href="#learning-promotion" id="toc-learning-promotion" class="nav-link" data-scroll-target="#learning-promotion">Learning promotion</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Architecture Reference</h1>
-<p class="subtitle lead">How the System Works</p>
+<h1 class="title">Architecture</h1>
+<p class="subtitle lead">How the system coordinates agents, enforces quality, and learns</p>
 </div>
 
 
@@ -209,554 +485,752 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="system-overview" class="level1">
 <h1>System Overview</h1>
-<p>Six configuration layers control behavior — from CLAUDE.md (loaded every session) to hooks (event-driven). See the <a href="./customization.html">Customization Guide</a> for the full breakdown.</p>
+<p>The system is configured through six layers, loaded in order of precedence.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 29%">
+<col style="width: 23%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Layer</th>
+<th>Location</th>
+<th>Loaded</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>CLAUDE.md</code></td>
+<td>Project root</td>
+<td>Every session</td>
+<td>Project identity, folder structure, commands, output organization</td>
+</tr>
+<tr class="even">
+<td>Rules</td>
+<td><code>.claude/rules/</code></td>
+<td>Every session</td>
+<td>Quality gates, invariants, permissions, lifecycle, workflow</td>
+</tr>
+<tr class="odd">
+<td>References</td>
+<td><code>.claude/references/</code></td>
+<td>On demand</td>
+<td>Domain profile, journal profiles, coding standards</td>
+</tr>
+<tr class="even">
+<td>Skills</td>
+<td><code>.claude/skills/</code></td>
+<td>When invoked</td>
+<td>Rich folders — routing logic, templates, gotchas, config. The knowledge layer.</td>
+</tr>
+<tr class="odd">
+<td>Agents</td>
+<td><code>.claude/agents/</code></td>
+<td>When dispatched</td>
+<td>Lean identity files — role, voice, constraints. The execution layer.</td>
+</tr>
+<tr class="even">
+<td>Hooks</td>
+<td><code>.claude/hooks/</code></td>
+<td>Event-driven</td>
+<td>Pre-commit lint, pre-compact checklist</td>
+</tr>
+</tbody>
+</table>
+<p><code>CLAUDE.md</code> and rules are always in context. Everything else loads on demand. For the full layer-by-layer breakdown, see the <a href="./customization.html">Customization Guide</a>.</p>
 <hr>
 </section>
-<section id="agent-workflow-diagram" class="level1">
-<h1>Agent Workflow Diagram</h1>
-<p>How 17 agents coordinate across the research pipeline. Each phase pairs <strong>workers</strong> (who create) with <strong>critics</strong> (who review). The <strong>Orchestrator</strong> manages dispatch, quality gates, and escalation. For detailed descriptions of each agent, see <a href="./agents.html">Meet the Agents</a>.</p>
-<section id="the-pipeline" class="level2">
-<h2 class="anchored" data-anchor-id="the-pipeline">The Pipeline</h2>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#1a1a36', 'primaryTextColor': '#00f0ff', 'primaryBorderColor': '#00f0ff', 'lineColor': '#b44dff', 'secondaryColor': '#14142a', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810', 'clusterBkg': '#0c0c18', 'clusterBorder': '#1e1e35'}}}%%
-flowchart LR
-    YOU:::start --&gt; D:::phase1
-    D --&gt; S:::phase2
-    S --&gt; E:::phase3
-    E --&gt; R:::phase4
-    R --&gt;|score &gt;= 95| SUB:::phase5
-    R -.-&gt;|missing lit| D
-    R -.-&gt;|flawed ID| S
-    R -.-&gt;|more checks| E
-    E -.-&gt;|parallel| T:::talks
-
-    YOU((You))
-    D(Discovery)
-    S(Strategy)
-    E(Execution)
-    R(Peer Review)
-    SUB(Submission)
-    T(Talks)
-
-    classDef start fill:#080810,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
-    classDef phase1 fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
-    classDef phase2 fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
-    classDef phase3 fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
-    classDef phase4 fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
-    classDef phase5 fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
-    classDef talks fill:#0c0c18,stroke:#8888a8,color:#8888a8,stroke-width:1px,stroke-dasharray: 5 5
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</section>
-<section id="agents-by-phase" class="level2">
-<h2 class="anchored" data-anchor-id="agents-by-phase">Agents by Phase</h2>
-<p>Each phase dispatches <strong>worker → critic</strong> pairs. The worker creates; the critic reviews (read-only, never edits). If they can’t agree after 3 rounds, the Orchestrator escalates.</p>
-<section id="phase-1-discovery" class="level3">
-<h3 class="anchored" data-anchor-id="phase-1-discovery">Phase 1: Discovery</h3>
+<section id="sec-skill-folders" class="level1">
+<h1>The Skill-Folder Architecture</h1>
+<p>Skills used to be thin dispatchers — a single SKILL.md file (~100 lines) that routed a command to an agent. All the real knowledge lived inside agent files: checklists, templates, scoring rubrics, reference protocols, packed into monolithic prompts that ran 200–474 lines. Adding knowledge meant editing a massive agent file. Knowledge was locked inside agents, not reusable across contexts. Loading an agent meant loading all its templates even when we needed one.</p>
+<p>The architecture inverted. Skills are now rich folders. Agents are lean identity files.</p>
+<section id="three-level-progressive-loading" class="level2">
+<h2 class="anchored" data-anchor-id="three-level-progressive-loading">Three-level progressive loading</h2>
+<p>The system loads context in three stages, each gated by need:</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 16%">
-<col style="width: 33%">
-<col style="width: 16%">
-<col style="width: 33%">
+<col style="width: 20%">
+<col style="width: 26%">
+<col style="width: 29%">
+<col style="width: 23%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Worker</th>
-<th>What it creates</th>
-<th>Critic</th>
-<th>What it checks</th>
+<th>Level</th>
+<th>Trigger</th>
+<th>Contents</th>
+<th>Budget</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Librarian</strong></td>
-<td>Bibliography, frontier map</td>
-<td><strong>librarian-critic</strong></td>
-<td>Coverage, gaps, recency</td>
+<td>1 — Metadata</td>
+<td>Always (skill index)</td>
+<td>Name, description, argument-hint</td>
+<td>~100 tokens</td>
 </tr>
 <tr class="even">
-<td><strong>Explorer</strong></td>
-<td>Data sources, feasibility</td>
-<td><strong>explorer-critic</strong></td>
-<td>Measurement, sample, ID fit</td>
+<td>2 — SKILL.md body</td>
+<td>User invokes the skill</td>
+<td>Workflow steps, dispatch logic, modes</td>
+<td>&lt; 5k tokens</td>
+</tr>
+<tr class="odd">
+<td>3 — Bundled files</td>
+<td>Agent reads on demand</td>
+<td>Templates, gotchas, checklists, references</td>
+<td>Unlimited</td>
 </tr>
 </tbody>
 </table>
+<p>Level 1 costs almost nothing — every skill’s frontmatter is visible in the skill index, so the system knows what commands exist without loading their bodies. Level 2 activates only when the user types the slash command. Level 3 loads only the specific files the agent needs for the task at hand.</p>
 </section>
-<section id="phase-2-strategy" class="level3">
-<h3 class="anchored" data-anchor-id="phase-2-strategy">Phase 2: Strategy</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 16%">
-<col style="width: 33%">
-<col style="width: 16%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Worker</th>
-<th>What it creates</th>
-<th>Critic</th>
-<th>What it checks</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Strategist</strong></td>
-<td>Strategy memo (4 paper types)</td>
-<td><strong>strategist-critic</strong></td>
-<td>Assumptions, inference, sanity (type-specific)</td>
-</tr>
-</tbody>
-</table>
+<section id="skill-folder-structure" class="level2">
+<h2 class="anchored" data-anchor-id="skill-folder-structure">Skill folder structure</h2>
+<p>Every skill follows the same layout:</p>
+<pre><code>skill-name/
+├── SKILL.md          # Routing + dispatch logic (Level 2)
+├── gotchas.md        # Known failure points, edge cases
+├── templates/        # Reusable artifacts the agent loads
+├── references/       # Domain-specific reference material
+└── config/           # Machine-readable configuration</code></pre>
+<p>Not every skill uses every subfolder. The <code>/write</code> skill has <code>templates/</code> (paragraph moves, section templates, cleanup patterns) and <code>references/</code> (notation protocol). The <code>/review</code> skill has <code>templates/</code> (scoring rubrics, referee report template) and <code>config/</code> (disposition pool weights). The <code>/strategize</code> skill has <code>templates/</code> (strategy memo structure, PAP templates, theory memo) and <code>references/</code> (PAP interview flow). Each skill carries exactly the knowledge its agents need.</p>
 </section>
-<section id="phase-3-execution" class="level3">
-<h3 class="anchored" data-anchor-id="phase-3-execution">Phase 3: Execution</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 16%">
-<col style="width: 33%">
-<col style="width: 16%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Worker</th>
-<th>What it creates</th>
-<th>Critic</th>
-<th>What it checks</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Data-engineer</strong></td>
-<td>Cleaning scripts, figures</td>
-<td><strong>coder-critic</strong></td>
-<td>Code quality, reproducibility</td>
-</tr>
-<tr class="even">
-<td><strong>Coder</strong></td>
-<td>Analysis scripts, tables (numerical discipline)</td>
-<td><strong>coder-critic</strong></td>
-<td>Strategy alignment, 16 checks incl.&nbsp;numerical discipline</td>
-</tr>
-<tr class="odd">
-<td><strong>Writer</strong></td>
-<td>Paper sections (argument moves, 4 types)</td>
-<td><strong>writer-critic</strong></td>
-<td>8 checks: structure, coherence, design completeness</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="phase-4-peer-review" class="level3">
-<h3 class="anchored" data-anchor-id="phase-4-peer-review">Phase 4: Peer Review</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 35%">
-<col style="width: 35%">
-<col style="width: 30%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Agent</th>
-<th>Focus</th>
-<th>Role</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Editor</strong></td>
-<td>Desk review, scope, referee assignment</td>
-<td>Assigns dispositions + pet peeves to referees</td>
-</tr>
-<tr class="even">
-<td><strong>domain-referee</strong></td>
-<td>Contributions, literature, external validity</td>
-<td>Blind — doesn’t see the other report</td>
-</tr>
-<tr class="odd">
-<td><strong>methods-referee</strong></td>
-<td>Identification, estimation, robustness</td>
-<td>Blind — doesn’t see the other report</td>
-</tr>
-</tbody>
-</table>
-<p>The Editor does desk review first, then dispatches referees with dispositions (Structuralist, Credibility, Measurement, Policy, Theory, Skeptic). After reports return, the Editor synthesizes the editorial decision, classifying issues as FATAL / ADDRESSABLE / TASTE.</p>
-</section>
-<section id="phase-5-submission" class="level3">
-<h3 class="anchored" data-anchor-id="phase-5-submission">Phase 5: Submission</h3>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Agent</th>
-<th>What it does</th>
-<th>Scoring</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Verifier</strong></td>
-<td>10-check AEA replication audit</td>
-<td>Pass/fail (binary)</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="talks-parallel-with-peer-review" class="level3">
-<h3 class="anchored" data-anchor-id="talks-parallel-with-peer-review">Talks (parallel with Peer Review)</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 16%">
-<col style="width: 33%">
-<col style="width: 16%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Worker</th>
-<th>What it creates</th>
-<th>Critic</th>
-<th>What it checks</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Storyteller</strong></td>
-<td>Beamer + Quarto slides (4 formats)</td>
-<td><strong>storyteller-critic</strong></td>
-<td>Narrative, visuals, fidelity</td>
-</tr>
-</tbody>
-</table>
-</section>
-</section>
-<section id="the-worker-critic-loop" class="level2">
-<h2 class="anchored" data-anchor-id="the-worker-critic-loop">The Worker-Critic Loop</h2>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
-flowchart TD
-    W[WORKER creates artifact]:::worker --&gt; C[CRITIC reviews, scores 0-100]:::critic
-    C --&gt;|score &gt;= 80| A([APPROVED]):::approved
-    C --&gt;|score &lt; 80| F[WORKER fixes issues]:::worker
-    F --&gt; C2[CRITIC re-reviews]:::critic
-    C2 --&gt;|pass| A
-    C2 --&gt;|fail, round 3| ESC([ESCALATE to user]):::escalate
-
-    classDef worker fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
-    classDef critic fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
-    classDef approved fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
-    classDef escalate fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p><strong>Why it works:</strong> The critic can’t fix files (read-only), so it has no incentive to downplay issues. The worker can’t approve itself (the critic re-audits). This prevents Claude from saying “looks good” about its own work.</p>
-<p><strong>Severity gradient:</strong> Critics calibrate harshness by phase — encouraging in Discovery, precise in Execution, adversarial in Peer Review.</p>
-<hr>
-</section>
-</section>
-<section id="sec-orchestrator" class="level1">
-<h1>The Orchestrator (Contractor Mode)</h1>
-<p>Once a plan is approved, the orchestrator takes over autonomously, dispatching agents based on the <strong>dependency graph</strong>.</p>
-<section id="the-mental-model" class="level2">
-<h2 class="anchored" data-anchor-id="the-mental-model">The Mental Model</h2>
-<p>Think of the orchestrator as a <strong>general contractor</strong>. You are the client. You describe what you want. The plan-first protocol is the blueprint phase. Once you approve the blueprint, the contractor takes over: hires the right specialists (agents), inspects their work (verification), sends them back to fix issues (review-fix loop), and only calls you when the job passes inspection (quality gates).</p>
-<p>The Orchestrator:</p>
+<section id="the-wiring" class="level2">
+<h2 class="anchored" data-anchor-id="the-wiring">The wiring</h2>
+<p>When a skill dispatches an agent, it tells the agent which templates to read. The agent file says “read the templates provided by the invoking skill.” This separation means:</p>
 <ul>
-<li><strong>Dispatches</strong> worker-critic pairs based on the dependency graph</li>
-<li><strong>Enforces quality gates</strong>: 80 (commit), 90 (PR), 95 (submission)</li>
-<li><strong>Escalates</strong> when pairs can’t converge after 3 rounds</li>
-<li><strong>Synthesizes</strong> referee reports into editorial decisions</li>
-<li><strong>Selects</strong> target journals at submission time</li>
-<li><strong>Tracks</strong> the research journal with scores and phase transitions</li>
+<li><strong>Skills own the WHAT</strong> — what to produce, what structure to follow, what pitfalls to avoid.</li>
+<li><strong>Agents own the HOW</strong> — voice, reasoning approach, quality standards.</li>
 </ul>
+<p>The same agent can serve multiple skills. The coder-critic reviews output from both <code>/analyze</code> and <code>/review --code</code>, loading different checklists each time. The strategist produces both strategy memos and pre-analysis plans, guided by different templates from the same skill folder.</p>
 </section>
-<section id="dependency-driven-dispatch" class="level2">
-<h2 class="anchored" data-anchor-id="dependency-driven-dispatch">Dependency-Driven Dispatch</h2>
+<section id="gotchas-as-first-class-content" class="level2">
+<h2 class="anchored" data-anchor-id="gotchas-as-first-class-content">Gotchas as first-class content</h2>
+<p>Every skill has a <code>gotchas.md</code> — the highest-signal file in the folder. These are known failure modes, accumulated from real pipeline runs. The strategist’s gotchas warn that “staggered adoption does not automatically mean DiD is the right choice.” The writer’s gotchas note that “the cleanup pass can over-correct domain-specific hedging that’s actually appropriate.” The review skill’s gotchas document when cold-read critics produce false positives.</p>
+<p>Gotchas are the fastest path to quality improvement. When a failure recurs, it gets a line in <code>gotchas.md</code>. The agent reads it before execution. The failure stops recurring.</p>
+</section>
+<section id="what-this-means-in-practice" class="level2">
+<h2 class="anchored" data-anchor-id="what-this-means-in-practice">What this means in practice</h2>
+<p>Adding a new template no longer requires editing a 400-line agent prompt. We create a file in <code>templates/</code>, reference it from SKILL.md, and the agent picks it up on next invocation. Knowledge accumulates in skill folders without bloating agent context. Agents stay lean enough to load fast and focused enough to execute well.</p>
+<hr>
+</section>
+</section>
+<section id="sec-permissions" class="level1">
+<h1>The Permission Registry</h1>
+<p>Every agent’s capabilities, dependencies, and routing are declared in a single file: <code>.claude/rules/permissions.md</code>. The Orchestrator reads this registry before dispatching any agent. No other file hardcodes agent relationships.</p>
+<section id="reading-an-entry" class="level2">
+<h2 class="anchored" data-anchor-id="reading-an-entry">Reading an entry</h2>
+<p>Each entry declares seven fields: <code>PHASE</code>, <code>PARALLEL_GROUP</code>, <code>REQUIRES</code>, <code>PRODUCES</code>, <code>CRITIC</code>, <code>ESCALATION_TARGET</code>, and <code>QUALITY_WEIGHT</code>.</p>
+<p>Here is the strategist entry, annotated:</p>
+<pre><code>## strategist
+- PHASE: Strategy
+- PARALLEL_GROUP: strategy
+- REQUIRES: quality_reports/literature/{project}/
+             OR quality_reports/data-assessment/{project}/
+- PRODUCES: quality_reports/strategy/{project}/
+    - Required files: strategy_memo.md
+    - Required sections: Estimand, Specification, Assumptions,
+                         Robustness Plan, Threats
+- CRITIC: strategist-critic
+- ESCALATION_TARGET: User --- fundamental design question
+- QUALITY_WEIGHT: 25% (identification validity)</code></pre>
+<p>The <code>REQUIRES</code> field uses OR logic — the strategist can activate after literature review alone, data assessment alone, or both. The <code>PRODUCES</code> field specifies not just the output file but the sections that must appear in it. POST-completion validation (see <a href="#sec-lifecycle">Section 4</a>) checks these sections exist before advancing.</p>
+</section>
+<section id="adding-an-agent" class="level2">
+<h2 class="anchored" data-anchor-id="adding-an-agent">Adding an agent</h2>
+<p>Adding a new agent is a one-file change. Create the agent file in <code>.claude/agents/</code>, add its entry to <code>permissions.md</code>. No other file needs modification — the Orchestrator discovers agents by reading the registry.</p>
+<hr>
+</section>
+</section>
+<section id="sec-orchestrator-loop" class="level1">
+<h1>The Orchestrator Loop</h1>
+<p>After a plan is approved, the Orchestrator takes over autonomously. It runs a 5-step loop until quality gates are met or limits are reached.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
-<pre class="mermaid mermaid-js">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+<pre class="mermaid mermaid-js">%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0eee6', 'primaryTextColor': '#141413', 'primaryBorderColor': '#d1cfc5', 'lineColor': '#d97757', 'secondaryColor': '#faf9f5', 'tertiaryColor': '#e6e3da', 'edgeLabelBackground': '#faf9f5', 'clusterBkg': '#f0eee6', 'clusterBorder': '#d1cfc5'}}}%%
 flowchart TD
-    P1:::phase --&gt; P2:::phase
-    P2 --&gt; P3:::phase
-    P3 --&gt; P4:::phase
-    P4 --&gt;|score &gt;= 95| P5:::phase
+    START([Plan approved]):::start --&gt; ID
+    ID[1. IDENTIFY\nCheck dependency graph]:::step --&gt; DISP[2. DISPATCH\nLaunch worker-critic pairs]:::step
+    DISP --&gt; REV[3. REVIEW\nCritic scores artifact]:::step
+    REV --&gt;|score &gt;= 80| VER[4. VERIFY\nCompile, render, run]:::step
+    REV --&gt;|score &lt; 80| FIX[Worker fixes]:::worker
+    FIX --&gt; REV
+    VER --&gt; SC[5. SCORE\nWeighted aggregate]:::step
+    SC --&gt;|&gt;= threshold| DONE([Present summary]):::approved
+    SC --&gt;|&lt; threshold| ID
+    SC -.-&gt;|max 5 rounds| DONE
 
-    P1(Discovery)
-    P2(Strategy)
-    P3(Execution)
-    P4(Peer Review)
-    P5(Submission)
-
-    subgraph s1 [" "]
-        direction LR
-        L[Librarian]:::worker ---|reviewed by| LC[librarian-critic]:::critic
-        X[Explorer]:::worker ---|reviewed by| XC[explorer-critic]:::critic
-    end
-
-    subgraph s2 [" "]
-        ST[Strategist]:::worker ---|reviewed by| STC[strategist-critic]:::critic
-    end
-
-    subgraph s3 [" "]
-        direction LR
-        DE[Data-engineer]:::worker ---|reviewed by| CC1[coder-critic]:::critic
-        CO[Coder]:::worker ---|reviewed by| CC2[coder-critic]:::critic
-        WR[Writer]:::worker ---|reviewed by| WC[writer-critic]:::critic
-    end
-
-    subgraph s4 [" "]
-        direction LR
-        ED[Editor]:::infra
-        DR[domain-referee]:::referee
-        MR[methods-referee]:::referee
-    end
-
-    subgraph s5 [" "]
-        VE[Verifier]:::infra
-    end
-
-    P1 --- s1
-    P2 --- s2
-    P3 --- s3
-    P4 --- s4
-    P5 --- s5
-
-    classDef phase fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
-    classDef worker fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:1px
-    classDef critic fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:1px
-    classDef referee fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:1px
-    classDef infra fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:1px
+    classDef start fill:#f0eee6,stroke:#d97757,color:#141413,stroke-width:2px
+    classDef step fill:#f0eee6,stroke:#87867f,color:#141413,stroke-width:2px
+    classDef worker fill:#faf9f5,stroke:#d97757,color:#141413,stroke-width:1px
+    classDef approved fill:#f0eee6,stroke:#4d7c5a,color:#141413,stroke-width:2px
 </pre>
 </div>
 <p></p></figure><p></p>
 </div>
 </div>
 </div>
-<p>Phases activate when dependencies are met, not by forced sequence. Parallel dispatch within phases (e.g., Librarian and Explorer run simultaneously in Phase 1).</p>
+<section id="step-1-identify" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-identify">Step 1: IDENTIFY</h3>
+<p>The Orchestrator reads <code>permissions.md</code> and checks which agents have their <code>REQUIRES</code> satisfied. Agents activate when dependencies are met, not by phase number. If you already have data and a draft paper, you can enter at Strategy or Peer Review — the Orchestrator checks <code>REQUIRES</code>, not sequence.</p>
 </section>
-<section id="the-loop" class="level2">
-<h2 class="anchored" data-anchor-id="the-loop">The Loop</h2>
+<section id="step-2-dispatch" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-dispatch">Step 2: DISPATCH</h3>
+<p>Worker-critic pairs launch for all agents whose <code>REQUIRES</code> are satisfied. Agents in the same <code>PARALLEL_GROUP</code> run concurrently — for example, the librarian and explorer both belong to the <code>discovery</code> group and run simultaneously. Before dispatch, the Orchestrator runs PRE-validation (see <a href="#sec-lifecycle">Section 4</a>).</p>
+</section>
+<section id="step-3-review" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-review">Step 3: REVIEW</h3>
+<p>The paired critic evaluates the worker’s artifact against its rubric. If the score is below 80, the worker revises and the critic re-reviews. This inner loop runs up to 3 rounds per pair (see <a href="#sec-worker-critic">Section 5</a>).</p>
+</section>
+<section id="step-4-verify" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-verify">Step 4: VERIFY</h3>
+<p>Compile LaTeX, run scripts, check that output files exist at expected paths. If verification fails, the worker fixes and re-verifies (max 2 attempts).</p>
+</section>
+<section id="step-5-score" class="level3">
+<h3 class="anchored" data-anchor-id="step-5-score">Step 5: SCORE</h3>
+<p>Compute the weighted aggregate across all scored components. If the score meets the gate threshold, present the summary to the user. If not, loop back to Step 1 to identify the blocking components.</p>
+</section>
+<section id="limits" class="level3">
+<h3 class="anchored" data-anchor-id="limits">Limits</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Limit</th>
+<th>Value</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Worker-critic rounds</td>
+<td>3</td>
+<td>Escalate per <code>ESCALATION_TARGET</code></td>
+</tr>
+<tr class="even">
+<td>Overall loop rounds</td>
+<td>5</td>
+<td>Present with remaining issues</td>
+</tr>
+<tr class="odd">
+<td>Verification retries</td>
+<td>2</td>
+<td>Report failure to user</td>
+</tr>
+</tbody>
+</table>
+<p>The system never loops indefinitely.</p>
+</section>
+<section id="modes" class="level3">
+<h3 class="anchored" data-anchor-id="modes">Modes</h3>
+<p><strong>Pipeline mode</strong> (<code>/new-project</code>): Full orchestration with dependency graph, parallel dispatch, and quality gates.</p>
+<p><strong>Standalone mode</strong> (<code>/review</code>, <code>/write</code>, <code>/analyze</code>, etc.): Skip dependency checks, dispatch the requested agent(s) directly, return results.</p>
+<p><strong>Simplified mode</strong> (R scripts, explorations): Plan, implement, run, verify quality &gt;= 80. No multi-agent reviews.</p>
+<hr>
+</section>
+</section>
+<section id="sec-lifecycle" class="level1">
+<h1>Lifecycle Validation</h1>
+<p>The Orchestrator runs validation checks at two points: before dispatching an agent and after an agent completes. This implements a fail-fast principle — missing inputs are caught before work begins, missing outputs are caught before advancement.</p>
+<section id="pre-dispatch-checks" class="level2">
+<h2 class="anchored" data-anchor-id="pre-dispatch-checks">PRE-dispatch checks</h2>
+<p>Before dispatching any agent, the Orchestrator reads its <code>permissions.md</code> entry and verifies that <code>REQUIRES</code> artifacts exist (file paths globbed, score gates checked against the research journal, directories confirmed non-empty) and that required sections are present in structured artifacts.</p>
+<p>If PRE validation fails, the agent is not dispatched.</p>
+</section>
+<section id="post-completion-checks" class="level2">
+<h2 class="anchored" data-anchor-id="post-completion-checks">POST-completion checks</h2>
+<p>After an agent completes, the Orchestrator verifies that <code>PRODUCES</code> artifacts exist, required sections are present, and the critic score is recorded in the research journal.</p>
+<p>If POST validation fails, the pipeline does not advance. The Orchestrator re-dispatches the agent with the specific gaps noted.</p>
+</section>
+<section id="what-failure-looks-like" class="level2">
+<h2 class="anchored" data-anchor-id="what-failure-looks-like">What failure looks like</h2>
+<pre><code>Cannot dispatch [coder]: missing quality_reports/strategy/{project}/strategy_memo.md
+  → Run /strategize first to produce the strategy memo.</code></pre>
+<p>No agent launches with missing inputs. No agent advances with missing outputs. The Orchestrator includes the validation failure in its report to the user.</p>
+<hr>
+</section>
+</section>
+<section id="sec-worker-critic" class="level1">
+<h1>Worker-Critic Protocol</h1>
+<p>Every agent that creates an artifact has a paired critic that evaluates it. For the full list of pairs and what each reviews, see <a href="./agents.html">Agents</a>.</p>
+<section id="the-3-round-loop" class="level2">
+<h2 class="anchored" data-anchor-id="the-3-round-loop">The 3-round loop</h2>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
-<pre class="mermaid mermaid-js">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
+<pre class="mermaid mermaid-js">%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0eee6', 'primaryTextColor': '#141413', 'primaryBorderColor': '#d1cfc5', 'lineColor': '#d97757', 'secondaryColor': '#faf9f5', 'tertiaryColor': '#e6e3da', 'edgeLabelBackground': '#faf9f5', 'clusterBkg': '#f0eee6', 'clusterBorder': '#d1cfc5'}}}%%
 flowchart TD
-    START([Plan approved]):::start --&gt; IMPL[IMPLEMENT]:::step
-    IMPL --&gt; VERIFY[VERIFY: compile, render, check]:::step
-    VERIFY --&gt; REVIEW[REVIEW: worker-critic pairs]:::step
-    REVIEW --&gt; FIX[FIX: critical then major then minor]:::step
-    FIX --&gt; REVERIFY[RE-VERIFY: confirm fixes]:::step
-    REVERIFY --&gt; SCORE[SCORE: weighted aggregate]:::step
-    SCORE --&gt;|score &gt;= threshold| DONE([Present summary]):::approved
-    SCORE --&gt;|score &lt; threshold| REVIEW
-    SCORE -.-&gt;|max 5 rounds| DONE
+    W[Worker creates artifact]:::worker --&gt; C[Critic reviews cold-read]:::critic
+    C --&gt;|score &gt;= 80| A([APPROVED]):::approved
+    C --&gt;|score &lt; 80| F[Worker fixes issues]:::worker
+    F --&gt; C2[Critic re-reviews cold-read]:::critic
+    C2 --&gt;|score &gt;= 80| A
+    C2 --&gt;|score &lt; 80, round &lt; 3| F
+    C2 --&gt;|score &lt; 80, round = 3| ESC([ESCALATE]):::escalate
 
-    classDef start fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
-    classDef step fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
-    classDef approved fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
+    classDef worker fill:#f0eee6,stroke:#d97757,color:#141413,stroke-width:2px
+    classDef critic fill:#f0eee6,stroke:#788c5d,color:#141413,stroke-width:2px
+    classDef approved fill:#f0eee6,stroke:#4d7c5a,color:#141413,stroke-width:2px
+    classDef escalate fill:#f0eee6,stroke:#b33d3d,color:#141413,stroke-width:2px
 </pre>
 </div>
 <p></p></figure><p></p>
 </div>
 </div>
 </div>
-<section id="three-strikes-escalation" class="level3">
-<h3 class="anchored" data-anchor-id="three-strikes-escalation">Three-Strikes Escalation</h3>
-<p>If a worker-critic pair can’t resolve after 3 rounds:</p>
+</section>
+<section id="cold-read-enforcement" class="level2">
+<h2 class="anchored" data-anchor-id="cold-read-enforcement">Cold-read enforcement</h2>
+<p>On every round, the critic receives only: the artifact, its scoring rubric, the severity level, and the content invariants from <a href="./rules.html">Rules &amp; Invariants</a>. It does not receive what round this is, what the worker struggled with, prior critic reports, or the research journal. This prevents the critic from softening its evaluation because it knows the worker has already tried twice.</p>
+<p>Round-aware feedback (what to fix and how) flows from the Orchestrator to the worker, never through the critics.</p>
+</section>
+<section id="separation-of-powers" class="level2">
+<h2 class="anchored" data-anchor-id="separation-of-powers">Separation of powers</h2>
+<p>Critics never create artifacts. Creators never self-score. If a critic invocation produces a file in <code>scripts/</code>, <code>paper/</code>, or <code>paper/talks/</code>, the Orchestrator flags it as a violation. If a creator reports its own score, the Orchestrator discards it and dispatches the critic.</p>
+<p>A critic who fixes its own findings has incentive to find only fixable issues. Separation keeps criticism honest.</p>
+</section>
+<section id="escalation-routing" class="level2">
+<h2 class="anchored" data-anchor-id="escalation-routing">Escalation routing</h2>
+<p>When a pair hits 3 rounds without converging, the Orchestrator reads the agent’s <code>ESCALATION_TARGET</code> from <code>permissions.md</code>. Some examples from the registry:</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 25%">
-<col style="width: 75%">
+<col style="width: 16%">
+<col style="width: 52%">
+<col style="width: 30%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Pair</th>
 <th>Escalation Target</th>
+<th>Rationale</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Coder + coder-critic</td>
-<td>→ Strategist (design may be wrong)</td>
+<td>coder + coder-critic</td>
+<td>strategist-critic</td>
+<td>Strategy memo may not be implementable</td>
 </tr>
 <tr class="even">
-<td>Writer + writer-critic</td>
-<td>→ domain-referee (framing may need rethinking)</td>
+<td>writer + writer-critic</td>
+<td>Orchestrator</td>
+<td>Needs structural rewrite, not polish</td>
 </tr>
 <tr class="odd">
-<td>Strategist + strategist-critic</td>
-<td>→ User (fundamental design disagreement)</td>
+<td>strategist + strategist-critic</td>
+<td>User</td>
+<td>Fundamental design question</td>
 </tr>
 <tr class="even">
-<td>Storyteller + storyteller-critic</td>
-<td>→ Writer (paper content may need revision)</td>
+<td>theorist + theorist-critic</td>
+<td>User</td>
+<td>Proof-level disagreement</td>
+</tr>
+</tbody>
+</table>
+<p>Post-escalation, the worker starts fresh from the escalation target’s decision — not from its previous attempt.</p>
+<hr>
+</section>
+</section>
+<section id="sec-dual-critic" class="level1">
+<h1>Dual-Critic Dispatch</h1>
+<p>For artifacts that gate major phase transitions, the Orchestrator dispatches two critics with different evaluation lenses. This catches blind spots that a single-dimension review misses.</p>
+<section id="gate-artifacts" class="level2">
+<h2 class="anchored" data-anchor-id="gate-artifacts">Gate artifacts</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 36%">
+<col style="width: 39%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Artifact</th>
+<th>Primary Critic</th>
+<th>Secondary Lens</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Strategy memo</td>
+<td>strategist-critic (identification)</td>
+<td>coder-critic (implementability)</td>
+</tr>
+<tr class="even">
+<td>Main results (code)</td>
+<td>coder-critic (code quality)</td>
+<td>strategist-critic (strategy alignment)</td>
+</tr>
+<tr class="odd">
+<td>Final manuscript</td>
+<td>writer-critic (prose quality)</td>
+<td>strategist-critic (claims-strategy match)</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="just-do-it-mode" class="level3">
-<h3 class="anchored" data-anchor-id="just-do-it-mode">“Just Do It” Mode</h3>
-<p>When you say “just do it”, the orchestrator still runs the full verify-review-fix loop, but skips the final approval pause and auto-commits if the score is &gt;= 80.</p>
+<section id="synthesis-rules" class="level2">
+<h2 class="anchored" data-anchor-id="synthesis-rules">Synthesis rules</h2>
+<ul>
+<li><strong>Both &gt;= 80:</strong> Pass. Artifact advances.</li>
+<li><strong>One &lt; 80:</strong> Worker fixes issues from the failing critic. Both critics re-evaluate.</li>
+<li><strong>Both &lt; 80:</strong> Escalate per the pair’s <code>ESCALATION_TARGET</code>.</li>
+</ul>
+</section>
+<section id="independence" class="level2">
+<h2 class="anchored" data-anchor-id="independence">Independence</h2>
+<p>Neither critic sees the other’s report. The Orchestrator synthesizes both scores independently. This is the same cold-read principle applied across critics, not just across rounds.</p>
+</section>
+<section id="scope" class="level2">
+<h2 class="anchored" data-anchor-id="scope">Scope</h2>
+<p>Dual-critic dispatch activates only for gate artifacts in the full pipeline (<code>/new-project</code>). Standalone skill invocations (<code>/review</code>, <code>/write</code>, etc.) use single critics.</p>
 <hr>
 </section>
 </section>
+<section id="sec-pipeline-state" class="level1">
+<h1>Pipeline State and Session Recovery</h1>
+<section id="the-state-file" class="level2">
+<h2 class="anchored" data-anchor-id="the-state-file">The state file</h2>
+<p>The Orchestrator maintains structured pipeline state in <code>quality_reports/pipeline_state.json</code>. The schema tracks:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"project"</span><span class="fu">:</span> <span class="st">"project-name"</span><span class="fu">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"phase"</span><span class="fu">:</span> <span class="st">"Execution"</span><span class="fu">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"last_updated"</span><span class="fu">:</span> <span class="st">"2026-05-09T14:30:00Z"</span><span class="fu">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"agents_completed"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">"agent"</span><span class="fu">:</span> <span class="st">"strategist"</span><span class="fu">,</span> <span class="dt">"critic"</span><span class="fu">:</span> <span class="st">"strategist-critic"</span><span class="fu">,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"score"</span><span class="fu">:</span> <span class="dv">88</span><span class="fu">,</span> <span class="dt">"rounds"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span> <span class="dt">"artifact"</span><span class="fu">:</span> <span class="st">"strategy_memo.md"</span> <span class="fu">}</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"agents_in_progress"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">"agent"</span><span class="fu">:</span> <span class="st">"coder"</span><span class="fu">,</span> <span class="dt">"critic"</span><span class="fu">:</span> <span class="st">"coder-critic"</span><span class="fu">,</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"current_round"</span><span class="fu">:</span> <span class="dv">2</span><span class="fu">,</span> <span class="dt">"max_rounds"</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">,</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"last_score"</span><span class="fu">:</span> <span class="dv">72</span><span class="fu">,</span> <span class="dt">"issues_remaining"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"missing robustness"</span><span class="ot">]</span> <span class="fu">}</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"agents_pending"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"writer"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"overall_score"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"blocked_by"</span><span class="fu">:</span> <span class="kw">null</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="sec-plan-first" class="level1">
-<h1>Plan-First Workflow</h1>
-<p>For any non-trivial task, Claude enters plan mode before writing code.</p>
-<section id="the-protocol" class="level2">
-<h2 class="anchored" data-anchor-id="the-protocol">The Protocol</h2>
-<pre><code>Non-trivial task arrives
-  │
-  Step 1: Enter Plan Mode
-  Step 2: Draft plan (approach, files, verification)
-  Step 3: Save to quality_reports/plans/YYYY-MM-DD_description.md
-  Step 4: Present plan to user
-  Step 5: User approves (or revises)
-  Step 6: Save initial session log
-  Step 7: Orchestrator takes over (dependency-driven dispatch)
-  Step 8: Update session log + plan status to COMPLETED</code></pre>
-<p>Plans are saved to disk so they survive context compression. The rule: <strong>avoid <code>/clear</code></strong> — prefer auto-compression.</p>
-</section>
-<section id="session-logging-3-triggers" class="level2">
-<h2 class="anchored" data-anchor-id="session-logging-3-triggers">Session Logging (3 Triggers)</h2>
+<section id="write-triggers" class="level2">
+<h2 class="anchored" data-anchor-id="write-triggers">Write triggers</h2>
+<p>The Orchestrator updates the state file at four points:</p>
 <ol type="1">
-<li><strong>After plan approval</strong> — create the log with goal, plan summary, rationale</li>
-<li><strong>During implementation</strong> — append 1–3 lines as design decisions happen</li>
-<li><strong>At session end</strong> — add what was accomplished, open questions, unresolved issues</li>
+<li><strong>After agent completion</strong> — move from <code>agents_in_progress</code> to <code>agents_completed</code></li>
+<li><strong>After critic score</strong> — update the score and round count</li>
+<li><strong>After phase transition</strong> — update the <code>phase</code> field</li>
+<li><strong>After escalation</strong> — set <code>blocked_by</code></li>
 </ol>
-<hr>
 </section>
+<section id="read-triggers" class="level2">
+<h2 class="anchored" data-anchor-id="read-triggers">Read triggers</h2>
+<p>On session start (new session or after context compression), the Orchestrator reads <code>pipeline_state.json</code> as the first action. The structured state is faster and more reliable than reconstructing from prose logs.</p>
 </section>
-<section id="parallel-agents" class="level1">
-<h1>Parallel Agents</h1>
-<p>Claude Code can spawn <strong>multiple agents simultaneously</strong> using the Task tool.</p>
-<section id="when-to-use" class="level2">
-<h2 class="anchored" data-anchor-id="when-to-use">When to Use</h2>
+<section id="session-recovery-order" class="level2">
+<h2 class="anchored" data-anchor-id="session-recovery-order">Session recovery order</h2>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 21%">
-<col style="width: 41%">
+<col style="width: 27%">
+<col style="width: 36%">
 <col style="width: 36%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Scenario</th>
-<th>Sequential (slow)</th>
-<th>Parallel (fast)</th>
+<th>Step</th>
+<th>Action</th>
+<th>Source</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Paper review</td>
-<td>Run each agent sequentially</td>
-<td>Run strategist-critic + coder-critic + writer-critic + Verifier simultaneously</td>
+<td>0</td>
+<td>Read pipeline state</td>
+<td><code>quality_reports/pipeline_state.json</code></td>
 </tr>
 <tr class="even">
-<td>Literature search</td>
-<td>Search one database at a time</td>
-<td>Spawn agents for journals, NBER, SSRN</td>
+<td>1</td>
+<td>Read checkpoint artifacts</td>
+<td><code>SESSION_REPORT.md</code>, <code>quality_reports/research_journal.md</code></td>
 </tr>
 <tr class="odd">
-<td>Data exploration</td>
-<td>Check one source at a time</td>
-<td>Spawn agents for each data category</td>
+<td>2</td>
+<td>Read project config + plan</td>
+<td><code>CLAUDE.md</code>, most recent file in <code>quality_reports/plans/</code></td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>Check recent changes</td>
+<td><code>git log --oneline -10</code>, <code>git diff</code></td>
 </tr>
 </tbody>
 </table>
-<p>The orchestrator recognizes independent subtasks and spawns parallel agents automatically.</p>
 </section>
-<section id="practical-limits" class="level2">
-<h2 class="anchored" data-anchor-id="practical-limits">Practical Limits</h2>
-<ul>
-<li><strong>3–4 agents</strong> is the sweet spot. More increases overhead without proportional speedup.</li>
-<li>Agents are <strong>independent</strong> — they cannot see each other’s work. Dependent tasks run sequentially.</li>
-<li>Parallel agents multiply token usage.</li>
-</ul>
+<section id="execution-traces" class="level2">
+<h2 class="anchored" data-anchor-id="execution-traces">Execution traces</h2>
+<p>After completing a multi-agent skill (<code>/new-project</code>, <code>/analyze</code>, <code>/write full</code>), the Orchestrator generates an execution trace from the pipeline state and saves it to <code>quality_reports/traces/</code>. The trace includes a mermaid graph of the agent invocation sequence, a table of rounds and scores per agent, any escalation events, and a pipeline summary with totals.</p>
+</section>
+<section id="relationship-to-the-research-journal" class="level2">
+<h2 class="anchored" data-anchor-id="relationship-to-the-research-journal">Relationship to the research journal</h2>
+<p><code>pipeline_state.json</code> is structured, machine-readable, and overwritten. <code>research_journal.md</code> is narrative, append-only, and human-readable. Both are maintained — the state file is for fast recovery, the journal is for understanding what happened and why.</p>
 <hr>
 </section>
 </section>
-<section id="scoring-protocol" class="level1">
+<section id="sec-scoring" class="level1">
 <h1>Scoring Protocol</h1>
-<p>The weighted aggregate score determines quality gate passage:</p>
+<section id="weighted-aggregation" class="level2">
+<h2 class="anchored" data-anchor-id="weighted-aggregation">Weighted aggregation</h2>
+<p>Each agent’s quality weight is declared in its <code>permissions.md</code> entry. The Orchestrator reads the registry and computes:</p>
+<p><span class="math display">\[\text{Overall} = \sum_i w_i \times \text{score}_i\]</span></p>
+<p>where <span class="math inline">\(w_i\)</span> is the agent’s <code>QUALITY_WEIGHT</code> and <span class="math inline">\(\text{score}_i\)</span> is the critic’s final score (0–100). Current weights:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Component</th>
 <th>Weight</th>
-<th>Agent(s)</th>
+<th>Source</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Literature</td>
+<td>Literature coverage</td>
 <td>10%</td>
-<td>Librarian + librarian-critic</td>
+<td>librarian-critic</td>
 </tr>
 <tr class="even">
-<td>Data</td>
+<td>Data quality</td>
 <td>10%</td>
-<td>Explorer + explorer-critic</td>
+<td>explorer-critic</td>
 </tr>
 <tr class="odd">
-<td>Identification</td>
+<td>Identification validity</td>
 <td>25%</td>
 <td>strategist-critic</td>
 </tr>
 <tr class="even">
-<td>Code</td>
+<td>Theory (when present)</td>
+<td>20%</td>
+<td>theorist-critic</td>
+</tr>
+<tr class="odd">
+<td>Code quality</td>
 <td>15%</td>
 <td>coder-critic</td>
 </tr>
-<tr class="odd">
-<td>Paper</td>
-<td>25%</td>
-<td>Avg(domain-referee + methods-referee)</td>
-</tr>
 <tr class="even">
-<td>Polish</td>
+<td>Paper quality</td>
+<td>25%</td>
+<td>Avg(domain-referee, methods-referee)</td>
+</tr>
+<tr class="odd">
+<td>Manuscript polish</td>
 <td>10%</td>
 <td>writer-critic</td>
 </tr>
-<tr class="odd">
-<td>Replication</td>
+<tr class="even">
+<td>Replication readiness</td>
 <td>5%</td>
-<td>Verifier</td>
+<td>verifier (0 or 100)</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Missing components:</strong> If a component hasn’t been scored (e.g., no literature review yet), its weight is redistributed proportionally across available components.</p>
-<p><strong>Submission gate:</strong> Aggregate &gt;= 95 AND every individual component &gt;= 80.</p>
-<p>These numbers run in the background. They prevent broken work from shipping — you rarely need to think about them directly.</p>
+</section>
+<section id="missing-components" class="level2">
+<h2 class="anchored" data-anchor-id="missing-components">Missing components</h2>
+<p>If a component has not been scored, it is excluded and remaining weights renormalize. The theory weight applies only when the theorist agent was dispatched (papers with formal theory sections). For applied papers using off-the-shelf estimators, theory is excluded automatically.</p>
+</section>
+<section id="gate-thresholds" class="level2">
+<h2 class="anchored" data-anchor-id="gate-thresholds">Gate thresholds</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Gate</th>
+<th>Overall Score</th>
+<th>Per-Component Min</th>
+<th>Consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Commit</td>
+<td>&gt;= 80</td>
+<td>None</td>
+<td>Allowed</td>
+</tr>
+<tr class="even">
+<td>PR</td>
+<td>&gt;= 90</td>
+<td>None</td>
+<td>Allowed</td>
+</tr>
+<tr class="odd">
+<td>Submission</td>
+<td>&gt;= 95</td>
+<td>&gt;= 80</td>
+<td>Allowed</td>
+</tr>
+<tr class="even">
+<td>Below 80</td>
+<td>&lt; 80</td>
+<td>—</td>
+<td>Blocked</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="severity-gradient" class="level2">
+<h2 class="anchored" data-anchor-id="severity-gradient">Severity gradient</h2>
+<p>Critics calibrate harshness by phase. The Orchestrator includes the severity level in the critic’s prompt. For the full deduction scaling table, see <a href="./rules.html">Rules &amp; Invariants</a>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 40%">
+<col style="width: 32%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Phase</th>
+<th>Severity</th>
+<th>Stance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Discovery</td>
+<td>Low</td>
+<td>Encouraging — early ideas need space</td>
+</tr>
+<tr class="even">
+<td>Strategy</td>
+<td>Medium</td>
+<td>Constructive — sound identification, but suggest alternatives</td>
+</tr>
+<tr class="odd">
+<td>Execution</td>
+<td>High</td>
+<td>Strict — bugs are costly at this stage</td>
+</tr>
+<tr class="even">
+<td>Peer Review</td>
+<td>Maximum</td>
+<td>Adversarial — simulates real referees</td>
+</tr>
+<tr class="odd">
+<td>Presentation</td>
+<td>Medium-high</td>
+<td>Professional — polished but advisory</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="sec-plan-first" class="level1">
+<h1>Plan-First Protocol</h1>
+<p>For any non-trivial task, the system enters plan mode before implementation.</p>
+<section id="the-protocol" class="level2">
+<h2 class="anchored" data-anchor-id="the-protocol">The protocol</h2>
+<ol type="1">
+<li><strong>Enter plan mode</strong></li>
+<li><strong>Check memory</strong> — read <code>[LEARN]</code> entries relevant to the task</li>
+<li><strong>Requirements spec</strong> (for complex/ambiguous tasks) — clarify ambiguities, mark requirements as MUST / SHOULD / MAY, declare clarity status as CLEAR / ASSUMED / BLOCKED</li>
+<li><strong>Draft the plan</strong> — what changes, which files, in what order</li>
+<li><strong>Save to disk</strong> — <code>quality_reports/plans/YYYY-MM-DD_description.md</code></li>
+<li><strong>Present to user</strong> — wait for approval</li>
+<li><strong>Exit plan mode</strong> — only after approval</li>
+<li><strong>Save session log</strong> — capture goal and context while fresh</li>
+<li><strong>Implement</strong> — Orchestrator takes over via the dependency-driven loop</li>
+</ol>
+<p>Plans survive context compression because they are saved to disk. The requirements spec step is optional — skip it for clear, specific tasks; use it for ambiguous or multi-file work.</p>
+</section>
+<section id="simplified-mode" class="level2">
+<h2 class="anchored" data-anchor-id="simplified-mode">Simplified mode</h2>
+<p>For standalone R scripts, simulations, and explorations: plan, implement, run, verify quality &gt;= 80. No multi-agent reviews.</p>
+</section>
+<section id="just-do-it-mode" class="level2">
+<h2 class="anchored" data-anchor-id="just-do-it-mode">“Just do it” mode</h2>
+<p>When the user says “just do it” or “handle it”: skip the final approval pause, auto-commit if score &gt;= 80, but still run the full verify-review-fix loop.</p>
+<hr>
+</section>
+</section>
+<section id="sec-learning-loop" class="level1">
+<h1>Learning Loop</h1>
+<p>After completing a multi-agent skill, the Orchestrator reviews the execution trace for three pattern types.</p>
+<section id="pattern-detection" class="level2">
+<h2 class="anchored" data-anchor-id="pattern-detection">Pattern detection</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 34%">
+<col style="width: 30%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pattern</th>
+<th>Signal</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>HIGH-PERF</code></td>
+<td>Agent-critic pair scored &gt;= 90 on first pass</td>
+<td>Strategist produced a clean memo that passed on round 1</td>
+</tr>
+<tr class="even">
+<td><code>FRICTION</code></td>
+<td>Pair hit 3 strikes</td>
+<td>Coder-critic kept failing on numerical discipline — prompt may need refinement</td>
+</tr>
+<tr class="odd">
+<td><code>ESCALATION</code></td>
+<td>Question escalated to user</td>
+<td>Could the system have resolved it with better context or rules?</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-it-works" class="level2">
+<h2 class="anchored" data-anchor-id="how-it-works">How it works</h2>
+<p>The Orchestrator surfaces findings as “Suggested Learnings” at the end of the pipeline summary:</p>
+<pre><code>### Suggested Learnings
+- [HIGH-PERF] Strategist memo structure matched coder needs ---
+  consider templating the robustness section
+- [FRICTION] Coder failed numerical discipline 3 rounds ---
+  add float-comparison examples to coding standards
+- [ESCALATION] User resolved data-source ambiguity ---
+  add data source preferences to domain profile</code></pre>
+<p>The Orchestrator never auto-appends to memory. It presents suggestions. The user approves or rejects. Approved learnings are saved via the auto-memory system.</p>
+</section>
+<section id="learning-promotion" class="level2">
+<h2 class="anchored" data-anchor-id="learning-promotion">Learning promotion</h2>
+<p>When a pattern appears across 3 or more projects, it is a candidate for promotion to a template or rule file — moving from project-specific memory to the system’s permanent configuration. This is how the architecture improves over time without accumulating noise.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {

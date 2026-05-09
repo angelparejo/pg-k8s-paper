@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Customization Guide – The Clo-Author</title>
+<title>Customization – The Clo-Author</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -37,10 +72,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-be788d54854417ccf85972ce5a1e216a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb133401eb1928132202f6efeefbc5fe.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-fdd259eaf9296a602f9f2594b91304b4.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb133401eb1928132202f6efeefbc5fe.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-4a343adb3e348b0dfb90aadcb4eb116e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-45f38feec4c6d3ad185969c2b5aa4b3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-b9862f91d0a1d344de8539a32e8a5ff2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-45f38feec4c6d3ad185969c2b5aa4b3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -69,15 +108,202 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
-<meta name="mermaid-theme" content="dark">
-<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
-<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
-<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -103,20 +329,28 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">User Guide</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./agents.html"> 
-<span class="menu-text">Agents</span></a>
+    <a class="nav-link" href="./reference.html"> 
+<span class="menu-text">Reference</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./architecture.html"> 
 <span class="menu-text">Architecture</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./customization.html" aria-current="page"> 
-<span class="menu-text">Customization</span></a>
+    <a class="nav-link" href="./agents.html"> 
+<span class="menu-text">Agents</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./reference.html"> 
-<span class="menu-text">Reference</span></a>
+    <a class="nav-link" href="./rules.html"> 
+<span class="menu-text">Rules</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./hooks.html"> 
+<span class="menu-text">Hooks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./customization.html" aria-current="page"> 
+<span class="menu-text">Customization</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./changelog.html"> 
@@ -132,6 +366,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -145,41 +380,63 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#claude.md-the-project-constitution" id="toc-claude.md-the-project-constitution" class="nav-link" data-scroll-target="#claude.md-the-project-constitution">CLAUDE.md — The Project Constitution</a></li>
-  <li><a href="#rules-auto-loading-domain-knowledge" id="toc-rules-auto-loading-domain-knowledge" class="nav-link" data-scroll-target="#rules-auto-loading-domain-knowledge">Rules — Auto-Loading Domain Knowledge</a></li>
-  <li><a href="#domain-profile" id="toc-domain-profile" class="nav-link" data-scroll-target="#domain-profile">Domain Profile</a>
+  <li><a href="#sec-claude-md" id="toc-sec-claude-md" class="nav-link active" data-scroll-target="#sec-claude-md">CLAUDE.md — The Project Constitution</a>
   <ul class="collapse">
-  <li><a href="#journal-profiles" id="toc-journal-profiles" class="nav-link" data-scroll-target="#journal-profiles">Journal Profiles</a></li>
+  <li><a href="#what-goes-in-it" id="toc-what-goes-in-it" class="nav-link" data-scroll-target="#what-goes-in-it">What goes in it</a></li>
+  <li><a href="#what-does-not-go-in-it" id="toc-what-does-not-go-in-it" class="nav-link" data-scroll-target="#what-does-not-go-in-it">What does not go in it</a></li>
+  <li><a href="#filling-the-template" id="toc-filling-the-template" class="nav-link" data-scroll-target="#filling-the-template">Filling the template</a></li>
   </ul></li>
-  <li><a href="#skills-10-core-commands" id="toc-skills-10-core-commands" class="nav-link" data-scroll-target="#skills-10-core-commands">Skills — Available Commands</a></li>
-  <li><a href="#hooks-smart-defaults" id="toc-hooks-smart-defaults" class="nav-link" data-scroll-target="#hooks-smart-defaults">Hooks — Smart Defaults</a>
+  <li><a href="#sec-domain-profile" id="toc-sec-domain-profile" class="nav-link" data-scroll-target="#sec-domain-profile">Domain Profile</a>
   <ul class="collapse">
-  <li><a href="#design-principles" id="toc-design-principles" class="nav-link" data-scroll-target="#design-principles">Design Principles</a></li>
-  <li><a href="#all-5-hooks" id="toc-all-5-hooks" class="nav-link" data-scroll-target="#all-5-hooks">All 5 Hooks</a></li>
+  <li><a href="#section-walkthrough" id="toc-section-walkthrough" class="nav-link" data-scroll-target="#section-walkthrough">Section walkthrough</a></li>
   </ul></li>
-  <li><a href="#memory-system" id="toc-memory-system" class="nav-link" data-scroll-target="#memory-system">Memory System</a></li>
-  <li><a href="#self-improvement" id="toc-self-improvement" class="nav-link" data-scroll-target="#self-improvement">Self-Improvement</a>
+  <li><a href="#sec-journal-profiles" id="toc-sec-journal-profiles" class="nav-link" data-scroll-target="#sec-journal-profiles">Journal Profiles</a>
   <ul class="collapse">
-  <li><a href="#auto-memory" id="toc-auto-memory" class="nav-link" data-scroll-target="#auto-memory">Auto-Memory</a></li>
-  <li><a href="#skill-extraction-tools-learn" id="toc-skill-extraction-tools-learn" class="nav-link" data-scroll-target="#skill-extraction-tools-learn">Skill Extraction: /tools learn</a></li>
+  <li><a href="#anatomy-of-a-profile-entry" id="toc-anatomy-of-a-profile-entry" class="nav-link" data-scroll-target="#anatomy-of-a-profile-entry">Anatomy of a profile entry</a></li>
+  <li><a href="#pre-populated-journals" id="toc-pre-populated-journals" class="nav-link" data-scroll-target="#pre-populated-journals">Pre-populated journals</a></li>
+  <li><a href="#adding-a-custom-journal" id="toc-adding-a-custom-journal" class="nav-link" data-scroll-target="#adding-a-custom-journal">Adding a custom journal</a></li>
+  </ul></li>
+  <li><a href="#sec-style-guide" id="toc-sec-style-guide" class="nav-link" data-scroll-target="#sec-style-guide">Personal Style Guide</a>
+  <ul class="collapse">
+  <li><a href="#how-to-create-it" id="toc-how-to-create-it" class="nav-link" data-scroll-target="#how-to-create-it">How to create it</a></li>
+  <li><a href="#what-it-extracts" id="toc-what-it-extracts" class="nav-link" data-scroll-target="#what-it-extracts">What it extracts</a></li>
+  <li><a href="#how-the-writer-uses-it" id="toc-how-the-writer-uses-it" class="nav-link" data-scroll-target="#how-the-writer-uses-it">How the Writer uses it</a></li>
+  <li><a href="#when-to-re-run" id="toc-when-to-re-run" class="nav-link" data-scroll-target="#when-to-re-run">When to re-run</a></li>
+  </ul></li>
+  <li><a href="#sec-coding-standards" id="toc-sec-coding-standards" class="nav-link" data-scroll-target="#sec-coding-standards">Coding Standards</a></li>
+  <li><a href="#sec-new-agent" id="toc-sec-new-agent" class="nav-link" data-scroll-target="#sec-new-agent">Adding a New Agent</a></li>
+  <li><a href="#sec-new-skill" id="toc-sec-new-skill" class="nav-link" data-scroll-target="#sec-new-skill">Adding a New Skill</a>
+  <ul class="collapse">
+  <li><a href="#the-steps" id="toc-the-steps" class="nav-link" data-scroll-target="#the-steps">The steps</a></li>
+  <li><a href="#the-three-level-loading-rule" id="toc-the-three-level-loading-rule" class="nav-link" data-scroll-target="#the-three-level-loading-rule">The three-level loading rule</a></li>
+  <li><a href="#example-a-minimal-custom-skill" id="toc-example-a-minimal-custom-skill" class="nav-link" data-scroll-target="#example-a-minimal-custom-skill">Example: a minimal custom skill</a></li>
+  <li><a href="#when-not-to-create-a-skill" id="toc-when-not-to-create-a-skill" class="nav-link" data-scroll-target="#when-not-to-create-a-skill">When NOT to create a skill</a></li>
   </ul></li>
   <li><a href="#sec-exploration" id="toc-sec-exploration" class="nav-link" data-scroll-target="#sec-exploration">Exploration Workflow</a>
   <ul class="collapse">
-  <li><a href="#fast-track-vs-plan-first" id="toc-fast-track-vs-plan-first" class="nav-link" data-scroll-target="#fast-track-vs-plan-first">Fast-Track vs Plan-First</a></li>
+  <li><a href="#folder-structure" id="toc-folder-structure" class="nav-link" data-scroll-target="#folder-structure">Folder structure</a></li>
+  <li><a href="#fast-track-vs.-plan-first" id="toc-fast-track-vs.-plan-first" class="nav-link" data-scroll-target="#fast-track-vs.-plan-first">Fast-track vs.&nbsp;plan-first</a></li>
+  <li><a href="#graduation-checklist" id="toc-graduation-checklist" class="nav-link" data-scroll-target="#graduation-checklist">Graduation checklist</a></li>
+  <li><a href="#kill-switch" id="toc-kill-switch" class="nav-link" data-scroll-target="#kill-switch">Kill switch</a></li>
   </ul></li>
-  <li><a href="#sec-constitutional" id="toc-sec-constitutional" class="nav-link" data-scroll-target="#sec-constitutional">Constitutional Governance (Optional)</a></li>
-  <li><a href="#context-survival-system" id="toc-context-survival-system" class="nav-link" data-scroll-target="#context-survival-system">Context Survival System</a></li>
+  <li><a href="#sec-memory" id="toc-sec-memory" class="nav-link" data-scroll-target="#sec-memory">Memory and Context</a>
+  <ul class="collapse">
+  <li><a href="#auto-memory" id="toc-auto-memory" class="nav-link" data-scroll-target="#auto-memory">Auto-memory</a></li>
+  <li><a href="#session-logging" id="toc-session-logging" class="nav-link" data-scroll-target="#session-logging">Session logging</a></li>
+  <li><a href="#compaction-discipline" id="toc-compaction-discipline" class="nav-link" data-scroll-target="#compaction-discipline">Compaction discipline</a></li>
+  <li><a href="#the-checkpoint-skill" id="toc-the-checkpoint-skill" class="nav-link" data-scroll-target="#the-checkpoint-skill">The <code>/checkpoint</code> skill</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Customization Guide</h1>
-<p class="subtitle lead">Make the Clo-Author Yours</p>
+<h1 class="title">Customization</h1>
+<p class="subtitle lead">Configuring clo-author for your project, field, and voice</p>
 </div>
 
 
@@ -196,423 +453,510 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="overview" class="level1">
-<h1>Overview</h1>
-<p>The Clo-Author works out of the box, but it’s designed to be customized. Six configuration layers control how Claude behaves in your project — from the high-level project constitution to low-level event hooks.</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 23%">
-<col style="width: 33%">
-<col style="width: 43%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Layer</th>
-<th>Location</th>
-<th>Loaded When</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>CLAUDE.md</strong></td>
-<td>Project root</td>
-<td>Every session</td>
-</tr>
-<tr class="even">
-<td><strong>Rules</strong></td>
-<td><code>.claude/rules/</code></td>
-<td>Always-on or path-scoped</td>
-</tr>
-<tr class="odd">
-<td><strong>References</strong></td>
-<td><code>.claude/references/</code></td>
-<td>On demand (agents read when needed)</td>
-</tr>
-<tr class="even">
-<td><strong>Skills</strong></td>
-<td><code>.claude/skills/</code></td>
-<td>On demand (slash commands)</td>
-</tr>
-<tr class="odd">
-<td><strong>Agents</strong></td>
-<td><code>.claude/agents/</code></td>
-<td>On demand (via skills or orchestrator)</td>
-</tr>
-<tr class="even">
-<td><strong>Hooks</strong></td>
-<td><code>.claude/settings.json</code></td>
-<td>On events (automatic)</td>
-</tr>
-</tbody>
-</table>
-<p>Claude reliably follows about <strong>100–150 custom instructions</strong>. Your system prompt uses ~50, leaving ~100 for your project. CLAUDE.md and always-on rules share this budget. Path-scoped rules, references, skills, and agents load on demand — they don’t count against the limit.</p>
+<p>Eight configuration files control how the system behaves. This page walks through each one — what it does, what to put in it, and how agents use it.</p>
 <hr>
-</section>
-<section id="claude.md-the-project-constitution" class="level1">
+<section id="sec-claude-md" class="level1">
 <h1>CLAUDE.md — The Project Constitution</h1>
-<p><code>CLAUDE.md</code> is the single most important file. Claude reads it at the start of every session. It should be a <strong>slim constitution</strong> — short directives and pointers, not comprehensive documentation. Aim for ~120 lines:</p>
-<ul>
-<li><strong>Core principles</strong> — 5–6 bullets (plan-first, verify-after, quality gates, worker-critic pairs, auto-memory)</li>
-<li><strong>Folder structure</strong> — where everything lives</li>
-<li><strong>Commands</strong> — compilation, deployment</li>
-<li><strong>Skill quick reference</strong> — table of 10 available commands</li>
-<li><strong>Customization tables</strong> — Beamer environments, notation</li>
-<li><strong>Current state</strong> — what’s done, what’s in progress</li>
-</ul>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Keep It Lean
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>If CLAUDE.md exceeds ~150 lines, Claude starts ignoring rules silently. Put detailed standards in path-scoped rules instead.</p>
-</div>
-</div>
-<hr>
-</section>
-<section id="rules-auto-loading-domain-knowledge" class="level1">
-<h1>Rules — Auto-Loading Domain Knowledge</h1>
-<p>Rules are markdown files in <code>.claude/rules/</code> that Claude loads automatically. Consolidated into <strong>9 focused files</strong> for clarity.</p>
+<p><code>CLAUDE.md</code> sits at the project root and loads at the start of every session. It is the single highest-priority file — Claude reads it before anything else. Keep it lean: 100–150 lines of short directives and pointers.</p>
+<section id="what-goes-in-it" class="level2">
+<h2 class="anchored" data-anchor-id="what-goes-in-it">What goes in it</h2>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 40%">
-<col style="width: 60%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Rule</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>workflow.md</code></td>
-<td>Plan-first protocol, orchestrator loop, dependency graph, standalone access</td>
-</tr>
-<tr class="even">
-<td><code>quality.md</code></td>
-<td>Weighted scoring formula, severity gradient by phase, quality gates</td>
-</tr>
-<tr class="odd">
-<td><code>agents.md</code></td>
-<td>Worker-critic pairs, separation of powers, three-strikes escalation</td>
-</tr>
-<tr class="even">
-<td><code>logging.md</code></td>
-<td>Session logging, session reporting, research journal</td>
-</tr>
-<tr class="odd">
-<td><code>content-standards.md</code></td>
-<td>Table generation, figure standards, PDF processing, exploration workflow</td>
-</tr>
-<tr class="even">
-<td><code>content-invariants.md</code></td>
-<td>21 numbered non-negotiable rules (INV-1 through INV-21) for paper, code, and talks</td>
-</tr>
-<tr class="odd">
-<td><code>working-paper-format.md</code></td>
-<td>Working paper layout: 12pt, 1in margins, reference preamble (tabularray, cleveref, latexmk)</td>
-</tr>
-<tr class="even">
-<td><code>revision.md</code></td>
-<td>R&amp;R cycle comment classification and routing</td>
-</tr>
-<tr class="odd">
-<td><code>meta-governance.md</code></td>
-<td>Template vs working project distinction</td>
-</tr>
-</tbody>
-</table>
-<hr>
-</section>
-<section id="domain-profile" class="level1">
-<h1>Domain Profile</h1>
-<p>The domain profile (<code>.claude/references/domain-profile.md</code>) calibrates all agents to your specific research field. The default is economics. It can be adapted to adjacent fields (finance, accounting, marketing, management) by editing the profile. It can be populated two ways:</p>
-<ol type="1">
-<li><strong><code>/discover</code></strong> (interactive interview) — generates it automatically</li>
-<li><strong>Manual editing</strong> — fill in the template directly</li>
-</ol>
-<p>All agents read this file for:</p>
-<ul>
-<li>Target journal tiers (for Orchestrator, Editor, and referees)</li>
-<li>Common data sources (for Explorer)</li>
-<li>Identification strategies (for Strategist and strategist-critic)</li>
-<li>Field conventions (for Coder and Writer)</li>
-<li>Seminal references (for Librarian)</li>
-<li>Referee concerns (for domain-referee and methods-referee)</li>
-</ul>
-<section id="journal-profiles" class="level2">
-<h2 class="anchored" data-anchor-id="journal-profiles">Journal Profiles</h2>
-<p>The journal profiles (<code>.claude/references/journal-profiles.md</code>) calibrate the <strong>Editor</strong>, <strong>domain-referee</strong>, and <strong>methods-referee</strong> to a specific journal’s review culture when you run <code>/review --peer [journal]</code>.</p>
-<p>30 journals are pre-populated across multiple fields:</p>
-<ul>
-<li><strong>Economics:</strong> AER, Econometrica, JPE, QJE, REStud, AEJ:Applied, AEJ:Policy, JHR, JHE, RAND, JPubE, JLE, JDE, RESTAT, AER:Insights</li>
-<li><strong>Finance:</strong> JF, JFE, RFS, JFQA</li>
-<li><strong>Accounting:</strong> JAR, JAE, TAR, CAR</li>
-<li><strong>Marketing:</strong> JMR, Marketing Science, JCR</li>
-<li><strong>Management:</strong> Management Science, SMJ, ASQ</li>
-</ul>
-<p>Each profile describes the journal’s bar, what its referees prioritize, and typical concerns — in plain language that the LLM interprets naturally.</p>
-<p>For journals not in the list, referees still adapt using the journal name + your domain profile. You can add your own profiles using the template at the bottom of the file.</p>
-<hr>
-</section>
-</section>
-<section id="skills-10-core-commands" class="level1">
-<h1>Skills — Available Commands</h1>
-<p>Skills are multi-step workflows invoked with <code>/command</code>. Each skill lives in <code>.claude/skills/[name]/SKILL.md</code> and dispatches the appropriate agents.</p>
-<p>There are <strong>10 skills</strong> covering the full research pipeline: <code>/new-project</code>, <code>/discover</code>, <code>/strategize</code>, <code>/analyze</code>, <code>/write</code>, <code>/review</code>, <code>/revise</code>, <code>/talk</code>, <code>/submit</code>, and <code>/tools</code>.</p>
-<p>Skills can be invoked two ways: <strong>explicitly</strong> (you type <code>/review paper/main.tex</code>) or <strong>automatically</strong> (Claude invokes them when relevant). Most of the time, you just describe what you want.</p>
-<p>See the <a href="./reference.html">Command Reference</a> for every command, flag, and subcommand. See the <a href="./user-guide.html">User Guide</a> for detailed workflow descriptions.</p>
-<hr>
-</section>
-<section id="hooks-smart-defaults" class="level1">
-<h1>Hooks — Smart Defaults</h1>
-<p>Hooks live in <code>.claude/settings.json</code> and fire on events, regardless of context state. Reduced to <strong>5 hooks</strong> that stay out of the way.</p>
-<section id="design-principles" class="level2">
-<h2 class="anchored" data-anchor-id="design-principles">Design Principles</h2>
-<ul>
-<li>Use <strong>command-based hooks</strong> for fast, mechanical checks</li>
-<li>Use <strong>rules</strong> for nuanced judgment</li>
-<li>Avoid prompt-based hooks that trigger LLM calls on every response</li>
-</ul>
-</section>
-<section id="all-5-hooks" class="level2">
-<h2 class="anchored" data-anchor-id="all-5-hooks">All 5 Hooks</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 23%">
-<col style="width: 26%">
+<col style="width: 50%">
 <col style="width: 50%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Hook</th>
-<th>Event</th>
-<th>What It Does</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>File protection</td>
-<td><code>PreToolUse</code></td>
-<td>Blocks edits to bibliography and settings</td>
-</tr>
-<tr class="even">
-<td>Context state capture</td>
-<td><code>PreCompact</code></td>
-<td>Saves plan state + context survival checklist</td>
-</tr>
-<tr class="odd">
-<td>Context restoration</td>
-<td><code>SessionStart[compact\|resume]</code></td>
-<td>Restores context after compaction</td>
-</tr>
-<tr class="even">
-<td>Post-merge reminder</td>
-<td>Git post-merge</td>
-<td>Reminds to run <code>/tools learn</code> after merges</td>
-</tr>
-<tr class="odd">
-<td>Auto-lint</td>
-<td><code>PostToolUse</code></td>
-<td>Lints R/Python/Julia files on every Edit or Write (advisory)</td>
-</tr>
-</tbody>
-</table>
-<hr>
-</section>
-</section>
-<section id="memory-system" class="level1">
-<h1>Memory System</h1>
-<p>Four persistent layers plus ephemeral conversation:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 19%">
-<col style="width: 16%">
-<col style="width: 38%">
-<col style="width: 25%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Layer</th>
-<th>File</th>
-<th>Updated When</th>
+<th>Section</th>
 <th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Project context</td>
-<td><code>CLAUDE.md</code></td>
-<td>Rarely</td>
-<td>Project rules, folder structure</td>
+<td>Project metadata</td>
+<td>Name, institution, field, branch</td>
 </tr>
 <tr class="even">
-<td>Corrections</td>
-<td><code>MEMORY.md</code></td>
-<td>Auto-memory (automatic)</td>
-<td>Prevent repeating mistakes</td>
+<td>Core principles</td>
+<td>5–6 bullets (plan-first, quality gates, worker-critic pairs)</td>
 </tr>
 <tr class="odd">
-<td>Task strategy</td>
-<td><code>quality_reports/plans/</code></td>
-<td>Once per task</td>
-<td>Plan survives handoff</td>
+<td>Folder structure</td>
+<td>Where data, scripts, paper, and reports live</td>
 </tr>
 <tr class="even">
-<td>Decision reasoning</td>
-<td><code>quality_reports/session_logs/</code></td>
-<td>Incrementally</td>
-<td>Record <em>why</em> decisions were made</td>
+<td>Compilation commands</td>
+<td><code>latexmk</code> invocations for paper and talks</td>
 </tr>
 <tr class="odd">
-<td>Conversation</td>
-<td>Context window</td>
-<td>Every response</td>
-<td>Current working memory (<strong>not</strong> persistent)</td>
+<td>Quality thresholds</td>
+<td>Commit (80), PR (90), submission (95)</td>
+</tr>
+<tr class="even">
+<td>Skills quick reference</td>
+<td>Table of 10 slash commands</td>
+</tr>
+<tr class="odd">
+<td>Beamer environments</td>
+<td>Custom environments for your talk preamble</td>
+</tr>
+<tr class="even">
+<td>Output organization</td>
+<td><code>by-script</code> (default) or <code>by-purpose</code></td>
+</tr>
+<tr class="odd">
+<td>Current project state</td>
+<td>Status of paper, data, replication, talk</td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="what-does-not-go-in-it" class="level2">
+<h2 class="anchored" data-anchor-id="what-does-not-go-in-it">What does not go in it</h2>
+<p>Detailed rules, agent definitions, coding standards, table formatting — those live in <code>.claude/rules/</code> and <code>.claude/references/</code>. If CLAUDE.md exceeds ~150 lines, Claude starts ignoring instructions silently.</p>
+</section>
+<section id="filling-the-template" class="level2">
+<h2 class="anchored" data-anchor-id="filling-the-template">Filling the template</h2>
+<p>The template ships with bracketed placeholders. Replace each one:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>**Project:** <span class="co">[</span><span class="ot">YOUR PROJECT NAME</span><span class="co">]</span>         # e.g., "Minimum Wage and Employment"</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>**Institution:** <span class="co">[</span><span class="ot">YOUR INSTITUTION</span><span class="co">]</span>       # e.g., "Vanderbilt University"</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>**Field:** <span class="co">[</span><span class="ot">YOUR FIELD</span><span class="co">]</span>                   # e.g., "Labor Economics"</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The Beamer environments table and current project state table follow the same pattern — replace the bracketed entries with your own values. Delete rows you do not use.</p>
 <hr>
 </section>
-<section id="self-improvement" class="level1">
-<h1>Self-Improvement</h1>
-<section id="auto-memory" class="level2">
-<h2 class="anchored" data-anchor-id="auto-memory">Auto-Memory</h2>
-<p>Claude Code has a built-in memory system that automatically saves corrections and preferences across sessions. No manual tagging needed — when you correct Claude (“that’s UAB, not Emory”), it saves the correction and applies it in future conversations.</p>
-<p>Memory is stored in <code>.claude/projects/.../memory/</code> and persists across sessions. You can also explicitly ask Claude to remember or forget something.</p>
 </section>
-<section id="skill-extraction-tools-learn" class="level2">
-<h2 class="anchored" data-anchor-id="skill-extraction-tools-learn">Skill Extraction: /tools learn</h2>
-<p>For discoveries that deserve a reusable workflow (not just a one-liner correction), use <code>/tools learn</code> to create a full skill.</p>
+<section id="sec-domain-profile" class="level1">
+<h1>Domain Profile</h1>
+<p>The domain profile (<code>.claude/references/domain-profile.md</code>) calibrates every agent to your research field. Economics is the default. The same template works for finance, accounting, marketing, or management — you fill in different journals, data sources, and conventions.</p>
+<p>Two ways to populate it:</p>
+<ol type="1">
+<li><strong><code>/discover interview [topic]</code></strong> — generates it from a guided conversation</li>
+<li><strong>Manual editing</strong> — fill the template sections directly</li>
+</ol>
+<section id="section-walkthrough" class="level2">
+<h2 class="anchored" data-anchor-id="section-walkthrough">Section walkthrough</h2>
+<p><strong>Field.</strong> Primary subfield and adjacent subfields whose methods and journals overlap.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>**Primary:** Labor Economics</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>**Adjacent subfields:** Public Finance, Education, Development</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Target Journals.</strong> Ranked by tier. The Orchestrator uses this for journal selection; the Librarian prioritizes these in searches.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Tier <span class="pp">|</span> Journals <span class="pp">|</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|----------|</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Top-5 <span class="pp">|</span> AER, Econometrica, JPE, QJE, REStud <span class="pp">|</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Top field <span class="pp">|</span> JHR, JLE, AEJ:Applied <span class="pp">|</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Strong field <span class="pp">|</span> RESTAT, JPubE, JDE <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Common Data Sources.</strong> What the Explorer looks for first, and what the explorer-critic knows the quirks of.</p>
+<p><strong>Common Identification Strategies.</strong> What the Strategist considers first. Each row names a strategy, a typical application, and the key assumption to defend.</p>
+<p><strong>Field Conventions.</strong> Norms the Coder and Writer follow — clustering level, functional form for costs, whether to report LPM alongside logit, whether welfare analysis is expected.</p>
+<p><strong>Notation Conventions.</strong> Symbol-meaning pairs the Writer enforces. Include anti-patterns to prevent — for example, “Don’t use <span class="math inline">\(y\)</span> without subscripts.”</p>
+<p><strong>Seminal References.</strong> Papers the Librarian ensures are cited when relevant. Keep this to 5–15 entries — the landmark papers in your area.</p>
+<p><strong>Theoretical Foundational References.</strong> Anchor references for the Theorist agent when building or reviewing a formal theory section. Only needed for papers with a theory section (econometric methods, structural, theory+empirics). Leave empty to fall back on the generic econometric theory defaults baked into the theorist agent.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Topic <span class="pp">|</span> Anchor references <span class="pp">|</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------|------------------|</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> DiD with staggered adoption <span class="pp">|</span> Callaway &amp; Sant'Anna (2021); Sant'Anna &amp; Zhao (2020) <span class="pp">|</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Semiparametric efficiency <span class="pp">|</span> Newey (1990, 1994); Bickel et al. (1993) <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Paper Author Team.</strong> Surnames and topics they are foundational on. The theorist-critic uses this to calibrate respect — if you are among the reference literature on a topic, the critic avoids lecturing you on your own contributions.</p>
+<p><strong>Field-Specific Referee Concerns.</strong> Common objections the domain-referee and methods-referee should watch for. Examples: “Selection into treatment,” “External validity — Medicaid population is not general population.”</p>
+<p><strong>Quality Tolerance Thresholds.</strong> Numerical precision standards for cross-language replication and simulation checks.</p>
+<hr>
+</section>
+</section>
+<section id="sec-journal-profiles" class="level1">
+<h1>Journal Profiles</h1>
+<p>The journal profiles file (<code>.claude/references/journal-profiles.md</code>) calibrates the Editor, domain-referee, and methods-referee when you run <code>/review --peer [journal]</code>.</p>
+<section id="anatomy-of-a-profile-entry" class="level2">
+<h2 class="anchored" data-anchor-id="anatomy-of-a-profile-entry">Anatomy of a profile entry</h2>
+<p>Each profile is a structured block of plain-language fields. Here is the AER entry:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">### American Economic Review (AER)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>**Focus:** All fields of economics --- the broadest audience</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>**Bar:** Must interest economists outside your subfield. Big question,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        clean execution, clear contribution.</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>**Domain referee adjusts:** Contribution must be broad. Literature</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        positioning against the *general* frontier, not just subfield.</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>**Methods referee adjusts:** Identification must be convincing to</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        non-specialists. Clean, transparent design preferred over</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        technically complex one.</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>**Typical concerns:** "Why should economists outside this field care?"</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        "Is the contribution big enough for AER?"</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>**Referee pool:** CREDIBILITY (high), POLICY (medium), STRUCTURAL (medium),</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        MEASUREMENT (low), THEORY (low), SKEPTIC (low)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>**Table format:** No significance stars. Standard errors in parentheses.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <strong>Referee pool</strong> weights determine which dispositions the simulated editor draws when selecting referees. The two referees always get different dispositions. Six dispositions exist: STRUCTURAL, CREDIBILITY, MEASUREMENT, POLICY, THEORY, SKEPTIC. See <a href="./agents.html">Agents</a> for how the editor uses these.</p>
+</section>
+<section id="pre-populated-journals" class="level2">
+<h2 class="anchored" data-anchor-id="pre-populated-journals">Pre-populated journals</h2>
+<p>30 journals ship with profiles across five fields:</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 41%">
+<col style="width: 58%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Situation</th>
-<th>Use</th>
+<th>Field</th>
+<th>Journals</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Correction or preference</td>
-<td>Auto-memory (automatic)</td>
+<td>Economics</td>
+<td>AER, Econometrica, JPE, QJE, REStud, AEJ:Applied, AEJ:Policy, JHR, JHE, RAND, JPubE, JLE, JDE, RESTAT, AER:Insights</td>
 </tr>
 <tr class="even">
-<td>Multi-step workflow</td>
-<td><code>/tools learn</code> to create full skill</td>
+<td>Finance</td>
+<td>JF, JFE, RFS, JFQA</td>
+</tr>
+<tr class="odd">
+<td>Accounting</td>
+<td>JAR, JAE, TAR, CAR</td>
+</tr>
+<tr class="even">
+<td>Marketing</td>
+<td>JMR, Marketing Science, JCR</td>
+</tr>
+<tr class="odd">
+<td>Management</td>
+<td>Management Science, SMJ, ASQ</td>
 </tr>
 </tbody>
 </table>
+<p>For journals not in the list, referees adapt using the journal name plus your domain profile. This still works — it is just less precise.</p>
+</section>
+<section id="adding-a-custom-journal" class="level2">
+<h2 class="anchored" data-anchor-id="adding-a-custom-journal">Adding a custom journal</h2>
+<p>Copy the template at the bottom of <code>journal-profiles.md</code> and fill in the fields:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">### [Journal Name] ([Abbreviation])</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>**Focus:** <span class="co">[</span><span class="ot">fields and topics covered</span><span class="co">]</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>**Bar:** <span class="co">[</span><span class="ot">what it takes to publish here</span><span class="co">]</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>**Domain referee adjusts:** <span class="co">[</span><span class="ot">what domain reviewers prioritize</span><span class="co">]</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>**Methods referee adjusts:** <span class="co">[</span><span class="ot">rigor expectations, required checks</span><span class="co">]</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>**Typical concerns:** <span class="co">[</span><span class="ot">common referee questions</span><span class="co">]</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>**Referee pool:** <span class="co">[</span><span class="ot">disposition</span><span class="co">]</span> (high/medium/low) for each of the six</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>**Table format:** <span class="co">[</span><span class="ot">optional --- only if the journal deviates from default</span><span class="co">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <strong>Table format</strong> field is optional. The default is standard economics conventions (significance stars, standard errors in parentheses, booktabs). Include it only for journals with explicit style deviations — like AEA journals, which prohibit significance stars.</p>
+<hr>
+</section>
+</section>
+<section id="sec-style-guide" class="level1">
+<h1>Personal Style Guide</h1>
+<p>The personal style guide (<code>.claude/references/personal-style-guide.md</code>) encodes your writing voice so the Writer agent drafts text that sounds like you, not like a generic academic.</p>
+<section id="how-to-create-it" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-create-it">How to create it</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/write</span> style-guide <span class="pp">[</span><span class="ss">paper</span><span class="pp">-</span><span class="ss">dir</span><span class="pp">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Point it at a directory containing one or more of your published papers (LaTeX source). The skill analyzes sentence patterns, paragraph architecture, lexicon, hedging patterns, and tone — then writes the guide.</p>
+</section>
+<section id="what-it-extracts" class="level2">
+<h2 class="anchored" data-anchor-id="what-it-extracts">What it extracts</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 37%">
+<col style="width: 62%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Category</th>
+<th>What it measures</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sentence patterns</td>
+<td>Median length, passive voice frequency, first-person usage, em dash frequency</td>
+</tr>
+<tr class="even">
+<td>Paragraph architecture</td>
+<td>Typical opening moves, closing moves, openings the author avoids</td>
+</tr>
+<tr class="odd">
+<td>Section architecture</td>
+<td>How the author structures intros, empirical strategy, results, conclusions</td>
+</tr>
+<tr class="even">
+<td>Lexicon</td>
+<td>Words the author uses freely, words the author avoids</td>
+</tr>
+<tr class="odd">
+<td>Hedging</td>
+<td>When the author hedges (“suggests,” “consistent with”) vs.&nbsp;makes flat declaratives</td>
+</tr>
+<tr class="even">
+<td>Citation conventions</td>
+<td>Textual vs.&nbsp;parenthetical ratio, papers cited per claim</td>
+</tr>
+<tr class="odd">
+<td>Tone markers</td>
+<td>Confidence level, humor, self-deprecation patterns</td>
+</tr>
+<tr class="even">
+<td>Anti-patterns</td>
+<td>Things the author has demonstrably edited out of prior drafts</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-the-writer-uses-it" class="level2">
+<h2 class="anchored" data-anchor-id="how-the-writer-uses-it">How the Writer uses it</h2>
+<p>The style guide is a voice target. The Writer loads it at invocation and calibrates sentence length, word choice, paragraph openings, and hedging to match. It overrides the generic academic voice but never overrides content invariants (INV-1 through INV-21).</p>
+</section>
+<section id="when-to-re-run" class="level2">
+<h2 class="anchored" data-anchor-id="when-to-re-run">When to re-run</h2>
+<p>Re-run <code>/write style-guide</code> after publishing a new paper that represents a shift in your writing voice. The guide should reflect your current style, not your dissertation.</p>
+<hr>
+</section>
+</section>
+<section id="sec-coding-standards" class="level1">
+<h1>Coding Standards</h1>
+<p>Three language-specific files live in <code>.claude/references/</code>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Language</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>coding-standards-r.md</code></td>
+<td>R (&gt;= 4.3.0)</td>
+</tr>
+<tr class="even">
+<td><code>coding-standards-python.md</code></td>
+<td>Python</td>
+</tr>
+<tr class="odd">
+<td><code>coding-standards-julia.md</code></td>
+<td>Julia</td>
+</tr>
+</tbody>
+</table>
+<p>Each file specifies:</p>
+<ul>
+<li><strong>Runtime version</strong> and dependency management (<code>renv</code>, <code>venv</code>, <code>Project.toml</code>)</li>
+<li><strong>Core package stack</strong> — e.g., R uses <code>data.table</code>, <code>fixest</code>, <code>modelsummary</code>, <code>ggplot2</code>, <code>here</code>, <code>future.apply</code></li>
+<li><strong>Prohibited packages</strong> — e.g., <code>stargazer</code> (use <code>modelsummary</code>), <code>plyr</code> (use <code>data.table</code>), <code>reshape2</code> (use <code>data.table::melt</code>)</li>
+<li><strong>Naming conventions</strong> — files, functions, variables, constants</li>
+<li><strong>Prohibited patterns</strong> — <code>setwd()</code>, <code>rm(list = ls())</code>, <code>T</code>/<code>F</code> instead of <code>TRUE</code>/<code>FALSE</code>, <code>sapply()</code> instead of <code>vapply()</code>, <code>attach()</code>/<code>detach()</code>, <code>&lt;&lt;-</code></li>
+</ul>
+<p>The Coder agent reads the relevant standards file before writing any code. The coder-critic checks compliance and deducts points for violations. CLAUDE.md declares the project language; if none is declared, the default is R.</p>
+<hr>
+</section>
+<section id="sec-new-agent" class="level1">
+<h1>Adding a New Agent</h1>
+<p>Two files, two steps.</p>
+<p><strong>Step 1.</strong> Create <code>.claude/agents/[name].md</code> following the pattern of existing agent files. The agent file defines identity, voice, and constraints — not operational knowledge. If the agent is paired with a skill, move checklists, templates, and rubrics into the skill’s <code>templates/</code> folder. The agent file keeps only: who it is, how it reasons, and what rules it follows.</p>
+<p><strong>Step 2.</strong> Add an entry to <code>.claude/rules/permissions.md</code> with all required fields:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## [agent-name]</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**PHASE:** <span class="co">[</span><span class="ot">Discovery/Strategy/Execution/Peer Review/Presentation/Submission</span><span class="co">]</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**PARALLEL_GROUP:** <span class="co">[</span><span class="ot">group name</span><span class="co">]</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**REQUIRES:** <span class="co">[</span><span class="ot">what must exist before this agent runs</span><span class="co">]</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**PRODUCES:** <span class="co">[</span><span class="ot">output paths and required files</span><span class="co">]</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**CRITIC:** <span class="co">[</span><span class="ot">paired critic name, or None</span><span class="co">]</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**ESCALATION_TARGET:** <span class="co">[</span><span class="ot">who handles 3-strike failures</span><span class="co">]</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**QUALITY_WEIGHT:** <span class="co">[</span><span class="ot">percentage of overall score, or Advisory</span><span class="co">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>No other files need to change. The Orchestrator reads <code>permissions.md</code> to discover available agents, their dependencies, and their dispatch rules.</p>
+<hr>
+</section>
+<section id="sec-new-skill" class="level1">
+<h1>Adding a New Skill</h1>
+<p>A skill earns its own folder when a workflow pattern recurs across projects and carries specific templates, gotchas, or configuration that no single agent should own. The test: if the same checklist or template would be copy-pasted into multiple agent files, it belongs in a skill folder.</p>
+<section id="the-steps" class="level2">
+<h2 class="anchored" data-anchor-id="the-steps">The steps</h2>
+<p><strong>1. Create the folder.</strong> <code>.claude/skills/[name]/</code> with at minimum two files: <code>SKILL.md</code> and <code>gotchas.md</code>.</p>
+<p><strong>2. Write <code>SKILL.md</code> with frontmatter.</strong> The frontmatter is Level 1 metadata — always loaded, always visible in the skill index. Keep it under 100 tokens.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">skill-name</span><span class="kw">]</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">One sentence. What does this skill do?</span><span class="kw">]</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">argument-hint</span><span class="kw">:</span><span class="at"> </span><span class="st">"[modes and arguments the user can pass]"</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">allowed-tools</span><span class="kw">:</span><span class="at"> Read,Write,Edit,Bash,Grep,Glob</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">user-invocable</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The body of SKILL.md is Level 2 — loaded only when the user invokes the command. It contains workflow steps, dispatch logic, mode routing, and a Bundled Resources table that tells agents which templates to read.</p>
+<p><strong>3. Create <code>gotchas.md</code>.</strong> Seed it with known failure points — even two or three lines to start. This file accumulates over time as real pipeline runs surface edge cases. It is the fastest-appreciating asset in the folder.</p>
+<p><strong>4. Create <code>templates/</code>.</strong> Reusable artifacts the agent loads during execution. A strategy skill carries memo templates and checklist structures. A review skill carries scoring rubrics and report templates. A write skill carries paragraph-move patterns and section templates. Each template is a separate file — the agent reads only what it needs.</p>
+<p><strong>5. Optionally: <code>references/</code> and <code>config/</code>.</strong> References hold domain material the agent consults (notation protocols, interview flows, design checklists). Config holds machine-readable settings (scoring weights, disposition pools, threshold mappings).</p>
+<p><strong>6. Wire it.</strong> In SKILL.md’s dispatch section, tell agents which templates to read. The agent’s own file says “read the templates provided by the invoking skill” — it does not hardcode template paths.</p>
+</section>
+<section id="the-three-level-loading-rule" class="level2">
+<h2 class="anchored" data-anchor-id="the-three-level-loading-rule">The three-level loading rule</h2>
+<p>This constraint keeps context budgets predictable:</p>
+<ul>
+<li><strong>Level 1 (frontmatter):</strong> Loaded always, even when the skill is not triggered. Under 100 tokens. Name, description, argument-hint.</li>
+<li><strong>Level 2 (SKILL.md body):</strong> Loaded when the user invokes the skill. Under 5k tokens. Workflow, routing, dispatch.</li>
+<li><strong>Level 3 (bundled files):</strong> Loaded on demand by agents during execution. No token limit. Templates, gotchas, references, config.</li>
+</ul>
+<p>The budget discipline matters. If SKILL.md exceeds 5k tokens, split operational detail into templates. If frontmatter exceeds 100 tokens, the skill index bloats and the system pays the cost on every session — even sessions that never invoke the skill.</p>
+</section>
+<section id="example-a-minimal-custom-skill" class="level2">
+<h2 class="anchored" data-anchor-id="example-a-minimal-custom-skill">Example: a minimal custom skill</h2>
+<p>A <code>/data-diary</code> skill that logs data decisions as the project evolves:</p>
+<pre><code>data-diary/
+├── SKILL.md
+├── gotchas.md
+└── templates/
+    └── diary-entry.md</code></pre>
+<p>The <code>SKILL.md</code> frontmatter:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> data-diary</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Log data decisions --- variable constructions, sample restrictions, merge choices --- with rationale and alternatives considered.</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">argument-hint</span><span class="kw">:</span><span class="at"> </span><span class="st">"[decision summary]"</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">allowed-tools</span><span class="kw">:</span><span class="at"> Read,Write,Edit</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">user-invocable</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The body dispatches no agent — it appends a structured entry to <code>quality_reports/data_diary.md</code> using the template in <code>templates/diary-entry.md</code>. The gotchas file warns: “Don’t log trivial renames. Log decisions where a different choice would change results.”</p>
+</section>
+<section id="when-not-to-create-a-skill" class="level2">
+<h2 class="anchored" data-anchor-id="when-not-to-create-a-skill">When NOT to create a skill</h2>
+<p>Not every workflow needs a folder. A one-off task with no templates, no gotchas, no reusable structure is just a task — handle it with an existing skill or directly. The threshold: if we would benefit from the same structure on the next project, it deserves a skill folder. If it is project-specific and unlikely to recur, it does not.</p>
 <hr>
 </section>
 </section>
 <section id="sec-exploration" class="level1">
 <h1>Exploration Workflow</h1>
-<p>The <code>explorations/</code> folder provides a structured sandbox for experimental work.</p>
-<p><strong>The problem:</strong> Without structure, experimental code scatters across the repository.</p>
-<p><strong>The solution:</strong> All experimental work goes into <code>explorations/</code> first:</p>
+<p>The <code>explorations/</code> folder is a structured sandbox for experimental work. All experimental code goes here first — never directly into production folders.</p>
+<section id="folder-structure" class="level2">
+<h2 class="anchored" data-anchor-id="folder-structure">Folder structure</h2>
 <pre><code>explorations/
-├── [active-project]/
+├── ACTIVE_PROJECTS.md
+├── [project-name]/
 │   ├── README.md           # Goal, hypotheses, status
 │   ├── R/                  # Code iterations (_v1, _v2)
-│   └── output/             # Results
+│   ├── scripts/            # Test scripts
+│   ├── output/             # Results
+│   └── SESSION_LOG.md      # Progress notes
 └── ARCHIVE/
     ├── completed_[name]/   # Graduated to production
     └── abandoned_[name]/   # Documented why stopped</code></pre>
-<section id="fast-track-vs-plan-first" class="level3">
-<h3 class="anchored" data-anchor-id="fast-track-vs-plan-first">Fast-Track vs Plan-First</h3>
+</section>
+<section id="fast-track-vs.-plan-first" class="level2">
+<h2 class="anchored" data-anchor-id="fast-track-vs.-plan-first">Fast-track vs.&nbsp;plan-first</h2>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Question</th>
 <th>Answer</th>
 <th>Workflow</th>
+<th>Quality threshold</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>“Will this ship?”</td>
-<td>YES</td>
-<td>Plan-First (80/100 quality)</td>
+<td>Will this ship?</td>
+<td>Yes</td>
+<td>Plan-first</td>
+<td>80/100</td>
 </tr>
 <tr class="even">
-<td>“Am I testing an idea?”</td>
-<td>YES</td>
-<td>Fast-Track (60/100 quality)</td>
+<td>Am I testing an idea?</td>
+<td>Yes</td>
+<td>Fast-track</td>
+<td>60/100</td>
 </tr>
 <tr class="odd">
-<td>“Does this improve the project?”</td>
-<td>NO</td>
-<td>Don’t build it</td>
+<td>Does this improve the project?</td>
+<td>No</td>
+<td>Do not build it</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
-<hr>
+<p>Fast-track explorations skip the planning step. The only requirements: code runs, results are correct, and the goal is documented in the README.</p>
 </section>
-</section>
-<section id="sec-constitutional" class="level1">
-<h1>Constitutional Governance (Optional)</h1>
-<div class="callout callout-style-default callout-note callout-titled" title="Constitutional Governance">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Constitutional Governance
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>As your project grows, some decisions become non-negotiable. The <code>templates/constitutional-governance.md</code> template helps you distinguish between:</p>
-<ul>
-<li><strong>Immutable principles</strong> (Articles I–V): Non-negotiable rules</li>
-<li><strong>User preferences</strong>: Flexible patterns that can vary</li>
+<section id="graduation-checklist" class="level2">
+<h2 class="anchored" data-anchor-id="graduation-checklist">Graduation checklist</h2>
+<p>To move an exploration into production (<code>scripts/R/</code>, <code>paper/tables/</code>, etc.):</p>
+<ul class="task-list">
+<li><label><input type="checkbox">Quality score &gt;= 80</label></li>
+<li><label><input type="checkbox">All tests pass</label></li>
+<li><label><input type="checkbox">Results replicate within tolerance</label></li>
+<li><label><input type="checkbox">Code is clear without deep context</label></li>
+<li><label><input type="checkbox">README explains approach and findings</label></li>
 </ul>
-<p>Use it <strong>after</strong> you’ve established 3–7 recurring patterns.</p>
-</div>
-</div>
-</div>
+<p>After graduation, the exploration folder moves to <code>ARCHIVE/completed_[name]/</code>.</p>
+</section>
+<section id="kill-switch" class="level2">
+<h2 class="anchored" data-anchor-id="kill-switch">Kill switch</h2>
+<p>Abandon at any point. Move the folder to <code>ARCHIVE/abandoned_[name]/</code> with a brief note explaining what was attempted and why it stopped. No guilt — exploration is inherently uncertain.</p>
 <hr>
 </section>
-<section id="context-survival-system" class="level1">
-<h1>Context Survival System</h1>
-<p>When context compaction happens, two hooks preserve and restore state:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#14142a', 'primaryTextColor': '#d0d0e0', 'primaryBorderColor': '#b44dff', 'lineColor': '#b44dff', 'secondaryColor': '#0c0c18', 'tertiaryColor': '#080810', 'edgeLabelBackground': '#080810'}}}%%
-flowchart TD
-    RUN[Session running]:::step --&gt;|context fills up| PRE[PreCompact fires]:::hook
-    PRE --&gt; SAVE[Saves plan, task, decisions]:::step
-    SAVE --&gt; COMPACT[Auto-compaction happens]:::event
-    COMPACT --&gt; POST[SessionStart fires]:::hook
-    POST --&gt; RESTORE[Restores context summary]:::step
-    RESTORE --&gt; RESUME[Claude knows where it left off]:::approved
+</section>
+<section id="sec-memory" class="level1">
+<h1>Memory and Context</h1>
+<section id="auto-memory" class="level2">
+<h2 class="anchored" data-anchor-id="auto-memory">Auto-memory</h2>
+<p>Claude Code’s built-in memory system saves corrections and preferences automatically. When you correct Claude (“that’s UAB, not Emory”), it stores the correction in <code>.claude/projects/.../memory/MEMORY.md</code> and applies it in future sessions. You can also explicitly ask Claude to remember or forget something.</p>
+</section>
+<section id="session-logging" class="level2">
+<h2 class="anchored" data-anchor-id="session-logging">Session logging</h2>
+<p>Two append-only logs track project state across sessions:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 34%">
+<col style="width: 48%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Log</th>
+<th>Location</th>
+<th>Updated when</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Session report</td>
+<td><code>SESSION_REPORT.md</code></td>
+<td>End of session or before context compaction</td>
+</tr>
+<tr class="even">
+<td>Research journal</td>
+<td><code>quality_reports/research_journal.md</code></td>
+<td>After any agent completes work</td>
+</tr>
+</tbody>
+</table>
+<p>The session report records operations, decisions, results, and commits. The research journal records agent invocations, scores, and phase transitions — it is the shared context that lets agents understand what other agents have done.</p>
+</section>
+<section id="compaction-discipline" class="level2">
+<h2 class="anchored" data-anchor-id="compaction-discipline">Compaction discipline</h2>
+<p>Context windows fill up. When they do, Claude auto-compacts by summarizing the conversation. You lose detail. The countermeasure:</p>
+<ol type="1">
+<li><strong>Run <code>/checkpoint</code> before natural stopping points.</strong> It saves state to memory, SESSION_REPORT.md, and the research journal.</li>
+<li><strong>Prefer manual <code>/compact</code> over letting auto-compression surprise you.</strong> You control what gets summarized.</li>
+<li><strong>Aim for 5–10 turn focused sessions.</strong> Long sessions drift.</li>
+<li><strong>Start fresh between phases.</strong> Do not carry discovery residue into execution.</li>
+</ol>
+<p>After compaction or a new session, Claude reads the most recent checkpoint artifacts, CLAUDE.md, the latest plan, and recent git history to reconstruct context.</p>
+</section>
+<section id="the-checkpoint-skill" class="level2">
+<h2 class="anchored" data-anchor-id="the-checkpoint-skill">The <code>/checkpoint</code> skill</h2>
+<p>Run <code>/checkpoint</code> before ending a session or compacting. It captures:</p>
+<ul>
+<li>Auto-memory updates (corrections, project state, references)</li>
+<li>Session report entry (operations, decisions, results)</li>
+<li>Research journal entry (agent, phase, score, verdict)</li>
+<li>Obsidian project note (optional — if <code>.claude/state/obsidian-config.md</code> is configured)</li>
+</ul>
+<p>For details on hooks that fire during compaction and session start, see <a href="./hooks.html">Hooks</a>.</p>
 
-    classDef step fill:#14142a,stroke:#b44dff,color:#b44dff,stroke-width:2px
-    classDef hook fill:#14142a,stroke:#00f0ff,color:#00f0ff,stroke-width:2px
-    classDef event fill:#14142a,stroke:#ff2d7b,color:#ff2d7b,stroke-width:2px
-    classDef approved fill:#14142a,stroke:#00cc66,color:#00cc66,stroke-width:2px
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
 
-
+</section>
 </section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
