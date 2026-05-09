@@ -7,8 +7,6 @@ subtitle: "Get running in 5 minutes"
 
 Works for empirical economics out of the box. Adapts to finance, accounting, marketing, and management by customizing the domain profile and journal profiles.
 
-**Built on** [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), reoriented for empirical research publication.
-
 ## What to Expect
 
 When you run a command, Claude enters plan mode, dispatches specialized agents, scores output against quality gates, and presents results for your approval. This is not autocomplete --- it is an orchestrated pipeline where every artifact is created by one agent and reviewed by another before advancing.
