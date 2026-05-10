@@ -72,6 +72,7 @@ Use the clo-author design system from `templates/html/base/styles.css`:
 7. **Status pills on everything** — IN HAND, READY, FOUND, PARTIAL, NEEDS AGG, GAP.
 8. **Self-contained HTML** — one file, no dependencies. Shareable as email attachment.
 9. **All anchor targets use `scroll-margin-top: 60px`** so the sticky nav doesn't overlap content.
+10. **Section navs are sticky too.** `.section-nav` uses `position: sticky; top: 50px` (below the main nav at `top: 0`). Background matches page color so content doesn't bleed through.
 
 ---
 
