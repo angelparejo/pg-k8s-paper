@@ -35,6 +35,8 @@ __pycache__/
 # OS files
 .DS_Store
 Thumbs.db
+*:Zone.Identifier
+*:mshield
 
 # Claude Code local files (not shared across machines)
 .claude/settings.local.json
