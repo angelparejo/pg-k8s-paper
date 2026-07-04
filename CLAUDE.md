@@ -1,13 +1,9 @@
-# CLAUDE.MD -- Empirical Economics Research with Claude Code
+# CLAUDE.MD -- Distributed Systems Research with Claude Code
 
-<!-- HOW TO USE: Replace [BRACKETED PLACEHOLDERS] with your project info.
-     Customize Beamer environments for your talk preamble.
-     Keep this file under ~150 lines — Claude loads it every session.
-     See the guide at https://hugosantanna.github.io/clo-author/ for full documentation. -->
-
-**Project:** [YOUR PROJECT NAME]
-**Institution:** [YOUR INSTITUTION]
-**Field:** [YOUR FIELD — Economics by default. Can be adapted to Finance, Accounting, Marketing, etc.]
+**Project:** Análisis Sistemático de Operadores de PostgreSQL y Almacenamiento basado en CSI en Kubernetes: Arquitectura, Manejo de Fallos e Implicaciones en la Consistencia (título de trabajo, v1-5)
+**Institution:** Universidad de Carabobo, Valencia, Estado Carabobo, Venezuela
+**Author:** Angel A. Parejo R. — Valencia, Estado Carabobo, Venezuela — angelparejo@gmail.com
+**Field:** Distributed Systems / Cloud-Native Infrastructure (Databases, Container Orchestration, Storage)
 **Branch:** main
 
 ---
@@ -20,6 +16,8 @@
 - **Quality gates** -- weighted aggregate score; nothing ships below 80/100; see `quality.md`
 - **Worker-critic pairs** -- every creator has a paired critic; critics never edit files
 - **Auto-memory** -- corrections and preferences are saved automatically via Claude Code's built-in memory system
+- **Air-gapped scripting** -- `scripts/` uses bash + Python standard library only. No `pip install`, no external packages, no R.
+- **Language** -- the paper is drafted in **Spanish** (`/write`, humanizer). English translation + language editing is a dedicated final phase, run only before targeting the secondary (English) journal tier — see `domain-profile.md` → Target Journals. Scaffold config files (this file, `domain-profile.md`) stay in English as the scaffold's own technical instructions.
 
 ---
 
@@ -34,7 +32,7 @@
 ## Folder Structure
 
 ```
-[YOUR-PROJECT]/
+pg-k8s-paper/
 ├── CLAUDE.MD                    # This file
 ├── .claude/                     # Rules, skills, agents, hooks
 ├── Bibliography_base.bib        # Centralized bibliography
@@ -48,10 +46,13 @@
 │   ├── preambles/               # LaTeX headers / shared preamble
 │   ├── supplementary/           # Online appendix and supplements
 │   └── replication/             # Replication package for deposit
-├── data/                        # Project data
-│   ├── raw/                     # Original untouched data (often gitignored)
-│   └── cleaned/                 # Processed datasets ready for analysis
-├── scripts/                     # Analysis code (R, Python, Julia)
+├── data/                        # Benchmark traces and fault-injection logs
+│   ├── raw/                     # Raw Chaos Mesh / Prometheus / operator logs (testbed output, gitignored)
+│   └── cleaned/                 # Parsed RTO/RPO/latency series ready for analysis
+├── scripts/                     # bash + Python stdlib only (air-gapped testbed, no external deps)
+│   ├── run-experiment.sh        # e.g., orchestrates fault injection + workload runs
+│   ├── parse-verifier.py        # e.g., parses operator/CSI logs into structured records
+│   └── analyze.py               # e.g., non-parametric analysis (Mann-Whitney, Kruskal-Wallis, Spearman)
 ├── quality_reports/             # Plans, session logs, reviews, scores
 ├── explorations/                # Research sandbox (see rules)
 ├── templates/                   # Session log, quality report templates
@@ -107,10 +108,9 @@ See `quality.md` for weighted aggregation formula.
 | `/tools [subcommand]` | Utilities: commit, compile, validate-bib, journal, etc. |
 | `/checkpoint [--flag]` | Session handoff: memory + SESSION_REPORT + research journal (+ Obsidian if configured) |
 
----
+> `/write` and the humanizer pass draft in **Spanish** for this project. English translation runs as a separate final pass before targeting the secondary (English) journal tier — see `domain-profile.md` → Target Journals.
 
-<!-- CUSTOMIZE: Replace the example entries below with your own
-     Beamer environments for talks. -->
+---
 
 ## Beamer Custom Environments (Talks)
 
@@ -125,8 +125,8 @@ See `quality.md` for weighted aggregation formula.
 <!-- Options: by-script (default) or by-purpose -->
 Output organization: by-script
 
-<!-- by-script:  paper/figures/main_regression/figure1.pdf, paper/tables/main_regression/table1.tex -->
-<!-- by-purpose: paper/figures/estimation/coefplot_main.pdf, paper/tables/robustness/alt_controls.tex -->
+<!-- by-script:  paper/figures/rto_comparison/figure1.pdf, paper/tables/rto_comparison/table1.tex -->
+<!-- by-purpose: paper/figures/recovery/rto_boxplot.pdf, paper/tables/robustness/spearman_corr.tex -->
 
 ---
 
@@ -134,7 +134,7 @@ Output organization: by-script
 
 | Component | File | Status | Description |
 |-----------|------|--------|-------------|
-| Paper | `paper/main.tex` | [draft/submitted/R&R] | [Brief description] |
-| Data | `scripts/R/` | [complete/in-progress] | [Analysis description] |
-| Replication | `paper/replication/` | [not started/ready] | [Deposit status] |
-| Job Market Talk | `paper/talks/job_market_talk.tex` | -- | [Status] |
+| Paper | `paper/main.tex` | draft | Título de trabajo v1-5 (en español): "Análisis Sistemático de Operadores de PostgreSQL y Almacenamiento basado en CSI en Kubernetes..." |
+| Experiments | `scripts/` | in-progress | bash+Python harnesses: Chaos Mesh fault injection, RTO/RPO measurement, CloudNativePG vs. Zalando/Patroni |
+| Replication | `paper/replication/` | not started | Deposit status TBD |
+| Talk | `paper/talks/` | -- | Not started |
