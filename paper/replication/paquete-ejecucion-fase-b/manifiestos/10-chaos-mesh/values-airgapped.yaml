@@ -12,6 +12,11 @@ controllerManager:
   enableFilterNamespace: true
   replicaCount: 1
   targetNamespace: pg-chaos-lab
+  # Air-gapped: fijar el controller al nodo del lab, donde estan importadas las
+  # imagenes de Chaos Mesh (evita ImagePullBackOff si cae en otro nodo) y ademas
+  # confina todo Chaos Mesh al nodo del laboratorio.
+  nodeSelector:
+    pg-chaos-lab/member: "true"
 
 chaosDaemon:
   runtime: containerd
