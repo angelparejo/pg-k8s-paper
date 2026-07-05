@@ -4,6 +4,31 @@
      clo-author original (no son historial de este proyecto, pg-k8s-paper). Se dejan intactos;
      limpiar si se desea. Las entradas de pg-k8s-paper empiezan en 2026-07-04. -->
 
+## 2026-07-05 — Creación de la versión experimental v2 (bifurcación de línea)
+
+**Operations:**
+- Creado `articulo_angelparejov2-experimental.md` como copia byte-idéntica de `articulo_angelparejov1-6.md` (v1-6 conceptual verificada intacta en git)
+- Revertido el reencuadre Ruta B: título a Opción 3 ("Análisis Multicapa… Evaluación Empírica de Recuperación y Consistencia bajo Fallos Inyectados"); resumen (137 palabras), introducción (contribución 5 + disclaimer conceptual) y conclusiones reencuadrados a estudio empírico
+- IV.E reclasificada de "Diseño experimental propuesto" a "Metodología experimental" (tiempos verbales propuesto→ejecutado)
+- Añadida Sección V. Resultados como plantilla vacía (Tabla II, Figura 2, contraste predicho-vs-observado — todos "pendiente de ejecución", sin datos inventados); Discusión→VI, Conclusiones→VII
+- Corregidos residuos de "validación futura" en II, III.C, III.D, IV.D
+- Entrada añadida al research journal (2026-07-05 08:30 — Writer)
+
+**Decisions:**
+- Título Opción 3 elegido por el usuario — conserva el espinazo de la v1-6 para reforzar el vínculo de publicación secuencial entre ambos artículos
+- v2 es una LÍNEA EXPERIMENTAL SEPARADA: la v1-6 conceptual sigue siendo la versión lista para el tier primario; la v2 espera datos del piloto
+- Honestidad de alcance conservada y reforzada: el fallo de nodo NO se reproduce (clúster productivo sin drenaje de nodos), se aproxima con pod-failure sostenido (escenario ii) = cota inferior del RTO; explícito en IV.E, V.A y limitaciones de VI
+
+**Results:**
+- `articulo_angelparejov2-experimental.md` completa como plantilla empírica; numeración I–VII coherente; 6 referencias pendientes ([5][10][11][14][15]) heredadas sin re-verificar
+
+**Commits:**
+- `[pendiente]` Crea versión experimental v2: revierte framing a estudio empírico, añade plantilla de Sección V Resultados
+
+**Status:**
+- Done: v2 experimental creada, registrada y reencuadrada; v1-6 conceptual intacta
+- Pending: **La v2 NO es sometible hasta ejecutar el piloto (`paper/replication/pg-chaos-lab.zip`) y rellenar la Sección V con RTO/RPO reales.** Dashboard sin actualizar (pospuesto a petición del usuario)
+
 ## 2026-07-04 — Reorientación del scaffold + peer review simulado + revisión conceptual v1-6
 
 **Operations:**
