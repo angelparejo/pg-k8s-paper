@@ -1,0 +1,50 @@
+# Cluster CloudNativePG 1.28.0 -- PostgreSQL 16.13, 3 instancias.
+# Requiere el operador CNPG 1.28.0 ya instalado (verificado en el cluster).
+# AJUSTAR: storageClassName al nombre real de la StorageClass del CSI Huawei (FC).
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pglab-cnpg-exp
+  namespace: pg-chaos-lab
+  labels:
+    app.kubernetes.io/part-of: pg-chaos-lab
+spec:
+  instances: 3
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.13   # importar via ctr en nodos del lab
+  primaryUpdateStrategy: unsupervised
+
+  # Semantica de replicacion: asincrona (por defecto). El eje experimental
+  # es operador x escenario x latencia; no se varia la sincronia (opcion a).
+  postgresql:
+    parameters:
+      max_connections: "200"
+      shared_buffers: 256MB
+      # Facilita el calculo de RPO/consistencia en los logs:
+      log_min_duration_statement: "1000"
+
+  bootstrap:
+    initdb:
+      database: labdb
+      owner: lab
+
+  storage:
+    size: 15Gi
+    storageClass: huawei-san-fc        # <-- AJUSTAR al StorageClass real (Huawei CSI 4.10.1 / FC)
+
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+
+  # Confinar al pool del laboratorio (nodos etiquetados pg-chaos-lab/member=true)
+  affinity:
+    nodeSelector:
+      pg-chaos-lab/member: "true"
+    # Distribuir instancias en nodos distintos (relevante para F2/F3):
+    topologyKey: kubernetes.io/hostname
+
+  monitoring:
+    enablePodMonitor: false            # poner true si Prometheus Operator esta disponible

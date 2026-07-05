@@ -1,0 +1,37 @@
+# Cuenta de servicio para lanzar experimentos SOLO en pg-chaos-lab.
+# Uso: kubectl --as=system:serviceaccount:pg-chaos-lab:chaos-operator ...
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: chaos-operator
+  namespace: pg-chaos-lab
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: chaos-experiments
+  namespace: pg-chaos-lab
+rules:
+  - apiGroups: ["chaos-mesh.org"]
+    resources: ["podchaos", "iochaos", "networkchaos"]
+    verbs: ["get", "list", "watch", "create", "delete", "patch", "update"]
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "events"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["networkpolicies"]
+    verbs: ["get", "list", "create", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: chaos-experiments
+  namespace: pg-chaos-lab
+subjects:
+  - kind: ServiceAccount
+    name: chaos-operator
+    namespace: pg-chaos-lab
+roleRef:
+  kind: Role
+  name: chaos-experiments
+  apiGroup: rbac.authorization.k8s.io

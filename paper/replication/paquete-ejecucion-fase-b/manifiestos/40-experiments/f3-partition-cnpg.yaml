@@ -1,0 +1,27 @@
+# F3 - Particion de red del primario (CNPG) SIN Chaos Mesh: NetworkPolicy
+# estandar aplicada por Calico 3.31.4. Bloquea TODO ingress y egress del pod
+# primario (incluido el API server), por lo que el operador pierde contacto
+# con la instancia y las replicas pierden la replicacion => particion realista.
+# Las sondas del kubelet NO se bloquean (trafico del host, failsafe de Calico):
+# el pod sigue "vivo" pero aislado, el peor caso para split-brain.
+#
+# APLICAR:  kubectl apply -f f3-partition-cnpg.yaml
+# REVERTIR (aborto inmediato): kubectl delete -f f3-partition-cnpg.yaml
+#
+# NOTA: la etiqueta cnpg.io/instanceRole es dinamica; esta politica selecciona
+# al que sea primario EN EL MOMENTO de aplicarla y lo sigue aunque cambie el rol.
+# Para fijar un pod concreto, sustituir por statefulset.kubernetes.io/pod-name.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: f3-partition-cnpg
+  namespace: pg-chaos-lab
+  labels: {experiment: f3, target: cnpg}
+spec:
+  podSelector:
+    matchLabels:
+      cnpg.io/cluster: pglab-cnpg-exp
+      cnpg.io/instanceRole: primary
+  policyTypes: [Ingress, Egress]
+  ingress: []     # deniega todo ingress
+  egress: []      # deniega todo egress (incluye API server y replicas)

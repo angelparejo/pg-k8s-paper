@@ -1,0 +1,15 @@
+# F1 - Terminacion del pod primario (CNPG). Accion puntual (one-shot).
+# CNPG etiqueta el primario con cnpg.io/instanceRole=primary.
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: f1-podkill-cnpg
+  namespace: pg-chaos-lab
+spec:
+  action: pod-kill
+  mode: one
+  selector:
+    namespaces: [pg-chaos-lab]
+    labelSelectors:
+      cnpg.io/cluster: pglab-cnpg-exp
+      cnpg.io/instanceRole: primary
