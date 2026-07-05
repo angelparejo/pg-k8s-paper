@@ -37,7 +37,7 @@ manifiestos/            Kit adaptado a Camino B (solo CNPG, clúster pglab-cnpg-
   20-cluster/           Definición del clúster experimental CNPG
   30-workload/          Carga pgbench + verificador de transacciones (RTO/RPO)
   40-experiments/       Manifiestos de fallo F1–F4 (todos acotados a pglab-cnpg-exp)
-  scripts/              Orquestación, parsing y estadística (sin dependencias)
+  scripts/              Orquestación, parsing, estadística y dry-run de selectores GO/NO-GO (sin dependencias)
   images/               Lista de imágenes + import por ctr
 ```
 
