@@ -121,3 +121,63 @@
 **Status:**
 - Done: Phases A-F of HTML dashboard pipeline complete (v4.3.0 scope)
 - Pending: Commit + deploy to GitHub Pages
+
+## 2026-07-05 15:40 — Endurecimiento de seguridad G1 (compuerta GO/NO-GO, paquete Fase B)
+
+**Operations:**
+- Creado `paper/replication/paquete-ejecucion-fase-b/manifiestos/scripts/dry-run-selectores.py` (chmod +x, stdlib + kubectl, sin yq).
+- Reescrito bloque G1 de `paper/replication/paquete-ejecucion-fase-b/CHECKLIST-GONOGO.md` (G1.2 autoritativo; G1.1/G1.3/G1.4 de apoyo; G1.5 semántica de F3).
+- Corregida descripción de `scripts/` en `README.md` del paquete (pasada de consistencia cruzada).
+- Actualizado `quality_reports/research_journal.md` (entrada Coder 15:32).
+
+**Decisions:**
+- Dry-run derivado del manifiesto (no tecleado por el operador) — el enlace manifiesto→pods debe ser mecánico, no transcripción humana.
+- Rechazo por precaución ante mecanismos de selección no previstos (expressionSelectors, pods:, matchExpressions) — la ausencia no se lee como seguridad.
+- `--dry-run=client` como primario (evita webhook), `--dry-run=server` como fallback documentado.
+- Numeración G1.x mantenida estable para no romper referencias en SEGURIDAD/PROCEDIMIENTO.
+
+**Results:**
+- Hueco de G1 cerrado: un manifiesto alterado (2º namespace, nombre de clúster cambiado, rol aislado) ahora se detecta antes de inyectar.
+- Consistencia cruzada verificada: nombres (`pglab-cnpg-exp`, `pg-chaos-lab/member=true`) sin variantes; única desalineación (README) corregida.
+- Paquete Fase B declarado completo y entregable. Salvedad: script validado sintácticamente, no ejecutado contra clúster real (air-gap) — primera corrida en Ventana 1 es parte del ensayo.
+
+**Commits:**
+- `8b415be` Cierra hueco G1: dry-run de selectores derivado del manifiesto en la compuerta GO/NO-GO
+- `0fe8987` README: registra el dry-run de selectores en el inventario de scripts/
+
+**Status:**
+- Done: endurecimiento G1, consistencia cruzada, paquete Fase B entregable.
+- Pending: (entorno del usuario) rellenar RESPONSABLES.md (G9), placeholders <NS-PROD-1..3>/<WORKER-LAB> en Fase 0; ejecución real del piloto en las 3 ventanas.
+
+## 2026-07-05 21:35 — Reconocimiento desacoplado del clúster real + instanciación del paquete Fase B
+
+**Operations:**
+- Reconocimiento en **modo desacoplado** (Claude genera comandos solo-lectura; usuario ejecuta por VPN y pega salida): 4 rondas (versión/nodos/namespaces/operador · etiquetas/taints/carga · gobernanza/co-tenencia/ubicación CNPG · recursos del nodo).
+- WebSearch/WebFetch de compatibilidad Chaos Mesh ↔ K8s 1.34 (chaos-mesh.org/supported-releases + GitHub releases).
+- Plan aprobado: `quality_reports/plans/2026-07-05_actualizar-paquete-fase-b.md`.
+- Editados 11 archivos del paquete `paper/replication/paquete-ejecucion-fase-b/`: README, SEGURIDAD, PROCEDIMIENTO, CHECKLIST-GONOGO, ABORTO, RESPONSABLES + manifiestos (00-namespace/01-namespace.yaml, 20-cluster/cluster-cnpg.yaml, 10-chaos-mesh/INSTALL-offline.md, 10-chaos-mesh/values-airgapped.yaml, images/image-list.txt).
+- Corregida memoria: `project_testbed_operador_compartido.md` + gancho `MEMORY.md`.
+
+**Hallazgos del reconocimiento (clúster real):**
+- K8s v1.34.6 · RHEL 9.8 · containerd 2.2.4 · 8 nodos (3 control-plane + 5 workers).
+- Operador CNPG 1.28.0 en `cnpg-operator`, gestiona **4 clústeres CNPG** (no 3): pg-prod (prod, primary pg-prod-2), pg-cert, pg-dev, gitlab/pg-gitlab.
+- Nodo del lab = **tcolp293** (worker, huawei-san/fc, ocioso 4% CPU/2% mem) — pero **co-aloja 3 primaries ajenos** (pg-cert-1, pg-dev-3, pg-gitlab-2) + ArgoCD/Harbor/Prometheus.
+- SC única `huawei-ch-xfs` (default, Retain, WaitForFirstConsumer). Kyverno inerte; Argo Rollouts ninguno; ArgoCD con apps sar-suite (no tocan pg-*/lab); Linkerd activo pero pg-* NO meshado.
+
+**Decisions:**
+- Mantener tcolp293 como worker-lab (worker nonprod designado) pese a la co-tenencia — decisión del usuario. → Reescribir barrera #2 y G5 (contención por G1 + filtro namespace, no por aislamiento de nodo).
+- Chaos Mesh 2.7.2 → **v2.8.3** (2.7 tope K8s 1.28; 2.8 soporta 1.34; parches "Chaotic Deputy").
+- Excluir Linkerd del lab (`linkerd.io/inject: disabled` en namespace + inheritedMetadata) — coincide con prod, sin salvedad de validez externa.
+- Framing "3 productivos" → "4 preexistentes"; experimental = 5.º clúster; "4 primarios" → "5".
+- Teardown: borrar PV liberados (SC Retain).
+
+**Results:**
+- Paquete instanciado para ESTE clúster con valores reales; modelo de seguridad ahora verdadero respecto a la co-tenencia.
+- Verificación: 0 placeholders, 0 residuos de encuadre viejo, YAML parsea (namespace + cluster). Salvedad: no ejecutado contra clúster (air-gap); validación `--dry-run` real es de la Ventana 1.
+
+**Commits:**
+- Ninguno aún — cambios sin commitear (pendiente decisión del usuario).
+
+**Status:**
+- Done: reconocimiento (4 rondas), plan aprobado, 11 archivos del paquete + memoria actualizados y verificados.
+- Pending: commit (a decidir); rellenar roles/fechas en RESPONSABLES.md (entorno del usuario); reconfirmar ubicación de pods en paso 0.7 (puede cambiar); ejecución del piloto en las 3 ventanas.

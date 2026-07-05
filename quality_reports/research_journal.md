@@ -1,5 +1,12 @@
 # Research Journal
 
+### 2026-07-05 21:35 — Coder/Data-engineer (instanciación del paquete Fase B con reconocimiento real del clúster)
+**Phase:** Execution (preparación del piloto empírico para la v2)
+**Target:** paper/replication/paquete-ejecucion-fase-b/ (11 archivos) + memory/
+**Score:** N/A (documentación/manifiestos; no ejecutado contra clúster)
+**Verdict:** Reconocido el clúster productivo real en **modo desacoplado** (solo-lectura; el usuario ejecutó por VPN y pegó salidas) y actualizado el paquete Fase B en consecuencia. Tres refutaciones materiales de los supuestos previos: (1) **no son 3 clústeres productivos sino 4 CNPG preexistentes** (pg-prod, pg-cert, pg-dev, gitlab/pg-gitlab); el experimental es el 5.º. (2) **Chaos Mesh 2.7.x es incompatible** con K8s v1.34.6 → subido a **v2.8.3** (soporta 1.30–1.35; parches "Chaotic Deputy"; verificado por WebSearch/WebFetch en chaos-mesh.org). (3) El nodo del lab **tcolp293 co-aloja 3 primaries CNPG ajenos** (pg-cert-1, pg-dev-3, pg-gitlab-2) → la barrera #2 y G5 (que asumían "nodo vacío") se **reescribieron**: la contención descansa en filtro de namespace + doble selector + nombre único + dry-run G1, no en aislamiento de nodo (decisión del usuario: mantener tcolp293). Además: placeholders resueltos (`cnpg-operator`, SC `huawei-ch-xfs` con reclaimPolicy Retain → teardown de PV a mano, nodo `tcolp293`); Linkerd excluido del lab vía `linkerd.io/inject: disabled` en namespace + `inheritedMetadata` del clúster (coincide con prod: pg-* no meshado → sin salvedad de validez externa). Verificado: 0 placeholders, 0 residuos de encuadre viejo, YAML parsea. Memoria del proyecto corregida.
+**Report:** quality_reports/plans/2026-07-05_actualizar-paquete-fase-b.md (plan aprobado) · paper/replication/paquete-ejecucion-fase-b/
+
 ### 2026-07-05 15:32 — Coder (mejora de seguridad — compuerta GO/NO-GO)
 **Phase:** Execution
 **Target:** paper/replication/paquete-ejecucion-fase-b/ (CHECKLIST-GONOGO.md, manifiestos/scripts/dry-run-selectores.py)
