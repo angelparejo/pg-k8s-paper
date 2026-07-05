@@ -1,5 +1,12 @@
 # Research Journal
 
+### 2026-07-05 22:25 — Reconocimiento (Ronda 5: verificación de versiones CSI/Calico)
+**Phase:** Execution (recon desacoplado, solo-lectura)
+**Target:** articulo_angelparejov2-experimental.md §IV.E (hilo abierto 🟡)
+**Score:** N/A
+**Verdict:** Verificadas contra el clúster real las dos versiones que quedaban asertadas sin confirmar en IV.E: **Huawei CSI = 4.10.1** (imágenes `huawei-csi:4.10.1`, `storage-backend-controller/sidecar/extender:4.10.1`) y **Calico = v3.31.4** (`clusterinformation.spec.calicoVersion` + `calico-node:v3.31.4`). **Ambas COINCIDEN** con IV.E → no requiere corrección; hilo cerrado. Dato adicional corroborante: el CSIDriver `csi.huawei.com` declara `ATTACHREQUIRED: true`, lo que respalda empíricamente el argumento de IV.E/VI de que la latencia de detach/attach del volumen dominaría el RTO en un fallo de nodo real (justificando que el escenario (ii) sea una cota inferior). Tigera operator v1.40.7.
+**Report:** journal (recon; sin cambios en el paper)
+
 ### 2026-07-05 22:05 — Writer (correcciones factuales del testbed real en IV.E del v2)
 **Phase:** Execution (re-entrada por hallazgos del reconocimiento)
 **Target:** articulo_angelparejov2-experimental.md §IV.E
