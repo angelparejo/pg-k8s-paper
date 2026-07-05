@@ -13,24 +13,39 @@
 
 ## G1 — Dry-run de selectores: cada experimento resuelve SOLO al clúster experimental
 
-**Es el ítem más importante.** Antes de ejecutar nada, se muestra a qué pods apuntaría cada manifiesto.
+**Es el ítem más importante.** El ítem **autoritativo** es **G1.2**: un dry-run que extrae el selector *del propio manifiesto* y pregunta a kubectl qué pods resolvería — sin que el operador teclee ningún selector. G1.1, G1.3 y G1.4 son verificaciones de apoyo, independientes.
 
-**G1.1 — Inventario de selectores de todos los manifiestos de fallo:**
+**G1.1 — Inventario estático (mirada rápida, NO autoritativa):**
 ```bash
 for f in manifiestos/40-experiments/*.yaml; do
   echo "== $f =="
   grep -E 'kind:|namespaces:|cnpg.io/cluster:|cnpg.io/instanceRole:' "$f"
 done
 ```
-- Esperado: **cada** manifiesto muestra `cnpg.io/cluster: pglab-cnpg-exp` **y** (para los de Chaos Mesh) `namespaces: [pg-chaos-lab]`. Ninguno debe traer `cnpg.io/instanceRole: primary` **sin** su `cnpg.io/cluster: pglab-cnpg-exp` acompañante.
+- Vistazo rápido. La verificación real —vinculada al manifiesto— es G1.2.
 - [ ] PASA / [ ] NO PASA
 
-**G1.2 — A qué pod apunta el selector de F1/F2/F4 (Chaos Mesh):**
+**G1.2 — Dry-run DERIVADO DEL MANIFIESTO (autoritativo): a qué pods apuntaría CADA experimento.**
+No teclees selectores: el script los extrae del YAML, los valida y consulta esos pods exactos. Requiere Chaos Mesh instalado (Fase 2 ya hecha).
 ```bash
-kubectl get pods -n pg-chaos-lab \
-  -l cnpg.io/cluster=pglab-cnpg-exp,cnpg.io/instanceRole=primary -o wide
+rc=0
+for f in manifiestos/40-experiments/*.yaml; do
+  echo "================ $(basename "$f") ================"
+  if ! kubectl create --dry-run=client -o json -f "$f" \
+        | python3 manifiestos/scripts/dry-run-selectores.py; then
+    rc=1
+  fi
+  echo
+done
+echo "===================================================="
+if [ "$rc" -eq 0 ]; then
+  echo "G1.2 GLOBAL: PASA — todos resuelven solo a pglab-cnpg-exp en pg-chaos-lab"
+else
+  echo "G1.2 GLOBAL: NO PASA — al menos un manifiesto falla. ABORTAR (ABORTO.md)."
+fi
 ```
-- Esperado: **exactamente 1 pod** (`pglab-cnpg-exp-N`, el primario actual), en un nodo `<WORKER-LAB>`. Ni más, ni de otro clúster.
+- Esperado: para **cada** manifiesto, el script imprime `EL MANIFIESTO SELECCIONARÍA ESTOS PODS:` seguido de **exactamente 1 pod**, en `pg-chaos-lab`, del clúster `pglab-cnpg-exp`, y `VEREDICTO: PASA`. Cierre global `G1.2 GLOBAL: PASA`.
+- **Regla inequívoca:** si aparece **CUALQUIER** pod fuera de `pg-chaos-lab` o que no sea de `pglab-cnpg-exp`, o **cualquier** `VEREDICTO: NO PASA` (segundo namespace, nombre de clúster alterado, rol aislado, mecanismo de selección no soportado) → **NO PASA, abortar** (`ABORTO.md`). No se interpreta, no se "arregla al vuelo": se aborta.
 - [ ] PASA / [ ] NO PASA
 
 **G1.3 — El label de clúster experimental es único en TODO el clúster K8s:**
@@ -44,15 +59,15 @@ kubectl get pods -A -l cnpg.io/cluster=pglab-cnpg-exp -o wide
 ```bash
 kubectl get pods -A -l cnpg.io/instanceRole=primary -o wide
 ```
-- Esperado: aparecen **4 primarios** (los 3 productivos + el experimental). Esto evidencia que un selector con **solo** `cnpg.io/instanceRole=primary` alcanzaría producción. Confirmar (por G1.1) que **ningún** manifiesto usa ese label aislado.
-- [ ] PASA / [ ] NO PASA — confirmado que ningún manifiesto usa el label de rol sin el de clúster
+- Esperado: aparecen **4 primarios** (los 3 productivos + el experimental). Esto evidencia que un selector con **solo** `cnpg.io/instanceRole=primary` alcanzaría producción. G1.2 ya rechaza automáticamente cualquier manifiesto que use ese label sin el de clúster (regla "rol aislado").
+- [ ] PASA / [ ] NO PASA
 
-**G1.5 — Selector de F3 (NetworkPolicy) apunta al mismo pod y es namespaced:**
+**G1.5 — Semántica de F3 (NetworkPolicy):**
 ```bash
-grep -E 'kind:|podSelector|cnpg.io/cluster:|cnpg.io/instanceRole:' manifiestos/40-experiments/f3-partition-cnpg.yaml
-kubectl get pods -n pg-chaos-lab -l cnpg.io/cluster=pglab-cnpg-exp,cnpg.io/instanceRole=primary
+grep -E 'kind:|namespace:|podSelector|cnpg.io/cluster:|cnpg.io/instanceRole:' \
+  manifiestos/40-experiments/f3-partition-cnpg.yaml
 ```
-- Esperado: la NetworkPolicy vive en `pg-chaos-lab` (una NetworkPolicy solo afecta a pods de su propio namespace, por diseño) y su `podSelector` resuelve al único primario experimental.
+- G1.2 ya validó mecánicamente que el `podSelector` de F3 resuelve al único primario experimental. Aquí solo se confirma la semántica: la NetworkPolicy vive en `pg-chaos-lab` y, por diseño de Kubernetes, una NetworkPolicy **solo** puede afectar pods de su propio namespace — no puede alcanzar producción aunque el selector fuese incorrecto.
 - [ ] PASA / [ ] NO PASA
 
 ---
