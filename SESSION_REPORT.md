@@ -204,3 +204,24 @@
 **Status:**
 - Done: IV.E con testbed real (factual), versiones CSI/Calico verificadas, todo commiteado (árbol limpio).
 - Pending (🔴 decisión abierta): **alcance de operadores** — el v2 afirma comparación empírica de 2 operadores pero el piloto ejecutable es solo CNPG (no hay Zalando en el clúster productivo). Resolver antes de someter. Además: roles/fechas de RESPONSABLES.md y ejecución del piloto (entorno del usuario).
+
+## 2026-07-05 22:55 — INICIO de ejecución del piloto (Ventana 1) — PAUSA en Fase 2
+
+**Modo:** DESACOPLADO (Claude genera comandos kubectl; el usuario los ejecuta por VPN/MobaXterm y pega la salida). Corriendo desde el host `TCOLP292`, dir `paquete-ejecucion-fase-b/`.
+
+**Progreso de ejecución (Ventana 1 = Fases 0–4 + F1 + F3):**
+- **FASE 0 — COMPLETA.** 0.1 K8s v1.34.6 ✓; 0.2 operador CNPG 1.28.0 en `cnpg-operator` 2/2 ✓; 0.4 Calico v3.31.4 ✓; **0.5 nodo `tcolp293` etiquetado `pg-chaos-lab/member=true`** (⚠️ escritura hecha, aditiva) ✓; 0.6 imágenes en tcolp293: `postgres:16.13` + `chaos-mesh:v2.8.3` + `chaos-daemon:v2.8.3` importadas ✓; 0.7 exactamente 4 clústeres CNPG sanos (primarios pg-cert-1/pg-dev-3/pg-gitlab-2 en tcolp293, pg-prod-2 en tcolp295) ✓; 0.8 `pg-chaos-lab` no existía ✓; **0.9 snapshot `estado-inicial.txt` capturado** (línea base para Fase 6.3) ✓.
+- **FASE 1 — COMPLETA.** `kubectl apply -f manifiestos/00-namespace/` → namespace `pg-chaos-lab` (labels `chaos-mesh.org/inject=enabled`, pod-security `privileged`; annotation `linkerd.io/inject=disabled`), ResourceQuota `pg-chaos-lab-quota` (uso 0), LimitRange, SA+Role+RoleBinding `chaos-experiments`. Todo PASA. ✓
+- **FASE 2 — SIGUIENTE (no iniciada).** Instalar Chaos Mesh v2.8.3 acotado. Plan: render seguro (`helm template ... -f values-airgapped.yaml --set 'controllerManager.nodeSelector.pg-chaos-lab/member=true' > chaos-mesh-rendered.yaml`) → inspección → ⚠️ `kubectl apply` → verificar confinamiento (controller + daemon solo en tcolp293). Ajuste aplicado al repo (`219e2dc`): controller fijado al nodo del lab (evita ImagePullBackOff air-gap).
+- Pendientes tras Fase 2: FASE 3 (crear `pglab-cnpg-exp` 3 instancias, SC `huawei-ch-xfs` + carga pgbench/verificador), **FASE 4 (compuerta GO/NO-GO, obligatoria)**, FASE 5 (Ventana 1 = F1 pod-kill + F3 partición).
+
+**Decisions:**
+- Etiqueta dedicada `pg-chaos-lab/member=true` en vez de reusar `kubernetes.io/hostname` (allowlist explícita, manifiestos agnósticos del nodo, no abusar de etiqueta reservada).
+- Controller de Chaos Mesh fijado al nodo del lab por air-gap (commit `219e2dc`).
+
+**Commits:**
+- `219e2dc` Fase B: fija el controller de Chaos Mesh al nodo del lab (air-gap)
+
+**Status:**
+- Done: Fases 0 y 1 de la Ventana 1 ejecutadas y verificadas en el clúster real. Lab desplegado (namespace + aislamiento).
+- Pending: reanudar en **Fase 2** (Chaos Mesh) con el prompt de reanudación; luego Fase 3/4/5. Protocolo: lectura por defecto, cada escritura marcada ⚠️ y con confirmación, compuerta GO/NO-GO inviolable antes de inyectar.
