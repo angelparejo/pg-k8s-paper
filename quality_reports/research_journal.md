@@ -1,5 +1,12 @@
 # Research Journal
 
+### 2026-07-05 15:32 — Coder (mejora de seguridad — compuerta GO/NO-GO)
+**Phase:** Execution
+**Target:** paper/replication/paquete-ejecucion-fase-b/ (CHECKLIST-GONOGO.md, manifiestos/scripts/dry-run-selectores.py)
+**Score:** N/A
+**Verdict:** Cerrado hueco en G1 del checklist GO/NO-GO. El dry-run de selectores dependía de transcripción manual (el operador tecleaba el selector, no se leía del manifiesto), por lo que un manifiesto alterado —segundo namespace, nombre de clúster cambiado, rol aislado— habría pasado inadvertido. Nuevo `dry-run-selectores.py` (solo stdlib + kubectl, sin yq) extrae el selector del propio YAML vía `kubectl create --dry-run=client -o json`, lo valida, y `verify_pods` comprueba los pods reales como red final; rechaza por precaución cualquier mecanismo de selección no previsto (expressionSelectors, pods:, etc.). G1.2 reescrito como ítem autoritativo; G1.1/G1.3/G1.4 quedan como apoyo. Crítico dado el riesgo del escenario: operador CNPG compartido entre 3 clústeres productivos y el experimental.
+**Report:** commit descriptivo (ver git log); paper/replication/paquete-ejecucion-fase-b/CHECKLIST-GONOGO.md §G1
+
 ### 2026-07-04 09:00 — Editor (desk review)
 **Phase:** Peer Review
 **Target:** articulo_angelparejov1-5.docx — tier primario (CLEI/RISTI/Ingeniare/Computación y Sistemas)
