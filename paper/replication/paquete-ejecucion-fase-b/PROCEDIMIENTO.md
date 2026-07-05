@@ -1,23 +1,25 @@
 # PROCEDIMIENTO — Piloto Fase B (solo CloudNativePG) · pg-chaos-lab
 
 **Audiencia:** equipo ejecutor (puede no conocer el contexto de la investigación).
-**Regla de oro:** este piloto crea **un cuarto clúster CNPG nuevo y aislado** (`pglab-cnpg-exp`) gestionado por el operador CNPG **ya instalado y compartido**. Los **tres clústeres CNPG productivos NO se tocan**. Toda inyección de fallos está acotada por **doble filtro: namespace `pg-chaos-lab` + nombre de clúster `pglab-cnpg-exp`**.
+**Regla de oro:** este piloto crea **un quinto clúster CNPG nuevo y aislado** (`pglab-cnpg-exp`) gestionado por el operador CNPG **ya instalado y compartido**. Los **cuatro clústeres CNPG preexistentes NO se tocan** (`pg-prod`, `pg-cert`, `pg-dev`, `gitlab/pg-gitlab`). Toda inyección de fallos está acotada por **doble filtro: namespace `pg-chaos-lab` + nombre de clúster `pglab-cnpg-exp`**.
 
 **Qué hace / qué NO hace:**
 - ✅ Crea `pglab-cnpg-exp` en el namespace nuevo `pg-chaos-lab`, le mete carga e inyecta fallos **solo a él**.
-- ❌ NO instala ni actualiza ningún operador. NO drena/acordona nodos. NO toca la SAN Huawei (IOChaos es FUSE dentro del pod). NO toca los tres clústeres productivos.
+- ❌ NO instala ni actualiza ningún operador. NO drena/acordona nodos. NO toca la SAN Huawei (IOChaos es FUSE dentro del pod). NO toca los cuatro clústeres CNPG preexistentes.
 
 **Orden estricto:** Fase 0 → 1 → 2 → 3 → **4 (GO/NO-GO, obligatoria)** → 5 → 6. No se salta ninguna fase.
 
 **Documentos hermanos (leer antes de ejecutar):** `SEGURIDAD.md`, `CHECKLIST-GONOGO.md`, `ABORTO.md`, `RESPONSABLES.md`.
 
-**Convenciones (rellenar en Fase 0):**
-| Placeholder | Significado |
+**Parámetros de este piloto (ya resueltos contra el clúster real; verificados 2026-07-05):**
+| Parámetro | Valor |
 |---|---|
-| `<NS-OPERADOR>` | namespace donde ya vive el operador CNPG (p. ej. `cnpg-system`) |
-| `<SC-HUAWEI>` | StorageClass real del CSI Huawei (FC) |
-| `<WORKER-LAB>` | nodo(s) worker del laboratorio (sin cargas productivas) |
+| Namespace del operador CNPG | `cnpg-operator` (deploy `cnpg-cloudnative-pg`, imagen `...cloudnative-pg:1.28.0`) |
+| StorageClass del CSI Huawei | `huawei-ch-xfs` (default · `csi.huawei.com` · `reclaimPolicy: Retain` · `WaitForFirstConsumer`) |
+| Nodo del laboratorio | `tcolp293` (worker con `storage=huawei-san`, `fc=true`) |
+| Entorno verificado | Kubernetes v1.34.6 · RHEL 9.8 · kernel 5.14 · containerd 2.2.4 |
 
+> ⚠️ `tcolp293` **co-aloja hoy 3 primaries CNPG ajenos** (pg-cert-1, pg-dev-3, pg-gitlab-2), además de ArgoCD/Harbor/Prometheus. El aislamiento del piloto **no** depende de que el nodo esté vacío, sino del filtro de namespace + doble selector + nombre único + dry-run G1 (ver `SEGURIDAD.md` y `CHECKLIST-GONOGO.md` G1/G5).
 > Todos los comandos asumen `kubectl` con el contexto correcto. Verificar: `kubectl config current-context`.
 
 ---
@@ -63,14 +65,14 @@ Antes de inyectar en una ventana posterior, ejecutar en orden:
 - [ ] **R1.** Contexto correcto: `kubectl config current-context`.
 - [ ] **R2.** Producción intacta vs. la línea base (mini-comparación del snapshot):
   ```bash
-  kubectl get clusters.postgresql.cnpg.io -A          # -> siguen los 3 productivos, saludables
+  kubectl get clusters.postgresql.cnpg.io -A          # -> siguen los 4 preexistentes, saludables
   kubectl get deploy -A -l app.kubernetes.io/name=cloudnative-pg -o wide   # operador sin cambios
   ```
-  Confirmar contra `estado-inicial.txt` (paso 0.9): mismos 3 clústeres, mismos namespaces, operador igual. Si algo cambió en producción → **pausar y avisar al DBA** antes de continuar.
+  Confirmar contra `estado-inicial.txt` (paso 0.9): mismos 4 clústeres, mismos namespaces, operador igual. Si algo cambió en producción → **pausar y avisar al DBA** antes de continuar.
 - [ ] **R3.** Aislamiento del laboratorio intacto:
   ```bash
   kubectl get pods -A -l app.kubernetes.io/instance=chaos-mesh -o wide     # solo en pg-chaos-lab
-  kubectl -n pg-chaos-lab get pods -o wide | grep chaos-daemon             # solo en <WORKER-LAB>
+  kubectl -n pg-chaos-lab get pods -o wide | grep chaos-daemon             # solo en tcolp293
   kubectl get ns pg-chaos-lab --show-labels | grep chaos-mesh.org/inject   # label intacto
   kubectl -n pg-chaos-lab get resourcequota                                # cuota activa
   kubectl get nodes -l pg-chaos-lab/member=true                            # nodos del lab intactos
@@ -100,17 +102,17 @@ kubectl version -o yaml | grep -A3 serverVersion
 - Si difiere: **detener**. El kit está validado para 1.34.6; escalar al responsable de la investigación.
 - [ ] PASA
 
-**0.2 El operador CNPG 1.28.0 YA existe (y descubrir su namespace)**
+**0.2 El operador CNPG 1.28.0 YA existe (namespace `cnpg-operator`)**
 ```bash
 kubectl get deploy -A -l app.kubernetes.io/name=cloudnative-pg -o wide
 ```
-- Esperado: un Deployment `READY 1/1` con imagen `...cloudnative-pg:1.28.0`. Anotar su namespace como `<NS-OPERADOR>`.
+- Esperado: un Deployment `READY 2/2` en el namespace `cnpg-operator` (deploy `cnpg-cloudnative-pg`) con imagen `...cloudnative-pg:1.28.0`.
 - Si no aparece: **detener y escalar**. Camino B **prohíbe instalar operadores**.
-- [ ] PASA — `<NS-OPERADOR>` = ____________
+- [ ] PASA — operador presente en `cnpg-operator`
 
 **0.3 Confirmar tag exacto del operador**
 ```bash
-kubectl -n <NS-OPERADOR> get deploy -l app.kubernetes.io/name=cloudnative-pg \
+kubectl -n cnpg-operator get deploy -l app.kubernetes.io/name=cloudnative-pg \
   -o jsonpath='{.items[*].spec.template.spec.containers[*].image}{"\n"}'
 ```
 - Esperado: termina en `:1.28.0`.
@@ -126,15 +128,14 @@ kubectl get clusterinformation default -o jsonpath='{.spec.calicoVersion}{"\n"}'
 - Si difiere: registrar la versión real y consultar con el responsable antes de F3.
 - [ ] PASA
 
-**0.5 Nodos del laboratorio etiquetados (y SIN cargas productivas)**
+**0.5 Nodo del laboratorio etiquetado (`tcolp293`)**
 ```bash
 kubectl get nodes -l pg-chaos-lab/member=true
-kubectl get pods -A -o wide --field-selector spec.nodeName=<WORKER-LAB> | grep -v pg-chaos-lab
+kubectl get pods -A -o wide --field-selector spec.nodeName=tcolp293 | grep -v pg-chaos-lab
 ```
-- Esperado: al menos un worker etiquetado; la segunda orden **no** debe listar bases de datos productivas en ese nodo.
-- Si no hay nodos etiquetados: etiquetar (con visto bueno) `kubectl label node <WORKER-LAB> pg-chaos-lab/member=true`, eligiendo nodos sin cargas productivas.
-- Si hay cargas productivas en el nodo del lab: **detener**, elegir otro nodo.
-- [ ] PASA — `<WORKER-LAB>` = ____________
+- Esperado: `tcolp293` etiquetado. La segunda orden **sí** listará cargas ajenas: `tcolp293` es el worker nonprod designado y **co-aloja 3 primaries CNPG** (pg-cert-1, pg-dev-3, pg-gitlab-2) además de ArgoCD/Harbor/Prometheus. **Esto es esperado y aceptado**: el aislamiento del piloto NO depende de que el nodo esté vacío (ver `SEGURIDAD.md` barrera 2 y `CHECKLIST-GONOGO.md` G5), sino del filtro de namespace + doble selector + nombre único + dry-run G1. Los escenarios son estrictamente pod-scoped (F1/F2 `pod-failure`, F4 IOChaos-FUSE); no se ejecuta ningún fallo de nodo ni StressChaos que pudiera alcanzar a los vecinos.
+- Si el nodo no está etiquetado: etiquetar (con visto bueno) `kubectl label node tcolp293 pg-chaos-lab/member=true`.
+- [ ] PASA — nodo del lab = `tcolp293`
 
 **0.6 Imágenes importadas en CADA nodo del lab** (ejecutar en el nodo, no en kubectl)
 ```bash
@@ -144,20 +145,20 @@ sudo ctr -n k8s.io images ls | grep -E 'cloudnative-pg/postgresql:16.13'
 - Si falta: importar con `manifiestos/images/import-images.sh` (ver `manifiestos/10-chaos-mesh/INSTALL-offline.md`).
 - [ ] PASA
 
-**0.7 CRÍTICO — Inventariar los tres clústeres CNPG productivos (para NO tocarlos)**
+**0.7 CRÍTICO — Inventariar los cuatro clústeres CNPG preexistentes (para NO tocarlos)**
 ```bash
 kubectl get clusters.postgresql.cnpg.io -A
 ```
-- Esperado: exactamente **3** clústeres (los productivos). **Anotarlos** (nombre + namespace) en `RESPONSABLES.md`.
+- Esperado: exactamente **4** clústeres preexistentes (`pg-prod`, `pg-cert`, `pg-dev`, `gitlab/pg-gitlab`). **Anotarlos** (nombre + namespace + nodos) en `RESPONSABLES.md`.
 - Verificaciones de seguridad sobre esa lista:
   - Ninguno se llama `pglab-cnpg-exp`. Si alguno coincide → cambiar el nombre experimental (p. ej. `pglab-cnpg-exp2`) en **todos** los manifiestos antes de seguir.
   - Ninguno está en el namespace `pg-chaos-lab`.
 ```bash
-# Confirmar que ningún primario productivo corre en los nodos del lab:
+# Ubicación de TODOS los primarios preexistentes (cuáles co-residen en el nodo del lab):
 kubectl get pods -A -l cnpg.io/instanceRole=primary -o wide
 ```
-  - Esperado: los primarios productivos están en nodos que **no** son `<WORKER-LAB>`.
-- [ ] PASA — clústeres productivos anotados: ____________________
+  - Nota: **3 de los primarios preexistentes (pg-cert-1, pg-dev-3, pg-gitlab-2) co-residen hoy en `tcolp293`**, el nodo del lab. Esto es **conocido y aceptado**; la protección no descansa en su ausencia sino en G1 (ningún manifiesto de fallo los selecciona) — se demuestra en la compuerta (`CHECKLIST-GONOGO.md`, G1 y G5). El primario de producción `pg-prod-2` **no** está en `tcolp293`.
+- [ ] PASA — clústeres preexistentes anotados: ____________________
 
 **0.8 El namespace del laboratorio NO existe todavía**
 ```bash
@@ -185,7 +186,7 @@ OUT=estado-inicial.txt
   kubectl get deploy -A -l app.kubernetes.io/name=cloudnative-pg \
     -o custom-columns='NS:.metadata.namespace,NAME:.metadata.name,READY:.status.readyReplicas,IMAGE:.spec.template.spec.containers[*].image'
   echo
-  echo "----- Clusteres CNPG PRODUCTIVOS (los 3 que NO se tocan) -----"
+  echo "----- Clusteres CNPG PREEXISTENTES (los 4 que NO se tocan) -----"
   # Nombre, namespace, nº de instancias, estado e instancias listas:
   kubectl get clusters.postgresql.cnpg.io -A \
     -o custom-columns='NS:.metadata.namespace,NAME:.metadata.name,INSTANCES:.spec.instances,READY:.status.readyInstances,STATUS:.status.phase' \
@@ -200,7 +201,7 @@ OUT=estado-inicial.txt
   kubectl get nodes -o custom-columns='NODE:.metadata.name,STATUS:.status.conditions[-1].type,LAB:.metadata.labels.pg-chaos-lab/member' --sort-by=.metadata.name
 } | tee "$OUT"
 ```
-- Esperado: `estado-inicial.txt` generado, con **exactamente los 3 clústeres productivos**, su nº de instancias, su estado saludable, sus nodos, el operador y su imagen, y las versiones. Revisar visualmente que todo esté sano.
+- Esperado: `estado-inicial.txt` generado, con **exactamente los 4 clústeres preexistentes**, su nº de instancias, su estado saludable, sus nodos, el operador y su imagen, y las versiones. Revisar visualmente que todo esté sano.
 - **Guardar `estado-inicial.txt`** junto a `results.csv` (no se borra hasta cerrar el piloto). Es la línea base de la comparación final.
 - [ ] PASA — `estado-inicial.txt` capturado y revisado
 
@@ -228,14 +229,16 @@ kubectl -n pg-chaos-lab get role,rolebinding,serviceaccount | grep chaos
 
 ## FASE 2 — Chaos Mesh acotado, offline
 
+> **Versión:** se usa **Chaos Mesh v2.8.3** (última de la línea 2.8; soporta K8s 1.30–1.35 e incluye los parches de seguridad "Chaotic Deputy"). Chaos Mesh 2.7.x queda **descartado**: solo soporta hasta K8s 1.28 y este clúster corre 1.34.6. Verificar el último parche 2.8.x vigente al momento de instalar.
+
 Seguir `manifiestos/10-chaos-mesh/INSTALL-offline.md`. Resumen:
 ```bash
 # 2.1 Importar imágenes de Chaos Mesh en CADA nodo del lab (en el nodo):
-sudo ctr -n k8s.io images import chaos-mesh_v2.7.2.tar
-sudo ctr -n k8s.io images import chaos-daemon_v2.7.2.tar
+sudo ctr -n k8s.io images import chaos-mesh_v2.8.3.tar
+sudo ctr -n k8s.io images import chaos-daemon_v2.8.3.tar
 
 # 2.2 Renderizar el chart offline con los values acotados y aplicar:
-helm template chaos-mesh ./chaos-mesh-2.7.2.tgz \
+helm template chaos-mesh ./chaos-mesh-2.8.3.tgz \
   --namespace pg-chaos-lab --include-crds \
   -f manifiestos/10-chaos-mesh/values-airgapped.yaml > chaos-mesh-rendered.yaml
 kubectl apply -f chaos-mesh-rendered.yaml
@@ -247,7 +250,7 @@ kubectl get pods -A -l app.kubernetes.io/instance=chaos-mesh -o wide
 # chaos-daemon SOLO en nodos del lab (cuenta == nº de nodos del lab):
 kubectl -n pg-chaos-lab get pods -o wide | grep chaos-daemon
 ```
-- Esperado: todos los pods de Chaos Mesh en `pg-chaos-lab`; `chaos-daemon` únicamente en `<WORKER-LAB>`; `clusterScoped:false`, `enableFilterNamespace:true`, `targetNamespace:pg-chaos-lab` en el rendered.
+- Esperado: todos los pods de Chaos Mesh en `pg-chaos-lab`; `chaos-daemon` únicamente en `tcolp293`; `clusterScoped:false`, `enableFilterNamespace:true`, `targetNamespace:pg-chaos-lab` en el rendered.
 - Si algún `chaos-daemon` aparece en un nodo que no es del lab: **detener**, revisar `nodeSelector`, borrar el rendered y reinstalar.
 - [ ] PASA
 
@@ -255,7 +258,7 @@ kubectl -n pg-chaos-lab get pods -o wide | grep chaos-daemon
 
 ## FASE 3 — Desplegar SOLO el clúster experimental + carga (NO se instala operador)
 
-**3.1 Ajustar la StorageClass** en `manifiestos/20-cluster/cluster-cnpg.yaml` (`storageClass: <SC-HUAWEI>`).
+**3.1 Ajustar la StorageClass** en `manifiestos/20-cluster/cluster-cnpg.yaml` (`storageClass: huawei-ch-xfs`).
 
 **3.2 Crear el clúster experimental** (lo gestiona el operador CNPG ya existente):
 ```bash
@@ -266,7 +269,7 @@ kubectl -n pg-chaos-lab get cluster pglab-cnpg-exp -w   # esperar estado saludab
 ```bash
 kubectl -n pg-chaos-lab get pods -l cnpg.io/cluster=pglab-cnpg-exp -o wide
 ```
-- Esperado: `pglab-cnpg-exp-1/2/3` en `Running`, en nodos `<WORKER-LAB>`.
+- Esperado: `pglab-cnpg-exp-1/2/3` en `Running`, en nodos `tcolp293`.
 
 **3.3 Desplegar carga y verificador e inicializar pgbench (una sola vez):**
 ```bash
@@ -287,7 +290,7 @@ kubectl -n pg-chaos-lab logs deploy/tx-verifier-cnpg --tail=5
 ## FASE 4 — COMPUERTA GO/NO-GO (obligatoria antes de inyectar)
 
 Ejecutar **CHECKLIST-GONOGO.md** en su totalidad. Incluye, como mínimo:
-- Dry-run de **cada** selector de fallo: mostrar qué pods seleccionaría **antes** de ejecutar, y confirmar que **solo** aparecen pods de `pglab-cnpg-exp` (ningún pod de los tres clústeres productivos).
+- Dry-run de **cada** selector de fallo: mostrar qué pods seleccionaría **antes** de ejecutar, y confirmar que **solo** aparecen pods de `pglab-cnpg-exp` (ningún pod de los cuatro clústeres preexistentes).
 - Prueba de que un experimento apuntando a otro namespace **no selecciona nada / es rechazado**.
 - `chaos-daemon` solo en nodos del lab.
 - Alertas de producción **no** silenciadas.
@@ -378,7 +381,7 @@ OUT=estado-final.txt
   kubectl get deploy -A -l app.kubernetes.io/name=cloudnative-pg \
     -o custom-columns='NS:.metadata.namespace,NAME:.metadata.name,READY:.status.readyReplicas,IMAGE:.spec.template.spec.containers[*].image'
   echo
-  echo "----- Clusteres CNPG PRODUCTIVOS -----"
+  echo "----- Clusteres CNPG PREEXISTENTES -----"
   kubectl get clusters.postgresql.cnpg.io -A \
     -o custom-columns='NS:.metadata.namespace,NAME:.metadata.name,INSTANCES:.spec.instances,READY:.status.readyInstances,STATUS:.status.phase' \
     --sort-by=.metadata.name
@@ -398,12 +401,12 @@ diff -u estado-inicial.txt estado-final.txt && echo "== IGUAL: sin diferencias =
 ```
 Interpretación del diff:
 - **Diferencias esperadas y aceptables:** la fecha/hora de la cabecera; la etiqueta `LAB` de los nodos (si se etiquetaron/desetiquetaron para el lab); la desaparición del clúster experimental (que no debe aparecer en ninguno de los dos snapshots productivos de todas formas).
-- **Diferencias que disparan ALERTA** (los recursos productivos deben quedar **idénticos**): distinto número de clústeres productivos; cambio de `INSTANCES`/`READY`/`STATUS` en cualquiera de los 3; un primario productivo en un nodo distinto por causa del piloto; imagen o estado del operador CNPG distintos. **Cualquiera de estas → tratar como incidente:** notificar al DBA/seguridad (ver `RESPONSABLES.md`) y NO dar el piloto por cerrado hasta aclararlo.
-- [ ] PASA — `estado-final.txt` generado; diff revisado; los 3 clústeres productivos **iguales** a la línea base
+- **Diferencias que disparan ALERTA** (los recursos preexistentes deben quedar **idénticos**): distinto número de clústeres preexistentes; cambio de `INSTANCES`/`READY`/`STATUS` en cualquiera de los 4; un primario preexistente en un nodo distinto por causa del piloto; imagen o estado del operador CNPG distintos. **Cualquiera de estas → tratar como incidente:** notificar al DBA/seguridad (ver `RESPONSABLES.md`) y NO dar el piloto por cerrado hasta aclararlo.
+- [ ] PASA — `estado-final.txt` generado; diff revisado; los 4 clústeres preexistentes **iguales** a la línea base
 
 **6.4 Confirmación final:**
 ```bash
-kubectl get clusters.postgresql.cnpg.io -A           # -> siguen EXACTAMENTE los 3 productivos, saludables
+kubectl get clusters.postgresql.cnpg.io -A           # -> siguen EXACTAMENTE los 4 preexistentes, saludables
 kubectl get deploy -A -l app.kubernetes.io/name=cloudnative-pg   # operador intacto
 ```
 - [ ] PASA — piloto cerrado; guardar `estado-inicial.txt`, `estado-final.txt`, `results.csv`, `verifier-cnpg.log`, `events-lab.log`

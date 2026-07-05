@@ -1,6 +1,6 @@
 # Cluster CloudNativePG 1.28.0 -- PostgreSQL 16.13, 3 instancias.
-# Requiere el operador CNPG 1.28.0 ya instalado (verificado en el cluster).
-# AJUSTAR: storageClassName al nombre real de la StorageClass del CSI Huawei (FC).
+# Requiere el operador CNPG 1.28.0 ya instalado (namespace cnpg-operator, verificado 2026-07-05).
+# StorageClass resuelta: huawei-ch-xfs (csi.huawei.com, FC/SAN). Nodo del lab: tcolp293.
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
@@ -12,6 +12,12 @@ spec:
   instances: 3
   imageName: ghcr.io/cloudnative-pg/postgresql:16.13   # importar via ctr en nodos del lab
   primaryUpdateStrategy: unsupervised
+
+  # Propagar metadatos a los pods de Postgres: excluirlos del service mesh Linkerd
+  # (coincide con produccion; evita el sidecar en la ruta de datos durante la medicion).
+  inheritedMetadata:
+    annotations:
+      linkerd.io/inject: disabled
 
   # Semantica de replicacion: asincrona (por defecto). El eje experimental
   # es operador x escenario x latencia; no se varia la sincronia (opcion a).
@@ -29,7 +35,7 @@ spec:
 
   storage:
     size: 15Gi
-    storageClass: huawei-san-fc        # <-- AJUSTAR al StorageClass real (Huawei CSI 4.10.1 / FC)
+    storageClass: huawei-ch-xfs        # StorageClass real del CSI Huawei (default, csi.huawei.com, Retain, WaitForFirstConsumer)
 
   resources:
     requests:

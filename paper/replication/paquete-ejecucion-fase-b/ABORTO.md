@@ -8,12 +8,12 @@
 
 Verificar tras **cada** inyección (y de forma continua durante F2/F4, que son largas). Si se cumple **cualquiera**:
 
-- **Alertas activas fuera de `pg-chaos-lab`** — cualquier alerta de los tres clústeres productivos o de infraestructura compartida.
+- **Alertas activas fuera de `pg-chaos-lab`** — cualquier alerta de los cuatro clústeres preexistentes o de infraestructura compartida.
 - **Degradación del plano de control** — latencia p99 del API server o `etcd_disk_wal_fsync` peor que la línea base; timeouts de `kubectl`.
-- **Cualquier anomalía en los tres clústeres productivos** — un clúster productivo que cambie de nº de instancias, pierda el primario, haga failover, entre en `CrashLoopBackOff`, o cuyo pod se reprograme coincidiendo en el tiempo con una inyección.
+- **Cualquier anomalía en los cuatro clústeres preexistentes** — un clúster preexistente que cambie de nº de instancias, pierda el primario, haga failover, entre en `CrashLoopBackOff`, o cuyo pod se reprograme coincidiendo en el tiempo con una inyección. **Atención especial** a pg-cert, pg-dev y pg-gitlab, cuyos primarios co-residen con el lab en `tcolp293`.
 - **Presión de E/S anómala en nodos que NO son del laboratorio.**
 - **Un `chaos-daemon` aparece en un nodo que no es del lab**, o un experimento selecciona un pod fuera de `pg-chaos-lab`.
-- **La verificación de igualdad (Fase 6.3) o la reanudación (R2) detecta un cambio en recursos productivos.**
+- **La verificación de igualdad (Fase 6.3) o la reanudación (R2) detecta un cambio en recursos preexistentes.**
 
 ---
 
@@ -43,6 +43,9 @@ kubectl -n pg-chaos-lab delete cluster pglab-cnpg-exp
 kubectl delete -f chaos-mesh-rendered.yaml           # retira Chaos Mesh
 # El borrado del namespace elimina PVCs -> coordinar con almacenamiento:
 # kubectl delete namespace pg-chaos-lab
+# La SC huawei-ch-xfs es reclaimPolicy=Retain: los PV NO se borran solos.
+# Borrar los PV liberados del lab (coordinar con almacenamiento):
+# kubectl get pv | grep pg-chaos-lab ; kubectl delete pv <nombres>
 ```
 
 ---
@@ -55,10 +58,10 @@ kubectl delete -f chaos-mesh-rendered.yaml           # retira Chaos Mesh
    ```
 2. **Verificar producción contra la línea base** (mismo bloque de la Fase 6.3):
    ```bash
-   kubectl get clusters.postgresql.cnpg.io -A                    # los 3 productivos, saludables
+   kubectl get clusters.postgresql.cnpg.io -A                    # los 4 preexistentes, saludables
    kubectl get deploy -A -l app.kubernetes.io/name=cloudnative-pg
    ```
-   Comparar con `estado-inicial.txt`. Si algún recurso productivo cambió → **escalar como incidente** al DBA/seguridad (ver `RESPONSABLES.md`), no cerrar el piloto.
+   Comparar con `estado-inicial.txt`. Si algún recurso preexistente cambió → **escalar como incidente** al DBA/seguridad (ver `RESPONSABLES.md`), no cerrar el piloto.
 3. **Documentar** en `RESPONSABLES.md` (hoja de registro): qué señal disparó el aborto, hora, fase/ventana, estado de producción tras revertir, y decisión (reintentar en otra ventana / abandonar).
 4. **No reanudar** hasta que la causa esté entendida y el checklist GO/NO-GO vuelva a estar completo en PASA.
 

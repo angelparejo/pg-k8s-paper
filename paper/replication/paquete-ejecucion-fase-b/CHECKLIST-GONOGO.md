@@ -3,11 +3,11 @@
 **Cuándo:** Fase 4 del `PROCEDIMIENTO.md`, y de nuevo (ítems G1–G4) en la reanudación de cada ventana posterior (paso R6).
 **Regla absoluta:** basta **un solo NO PASA** para **abortar**. No se inyecta nada hasta que TODOS los ítems estén en PASA. Ante la duda → NO-GO. Ver `ABORTO.md`.
 
-**Contexto de riesgo:** el operador CNPG es **compartido** con tres clústeres productivos. Ninguna inyección puede alcanzarlos. La contención descansa en cuatro capas independientes que este checklist verifica una por una:
+**Contexto de riesgo:** el operador CNPG es **compartido** con cuatro clústeres CNPG preexistentes (`pg-prod`, `pg-cert`, `pg-dev`, `gitlab/pg-gitlab`); además, 3 de sus primarios (pg-cert-1, pg-dev-3, pg-gitlab-2) **co-residen hoy en el nodo del lab `tcolp293`**. Ninguna inyección puede alcanzarlos. La contención descansa en cuatro capas independientes que este checklist verifica una por una:
 1. Chaos Mesh `clusterScoped:false` + `enableFilterNamespace:true` + `targetNamespace:pg-chaos-lab`.
-2. `chaos-daemon` confinado por `nodeSelector` a los nodos del lab.
-3. Todo selector acotado por `namespaces:[pg-chaos-lab]`.
-4. Nombre de clúster único `pglab-cnpg-exp` (ningún productivo lo comparte).
+2. `chaos-daemon` confinado por `nodeSelector` al nodo del lab (`tcolp293`).
+3. Todo selector acotado por `namespaces:[pg-chaos-lab]` + `cnpg.io/cluster: pglab-cnpg-exp`.
+4. Nombre de clúster único `pglab-cnpg-exp` (ningún preexistente lo comparte).
 
 ---
 
@@ -59,7 +59,7 @@ kubectl get pods -A -l cnpg.io/cluster=pglab-cnpg-exp -o wide
 ```bash
 kubectl get pods -A -l cnpg.io/instanceRole=primary -o wide
 ```
-- Esperado: aparecen **4 primarios** (los 3 productivos + el experimental). Esto evidencia que un selector con **solo** `cnpg.io/instanceRole=primary` alcanzaría producción. G1.2 ya rechaza automáticamente cualquier manifiesto que use ese label sin el de clúster (regla "rol aislado").
+- Esperado: aparecen **5 primarios** (los 4 preexistentes + el experimental). Esto evidencia que un selector con **solo** `cnpg.io/instanceRole=primary` alcanzaría producción. G1.2 ya rechaza automáticamente cualquier manifiesto que use ese label sin el de clúster (regla "rol aislado").
 - [ ] PASA / [ ] NO PASA
 
 **G1.5 — Semántica de F3 (NetworkPolicy):**
@@ -85,10 +85,10 @@ kubectl -n pg-chaos-lab get deploy -l app.kubernetes.io/component=controller-man
 - Esperado: `clusterScoped: false`, `enableFilterNamespace: true`, `targetNamespace: pg-chaos-lab`.
 - [ ] PASA / [ ] NO PASA
 
-**G2.2 — Los namespaces productivos NO son inyectables** (les falta el label de opt-in):
+**G2.2 — Los namespaces preexistentes NO son inyectables** (les falta el label de opt-in):
 ```bash
-# Sustituir <NS-PROD-1..3> por los namespaces de los 3 clústeres productivos (paso 0.7):
-for ns in <NS-PROD-1> <NS-PROD-2> <NS-PROD-3>; do
+# Namespaces de los 4 clústeres CNPG preexistentes (paso 0.7):
+for ns in pg-prod pg-cert pg-dev gitlab; do
   echo -n "$ns -> "; kubectl get ns "$ns" -o jsonpath='{.metadata.labels.chaos-mesh\.io/inject}{"\n"}'
 done
 ```
@@ -149,15 +149,20 @@ kubectl get nodes -l pg-chaos-lab/member=true -o name
 
 ---
 
-## G5 — Ningún pod productivo corre en los nodos del laboratorio
+## G5 — Co-residentes en el nodo del lab: inventario y confirmación de que ninguno es objetivo
+
+> El nodo del lab (`tcolp293`) **no está vacío**: co-aloja 3 primaries CNPG ajenos (pg-cert-1, pg-dev-3, pg-gitlab-2) y cargas de infra (ArgoCD/Harbor/Prometheus). La contención **no** depende de su ausencia —imposible aquí— sino de **G1** + del filtro de namespace. Este ítem lo hace explícito y verificable.
 
 ```bash
 for n in $(kubectl get nodes -l pg-chaos-lab/member=true -o name | cut -d/ -f2); do
-  echo "== nodo $n =="
-  kubectl get pods -A -o wide --field-selector spec.nodeName="$n" | grep -v '^pg-chaos-lab ' | grep -viE 'kube-system|calico|chaos'
+  echo "== nodo $n : cargas ajenas co-residentes =="
+  kubectl get pods -A -o wide --field-selector spec.nodeName="$n" \
+    | grep -v '^pg-chaos-lab ' | grep -viE 'kube-system|calico|chaos'
 done
 ```
-- Esperado: no aparecen bases de datos ni cargas productivas en los nodos del lab (solo componentes de sistema y del propio lab).
+- Esperado: el nodo lista cargas ajenas (los 3 primaries CNPG + infra). **Anotarlas.** Es **conocido y aceptado**.
+- **Criterio PASA:** (a) el `chaos-daemon` está confinado a este nodo (G4); (b) **ningún** manifiesto de fallo selecciona a esas cargas — ya demostrado en **G1** (cada selector resuelve solo a `pglab-cnpg-exp`); y (c) los escenarios son estrictamente pod-scoped (F1/F2 `pod-failure`, F4 IOChaos-FUSE), sin fallo de nodo ni StressChaos. Si G1 pasó y no se ha añadido ningún manifiesto de tipo nodo/stress → **PASA**.
+- **NO PASA** si: existe algún manifiesto de fallo de tipo nodo o `StressChaos`, o si G1 no resolvió limpio para algún experimento.
 - [ ] PASA / [ ] NO PASA
 
 ---
@@ -168,7 +173,7 @@ done
 # Si se usa Alertmanager, listar los silences activos y su matcher de namespace:
 # amtool silence query   (o via la API/UI de Alertmanager)
 ```
-- Esperado: **como mucho** existe un silence acotado a `namespace="pg-chaos-lab"`. **Ningún** silence global ni sobre namespaces productivos. La monitorización de los 3 clústeres productivos sigue **activa** durante toda la ventana.
+- Esperado: **como mucho** existe un silence acotado a `namespace="pg-chaos-lab"`. **Ningún** silence global ni sobre namespaces preexistentes. La monitorización de los 4 clústeres preexistentes sigue **activa** durante toda la ventana.
 - [ ] PASA / [ ] NO PASA
 
 ---
@@ -189,14 +194,14 @@ kubectl -n pg-chaos-lab get limitrange pg-chaos-lab-limits
 ```bash
 test -s estado-inicial.txt && echo "OK: estado-inicial.txt presente" || echo "FALTA la linea base"
 ```
-- Esperado: `estado-inicial.txt` (paso 0.9) existe y contiene los 3 clústeres productivos sanos. Sin línea base no hay comparación final posible → NO-GO.
+- Esperado: `estado-inicial.txt` (paso 0.9) existe y contiene los 4 clústeres preexistentes sanos. Sin línea base no hay comparación final posible → NO-GO.
 - [ ] PASA / [ ] NO PASA
 
 ---
 
 ## G9 — Roles y autoridad de aborto definidos
 
-- [ ] `RESPONSABLES.md` está relleno: quién aprueba, quién ejecuta, quién monitorea los 3 clústeres productivos durante la ventana y quién tiene **autoridad de aborto**.
+- [ ] `RESPONSABLES.md` está relleno: quién aprueba, quién ejecuta, quién monitorea los 4 clústeres preexistentes durante la ventana y quién tiene **autoridad de aborto**.
 - [ ] Todos los presentes conocen `ABORTO.md` y saben ejecutar la reversión de la fase en curso.
 - [ ] PASA / [ ] NO PASA
 
