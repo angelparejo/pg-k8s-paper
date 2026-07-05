@@ -3,25 +3,25 @@
 ## 1. En una máquina CON internet
 ```bash
 helm repo add chaos-mesh https://charts.chaos-mesh.org
-helm pull chaos-mesh/chaos-mesh --version 2.7.2          # genera chaos-mesh-2.7.2.tgz
-docker pull ghcr.io/chaos-mesh/chaos-mesh:v2.7.2
-docker pull ghcr.io/chaos-mesh/chaos-daemon:v2.7.2
-docker save ghcr.io/chaos-mesh/chaos-mesh:v2.7.2  -o chaos-mesh_v2.7.2.tar
-docker save ghcr.io/chaos-mesh/chaos-daemon:v2.7.2 -o chaos-daemon_v2.7.2.tar
+helm pull chaos-mesh/chaos-mesh --version 2.8.3          # genera chaos-mesh-2.8.3.tgz
+docker pull ghcr.io/chaos-mesh/chaos-mesh:v2.8.3
+docker pull ghcr.io/chaos-mesh/chaos-daemon:v2.8.3
+docker save ghcr.io/chaos-mesh/chaos-mesh:v2.8.3  -o chaos-mesh_v2.8.3.tar
+docker save ghcr.io/chaos-mesh/chaos-daemon:v2.8.3 -o chaos-daemon_v2.8.3.tar
 ```
 
 ## 2. Transferir e importar en CADA nodo del laboratorio
 El chaos-daemon es un DaemonSet: la imagen debe existir en **todos** los nodos
 etiquetados `pg-chaos-lab/member=true` (el controlador solo en donde se programe).
 ```bash
-sudo ctr -n k8s.io images import chaos-mesh_v2.7.2.tar
-sudo ctr -n k8s.io images import chaos-daemon_v2.7.2.tar
+sudo ctr -n k8s.io images import chaos-mesh_v2.8.3.tar
+sudo ctr -n k8s.io images import chaos-daemon_v2.8.3.tar
 ```
 
 ## 3. Renderizar el chart offline y aplicar
 `helm template` no necesita red; los CRDs vienen en el chart.
 ```bash
-helm template chaos-mesh ./chaos-mesh-2.7.2.tgz \
+helm template chaos-mesh ./chaos-mesh-2.8.3.tgz \
   --namespace pg-chaos-lab \
   --include-crds \
   -f values-airgapped.yaml > chaos-mesh-rendered.yaml
