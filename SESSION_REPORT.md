@@ -181,3 +181,26 @@
 **Status:**
 - Done: reconocimiento (4 rondas), plan aprobado, 11 archivos del paquete + memoria actualizados y verificados.
 - Pending: commit (a decidir); rellenar roles/fechas en RESPONSABLES.md (entorno del usuario); reconfirmar ubicación de pods en paso 0.7 (puede cambiar); ejecución del piloto en las 3 ventanas.
+
+## 2026-07-05 22:30 — Testbed real al paper v2 (IV.E) + verificación de versiones
+
+**Operations:**
+- Editada §IV.E de `articulo_angelparejov2-experimental.md` (solo correcciones factuales scope-neutrales; el marco de 2 operadores NO se tocó por decisión del usuario).
+- Ronda 5 de recon desacoplado: verificación de versiones CSI Huawei y Calico.
+- Commits `684d495` (IV.E), `55f5af9` (verificación de versiones).
+
+**Decisions:**
+- Aplicar solo correcciones factuales a IV.E ahora; **diferir** la decisión de alcance de operadores (CNPG-solo vs 2 operadores) — el usuario eligió "solo correcciones factuales".
+- Chaos Mesh 2.7.x → 2.8.3 en IV.E; añadidos provisioner `csi.huawei.com` + SC (`Retain`, `WaitForFirstConsumer`); párrafo de aislamiento enriquecido (nodo co-residente → contención por namespaced+doble filtro+dry-run; Linkerd excluido).
+
+**Results:**
+- Versiones de IV.E **verificadas y correctas**: Huawei CSI **4.10.1** (imágenes `huawei-csi:4.10.1` + backends), Calico **v3.31.4** (`clusterinformation.calicoVersion`). No requirió corrección.
+- `csi.huawei.com` con `ATTACHREQUIRED: true` → corrobora que detach/attach domina el RTO en fallo de nodo real (respalda que el escenario (ii) sea cota inferior). Tigera operator v1.40.7.
+
+**Commits:**
+- `684d495` IV.E (v2): correcciones factuales del testbed real (sin tocar alcance de operadores)
+- `55f5af9` Verifica versiones CSI/Calico de IV.E contra el clúster real (coinciden)
+
+**Status:**
+- Done: IV.E con testbed real (factual), versiones CSI/Calico verificadas, todo commiteado (árbol limpio).
+- Pending (🔴 decisión abierta): **alcance de operadores** — el v2 afirma comparación empírica de 2 operadores pero el piloto ejecutable es solo CNPG (no hay Zalando en el clúster productivo). Resolver antes de someter. Además: roles/fechas de RESPONSABLES.md y ejecución del piloto (entorno del usuario).
