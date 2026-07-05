@@ -1,5 +1,12 @@
 # Research Journal
 
+### 2026-07-05 22:05 — Writer (correcciones factuales del testbed real en IV.E del v2)
+**Phase:** Execution (re-entrada por hallazgos del reconocimiento)
+**Target:** articulo_angelparejov2-experimental.md §IV.E
+**Score:** N/A
+**Verdict:** Llevadas al paper solo las **correcciones factuales scope-neutrales** del reconocimiento (decisión del usuario: no tocar aún el alcance de operadores): (1) Chaos Mesh 2.7.x → **2.8.3** (compatibilidad K8s 1.34); (2) storage — añadidos provisioner `csi.huawei.com` y propiedades verificadas de la SC (`Retain`, `WaitForFirstConsumer`); (3) párrafo de aislamiento enriquecido con hechos verificados: nodo dedicado que co-aloja otras cargas → la contención descansa en Chaos Mesh namespaced + doble filtro + dry-run de selectores (no en exclusividad de nodo), y exclusión de Linkerd (coincide con prod: pg-* no meshado). **DECISIÓN DIFERIDA (abierta):** el paper afirma comparación empírica de 2 operadores (CNPG + Zalando) pero el piloto Fase B ejecutable es SOLO CNPG (no hay Zalando en el clúster productivo, no se puede instalar). Pendiente resolver: piloto CNPG + Zalando analítico, o segundo entorno para Zalando. **Sin verificar (versiones asertadas en IV.E):** Huawei CSI 4.10.1 y Calico 3.31.4 — se pueden confirmar en una ronda de recon.
+**Report:** articulo_angelparejov2-experimental.md §IV.E (líneas 146, 148)
+
 ### 2026-07-05 21:35 — Coder/Data-engineer (instanciación del paquete Fase B con reconocimiento real del clúster)
 **Phase:** Execution (preparación del piloto empírico para la v2)
 **Target:** paper/replication/paquete-ejecucion-fase-b/ (11 archivos) + memory/
