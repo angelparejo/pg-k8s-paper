@@ -1,0 +1,14 @@
+# Imagenes a importar en los nodos del laboratorio (ctr -n k8s.io images import <tar>)
+# Camino B (solo CNPG): NO se incluyen imagenes de Zalando/Spilo.
+# Ajustar tags a las versiones realmente descargadas/aprobadas.
+
+# -- Ya presente en el cluster (verificado): operador CNPG 1.28.0 --
+ghcr.io/cloudnative-pg/cloudnative-pg:1.28.0
+
+# -- Instancias PostgreSQL 16.13 (tambien usada por pgbench/tx-verifier/rto-probe) --
+ghcr.io/cloudnative-pg/postgresql:16.13
+
+# -- Chaos Mesh 2.7.x --
+ghcr.io/chaos-mesh/chaos-mesh:v2.7.2
+ghcr.io/chaos-mesh/chaos-daemon:v2.7.2
+# ghcr.io/chaos-mesh/chaos-dashboard:v2.7.2   # opcional (dashboard deshabilitado)

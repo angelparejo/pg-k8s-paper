@@ -1,0 +1,11 @@
+# Namespace aislado del laboratorio. Etiquetas usadas por RBAC, cuotas,
+# politicas Calico y el alcance de Chaos Mesh.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pg-chaos-lab
+  labels:
+    app.kubernetes.io/part-of: pg-chaos-lab
+    # Requerido si se habilita enableFilterNamespace en Chaos Mesh:
+    chaos-mesh.org/inject: enabled
+    pod-security.kubernetes.io/enforce: privileged   # chaos-daemon lo requiere; validar con el equipo de seguridad

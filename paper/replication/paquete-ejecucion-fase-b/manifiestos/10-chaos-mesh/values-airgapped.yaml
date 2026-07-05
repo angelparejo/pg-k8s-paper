@@ -1,0 +1,33 @@
+# Chaos Mesh 2.7.x -- instalacion RESTRINGIDA AL NAMESPACE en entorno air-gapped.
+# helm template chaos-mesh ./chaos-mesh-2.7.x.tgz -n pg-chaos-lab -f values-airgapped.yaml > chaos-mesh-rendered.yaml
+# kubectl apply -f chaos-mesh-rendered.yaml
+#
+# clusterScoped=false: el controlador solo gestiona recursos del namespace de
+# instalacion; no puede tocar otros namespaces (proteccion clave en produccion).
+clusterScoped: false
+
+# Solo namespaces con la etiqueta chaos-mesh.org/inject=enabled son objetivos validos.
+controllerManager:
+  enableFilterNamespace: true
+  replicaCount: 1
+  targetNamespace: pg-chaos-lab
+
+chaosDaemon:
+  runtime: containerd
+  socketPath: /run/containerd/containerd.sock
+  # Limitar el DaemonSet a los nodos donde correra el laboratorio.
+  # Etiquetar antes: kubectl label node <worker-N> pg-chaos-lab/member=true
+  nodeSelector:
+    pg-chaos-lab/member: "true"
+
+dashboard:
+  create: false          # opcional; en air-gapped se opera por CLI/manifiestos
+
+dnsServer:
+  create: false          # no se usan fallos de DNS en este diseno
+
+# Registro local air-gapped: ajustar si las imagenes se re-etiquetaron
+# (p. ej. registry.local:5000/chaos-mesh/...). Si se importaron con ctr
+# conservando el nombre original ghcr.io/..., dejar por defecto.
+# images:
+#   registry: registry.local:5000

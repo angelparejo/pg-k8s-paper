@@ -1,0 +1,19 @@
+# F2 - Indisponibilidad sostenida del primario durante 10 min (CNPG).
+# Aproximacion observable de un fallo de nodo desde la perspectiva del operador:
+# la instancia queda inalcanzable y NO se reinicia mientras dura la inyeccion.
+# El comportamiento de K8s/CSI ante nodo perdido (desalojo, detach/attach)
+# NO se reproduce: queda declarado como limitacion (Tabla I, seccion V).
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: f2-podfailure-cnpg
+  namespace: pg-chaos-lab
+spec:
+  action: pod-failure
+  mode: one
+  duration: 10m
+  selector:
+    namespaces: [pg-chaos-lab]
+    labelSelectors:
+      cnpg.io/cluster: pglab-cnpg-exp
+      cnpg.io/instanceRole: primary

@@ -4,6 +4,31 @@
      clo-author original (no son historial de este proyecto, pg-k8s-paper). Se dejan intactos;
      limpiar si se desea. Las entradas de pg-k8s-paper empiezan en 2026-07-04. -->
 
+## 2026-07-05 — Paquete de ejecución Fase B (piloto CNPG para terceros)
+
+**Operations:**
+- Leído completo el kit `paper/replication/pg-chaos-lab.zip` (49 archivos) como base
+- Creado `paper/replication/paquete-ejecucion-fase-b/` — paquete de ejecución para terceros (Camino B: piloto SOLO CloudNativePG, sin operador nuevo)
+- 6 documentos: README.md, PROCEDIMIENTO.md, SEGURIDAD.md, CHECKLIST-GONOGO.md, ABORTO.md, RESPONSABLES.md
+- `manifiestos/` adaptado: renombrado `pg-cnpg`→`pglab-cnpg-exp` en todos los manifiestos/servicios/secret; excluido todo Zalando; cuota reducida a 1 clúster; run-experiment.sh variante solo-CNPG
+- Auditoría de selectores: 6/6 experimentos doblemente acotados (namespace + `cnpg.io/cluster`)
+
+**Decisions:**
+- Nombre único del clúster experimental: `pglab-cnpg-exp` (evita colisión con los 3 clústeres CNPG productivos que comparten el operador)
+- Riesgo #1 (inyección alcanza producción) contenido por 4 barreras: Chaos Mesh clusterScoped=false+enableFilterNamespace, chaos-daemon nodeSelector al lab, doble filtro en cada manifiesto, nombre único
+- 3 adiciones sobre lo pedido en turno previo: paso 0.9 snapshot línea base, Fase 6.3 diff de igualdad final producción, sección Planificación de Ventanas (V1 setup+F1+F3 ~4h / V2 F4 ~7h / V3 F2 ~2.5h) con reentrada R1-R6
+
+**Results:**
+- Paquete completo (26 archivos) verificado; CHECKLIST-GONOGO mostrado al usuario y aprobado
+- NO ejecutado — es documentación + manifiestos para que otra área lo corra
+
+**Commits:**
+- `[pendiente]` Añade paquete de ejecución Fase B (piloto CNPG aislado) para terceros
+
+**Status:**
+- Done: paquete de ejecución Fase B listo para entregar al área ejecutora
+- Pending: ejecución del piloto (3 ventanas) → rellenar Sección V de `articulo_angelparejov2-experimental.md` con RTO/RPO reales. **La v2 sigue NO sometible hasta entonces.**
+
 ## 2026-07-05 — Creación de la versión experimental v2 (bifurcación de línea)
 
 **Operations:**
