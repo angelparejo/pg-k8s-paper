@@ -1,0 +1,16 @@
+% tab_resultados_fallos_cnpg.tex — Fragmento (tabular desnudo, booktabs).
+% Resultados del piloto Fase B (solo CloudNativePG) por escenario de fallo.
+% Para main.tex: envolver con \begin{table}...\caption{}...\input{}...\begin{tablenotes} (INV-1/2).
+% NO editar aquí caption/notas. Sin \hline ni reglas verticales (INV-3).
+% Cifras deben cuadrar con quality_reports/results_summary.md (INV-11).
+% PROVISIONAL: F2 (RTO/RPO) pendiente de confirmar con el lote n=10 en curso.
+\begin{tabular}{lccll}
+\toprule
+Escenario (mecanismo) & ¿Promueve? & RTO / indisponibilidad & RPO & Comportamiento observado \\
+\midrule
+F1 — Terminación del primario (\texttt{pod-kill}) & Sí & 7.91 s (mediana, $n=10$) & 0 & Failover rápido \\
+F2 — Indisponibilidad del pod (\texttt{pod-failure}) & No & 36.75 s (mediana, $n=10$) & 0 & Recreación en sitio \\
+F3 — Partición de red (NetworkPolicy Calico) & No & $=$ duración de la partición & 0 & CP (consistencia) \\
+F4 — Latencia de E/S (IOChaos FUSE) & --- & No ejecutable & --- & Bloqueo \emph{hardening}--FUSE \\
+\bottomrule
+\end{tabular}
