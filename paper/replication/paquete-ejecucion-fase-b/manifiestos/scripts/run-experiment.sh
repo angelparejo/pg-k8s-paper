@@ -1,40 +1,34 @@
 #!/usr/bin/env bash
-# Orquesta UNA repeticion de un experimento y registra el RTO en results.csv.
-# Camino B: SOLO CloudNativePG. Clúster experimental: pglab-cnpg-exp.
-# Uso: ./run-experiment.sh cnpg <manifiesto-chaos.yaml|networkpolicy.yaml> <rep>
-# El RPO se calcula despues con parse-verifier.py sobre los logs del tx-verifier.
+# UNA repeticion de un experimento (Camino B: SOLO CloudNativePG, cluster pglab-cnpg-exp).
+# Orquesta: inyecta el fallo, confirma el failover (cambio de currentPrimary), espera
+# recuperacion y limpia. Registra marcas de tiempo en results.csv para localizar el gap.
+#
+# El RTO/RPO NO se miden aqui con una sonda activa: kubectl exec ~1s es demasiado grueso
+# para el outage breve del failover (la sonda no lo capta). Se obtienen del gap entre
+# COMMITs del tx-verifier (resolucion ~100 ms) con parse-verifier.py. Este script solo
+# marca inyeccion/failover y garantiza el cool-down por recuperacion.
+#
+# Uso: ./run-experiment.sh cnpg <manifiesto> <rep>
 set -euo pipefail
 OP="${1:-cnpg}"; MANIFEST="$2"; REP="${3:-1}"
 NS=pg-chaos-lab
-if [ "$OP" != "cnpg" ]; then
-  echo "Camino B es solo CNPG (recibido: '$OP'). Uso: ./run-experiment.sh cnpg <manifiesto> <rep>"; exit 1
-fi
-HOST=pglab-cnpg-exp-rw
-SECRET=pglab-cnpg-exp-app
-PGPASSWORD=$(kubectl -n $NS get secret "$SECRET" -o jsonpath="{.data.password}" | base64 -d)
+[ "$OP" = cnpg ] || { echo "solo cnpg. Uso: ./run-experiment.sh cnpg <manifiesto> <rep>"; exit 1; }
 EXP=$(basename "$MANIFEST" .yaml)
-PROBE="kubectl -n $NS run rto-probe-$$ --rm -i --restart=Never \
-  --image=ghcr.io/cloudnative-pg/postgresql:16.13 \
-  --env=PGPASSWORD=$PGPASSWORD --command -- \
-  psql -h $HOST -U lab -d labdb -tAc"
 
-echo "[i] verificando linea base de escritura..."
-$PROBE "SELECT 1" >/dev/null
+P0=$(kubectl -n "$NS" get cluster pglab-cnpg-exp -o jsonpath='{.status.currentPrimary}')
+T0=$(date -u +%FT%T.%3NZ)
+kubectl apply -f "$MANIFEST" >/dev/null
+echo "[i] $EXP rep $REP inyectado a $T0 (primario previo=$P0); esperando failover..."
 
-T0=$(date +%s.%N)
-kubectl apply -f "$MANIFEST"
-echo "[i] fallo inyectado: $EXP (t0=$T0)"
-
-# Sondeo del RTO: primera escritura aceptada por el nuevo primario
-while true; do
-  if $PROBE "INSERT INTO truth(id) VALUES (-$(date +%s%N)) RETURNING id" >/dev/null 2>&1; then
-    T1=$(date +%s.%N); break
-  fi
+P1="$P0"
+for _ in $(seq 1 240); do            # hasta ~120 s
+  P1=$(kubectl -n "$NS" get cluster pglab-cnpg-exp -o jsonpath='{.status.currentPrimary}')
+  [ "$P1" != "$P0" ] && break
   sleep 0.5
 done
-RTO=$(echo "$T1 - $T0" | bc)
-echo "$EXP,$OP,$REP,$T0,$T1,$RTO" >> results.csv
-echo "[OK] RTO=${RTO}s  (results.csv)"
+TFO=$(date -u +%FT%T.%3NZ)
+if [ "$P1" != "$P0" ]; then echo "[OK] rep $REP failover $P0 -> $P1 (t=$TFO)"; else echo "[WARN] rep $REP sin cambio de primario en ~120s"; fi
+echo "$EXP,$OP,$REP,$T0,$TFO,$P0,$P1" >> results.csv
 
-# Limpieza del experimento (para NetworkPolicy esto ES el aborto/reversion)
-kubectl delete -f "$MANIFEST" --ignore-not-found
+kubectl delete -f "$MANIFEST" --ignore-not-found >/dev/null
+kubectl -n "$NS" wait --for=condition=Ready cluster/pglab-cnpg-exp --timeout=180s >/dev/null 2>&1 || true

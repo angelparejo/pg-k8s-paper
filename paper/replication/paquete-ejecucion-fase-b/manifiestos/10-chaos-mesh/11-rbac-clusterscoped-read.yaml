@@ -1,0 +1,51 @@
+# RBAC minimo para el modo clusterScoped:false de Chaos Mesh 2.8.
+#
+# En modo namespaced (clusterScoped:false) el controller sigue creando informers
+# para DOS CRDs CLUSTER-SCOPED de Chaos Mesh -- remoteclusters y physicalmachines --
+# pero su RBAC namespaced (Role/RoleBinding en pg-chaos-lab) NO autoriza un list/watch
+# a nivel de cluster: "remoteclusters.chaos-mesh.org is forbidden ... at the cluster
+# scope". Esas caches no sincronizan, el manager aborta y el pod entra en CrashLoopBackOff.
+#
+# Este ClusterRole concede SOLO get/list/watch (lectura) sobre esos dos tipos, que
+# estan VACIOS en este piloto (no se usa multi-cluster ni physical-machine chaos).
+# NO concede acceso a pods ni a ningun recurso de produccion, y NO permite inyectar
+# fuera de pg-chaos-lab: el alcance de inyeccion lo siguen gobernando CLUSTER_SCOPED=false
+# + ENABLE_FILTER_NAMESPACE=true + el filtro de namespace (chaos-mesh.org/inject=enabled).
+#
+# Alternativa descartada: acotar controllerManager.enabledControllers. En 2.8.3 los
+# nombres no casan y se desactivan TODOS los reconcilers (el caos deja de aplicarse).
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: chaos-mesh-lab-clusterscoped-read
+  labels:
+    app.kubernetes.io/part-of: pg-chaos-lab
+rules:
+  # CRDs cluster-scoped de Chaos Mesh (informers que crashean el manager sin esto).
+  - apiGroups: ["chaos-mesh.org"]
+    resources: ["remoteclusters", "physicalmachines"]
+    verbs: ["get", "list", "watch"]
+  # La SELECCION de pods en modo namespaced lista namespaces (y services) a nivel de
+  # cluster para resolver el selector `namespaces: [...]`. Sin esto: "namespaces is
+  # forbidden ... at the cluster scope" -> condition Selected=False -> no se inyecta.
+  # Solo-lectura de metadatos; NO da acceso a recursos dentro de otros namespaces, y
+  # la inyeccion sigue acotada por ENABLE_FILTER_NAMESPACE + label de inject.
+  - apiGroups: [""]
+    resources: ["namespaces", "services"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: chaos-mesh-lab-clusterscoped-read
+  labels:
+    app.kubernetes.io/part-of: pg-chaos-lab
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: chaos-mesh-lab-clusterscoped-read
+subjects:
+  - kind: ServiceAccount
+    name: chaos-controller-manager
+    namespace: pg-chaos-lab
