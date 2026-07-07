@@ -1,0 +1,19 @@
+% tab_limitaciones_alcance.tex — Fragmento (tabular desnudo, booktabs).
+% Limitaciones de alcance del piloto Fase B (sección V del paper; "Tabla I" en los manifiestos).
+% Para main.tex: envolver con \begin{table}...\caption{}...\begin{tablenotes} (INV-1/2).
+% Sin \hline ni reglas verticales (INV-3).
+\begin{tabular}{p{0.44\textwidth}p{0.48\textwidth}}
+\toprule
+Limitación & Implicación / tratamiento \\
+\midrule
+La validación empírica cubre un único operador (CloudNativePG): el entorno productivo no permite instalar operadores adicionales (p.\,ej.\ Zalando/Patroni) por riesgo operativo. & La comparación entre operadores se aborda de forma analítica (Tabla~I) y se declara trabajo futuro (estudio comparativo en entorno no productivo); los resultados empíricos se enuncian para CNPG como exponente representativo del enfoque cloud-native. \\
+\addlinespace
+F2 (\texttt{pod-failure}) no reproduce un fallo de nodo real: no hay \texttt{detach}/\texttt{attach} del volumen CSI ni desalojo. & El RTO de F2 es una \emph{cota inferior} del fallo de nodo; el comportamiento de K8s/CSI ante pérdida de nodo no se observa. \\
+\addlinespace
+No se ejecutan \texttt{drain}/\texttt{cordon} ni fallos a nivel de nodo (escenarios pod-scoped). & Se protege el nodo compartido (co-aloja primarios ajenos); el alcance de fallos es intra-pod por diseño de seguridad. \\
+\addlinespace
+F4 (latencia de E/S, IOChaos FUSE) no es ejecutable sobre CNPG: el \emph{hardening} del operador (\texttt{readOnlyRootFilesystem}) impide el montaje FUSE de \texttt{toda}. & La sensibilidad cuantitativa a latencia de E/S queda como trabajo futuro (mecanismo sin FUSE); el bloqueo se reporta como hallazgo hardening$\leftrightarrow$tooling. \\
+\addlinespace
+Laboratorio en un solo nodo (\texttt{tcolp293}) dentro de un clúster productivo compartido, con Chaos Mesh confinado al namespace. & Alta validez interna (aislamiento demostrado por compuerta GO/NO-GO); la validez externa multi-nodo no se aborda en este piloto. \\
+\bottomrule
+\end{tabular}

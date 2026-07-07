@@ -83,3 +83,17 @@
 **Score:** N/A (no ejecutado; paquete para terceros)
 **Verdict:** Preparado el PAQUETE DE EJECUCIÓN PARA TERCEROS del Camino B (piloto SOLO CloudNativePG, sin instalar operador nuevo). Contexto crítico: el operador CNPG 1.28.0 ya gestiona TRES clústeres productivos; el piloto crea un CUARTO clúster aislado (`pglab-cnpg-exp`, nombre único propuesto y aprobado) gestionado por ese operador compartido. Riesgo #1: que la inyección alcance los pods productivos. Partí del kit `pg-chaos-lab.zip` (leído completo, 49 archivos). Auditoría de selectores: los 6 manifiestos de fallo CNPG ya estaban doblemente acotados (namespace pg-chaos-lab + cnpg.io/cluster); ninguno usa el label de rol aislado. Adaptaciones: renombrado pg-cnpg→pglab-cnpg-exp en todos los manifiestos/servicios/secret, excluido todo Zalando (Camino B), cuota reducida a 1 clúster. Paquete (6 docs + manifiestos/): README, PROCEDIMIENTO (Fase 0-6 + paso 0.9 snapshot estado-inicial.txt + Fase 6.3 diff de igualdad final + sección Planificación de Ventanas V1/V2/V3 con reentrada R1-R6), SEGURIDAD (4 barreras de aislamiento), CHECKLIST-GONOGO (G1 dry-run de selectores + G3 prueba cross-namespace + G4-G9), ABORTO (señales + reversión por fase), RESPONSABLES (roles + inventario productivo + hoja de registro). Fraccionamiento en 3 ventanas (~12-14h totales). NO ejecutado. Alimentará la Sección V de la v2-experimental cuando se corra.
 **Report:** paper/replication/paquete-ejecucion-fase-b/PROCEDIMIENTO.md
+
+### 2026-07-07 18:02 — Coder/Data-engineer (piloto Fase B, Ventana 2 F4)
+**Phase:** Execution (piloto empírico CNPG, modo desacoplado)
+**Target:** F4 (IOChaos latencia E/S) sobre pglab-cnpg-exp; quality_reports/results_summary.md
+**Score:** N/A (experimento no ejecutable — bloqueo confirmado)
+**Verdict:** F4 NO ejecutable: IOChaos/FUSE (toda) incompatible con readOnlyRootFilesystem:true de CNPG (`Read-only file system, os error 30`, AllInjected=False; baseline 0ms == 100ms). Config correcta y dry-run OK → incompatibilidad estructural hardening↔tooling, no bug. DECIDIDO (opción 1): reformular como hallazgo, dropear medición empírica; a trabajo futuro con mecanismo sin FUSE. La validación de 1 corrida (Opción A) atrapó el bloqueo antes del lote. Lab limpio y entre-ventanas; 4 preexistentes intactos. Pendiente: F2 (Ventana 3), escritura del hallazgo, Fase 6.
+**Report:** quality_reports/results_summary.md (secc. Ventana 2); memoria project_f4_iochaos_readonly_incompat
+
+### 2026-07-07 19:36 — Coder/Data-engineer (piloto Fase B, Ventana 3 F2 + Fase 6 + cierre)
+**Phase:** Execution (piloto empirico CNPG, modo desacoplado)
+**Target:** F2 pod-failure n=10; Fase 6 (RTO/RPO); teardown; reencuadre v2-experimental
+**Score:** N/A (ejecucion empirica)
+**Verdict:** F2 0/10 promociones (recreacion en sitio), RTO mediana 36.75s; RPO GLOBAL=0 (truth contiguo 1..613253). Piloto CERRADO con teardown total (produccion intacta). Alcance de operadores resuelto (restriccion externa) -> reencuadre a estudio en profundidad de CNPG. Bug ARG_MAX en parse-verifier.py (RPO) documentado + workaround.
+**Report:** quality_reports/results_summary.md; reframe_v2_cnpg_alcance.md; claim_source_map_pg-k8s-paper.md

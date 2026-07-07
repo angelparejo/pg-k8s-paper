@@ -225,3 +225,53 @@
 **Status:**
 - Done: Fases 0 y 1 de la Ventana 1 ejecutadas y verificadas en el clúster real. Lab desplegado (namespace + aislamiento).
 - Pending: reanudar en **Fase 2** (Chaos Mesh) con el prompt de reanudación; luego Fase 3/4/5. Protocolo: lectura por defecto, cada escritura marcada ⚠️ y con confirmación, compuerta GO/NO-GO inviolable antes de inyectar.
+
+## 2026-07-07 18:02 — Ventana 2 (F4/IOChaos): bloqueo estructural, reformulada como hallazgo
+
+**Operations:**
+- Modo desacoplado (usuario ejecuta kubectl por VPN desde TCOLP292; Claude genera comandos).
+- Transferencia SFTP y verificación SHA256 de 7 archivos del arnés F4 (4 no habían llegado: run-f4-latency.sh, parse-f4.py, analyze.py-nuevo, pgbench-runner-cnpg.yaml). Estado acumulado (results.csv 20 filas, estado-inicial.txt) intacto.
+- Checklist de reentrada R1–R6: contexto, producción intacta (4 preexistentes + exp healthy), aislamiento (Chaos Mesh solo en tcolp293), cluster sano, runner desplegado, dry-run de los 3 selectores IOChaos = PASA.
+- Validación individual F4 100 ms (previa al lote): baseline 0 ms vs 100 ms → latencia IDÉNTICA (~8.5 ms).
+- Diagnóstico: describe/eventos + logs chaos-daemon/controller.
+- Limpieza: finalizer del IOChaos atascado retirado (patch); runner F4 borrado; val logs renombrados a f4-VALIDACION-*.
+- results_summary.md actualizado (sección Ventana 2 + Pendiente).
+
+**Decisions:**
+- F4 NO ejecutable con IOChaos: toda/FUSE incompatible con readOnlyRootFilesystem:true de CNPG (`Read-only file system, os error 30`, AllInjected=False). Config correcta (PodIOChaos bien construido, dry-run OK) → incompatibilidad estructural, no bug.
+- Opción 1 (reformular): documentar el bloqueo como hallazgo; medición cuantitativa de E/S → trabajo futuro. Descartado desactivar rootfs RO (pierde validez externa) y sustituto cgroup en este piloto (escritura de nodo en worker con primarios ajenos).
+
+**Results:**
+- F4 reformulada; contribución CP se sostiene en F1+F3 (+F2 pendiente). La validación de 1 corrida (diseño Opción A) evitó un lote de ~2 h sin señal.
+- Lab en estado entre-ventanas: pglab-cnpg-exp 3/3, tx-verifier corriendo, pgbench-cnpg 0/0, Chaos Mesh intacto. 4 preexistentes idénticos a la línea base.
+
+**Commits:**
+- (sin commit aún; cambios en working tree: results_summary.md)
+
+**Status:**
+- Done: Ventana 2 cerrada por hallazgo. Memoria + results_summary actualizados.
+- Pending: escribir el hallazgo F4 en el paper (Métodos + Resultados); Ventana 3 = F2 (pod-failure, ventana aparte); Fase 6 (analyze/RPO/teardown, ya sin niveles F4).
+
+## 2026-07-07 19:36 — Ventana 3 (F2) completa, RPO global=0, teardown y cierre del piloto
+
+**Operations:**
+- Reentrada R1-R6 (Ventana 3); restaurada carga pgbench-cnpg=1; dry-run selector F2 = PASA.
+- Validación 1 inyeccion pod-failure (manual, ~3 min) + lote n=10 via run-experiment.sh desde la raiz (results.csv acumula; backup results.csv.bak-preF2).
+- Fase 6: verifier-cnpg.log (117223 COMMITs), parse-verifier RTO; RPO via psql in-cluster (workaround al bug ARG_MAX); estado-final + comparacion vs linea base; teardown TOTAL (namespace, cluster exp, workload, Chaos Mesh CRDs+webhooks+clusterroles via fallback manual, etiqueta nodo).
+- Creados: data/cleaned/f2_podfailure_cnpg.csv, quality_reports/reframe_v2_cnpg_alcance.md, quality_reports/claim_source_map_pg-k8s-paper.md, quality_reports/fase6_recoleccion_analisis.md, paper/tables/tab_resultados_fallos_cnpg.tex, paper/tables/tab_limitaciones_alcance.tex. Actualizados: results_summary.md, 3 memorias, MEMORY.md.
+
+**Decisions:**
+- F2: 0/10 promociones — CNPG recrea el primario en sitio, NO promueve (hipotesis previa falsada). Gradiente = 3 comportamientos.
+- Alcance de operadores RESUELTO por restriccion externa (produccion no permite instalar Zalando) -> v2-experimental se reencuadra a estudio en profundidad de CNPG + marco analitico N operadores. Plan en reframe_v2_cnpg_alcance.md.
+
+**Results:**
+- F1 RTO 7.91s (promueve) | F2 RTO 36.75s mediana (IQR ~[36.2,37.1], sd 0.78; no promueve) | F3 outage=duracion (CP) | F4 no ejecutable (hardening<->FUSE).
+- RPO GLOBAL = 0: truth contiguo 1..613253, 0 huecos, 11/11 ids-frontera presentes.
+- Teardown limpio: sin CRDs/webhooks chaos, 4 preexistentes healthy, operador :1.28.0. PVs Released (Retain) pendientes de reclamar por almacenamiento: pvc-1c5ae376, pvc-3d3670ad, pvc-fde7e69b (15Gi).
+
+**Commits:**
+- (sin commit; cambios en working tree)
+
+**Status:**
+- Done: piloto Fase B CERRADO (F1/F3/F2 + hallazgo F4). Datos, claim-source-map, tablas y plan de reencuadre listos.
+- Pending: escribir v2-experimental (via /write) con reencuadre CNPG y cifras finales; almacenamiento reclama 3 PVs; arreglar bug ARG_MAX de parse-verifier.py.
