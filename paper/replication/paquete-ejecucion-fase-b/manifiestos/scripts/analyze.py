@@ -64,9 +64,9 @@ for row in csv.reader(open(sys.argv[1] if len(sys.argv) > 1 else "results.csv"))
     data[(row[0], row[1])].append(float(row[5]))
 
 hdr_e, hdr_o = "experimento", "op"
-print(f"{hdr_e:32s} {hdr_o:8s} n   mediana   p95")
+print(f"{hdr_e:32s} {hdr_o:8s} n   p50      p95      p99")
 for (exp, op), v in sorted(data.items()):
-    print(f"{exp:32s} {op:8s} {len(v):<3d} {median(v):8.2f} {pct(v,95):8.2f}")
+    print(f"{exp:32s} {op:8s} {len(v):<3d} {median(v):8.2f} {pct(v,95):8.2f} {pct(v,99):8.2f}")
 
 scen = defaultdict(dict)
 for (exp, op), v in data.items():

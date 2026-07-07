@@ -1,0 +1,11 @@
+rep,rto_s,primary_before,primary_after,injection_utc
+1,7.99,pglab-cnpg-exp-2,pglab-cnpg-exp-1,2026-07-07T13:54:35.292Z
+2,7.86,pglab-cnpg-exp-1,pglab-cnpg-exp-2,2026-07-07T14:01:14.578Z
+3,6.61,pglab-cnpg-exp-2,pglab-cnpg-exp-1,2026-07-07T14:03:44.922Z
+4,8.15,pglab-cnpg-exp-1,pglab-cnpg-exp-2,2026-07-07T14:06:15.180Z
+5,8.17,pglab-cnpg-exp-2,pglab-cnpg-exp-1,2026-07-07T14:08:44.912Z
+6,8.02,pglab-cnpg-exp-1,pglab-cnpg-exp-2,2026-07-07T14:11:15.135Z
+7,7.75,pglab-cnpg-exp-2,pglab-cnpg-exp-1,2026-07-07T14:13:45.696Z
+8,6.85,pglab-cnpg-exp-1,pglab-cnpg-exp-2,2026-07-07T14:16:15.982Z
+9,7.58,pglab-cnpg-exp-2,pglab-cnpg-exp-1,2026-07-07T14:18:46.484Z
+10,7.95,pglab-cnpg-exp-1,pglab-cnpg-exp-2,2026-07-07T14:21:16.900Z
