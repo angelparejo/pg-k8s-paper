@@ -6,14 +6,15 @@ Rellenar **antes** de agendar la primera ventana. Es requisito del GO/NO-GO (ít
 
 | Rol | Nombre | Contacto | Responsabilidad |
 |---|---|---|---|
-| **Aprobador del change** | | | Aprueba la ventana y el alcance (solo `pg-chaos-lab`) |
-| **Ejecutor** | | | Ejecuta el `PROCEDIMIENTO.md` paso a paso |
-| **Monitor de producción** | | | Vigila los **4 clústeres CNPG preexistentes** durante toda la ventana |
-| **Autoridad de aborto** | | | Puede detener el piloto en cualquier momento (ver `ABORTO.md`) |
-| **DBA de producción (guardia)** | | | Punto de escalado ante cualquier anomalía en producción |
-| **Responsable de almacenamiento (SAN)** | | | Coordina pool/QoS del lab y el borrado final de PVCs |
-| **Responsable de plataforma / K8s** | | | Etiquetado de nodos, Chaos Mesh, plano de control |
+| **Aprobador del change** | Angel A. Parejo R. | aparejo@alitronslt.com | Aprueba la ventana y el alcance (solo `pg-chaos-lab`) |
+| **Ejecutor** | Angel A. Parejo R. | aparejo@alitronslt.com | Ejecuta el `PROCEDIMIENTO.md` paso a paso |
+| **Monitor de producción** | Angel A. Parejo R. | aparejo@alitronslt.com | Vigila los **4 clústeres CNPG preexistentes** durante toda la ventana |
+| **Autoridad de aborto** | Angel A. Parejo R. | aparejo@alitronslt.com | Puede detener el piloto en cualquier momento (ver `ABORTO.md`) |
+| **DBA de producción (guardia)** | Angel A. Parejo R. | aparejo@alitronslt.com | Punto de escalado ante cualquier anomalía en producción |
+| **Responsable de almacenamiento (SAN)** | Angel A. Parejo R. | aparejo@alitronslt.com | Coordina pool/QoS del lab y el borrado final de PVCs |
+| **Responsable de plataforma / K8s** | Angel A. Parejo R. | aparejo@alitronslt.com | Etiquetado de nodos, Chaos Mesh, plano de control |
 
+> **Operador único:** Angel A. Parejo R. asume todos los roles, incluida la **autoridad de aborto**, para este piloto. Confirma conocer y tener a mano `ABORTO.md`.
 > La **autoridad de aborto** debe estar presente o localizable durante toda cada ventana. No se inyecta sin ella.
 
 ## Inventario de los cuatro clústeres CNPG preexistentes (paso 0.7 — NO tocar)
@@ -48,7 +49,7 @@ Prellenado con el reconocimiento del **2026-07-05**. **Reconfirmar en el paso 0.
 
 | Ventana | Contenido | Fecha/hora prevista | Duración estimada | Ejecutor | Autoridad de aborto |
 |---|---|---|---|---|---|
-| **1** | Fases 0–4 + F1 + F3 | | ~4 h | | |
+| **1** | Fases 0–4 + F1 + F3 | 2026-07-07 | ~4 h | Angel A. Parejo R. | Angel A. Parejo R. |
 | **2** | F4 (20/50/100 ms) | | ~7 h | | |
 | **3** | F2 (pod-failure) | | ~2.5 h | | |
 

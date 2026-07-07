@@ -85,14 +85,17 @@ kubectl -n pg-chaos-lab get deploy -l app.kubernetes.io/component=controller-man
 - Esperado: `clusterScoped: false`, `enableFilterNamespace: true`, `targetNamespace: pg-chaos-lab`.
 - [ ] PASA / [ ] NO PASA
 
-**G2.2 — Los namespaces preexistentes NO son inyectables** (les falta el label de opt-in):
+**G2.2 — Los namespaces preexistentes NO son inyectables** (les falta la ANNOTATION de opt-in):
+> `enableFilterNamespace` reconoce el marcador como **annotation** `chaos-mesh.org/inject=enabled` (NO como label). Sin ella, el selector reporta "namespace is not enabled" y no inyecta (fail-safe). Verificar la **annotation**, no el label.
 ```bash
-# Namespaces de los 4 clústeres CNPG preexistentes (paso 0.7):
+# El lab SÍ debe tener la annotation:
+echo -n "pg-chaos-lab (debe: enabled) -> "; kubectl get ns pg-chaos-lab -o jsonpath='{.metadata.annotations.chaos-mesh\.org/inject}{"\n"}'
+# Los 4 clústeres CNPG preexistentes NO deben tenerla (paso 0.7):
 for ns in pg-prod pg-cert pg-dev gitlab; do
-  echo -n "$ns -> "; kubectl get ns "$ns" -o jsonpath='{.metadata.labels.chaos-mesh\.io/inject}{"\n"}'
+  echo -n "$ns (debe: vacío) -> "; kubectl get ns "$ns" -o jsonpath='{.metadata.annotations.chaos-mesh\.org/inject}{"\n"}'
 done
 ```
-- Esperado: cada uno imprime **vacío** (no tienen `chaos-mesh.org/inject=enabled`). Solo `pg-chaos-lab` lo tiene.
+- Esperado: `pg-chaos-lab` imprime `enabled`; los 4 preexistentes imprimen **vacío**. Solo `pg-chaos-lab` es inyectable.
 - [ ] PASA / [ ] NO PASA
 
 **G2.3 — El controlador no tiene permisos de ámbito de clúster** (con `clusterScoped:false` usa Role, no ClusterRole):

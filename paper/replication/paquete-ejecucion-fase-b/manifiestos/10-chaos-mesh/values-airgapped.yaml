@@ -12,6 +12,14 @@ controllerManager:
   enableFilterNamespace: true
   replicaCount: 1
   targetNamespace: pg-chaos-lab
+  # enabledControllers se DEJA en "*" (todos). Acotarlo a nombres tipo
+  # [podchaos, iochaos] NO funciona en 2.8.3: no casan con los nombres reales de
+  # los reconcilers y se desactivan TODOS (0 controladores -> el caos no se aplica).
+  # El crashloop de clusterScoped:false (informers cluster-scoped de remoteclusters
+  # y physicalmachines -> "forbidden at the cluster scope") se resuelve con el RBAC
+  # minimo de solo-lectura en 11-rbac-clusterscoped-read.yaml, NO acotando controllers.
+  enabledControllers:
+    - "*"
   # Air-gapped: fijar el controller al nodo del lab, donde estan importadas las
   # imagenes de Chaos Mesh (evita ImagePullBackOff si cae en otro nodo) y ademas
   # confina todo Chaos Mesh al nodo del laboratorio.

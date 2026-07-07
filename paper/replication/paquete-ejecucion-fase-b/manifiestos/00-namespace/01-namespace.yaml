@@ -9,8 +9,14 @@ metadata:
     # (los namespaces pg-* de CNPG no estan meshados) y evita contaminar la
     # medicion de RTO/latencia con un sidecar linkerd-proxy en la ruta.
     linkerd.io/inject: disabled
+    # enableFilterNamespace de Chaos Mesh reconoce este marcador como ANNOTATION
+    # (NO como label): sin el, el selector reporta "namespace is not enabled" y
+    # "no pod is selected" -> ningun experimento inyecta (fail-safe). Verificado
+    # contra la doc oficial. Los 4 clusteres preexistentes NO lo tienen -> protegidos.
+    chaos-mesh.org/inject: enabled
   labels:
     app.kubernetes.io/part-of: pg-chaos-lab
-    # Requerido si se habilita enableFilterNamespace en Chaos Mesh:
+    # (Se mantiene tambien como label por si alguna version usa namespaceSelector
+    # en los webhooks; el filtro de inyeccion real es la ANNOTATION de arriba.)
     chaos-mesh.org/inject: enabled
     pod-security.kubernetes.io/enforce: privileged   # chaos-daemon lo requiere; validar con el equipo de seguridad
