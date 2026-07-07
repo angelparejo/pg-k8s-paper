@@ -35,7 +35,7 @@ El piloto completo son **~12–14 h** de ejecución efectiva. No cabe en una sol
 | Fases 0–4 (setup + GO/NO-GO) | prerrequisitos, snapshot, aislamiento, Chaos Mesh, clúster, compuerta | ~2–2.5 h |
 | F1 (`pod-kill`) | 10 rep × (~1 min recuperación + 120 s cool-down) | ~40 min |
 | F3 (partición Calico) | 10 rep × (~1 min + 120 s) | ~40 min |
-| F4 (`IOChaos` 20/50/100 ms) | 30 rep × (10 min inyección + 120 s) + baseline 0 ms | ~6.5–7 h |
+| F4 (`IOChaos` 0/20/50/100 ms, Opción A) | 4 niveles × 5 corridas × (5 min + 30 s) | ~2 h |
 | F2 (`pod-failure` 10 min) | 10 rep × (10 min inyección + recuperación + 120 s) | ~2–2.5 h |
 
 ### Fraccionamiento propuesto
@@ -43,7 +43,7 @@ El piloto completo son **~12–14 h** de ejecución efectiva. No cabe en una sol
 | Ventana | Contenido | Duración |
 |---|---|---|
 | **Ventana 1** | Fases 0–4 (setup + GO/NO-GO) **+ F1 + F3** | **~4 h** |
-| **Ventana 2** | **F4** (20/50/100 ms + baseline 0 ms) | **~7 h** |
+| **Ventana 2** | **F4** (0/20/50/100 ms, Opción A) | **~2 h** |
 | **Ventana 3** | **F2** (sustituto de fallo de nodo) | **~2.5 h** |
 
 > El orden V1→V2→V3 es deliberado: Ventana 1 deja el laboratorio montado y **validado** (GO/NO-GO superado) con los dos experimentos de menor riesgo ya hechos; V2 y V3 solo añaden inyecciones sobre esa base ya probada.
@@ -82,10 +82,17 @@ Antes de inyectar en una ventana posterior, ejecutar en orden:
   kubectl -n pg-chaos-lab get cluster pglab-cnpg-exp        # healthy, 3/3
   kubectl -n pg-chaos-lab logs deploy/tx-verifier-cnpg --tail=3   # COMMITs recientes
   ```
-- [ ] **R5.** Si se escaló pgbench a cero al cerrar la ventana anterior, restaurarlo:
-  ```bash
-  kubectl -n pg-chaos-lab scale deploy pgbench-cnpg --replicas=1
-  ```
+- [ ] **R5.** Carga según la ventana:
+  - **Ventana 2 (F4):** NO hace falta la carga de fondo `pgbench-cnpg`; desplegar el runner ocioso:
+    ```bash
+    kubectl apply -f manifiestos/30-workload/pgbench-runner-cnpg.yaml
+    kubectl -n pg-chaos-lab rollout status deploy/pgbench-runner-cnpg --timeout=90s
+    ```
+  - **Ventana 3 (F2):** restaurar la carga de fondo si se escaló a cero:
+    ```bash
+    kubectl -n pg-chaos-lab scale deploy pgbench-cnpg --replicas=1
+    ```
+  - El `tx-verifier-cnpg` debe seguir corriendo en ambas (log continuo de RTO/RPO).
 - [ ] **R6.** **Re-ejecutar el dry-run de selectores de CHECKLIST-GONOGO.md** (los nombres de pod y el primario pueden haber cambiado entre ventanas): confirmar que cada selector de la ventana en curso resuelve **solo** a pods de `pglab-cnpg-exp`. Si algo no resuelve como se espera → **abortar** (`ABORTO.md`).
 
 Solo con R1–R6 en verde se procede a inyectar en la ventana.
@@ -324,14 +331,38 @@ for r in $(seq 1 10); do ./run-experiment.sh cnpg ../40-experiments/f3-partition
 ```
 - [ ] 10 repeticiones
 
-**F4 — Sensibilidad a latencia de E/S (IOChaos FUSE; 0 ms = línea base sin manifiesto) · [Ventana 2]:**
+**F4 — Sensibilidad a latencia de E/S (IOChaos FUSE) · [Ventana 2] · DISEÑO "Opción A" (métrica continua):**
+
+> **Cambio de instrumento (leer NOTA METODOLÓGICA F4 más abajo):** F4 mide una métrica
+> *continua* (latencia/tps bajo E/S degradada), no un evento. **NO se usa `run-experiment.sh`**
+> (su detector de failover retiraría el IOChaos a los ~120 s). Se usa el arnés dedicado
+> `run-f4-latency.sh`, que aplica el IOChaos, corre `pgbench --progress=1` la ventana completa
+> y retira el IOChaos. Diseño: **5 corridas × 5 min por nivel** (0/20/50/100 ms), muestreo por
+> segundo, descartando 30 s de calentamiento → ~1.4 M transacciones/nivel.
+
 ```bash
-for lvl in 20 50 100; do
-  for r in $(seq 1 10); do ./run-experiment.sh cnpg ../40-experiments/f4-iolatency-${lvl}ms-cnpg.yaml $r; sleep 120; done
-done
+# 1) desplegar el runner ocioso (una sola vez en la ventana)
+kubectl apply -f manifiestos/30-workload/pgbench-runner-cnpg.yaml
+kubectl -n pg-chaos-lab rollout status deploy/pgbench-runner-cnpg --timeout=90s
+# 2) ejecutar F4 (niveles 0/20/50/100 ms, 5 reps de 300 s c/u). El 0 ms es la linea base.
+manifiestos/scripts/run-f4-latency.sh 300 5
+# 3) parsear: percentiles por nivel + serie por segundo + filas-resumen a results.csv
+manifiestos/scripts/parse-f4.py data-f4 results.csv
 ```
-> IOChaos actúa a nivel de FUSE dentro del pod: **no toca la SAN Huawei** ni a otros consumidores. La serie de control 0 ms se registra sin aplicar ningún manifiesto (sonda de escritura sin inyección).
-- [ ] Niveles 20/50/100 ms · 10 repeticiones cada uno · (línea base 0 ms registrada aparte)
+> IOChaos actúa a nivel de FUSE dentro del pod: **no toca la SAN Huawei** ni a otros consumidores.
+> El nivel 0 ms (sin manifiesto) es la línea base sin inyección.
+- [ ] Runner desplegado · niveles 0/20/50/100 ms · 5 corridas × 300 s cada uno · `f4-latency-series.csv` generado
+
+**NOTA METODOLÓGICA F4 (documentar en la sección de Métodos del paper):**
+El plan pre-registrado fijaba `n=10` repeticiones por combinación, apropiado para métricas de
+*evento* (RTO/RPO de F1/F3). F4 mide una métrica *continua* (latencia/tps bajo E/S degradada),
+donde el `n` estadístico son las transacciones muestreadas, no las corridas. Por ello F4 sustituye
+las 10 repeticiones por **5 corridas × 5 min con muestreo por segundo** (~1.4 M transacciones y
+~1350 puntos por-segundo por nivel tras descartar 30 s de calentamiento). Las 5 corridas aportan
+la varianza entre-corridas (reproducibilidad); el muestreo por segundo aporta la distribución para
+p50/p95/p99 y la prueba dosis-respuesta (Kruskal-Wallis entre niveles, Spearman latencia–nivel).
+Este ajuste **adapta el diseño a la naturaleza de la métrica** y es una decisión consciente, no un
+recorte. `n=10` se mantiene en F1/F3. (Instrumento: `run-f4-latency.sh` + `parse-f4.py`.)
 
 **F2 — Indisponibilidad sostenida 10 min (`pod-failure`) — sustituto de fallo de nodo · [Ventana 3]:**
 ```bash
