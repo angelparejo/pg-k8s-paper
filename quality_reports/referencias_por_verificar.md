@@ -1,8 +1,16 @@
 # Referencias por Verificar — articulo_angelparejov1-6.md
 
-**Fecha:** 2026-07-04
-**Estado:** PENDIENTE — bloqueante para someter el artículo
-**Alcance:** [5], [10], [11], [14], [15] no están en `Bibliography_base.bib`. Las 9 restantes ([1],[2],[4],[6],[7],[8],[9],[12],[13]) y [3] (con URL corregida) ya están verificadas y añadidas.
+**Fecha:** 2026-07-04 · **Actualizado:** 2026-07-08
+**Estado:** ✅ RESUELTO (2026-07-08) — las 5 corregidas en `articulo_angelparejov1-6.md` con fuentes reales verificadas por web (Crossref/Springer/ACM/MDPI):
+- **[5]** → doc oficial Kubernetes "Operator pattern".
+- **[10]** → W. Khan et al., *Big Data Cogn. Comput.* 7(2):97, 2023, doi:10.3390/bdcc7020097.
+- **[11]** → autoría corregida a F. Han et al., *Proc. VLDB Endow.* 17(12):3745–3758, 2024, doi:10.14778/3685800.3685803.
+- **[14]** → J. Dobies y J. Wood, *Kubernetes Operators*, O'Reilly, 2020 (distinta de [5]); además se quitó [14] de la cita de Crunchy en la Tabla I, queda [21].
+- **[15]** (era falsa: Santos/FGCS inventados) → C. Mega, SummerSOC 2023, Springer CCIS 1847, pp. 125–143, doi:10.1007/978-3-031-45728-9_8.
+
+> **NOTA CRUZADA:** la misma [15] fabricada estaba en `articulo_angelparejov2-experimental.md` → corregida también allí a Mega (con ajuste de la frase de §II para reflejar la fuente real).
+
+**Alcance original:** [5], [10], [11], [14], [15] no estaban en `Bibliography_base.bib`. Las 9 restantes ([1],[2],[4],[6],[7],[8],[9],[12],[13]) y [3] (con URL corregida) ya estaban verificadas y añadidas.
 
 ---
 

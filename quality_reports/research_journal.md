@@ -97,3 +97,10 @@
 **Score:** N/A (ejecucion empirica)
 **Verdict:** F2 0/10 promociones (recreacion en sitio), RTO mediana 36.75s; RPO GLOBAL=0 (truth contiguo 1..613253). Piloto CERRADO con teardown total (produccion intacta). Alcance de operadores resuelto (restriccion externa) -> reencuadre a estudio en profundidad de CNPG. Bug ARG_MAX en parse-verifier.py (RPO) documentado + workaround.
 **Report:** quality_reports/results_summary.md; reframe_v2_cnpg_alcance.md; claim_source_map_pg-k8s-paper.md
+
+### 2026-07-08 05:00 — Writer + Editor + Domain/Methods referees (v2-experimental)
+**Phase:** Execution + Peer Review (R&R)
+**Target:** articulo_angelparejov2-experimental.md
+**Score:** dominio 83/100, métodos 87/100 (R&R Ronda 2); writer-critic 98/100
+**Verdict:** Reencuadre a estudio en profundidad de CNPG; peer review + R&R → REVISIÓN MENOR, listo para tier primario. MUST (R1) y residuos (R2) aplicados. Cuello de botella: v1-6 conceptual (5 refs pendientes, no sometido). Tier secundario gateado por evidencia nueva (2.º artículo).
+**Report:** quality_reports/reviews/2026-07-08_v2_r2_editorial_decision.md

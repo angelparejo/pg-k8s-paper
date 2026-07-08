@@ -118,7 +118,7 @@ Por otro lado, el almacenamiento en red presenta un comportamiento menos predeci
 
 ### IV.C Interacción operador–almacenamiento
 
-Uno de los aspectos más relevantes que surge de este análisis es la dependencia entre el operador y el tipo de almacenamiento utilizado. Esta interacción resulta especialmente crítica, ya que el comportamiento del sistema no puede explicarse de forma aislada en cada capa. La Tabla I sintetiza, a partir del comportamiento documentado de CloudNativePG [19], Zalando Postgres Operator (Patroni) [20] y Crunchy Postgres for Kubernetes [14], [21], la distribución de responsabilidades de detección y recuperación entre capas para los principales tipos de fallo.
+Uno de los aspectos más relevantes que surge de este análisis es la dependencia entre el operador y el tipo de almacenamiento utilizado. Esta interacción resulta especialmente crítica, ya que el comportamiento del sistema no puede explicarse de forma aislada en cada capa. La Tabla I sintetiza, a partir del comportamiento documentado de CloudNativePG [19], Zalando Postgres Operator (Patroni) [20] y Crunchy Postgres for Kubernetes [21], la distribución de responsabilidades de detección y recuperación entre capas para los principales tipos de fallo.
 
 **Tabla I.** Responsabilidad de detección y recuperación por capa y tipo de fallo
 
@@ -187,17 +187,17 @@ En conjunto, este trabajo contribuye a cerrar la brecha existente entre la teor�
 [2] M. Schwarzkopf, A. Konwinski, M. Abd-El-Malek, and J. Wilkes, "Omega: Flexible, scalable schedulers for large compute clusters," in Proc. EuroSys, 2013, pp. 351–364.
 [3] Kubernetes, "Container Storage Interface (CSI)," 2024. [Online]. Available: https://kubernetes.io
 [4] A. Taft et al., "CockroachDB: The resilient geo-distributed SQL database," in Proc. ACM SIGMOD Int. Conf. Management of Data, 2020, pp. 1493–1509.
-[5] S. Kulkarni et al., "Declarative stateful systems in Kubernetes," IEEE Cloud Computing, vol. 7, no. 2, pp. 52–61, 2020.
+[5] Kubernetes, "Operator pattern," Kubernetes Documentation. [Online]. Available: https://kubernetes.io/docs/concepts/extend-kubernetes/operator/ [Consultado: 8 de julio de 2026]
 [6] P. Bailis and A. Ghodsi, "Eventual consistency today: limitations, extensions, and beyond," Communications of the ACM, vol. 56, no. 5, pp. 55–63, 2013.
 [7] S. Gilbert and N. Lynch, "Brewer's conjecture and the feasibility of consistent, available, partition-tolerant web services," ACM SIGACT News, vol. 33, no. 2, pp. 51–59, 2002.
 [8] M. Burckhardt, "Principles of eventual consistency," Foundations and Trends in Programming Languages, vol. 1, no. 1–2, pp. 1–150, 2014.
 [9] A. Avizienis, J.-C. Laprie, B. Randell, and C. Landwehr, "Basic concepts and taxonomy of dependable and secure computing," IEEE Trans. Dependable and Secure Computing, vol. 1, no. 1, pp. 11–33, 2004.
-[10] S. Nayak, "SQL and NoSQL database architectures: A performance evaluation and systematic review," Journal of Systems and Software, vol. 195, 2023.
-[11] Y. Cao et al., "PALF: Replicated write-ahead logging for distributed databases," Proc. VLDB, 2024.
+[10] W. Khan, T. Kumar, C. Zhang, K. Raj, A. M. Roy, and B. Luo, "SQL and NoSQL database software architecture performance analysis and assessments—A systematic literature review," Big Data and Cognitive Computing, vol. 7, no. 2, art. 97, 2023, doi: 10.3390/bdcc7020097.
+[11] F. Han et al., "PALF: Replicated write-ahead logging for distributed databases," Proc. VLDB Endow., vol. 17, no. 12, pp. 3745–3758, 2024, doi: 10.14778/3685800.3685803.
 [12] M. Stonebraker and G. Kemnitz, "The POSTGRES next-generation database management system," Communications of the ACM, vol. 34, no. 10, pp. 78–92, 1991.
 [13] R. van Renesse and F. B. Schneider, "Chain replication for supporting high throughput and availability," in Proc. OSDI, 2004.
-[14] Red Hat, "Orchestrating a stateful application using Kubernetes Operators," 2021.
-[15] J. Santos et al., "Deploying a scalable PostgreSQL database on Kubernetes: Toward serverless operations," Future Generation Computer Systems, 2025.
+[14] J. Dobies and J. Wood, Kubernetes Operators: Automating the Container Orchestration Platform. Sebastopol, CA, USA: O'Reilly Media, 2020.
+[15] C. Mega, "Orchestrating information governance workloads as stateful services using Kubernetes operator framework," in Service-Oriented Computing (SummerSOC 2023), Communications in Computer and Information Science, vol. 1847. Cham, Switzerland: Springer, 2023, pp. 125–143, doi: 10.1007/978-3-031-45728-9_8.
 [16] A. Basiri, N. Behnam, R. de Rooij, L. Hochstein, L. Kosewski, J. Reynolds, and C. Rosenthal, "Chaos Engineering," IEEE Software, vol. 33, no. 3, pp. 35–41, 2016.
 [17] P. Alvaro and S. Tymon, "Abstracting the Geniuses Away from Failure Testing," Communications of the ACM, vol. 61, no. 1, pp. 54–61, 2018.
 [18] A. Alquraan, H. Takruri, M. Alfatafta, and S. Al-Kiswany, "An Analysis of Network-Partitioning Failures in Cloud Systems," in Proc. 13th USENIX Symposium on Operating Systems Design and Implementation (OSDI 18), Carlsbad, CA, 2018, pp. 51–68.

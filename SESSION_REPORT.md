@@ -275,3 +275,29 @@
 **Status:**
 - Done: piloto Fase B CERRADO (F1/F3/F2 + hallazgo F4). Datos, claim-source-map, tablas y plan de reencuadre listos.
 - Pending: escribir v2-experimental (via /write) con reencuadre CNPG y cifras finales; almacenamiento reclama 3 PVs; arreglar bug ARG_MAX de parse-verifier.py.
+
+## 2026-07-08 05:00 — v2-experimental: reencuadre + revisión adversarial + peer review + R&R (Menor)
+
+**Operations:**
+- Reencuadre del v2 a "estudio en profundidad de CNPG" (writer + writer-critic 91→98); abstract 176 pal.
+- Fig.1 recreada en TikZ→PDF (paper/figures/fig1_modelo_multicapa.{tex,pdf}); .svg conservado para preview.
+- Revisión adversarial (dominio 54, métodos 60) → aplicados MUST → peer review Ronda 1 (editor desk→2 árbitros→decisión) → R&R Ronda 2.
+- Aplicados 6 MUST (R1) + 7 residuos (R2): reencuadre descriptivo, outlier F2 ≈80.5 s + Spearman ρ≈0.62 divulgados, mecanismo RPO=0 lag≈0 (inferencia), posicionamiento (chaos-CI CNPG [26], Chen 2025 [27], Avizienis [9], §IV.A condicional), MW exacta p≈1.1e-5, "CP" operacional, sección Disponibilidad de datos, comentario build Fig.1.
+- parse-verifier.py: corregido bug ARG_MAX (contigüidad server-side).
+- Verificado estado v1-6: NO sometido; 5 refs pendientes (referencias_por_verificar.md) con arreglos ya especificados.
+
+**Decisions:**
+- Separador decimal: PUNTO (RAE-2010/ISO/IEEE; ya consistente) — decisión cerrada.
+- Reencuadre formalismo por vía descriptiva (no "validación del modelo"); F2-refutación como núcleo probatorio.
+- Prioridad: desbloquear v1-6 (refs + revista) ANTES de empaquetar v2.
+
+**Results:**
+- v2 peer review: dominio 54→72→**83**, métodos 60→81→**87**, writer-critic **98**. Decisión R&R: **Revisión Menor**, listo para tier primario. Tier secundario requiere evidencia nueva (2.º artículo).
+- Reportes: quality_reports/reviews/2026-07-08_v2_{,r2_}{desk_review,referee_domain,referee_methods,editorial_decision}.md + peer_review.html.
+
+**Commits:**
+- `d192bfb`,`a0fb71e`,`23d8ff9`,`d609332`,`6c54b5a`,`e5982bf`
+
+**Status:**
+- Done: v2 reencuadrado, revisado (Menor) y con residuos aplicados; todo commiteado. Sin push.
+- Pending: v1-6 (aplicar 5 refs + [Accessed] + elegir revista primaria); luego LaTeX + empaquetado del v2 citando al v1; Nivel-3 (fallo de nodo real, multi-operador) para el 2.º artículo.
