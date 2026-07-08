@@ -24,6 +24,19 @@ Estado: F1 y F3 con datos; **F2 pendiente del lote n=10**; F4 sin cifras (bloque
 | C12 | F2 **RPO = 0** (y RPO=0 global) | `truth`: filas=613253, min=1, max=613253, **faltantes=0**; 11/11 ids-frontera presentes | `kubectl exec` primario → `psql` in-cluster (contigüidad + IN de 11 ids) |
 | C13 | F4 **no ejecutable** (hardening rootfs RO ↔ FUSE) | eventos PodIOChaos `Read-only file system (os error 30)`; `f4-VALIDACION-*.log` | validación 100 ms: latencia == baseline |
 
+## Estadística derivada (añadida en la revisión adversarial 2026-07-07)
+
+| # | Afirmación (valor) | Fuente / cómo se obtiene |
+|---|---|---|
+| C14 | Razón de medianas F2/F1 = **4.65×** (36.75/7.91) | derivada de C1/C11 |
+| C15 | **Mann–Whitney F1 vs F2:** U=0, z=−3.78, **p≈1.6×10⁻⁴**, rank-biserial=**1.00** (separación completa) | `analyze.py`-equivalente sobre `f1_rto_cnpg.csv` y `f2_podfailure_cnpg.csv` (n=10 c/u) |
+| C16 | **Hodges–Lehmann** (F2−F1) = **28.96 s** (diferencia de medianas robusta) | mediana de las diferencias pareadas de los dos conjuntos |
+| C17 | IC de mediana (distribución-libre, estad. de orden [x(2),x(9)], cobertura ~97.9%): F1 **[6.85, 8.15]**, F2 **[36.05, 37.66]**, F3 fija **[60.74, 60.77]** | `data/cleaned/*.csv` |
+| C18 | IC binomial (regla de tres, cota sup. 95% una cola): no-promoción **0/10 ⇒ ≤25.9%**, **0/12 ⇒ ≤22.1%** | 1−0.05^(1/n); la conclusión de no-promoción se apoya sobre todo en el **mecanismo** (recreación con misma identidad/PVC), no solo en el conteo |
+| C19 | Replicación de CNPG **asíncrona** (sincronía no variada) | `paper/replication/.../manifiestos/20-cluster/cluster-cnpg.yaml` (sin config `synchronous`; comentario explícito) |
+| C20 | Las **3 instancias co-residen en `tcolp293`** (nodo único del lab; anti-afinidad `topologyKey=hostname` anulada por pool de un nodo) ⇒ failover intra-nodo | `cluster-cnpg.yaml` (affinity) + observación `kubectl get pods -o wide` (exp-1/2/3 en tcolp293) |
+| C21 | Verificador: id **BIGINT monótono de cliente**; reintenta el mismo id ante fallo (outages no crean huecos); cadencia bucle apretado + `sleep 0.2 s`/`PGCONNECT_TIMEOUT 2 s` ⇒ **granularidad RTO ≈0.2 s** | `paper/replication/.../manifiestos/30-workload/tx-verifier-cnpg.yaml` |
+
 **Notas de fiabilidad ligadas a cifras:** el id espurio negativo en `truth` (ts 04:56 UTC, previo a
 las ventanas) NO cuenta como RPO (ver results_summary § Nota de fiabilidad). Para F2, el RTO **no** es
 la columna `rto` de `results.csv` (esa es t1−t0≈120 s del poll sin failover); es el gap del verificador.

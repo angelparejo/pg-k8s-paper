@@ -2,8 +2,9 @@
 
 Clúster experimental `pglab-cnpg-exp` (CNPG 1.28.0, PG 16.13, 3 instancias, SC `huawei-ch-xfs`),
 nodo del lab `tcolp293`, K8s 1.34.6, Calico 3.31.4, Chaos Mesh 2.8.3 confinado.
-RTO = hueco entre COMMITs del `tx-verifier` (resolución ~100 ms). RPO = huecos en la
-secuencia de la tabla `truth` (id secuencial, PK). Datos crudos en el servidor (gitignored);
+RTO = hueco entre COMMITs del `tx-verifier`; **granularidad ≈0.2 s** (reintento 0.2 s +
+`PGCONNECT_TIMEOUT` 2 s ante fallo; el COMMIT en éxito es sub-segundo). RPO = huecos en la
+secuencia de la tabla `truth` (id BIGINT monótono generado por el cliente, PK). Datos crudos en el servidor (gitignored);
 series limpias en `data/cleaned/`.
 
 ## Ventana 1 (2026-07-07) — COMPLETA
