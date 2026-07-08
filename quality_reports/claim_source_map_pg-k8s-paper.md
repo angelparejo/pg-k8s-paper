@@ -11,11 +11,11 @@ Estado: F1 y F3 con datos; **F2 pendiente del lote n=10**; F4 sin cifras (bloque
 | # | Afirmación (valor) | Fuente (archivo / columna) | Cómo se obtiene |
 |---|---|---|---|
 | C1 | F1 RTO mediana **7.91 s** | `data/cleaned/f1_rto_cnpg.csv` col `rto_s` (n=10) | `parse-verifier.py` (gap COMMITs) → mediana |
-| C2 | F1 RTO media **7.69 s**, sd **0.54**, min **6.61**, max **8.17** | `data/cleaned/f1_rto_cnpg.csv` col `rto_s` | estadística sobre las 10 filas |
+| C2 | F1 RTO media **7.69 s**, sd **0.54**, min **6.61**, max **8.17**, IQR **[7.62, 8.01]** | `data/cleaned/f1_rto_cnpg.csv` col `rto_s` | estadística sobre las 10 filas |
 | C3 | F1 **failover 10/10** (primario alterna) | `f1_rto_cnpg.csv` cols `primary_before`≠`primary_after` | comparación por fila |
 | C4 | F1 **RPO = 0** | `parse-verifier.py` (args RPO) sobre tabla `truth` | ids con COMMIT no presentes en `truth` = 0 |
 | C5 | F3 **no promoción 0/12** | `data/cleaned/f3_partition_cnpg.csv` col `promocion`=no (12 filas) | `currentPrimary` invariable por rep |
-| C6 | F3 outage ≈ **duración de la partición** (60 s → 60.74 s) | `f3_partition_cnpg.csv` cols `partition_dur_s`, `outage_s` | gap del verificador vs. duración inyectada |
+| C6 | F3 outage ≈ **duración de la partición** (60 s → 60.75 s mediana; rango 60.73–60.78) | `f3_partition_cnpg.csv` cols `partition_dur_s`, `outage_s` (filas `fija`, n=10) | gap del verificador vs. duración inyectada |
 | C7 | F3 pod **`Ready=True`** durante la partición | `f3_partition_cnpg.csv` col `pod_ready_durante` (sonda larga 300 s) | muestreo de `pod.status` |
 | C8 | F3 **RPO = 0** (por construcción) | — | sin promoción ⇒ sin divergencia |
 | C9 | F3 recuperación **< 1 s** al sanar | `f3_partition_cnpg.csv` (outage − partition_dur) | resto tras eliminar la NetworkPolicy |
