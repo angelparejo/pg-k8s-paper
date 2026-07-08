@@ -4,7 +4,7 @@ Angel A. Parejo R., Universidad de Carabobo — Valencia, Estado Carabobo, Venez
 
 **Resumen**—La adopción de Kubernetes ha impulsado los operadores de PostgreSQL y la Container Storage Interface (CSI), cuya interacción ante fallos rara vez se evalúa de forma conjunta. Este artículo presenta un marco de análisis multicapa —una taxonomía, un modelo formal S = (O, K, M, D) e invariantes de consistencia, disponibilidad y durabilidad— y lo valida mediante inyección controlada de fallos en un clúster productivo. La validación en profundidad cubre CloudNativePG bajo terminación del primario, indisponibilidad sostenida y partición de red; el contraste con operadores basados en Patroni se aborda de forma analítica. Ninguna transacción confirmada se perdió (RPO nulo) en los tres escenarios. El tiempo de recuperación depende de la visibilidad del fallo ante Kubernetes: la recuperación tras matar el pod primario resulta unas 4.6× más rápida que tras fallarlo de forma sostenida, porque la primera dispara una promoción inmediata y la segunda induce la recreación del pod en su sitio, sin promoción; la partición de red preserva la consistencia sin promover.
 
-**Palabras clave**— Kubernetes, PostgreSQL, operadores de bases de datos, CSI, arquitecturas nativas de la nube, sistemas distribuidos, cargas de trabajo, consistencia, resiliencia y conmutación por error (failover)
+**Palabras clave**— Kubernetes, PostgreSQL, CloudNativePG, operadores de bases de datos, CSI, inyección de fallos, arquitecturas nativas de la nube, sistemas distribuidos, consistencia, resiliencia, conmutación por error (failover)
 
 ## I. Introducción
 
