@@ -71,8 +71,10 @@ Contra lo hipotetizado, `pod-failure` **NO produce failover** — **0/10 promoci
   recreando el pod con la imagen real; los `duration: 10m` resultan inefectivos.
 - **RTO (ventana de indisponibilidad de escritura): mediana 36.75 s** (n=10; IQR ~[36.2, 37.1], rango
   35.5–38.3, sd ~0.83). El servicio `-rw` sigue apuntando al primario caído porque no hay promoción.
-  **~4.6× el failover de F1 (7.91 s).** La validación previa (1.ª inyección, retirada a mano) dio ~80 s
-  (outlier de primera-inyección; **excluida**, no está en `results.csv`).
+  **~4.6× el failover de F1 (7.91 s).** La validación previa (1.ª inyección, retirada a mano) dio
+  **≈80.5 s** (hueco 80.54 s; outlier de primera-inyección/arranque en frío; **excluida**, no está en
+  `results.csv`). Dentro del lote hay una asociación positiva débil orden↔RTO (**Spearman ρ≈0.62, n=10,
+  no significativa**, crítico ≈0.65): posible efecto de calentamiento, declarado como limitación (C23/C24).
 - **RPO = 0.** Recuperación limpia (3/3); 4 preexistentes intactos tras cada rep.
 - Datos: `data/cleaned/f2_podfailure_cnpg.csv`.
 
