@@ -36,6 +36,9 @@ Estado: F1 y F3 con datos; **F2 pendiente del lote n=10**; F4 sin cifras (bloque
 | C19 | Replicación de CNPG **asíncrona** (sincronía no variada) | `paper/replication/.../manifiestos/20-cluster/cluster-cnpg.yaml` (sin config `synchronous`; comentario explícito) |
 | C20 | Las **3 instancias co-residen en `tcolp293`** (nodo único del lab; anti-afinidad `topologyKey=hostname` anulada por pool de un nodo) ⇒ failover intra-nodo | `cluster-cnpg.yaml` (affinity) + observación `kubectl get pods -o wide` (exp-1/2/3 en tcolp293) |
 | C21 | Verificador: id **BIGINT monótono de cliente**; reintenta el mismo id ante fallo (outages no crean huecos); cadencia bucle apretado + `sleep 0.2 s`/`PGCONNECT_TIMEOUT 2 s` ⇒ **granularidad RTO ≈0.2 s** | `paper/replication/.../manifiestos/30-workload/tx-verifier-cnpg.yaml` |
+| C22 | **Mann–Whitney F1 vs F2 EXACTA bilateral: p ≈ 1.1×10⁻⁵** (U=0, n1=n2=10; = 2/C(20,10)) | cálculo exacto; z=−3.78/p≈1.6×10⁻⁴ era la aproximación normal (C15) |
+| C23 | **Spearman(índice de repetición, RTO) en F2 = 0.62** (n=10; crítico ≈0.65 a α=0.05 ⇒ **no significativa**) → posible efecto de orden/calentamiento, no descartable | `data/cleaned/f2_podfailure_cnpg.csv` (cols `rep`,`rto_s`) |
+| C24 | **Outlier de F2 excluido: primera inyección (validación) ≈ 80.5 s** (hueco del verificador 80.54 s @22:11) — excluido del lote n=10; efecto de primera-inyección/arranque en frío | `f4-VALIDACION-*.log`/`verifier-cnpg.log`; ver [[project_pilot_execution_state]] |
 
 **Notas de fiabilidad ligadas a cifras:** el id espurio negativo en `truth` (ts 04:56 UTC, previo a
 las ventanas) NO cuenta como RPO (ver results_summary § Nota de fiabilidad). Para F2, el RTO **no** es

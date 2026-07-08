@@ -39,11 +39,18 @@ for k, (sec, id0, t0) in enumerate(big, 1):
 
 if len(sys.argv) >= 6:
     host, user, pw, db = sys.argv[2:6]
-    ids = ",".join(str(c[0]) for c in commits if c[0] > 0)
-    q = f"SELECT id FROM truth WHERE id IN ({ids})"
+    pos = [c[0] for c in commits if c[0] > 0]
+    lo, hi = min(pos), max(pos)
+    # Evitar ARG_MAX: NO enviar todos los ids en un IN(...). El id es un contador
+    # monotono del cliente y el verificador reintenta el mismo id ante fallo, de modo
+    # que un hueco en la secuencia de `truth` = un COMMIT reconocido y perdido (RPO).
+    # Se comprueba server-side la contigüidad sobre el rango confirmado [lo,hi] y que
+    # el ultimo id confirmado persista.
+    q = (f"SELECT ({hi}-{lo}+1)-count(*), count(*) FILTER (WHERE id={hi}) "
+         f"FROM truth WHERE id BETWEEN {lo} AND {hi}")
     out = subprocess.run(["psql", "-h", host, "-U", user, "-d", db, "-tAc", q],
                          env={"PGPASSWORD": pw, "PATH": "/usr/bin:/bin"},
-                         capture_output=True, text=True).stdout.split()
-    visible = {int(x) for x in out}
-    lost = [c[0] for c in commits if c[0] > 0 and c[0] not in visible]
-    print(f"RPO (tx perdidas)   : {len(lost)}  {lost[:20]}")
+                         capture_output=True, text=True).stdout.strip().split("|")
+    faltantes = int(out[0]) if out and out[0].strip().lstrip("-").isdigit() else -1
+    max_ok = (len(out) > 1 and out[1].strip() == "1")
+    print(f"RPO (huecos en truth [{lo}..{hi}]): {faltantes}   ultimo-id-confirmado-presente: {max_ok}")
