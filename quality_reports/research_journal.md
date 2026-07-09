@@ -104,3 +104,17 @@
 **Score:** dominio 83/100, métodos 87/100 (R&R Ronda 2); writer-critic 98/100
 **Verdict:** Reencuadre a estudio en profundidad de CNPG; peer review + R&R → REVISIÓN MENOR, listo para tier primario. MUST (R1) y residuos (R2) aplicados. Cuello de botella: v1-6 conceptual (5 refs pendientes, no sometido). Tier secundario gateado por evidencia nueva (2.º artículo).
 **Report:** quality_reports/reviews/2026-07-08_v2_r2_editorial_decision.md
+
+### 2026-07-08 — Coder (conversión DOCX plantilla IEEE)
+**Phase:** Presentation / Submission-prep (empaquetado de formato)
+**Target:** scripts/md2ieee_docx.py; articulo_angelparejov1-6_IEEE.docx; articulo_angelparejov2-experimental_IEEE.docx
+**Score:** N/A (scripting stdlib, modo simplificado)
+**Verdict:** Script stdlib air-gapped que convierte los .md al template IEEE Conference (OOXML Strict, 2 col) con cumplimiento 100%: conserva el esqueleto del zip byte a byte y regenera solo word/document.xml; elimina numeración manual (autonumeran los estilos); tablas anchas en interludios a 1 columna. Ambos .docx validados (esqueleto idéntico, pStyle definidos, XML bien formado, Strict). Único paso manual: insertar imagen de Fig. 1. Consolidado en main y pusheado (aa0dddd).
+**Report:** SESSION_REPORT.md (entrada 2026-07-08 conversión DOCX); memoria project_docx_ieee_conversion_pending
+
+### 2026-07-08 — coder (md2ieee_docx.py) + writer (v2 markdown)
+**Phase:** Execution (refinamiento de formato, ronda 2)
+**Target:** scripts/md2ieee_docx.py + articulo_angelparejov2-experimental.md → DOCX IEEE
+**Score:** N/A (tarea de formato/edición, revisión visual del usuario)
+**Verdict:** Aplicados 43 amarillos del usuario: backticks→monospace, imagen Markdown incrustada (sin duplicar), §→"Sección", nodo seudónimo nodo-lab-01, "matar"→"terminar", rutas internas→DOI Zenodo, encabezados Tabla II a 2 líneas. Ambos DOCX regenerados y validados (0 backticks/§/rutas; figura 1×).
+**Report:** SESSION_REPORT.md (entrada 2026-07-08 ronda 2); plan quality_reports/plans/2026-07-08_docx-ieee-refinamiento-v2.md

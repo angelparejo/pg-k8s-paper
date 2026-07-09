@@ -28,6 +28,8 @@ import re
 import zipfile
 import shutil
 import tempfile
+import struct
+import zlib
 import xml.dom.minidom as minidom
 
 # --------------------------------------------------------------------------
@@ -73,6 +75,18 @@ DOC_OPEN = (
 )
 DOC_CLOSE = "</w:document>"
 
+# --- Incrustación de figura -----------------------------------------------
+# La línea "ISBN/XX/$XX.00 ©20XX IEEE" del footer de 1.ª página es una nota de
+# copyright de ACTAS DE CONGRESO; no aplica a una revista arbitrada. Se blanquea.
+STRIP_CONF_COPYRIGHT = True
+
+FIG_SENTINEL = "%%FIGURE_DRAWING%%"                 # marcador reemplazado en build_docx
+FIG_SVG_REL = "paper/figures/fig1_modelo_multicapa.svg"   # fuente vectorial
+FIG_RID_PNG = "rId13"                               # respaldo raster
+FIG_RID_SVG = "rId14"                               # SVG nativo (Word 2016+)
+EMU_PER_PT = 12700
+FIG_MAX_PT = 251                                    # ancho de columna (in-column)
+
 # --- sectPr del template (verificados) -----------------------------------
 # Sección de título: 1 columna, titlePg, footer en primera página.
 SECTPR_TITLE = (
@@ -97,18 +111,6 @@ SECTPR_2COL = (
     '<w:docGrid w:linePitch="360"/>'
     '</w:sectPr>'
 )
-# Interludio a 1 columna (continuo) para tablas/figuras que ocupan todo el ancho.
-SECTPR_1COL_SPAN = (
-    '<w:sectPr>'
-    '<w:type w:val="continuous"/>'
-    '<w:pgSz w:w="612pt" w:h="792pt" w:code="1"/>'
-    '<w:pgMar w:top="54pt" w:right="45.35pt" w:bottom="72pt" w:left="45.35pt" '
-    'w:header="36pt" w:footer="36pt" w:gutter="0pt"/>'
-    '<w:cols w:space="36pt"/>'
-    '<w:docGrid w:linePitch="360"/>'
-    '</w:sectPr>'
-)
-
 
 # --------------------------------------------------------------------------
 # Utilidades
@@ -130,7 +132,13 @@ def run(text, bold=False, italic=False):
 
 
 def parse_inline(text):
-    """Convierte **negrita**/*cursiva* en una lista de runs XML."""
+    """Convierte **negrita**/*cursiva* en una lista de runs XML.
+
+    Antes de procesar, une cada cita numérica [n] al texto previo con un espacio
+    de no separación (U+00A0) para que la referencia no quede huérfana al saltar
+    de línea (p. ej. "...recuperación [9]." nunca parte "[9]" a la línea siguiente).
+    """
+    text = re.sub(r"\s+(\[\d+\])", " \\1", text)
     runs = []
     i = 0
     n = len(text)
@@ -143,6 +151,22 @@ def parse_inline(text):
             buf = ""
 
     while i < n:
+        # Salto de línea explícito dentro de la celda/párrafo (<br> o <br/>).
+        if text.startswith("<br/>", i) or text.startswith("<br>", i):
+            flush()
+            runs.append("<w:r><w:br/></w:r>")
+            i += 5 if text.startswith("<br/>", i) else 4
+            continue
+        # Código/identificador en línea `...` -> run en cursiva (sin backticks).
+        # Se integra con el Times del cuerpo (convención académica en español),
+        # en lugar de un segundo tipo de letra monoespaciado.
+        if text[i] == "`":
+            j = text.find("`", i + 1)
+            if j != -1:
+                flush()
+                runs.append(run(text[i + 1:j], italic=True))
+                i = j + 1
+                continue
         if text.startswith("**", i):
             j = text.find("**", i + 2)
             if j != -1:
@@ -163,6 +187,39 @@ def parse_inline(text):
         i += 1
     flush()
     return "".join(runs)
+
+
+def split_author(text):
+    """Descompone la línea de autor en las líneas del bloque IEEE.
+
+    Separadores admitidos entre bloques: em/en dash o guion con espacios.
+    El primer bloque "Nombre, Organización" se parte en dos líneas.
+    El email (con @ y sin espacios) va en su propia línea.
+    """
+    segs = [s.strip() for s in re.split(r"\s+[—–-]\s+", text) if s.strip()]
+    lines = []
+    for s in segs:
+        if "@" in s and " " not in s:            # email / ORCID
+            lines.append(s)
+        elif not lines and "," in s:             # "Nombre, Organización"
+            name, org = s.split(",", 1)
+            lines.append(name.strip())
+            lines.append(org.strip())
+        else:
+            lines.append(s)
+    return lines
+
+
+def build_author(text):
+    """Párrafo Author (centrado, 9 pt) con una línea por dato, como el template."""
+    sz = '<w:rPr><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr>'
+    runs = []
+    for i, ln in enumerate(split_author(text)):
+        br = "<w:br/>" if i > 0 else ""
+        runs.append(f'<w:r>{sz}{br}<w:t xml:space="preserve">{esc(ln)}</w:t></w:r>')
+    # Línea en blanco extra tras el email (separación con el Resumen).
+    runs.append(f'<w:r>{sz}<w:br/></w:r>')
+    return para("Author", "".join(runs))
 
 
 def para(style, inner_runs, extra_ppr="", ind=None):
@@ -186,6 +243,7 @@ RE_REF_NUM = re.compile(r"^\[\d+\]\s+")            # "[1] "
 RE_TABLE_LBL = re.compile(r"^\*\*\s*(?:Tabla|Table|Cuadro)\s+[IVXLC0-9]+\.?\s*\*\*\s*")
 RE_FIG_LBL = re.compile(r"^\*\*\s*(?:Fig\.?|Figura|Figure)\s*[0-9IVXLC]*\.?\s*\*\*\s*")
 RE_HTML_COMMENT = re.compile(r"<!--.*?-->", re.S)
+RE_IMG = re.compile(r"^!\[(.*?)\]\((.*?)\)\s*$")  # ![alt](ruta) -> figura, alt = pie
 
 
 def parse_markdown(md):
@@ -294,6 +352,21 @@ def parse_markdown(md):
             i += 1
             continue
 
+        # Imagen Markdown ![alt](ruta). Si le sigue un pie **Fig. N.** (la línea
+        # ![]() es solo previsualización Markdown de la misma figura), se omite: el
+        # pie ya la incrusta. Si no hay pie, el alt actúa como pie autonumerado.
+        m_img = RE_IMG.match(line)
+        if m_img:
+            k2 = i + 1
+            while k2 < len(lines) and lines[k2].strip() == "":
+                k2 += 1
+            if k2 < len(lines) and RE_FIG_LBL.match(lines[k2].strip()):
+                i += 1
+                continue
+            blocks.append(("figure", m_img.group(1).strip()))
+            i += 1
+            continue
+
         # Viñetas
         if line.startswith("- ") or line.startswith("* "):
             blocks.append(("bullet", line[2:].strip()))
@@ -317,8 +390,13 @@ def parse_markdown(md):
 # --------------------------------------------------------------------------
 # Construcción de la tabla (<w:tbl>)
 # --------------------------------------------------------------------------
-def build_table(rows):
-    """rows: lista de líneas '| a | b |'. La 2ª línea es el separador '|---|'."""
+def build_table(rows, widths_pt=None, center_cols=None):
+    """rows: lista de líneas '| a | b |'. La 2ª línea es el separador '|---|'.
+
+    widths_pt   -- anchos de columna en puntos (lista); si None, reparto proporcional.
+    center_cols -- índices de columnas cuyas celdas de DATOS van centradas
+                   (sobrescribe el jc=both del estilo tablecopy para valores cortos).
+    """
     def cells(r):
         parts = [c.strip() for c in r.strip().strip("|").split("|")]
         return parts
@@ -328,19 +406,23 @@ def build_table(rows):
         return ""
     ncol = max(len(r) for r in data)
     data = [r + [""] * (ncol - len(r)) for r in data]
+    center_cols = center_cols or set()
 
-    # Ancho total ~ ancho de página menos márgenes (612pt - 2*45.35pt) en dxa.
-    total = 10420
-    # Primera columna algo más estrecha; el resto reparte.
-    if ncol >= 2:
-        first = int(total * 0.16)
-        rest = (total - first) // (ncol - 1)
+    # Formato del template: tabla IN-COLUMN (cabe en UNA de las dos columnas).
+    # Ancho de columna del cuerpo a 2 col = (612 - 45.35 - 45.35 - 18) / 2 = 251.65 pt.
+    TOTAL_PT = 251
+    if widths_pt and len(widths_pt) == ncol:
+        widths = list(widths_pt)
+    elif ncol >= 2:
+        first = round(TOTAL_PT * 0.16)          # 1.ª columna más estrecha
+        rest = (TOTAL_PT - first) // (ncol - 1)
         widths = [first] + [rest] * (ncol - 1)
-        widths[-1] = total - first - rest * (ncol - 2) if ncol > 2 else total - first
+        widths[-1] = TOTAL_PT - first - rest * (ncol - 2)  # ajuste para sumar exacto
     else:
-        widths = [total]
+        widths = [TOTAL_PT]
+    wpt = [f"{w}pt" for w in widths]
 
-    grid = "".join(f'<w:gridCol w:w="{w}"/>' for w in widths)
+    grid = "".join(f'<w:gridCol w:w="{w}"/>' for w in wpt)
 
     tblpr = (
         "<w:tblPr>"
@@ -355,6 +437,11 @@ def build_table(rows):
         '<w:insideV w:val="single" w:sz="2" w:space="0" w:color="auto"/>'
         "</w:tblBorders>"
         '<w:tblLayout w:type="fixed"/>'
+        # Márgenes de celda reducidos (2pt L/R) para aprovechar el ancho in-column.
+        "<w:tblCellMar>"
+        '<w:top w:w="0pt" w:type="dxa"/><w:start w:w="2pt" w:type="dxa"/>'
+        '<w:bottom w:w="0pt" w:type="dxa"/><w:end w:w="2pt" w:type="dxa"/>'
+        "</w:tblCellMar>"
         '<w:tblLook w:firstRow="0" w:lastRow="0" w:firstColumn="0" '
         'w:lastColumn="0" w:noHBand="0" w:noVBand="0"/>'
         "</w:tblPr>"
@@ -366,8 +453,11 @@ def build_table(rows):
         style = "tablecolhead" if is_head else "tablecopy"
         tcs = []
         for ci, cell in enumerate(r):
-            tcpr = f'<w:tcPr><w:tcW w:w="{widths[ci]}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr>'
-            p = f'<w:p><w:pPr><w:pStyle w:val="{style}"/></w:pPr>{parse_inline(cell)}</w:p>'
+            tcpr = f'<w:tcPr><w:tcW w:w="{wpt[ci]}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr>'
+            ppr = f'<w:pStyle w:val="{style}"/>'
+            if (not is_head) and ci in center_cols:
+                ppr += '<w:jc w:val="center"/>'   # centra valores cortos bajo su encabezado
+            p = f'<w:p><w:pPr>{ppr}</w:pPr>{parse_inline(cell)}</w:p>'
             tcs.append(f"<w:tc>{tcpr}{p}</w:tc>")
         trpr = "<w:trPr><w:cantSplit/>" + ('<w:tblHeader/>' if is_head else "") + \
                '<w:jc w:val="center"/></w:trPr>'
@@ -385,15 +475,13 @@ REF_IND = '<w:ind w:start="17.70pt" w:hanging="17.70pt"/>'
 def build_body(blocks):
     out = []            # cadenas XML de párrafos/tablas
     author_idx = None
-    table_spans = []    # (idx_pre, idx_table_end) para cada tabla ancha
-    pending_pre = None  # índice del párrafo previo a un título tablehead
 
     for k, (kind, payload) in enumerate(blocks):
         if kind == "title":
             out.append(para("papertitle", parse_inline(payload)))
         elif kind == "author":
             author_idx = len(out)
-            out.append(para("Author", parse_inline(payload)))
+            out.append(build_author(payload))
         elif kind == "abstract":
             # rótulo "Resumen" en cursiva + em dash + cuerpo
             inner = run("Resumen", italic=True) + run("—") + parse_inline(payload)
@@ -414,40 +502,35 @@ def build_body(blocks):
         elif kind == "reference":
             out.append(para("references", parse_inline(payload), ind=REF_IND))
         elif kind == "figure":
-            # marcador de imagen (paso manual) + pie autonumerado
-            marker = run("[INSERTAR AQUÍ: paper/figures/fig1_modelo_multicapa.pdf]")
-            out.append(para("BodyText", marker))
+            # párrafo centrado con la imagen (sentinel → drawing en build_docx)
+            # seguido del pie autonumerado ("Fig. n.")
+            out.append(f'<w:p><w:pPr><w:jc w:val="center"/></w:pPr>{FIG_SENTINEL}</w:p>')
             out.append(para("figurecaption", parse_inline(payload)))
         elif kind == "tablehead":
-            # el párrafo emitido justo antes cierra la corrida a 2 columnas
-            pending_pre = len(out) - 1
             out.append(para("tablehead", parse_inline(payload)))
         elif kind == "table":
-            out.append(build_table(payload))
-            # si no hubo tablehead inmediatamente antes, el "pre" es el párrafo previo
-            pre = pending_pre if pending_pre is not None else len(out) - 2
-            table_spans.append((pre, len(out) - 1))
-            pending_pre = None
+            # Todas las tablas IN-COLUMN: fluyen dentro de la columna, sin
+            # saltos de sección (preserva el flujo de dos columnas del template).
+            header = payload[0] if payload else ""
+            if "¿Promueve?" in header:
+                # Tabla II (v2): col. "Escenario" reducida a F1–F4 (el mecanismo
+                # va en la nota), lo que libera ancho para encabezados completos.
+                # Encabezados largos en 2 líneas (<br> en el .md); datos centrados.
+                out.append(build_table(
+                    payload,
+                    widths_pt=[42, 50, 68, 20, 71],   # suma 251 pt (in-column)
+                    center_cols={1, 2, 3, 4},
+                ))
+            else:
+                out.append(build_table(payload))
         else:  # body
             out.append(para("BodyText", parse_inline(payload)))
 
-    # --- Inyección de saltos de sección ---
     # Sección 0 (título+autor) a 1 columna: sectPr en el párrafo del autor.
     if author_idx is not None:
         out[author_idx] = _inject_sectpr(out[author_idx], SECTPR_TITLE)
 
-    # Cada tabla ancha => interludio a 1 columna. Se procesa de la última a la
-    # primera para que las inserciones no invaliden los índices anteriores.
-    closer = f"<w:p><w:pPr>{SECTPR_1COL_SPAN}</w:pPr></w:p>"
-    for pre, tend in sorted(table_spans, reverse=True):
-        out.insert(tend + 1, closer)  # cierra el interludio a 1 columna tras la tabla
-        if 0 <= pre < len(out) and out[pre].startswith("<w:p>") and "<w:pPr>" in out[pre]:
-            out[pre] = _inject_sectpr(out[pre], SECTPR_2COL)  # cierra la corrida a 2 columnas
-        else:
-            # no hay párrafo apto antes de la tabla: inserta un cierre explícito
-            out.insert(pre + 1, f"<w:p><w:pPr>{SECTPR_2COL}</w:pPr></w:p>")
-
-    # sectPr final del documento: cuerpo a 2 columnas (continuo)
+    # sectPr final del documento: cuerpo a 2 columnas (continuo).
     return "<w:body>" + "".join(out) + SECTPR_2COL + "</w:body>"
 
 
@@ -455,6 +538,91 @@ def _inject_sectpr(paragraph_xml, sectpr):
     """Inserta un sectPr dentro del <w:pPr> de un <w:p> ya serializado."""
     assert paragraph_xml.startswith("<w:p>") and "<w:pPr>" in paragraph_xml
     return paragraph_xml.replace("</w:pPr>", sectpr + "</w:pPr>", 1)
+
+
+# --------------------------------------------------------------------------
+# Figura: PNG de respaldo (stdlib) + drawing XML con SVG nativo
+# --------------------------------------------------------------------------
+def _png_chunk(tag, data):
+    return (struct.pack(">I", len(data)) + tag + data
+            + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF))
+
+
+def make_png(width, height, rects):
+    """PNG RGB (stdlib). `rects`: lista de (x, y, w, h, (r, g, b)) sobre fondo blanco."""
+    row = bytearray([255, 255, 255] * width)
+    buf = [bytearray(row) for _ in range(height)]
+    for x, y, w, h, (r, g, b) in rects:
+        for yy in range(max(0, y), min(height, y + h)):
+            line = buf[yy]
+            for xx in range(max(0, x), min(width, x + w)):
+                line[xx * 3:xx * 3 + 3] = bytes((r, g, b))
+    raw = bytearray()
+    for line in buf:
+        raw += b"\x00" + line
+    comp = zlib.compress(bytes(raw), 9)
+    ihdr = struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0)
+    return (b"\x89PNG\r\n\x1a\n" + _png_chunk(b"IHDR", ihdr)
+            + _png_chunk(b"IDAT", comp) + _png_chunk(b"IEND", b""))
+
+
+def _hex(c):
+    return (int(c[1:3], 16), int(c[3:5], 16), int(c[5:7], 16))
+
+
+def build_figure_assets(svg_bytes):
+    """Devuelve (drawing_xml, png_bytes). Escala in-column por el ancho de columna."""
+    m = re.search(rb'viewBox="([\d.\s]+)"', svg_bytes)
+    vw, vh = (620.0, 566.0)
+    if m:
+        nums = [float(x) for x in m.group(1).split()]
+        if len(nums) == 4:
+            vw, vh = nums[2], nums[3]
+    cx = int(round(FIG_MAX_PT * EMU_PER_PT))
+    cy = int(round(FIG_MAX_PT * (vh / vw) * EMU_PER_PT))
+
+    # Respaldo raster (escala 0.5 del viewBox): cajas de colores del modelo, sin texto.
+    sx = 0.5
+    pw, ph = int(vw * sx), int(vh * sx)
+    boxes = [(90, 26, "#dbeafe"), (90, 156, "#e2e8f0"),
+             (90, 286, "#dcfce7"), (90, 416, "#fef3c7")]  # O, K, D, M
+    rects = []
+    for bx, by, col in boxes:
+        rects.append((int(bx * sx), int(by * sx), int(440 * sx), int(80 * sx), _hex(col)))
+    for ay in (106, 236, 366):  # flechas verticales
+        rects.append((int(309 * sx), int(ay * sx), 2, int(48 * sx), (0x33, 0x41, 0x55)))
+    png = make_png(pw, ph, rects)
+
+    A = "http://purl.oclc.org/ooxml/drawingml/main"
+    PIC = "http://purl.oclc.org/ooxml/drawingml/picture"
+    ASVG = "http://schemas.microsoft.com/office/drawing/2016/SVG/main"
+    drawing = (
+        "<w:drawing>"
+        '<wp:inline distT="0" distB="0" distL="0" distR="0">'
+        f'<wp:extent cx="{cx}" cy="{cy}"/>'
+        '<wp:effectExtent l="0" t="0" r="0" b="0"/>'
+        '<wp:docPr id="1" name="Figura 1 - Modelo multicapa"/>'
+        f'<wp:cNvGraphicFramePr><a:graphicFrameLocks xmlns:a="{A}" noChangeAspect="1"/></wp:cNvGraphicFramePr>'
+        f'<a:graphic xmlns:a="{A}">'
+        f'<a:graphicData uri="{PIC}">'
+        f'<pic:pic xmlns:pic="{PIC}">'
+        '<pic:nvPicPr><pic:cNvPr id="1" name="fig1_modelo_multicapa"/><pic:cNvPicPr/></pic:nvPicPr>'
+        "<pic:blipFill>"
+        f'<a:blip r:embed="{FIG_RID_PNG}">'
+        '<a:extLst><a:ext uri="{96DAC541-7B7A-43D3-8B79-37D633B846F1}">'
+        f'<asvg:svgBlip xmlns:asvg="{ASVG}" r:embed="{FIG_RID_SVG}"/>'
+        "</a:ext></a:extLst>"
+        "</a:blip>"
+        "<a:stretch><a:fillRect/></a:stretch>"
+        "</pic:blipFill>"
+        "<pic:spPr>"
+        f'<a:xfrm><a:off x="0" y="0"/><a:ext cx="{cx}" cy="{cy}"/></a:xfrm>'
+        '<a:prstGeom prst="rect"><a:avLst/></a:prstGeom>'
+        "</pic:spPr>"
+        "</pic:pic></a:graphicData></a:graphic>"
+        "</wp:inline></w:drawing>"
+    )
+    return drawing, png
 
 
 # --------------------------------------------------------------------------
@@ -467,6 +635,22 @@ def build_docx(md_path, template_path, out_path):
     body = build_body(blocks)
     document_xml = DOC_OPEN + body + DOC_CLOSE
 
+    # --- Figura: incrustar SVG (+ PNG de respaldo) o degradar a marcador ---
+    fig_embedded = False
+    png_bytes = None
+    svg_bytes = None
+    if FIG_SENTINEL in document_xml:
+        svg_path = os.path.join(os.path.dirname(os.path.abspath(md_path)), FIG_SVG_REL)
+        if os.path.exists(svg_path):
+            with open(svg_path, "rb") as f:
+                svg_bytes = f.read()
+            drawing, png_bytes = build_figure_assets(svg_bytes)
+            document_xml = document_xml.replace(FIG_SENTINEL, "<w:r>" + drawing + "</w:r>")
+            fig_embedded = True
+        else:
+            marker = run(f"[INSERTAR AQUÍ: {FIG_SVG_REL} — no encontrado]")
+            document_xml = document_xml.replace(FIG_SENTINEL, marker)
+
     # Validación de buen formato XML
     minidom.parseString(document_xml.encode("utf-8"))
 
@@ -478,16 +662,67 @@ def build_docx(md_path, template_path, out_path):
         # Reescribe SOLO document.xml
         with open(os.path.join(tmp, "word", "document.xml"), "w", encoding="utf-8") as f:
             f.write(document_xml)
-        # Reempaqueta conservando el orden original
+
+        # Blanquea la nota de copyright de actas de congreso (©20XX IEEE) del
+        # footer de 1.ª página: no aplica a una revista arbitrada.
+        footer_path = os.path.join(tmp, "word", "footer1.xml")
+        if STRIP_CONF_COPYRIGHT and os.path.exists(footer_path):
+            with open(footer_path, encoding="utf-8") as f:
+                ftr = f.read()
+            ftr2 = re.sub(r"(<w:t[^>]*>)[^<]*IEEE[^<]*(</w:t>)", r"\1\2", ftr)
+            if ftr2 != ftr:
+                with open(footer_path, "w", encoding="utf-8") as f:
+                    f.write(ftr2)
+
+        extra = []  # archivos añadidos (media) que no están en el template
+        if fig_embedded:
+            os.makedirs(os.path.join(tmp, "word", "media"), exist_ok=True)
+            with open(os.path.join(tmp, "word", "media", "image1.png"), "wb") as f:
+                f.write(png_bytes)
+            with open(os.path.join(tmp, "word", "media", "image2.svg"), "wb") as f:
+                f.write(svg_bytes)
+            extra = ["word/media/image1.png", "word/media/image2.svg"]
+
+            # Relaciones de imagen en document.xml.rels
+            rels_path = os.path.join(tmp, "word", "_rels", "document.xml.rels")
+            with open(rels_path, encoding="utf-8") as f:
+                rels = f.read()
+            add = (
+                f'<Relationship Id="{FIG_RID_PNG}" '
+                'Type="http://purl.oclc.org/ooxml/officeDocument/relationships/image" '
+                'Target="media/image1.png"/>'
+                f'<Relationship Id="{FIG_RID_SVG}" '
+                'Type="http://purl.oclc.org/ooxml/officeDocument/relationships/image" '
+                'Target="media/image2.svg"/>'
+            )
+            rels = rels.replace("</Relationships>", add + "</Relationships>")
+            with open(rels_path, "w", encoding="utf-8") as f:
+                f.write(rels)
+
+            # Content types: Default para png y svg
+            ct_path = os.path.join(tmp, "[Content_Types].xml")
+            with open(ct_path, encoding="utf-8") as f:
+                ct = f.read()
+            ins = ""
+            if 'Extension="png"' not in ct:
+                ins += '<Default Extension="png" ContentType="image/png"/>'
+            if 'Extension="svg"' not in ct:
+                ins += '<Default Extension="svg" ContentType="image/svg+xml"/>'
+            ct = ct.replace("<Default Extension=\"xml\"",
+                            ins + "<Default Extension=\"xml\"", 1)
+            with open(ct_path, "w", encoding="utf-8") as f:
+                f.write(ct)
+
+        # Reempaqueta conservando el orden original + media añadida
         if os.path.exists(out_path):
             os.remove(out_path)
         with zipfile.ZipFile(out_path, "w", zipfile.ZIP_DEFLATED) as z:
-            for name in names:
+            for name in names + extra:
                 z.write(os.path.join(tmp, name), name)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
-    return blocks, document_xml
+    return blocks, document_xml, fig_embedded
 
 
 def main():
@@ -495,7 +730,7 @@ def main():
         print(__doc__)
         sys.exit(1)
     md_path, template_path, out_path = sys.argv[1:4]
-    blocks, doc = build_docx(md_path, template_path, out_path)
+    blocks, doc, fig_embedded = build_docx(md_path, template_path, out_path)
 
     # Reporte por estilo
     from collections import Counter
@@ -509,6 +744,7 @@ def main():
     tbls = doc.count("<w:tbl>")
     print(f"[OK] Tablas <w:tbl>: {tbls}")
     print(f"[OK] Saltos de sección <w:sectPr>: {doc.count('<w:sectPr>')}")
+    print(f"[OK] Figura incrustada (SVG + PNG respaldo): {'SÍ' if fig_embedded else 'no (marcador)'}")
 
 
 if __name__ == "__main__":
