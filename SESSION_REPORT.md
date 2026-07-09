@@ -382,3 +382,29 @@
 **Status:**
 - Done: script + markdown v2 refinados; ambos DOCX regenerados y validados.
 - Pending: (1) usuario debe crear depósito Zenodo y sustituir DOI placeholder; (2) revisión visual de Tabla II y guiones; (3) commit + push tras aprobación (aún SIN COMMITEAR, incluye la ronda 1 previa).
+
+## 2026-07-08 23:28 — Cierre: refinamiento DOCX v2 + terminología K8s + Peer Review R3
+
+**Operations:**
+- scripts/md2ieee_docx.py: backticks→cursiva; soporte <br>; imagen ![alt](ruta) (omite si sigue **Fig.**); pie copyright de congreso blanqueado (STRIP_CONF_COPYRIGHT); Tabla II in-column con encabezados completos y anchos [42,50,68,20,71]. (Se probó y REVIRTIÓ el ancho completo/interludio 1-col: rompe el flujo de 2 columnas en Word.)
+- articulo_angelparejov2-experimental.md: terminología F1=eliminación/F2=fallo sostenido; "promoción de una réplica" explícita en resumen; § → Sección; nodo → seudónimo nodo-lab-01; datos "a petición" (sin Zenodo); Tabla II reducida (Escenario=F1-F4, mecanismo a la nota); corrección "(regla de tres)" → "(Clopper–Pearson)" en §VI L208.
+- Re-evaluación por pares R3: 3 agentes (domain-referee, methods-referee, writer-critic) en paralelo; 4 reportes en quality_reports/reviews/2026-07-08_v2_r3_*.
+- Borrador de correo a profesoras asesoras (cambio de alcance) — no persistido, uso puntual.
+
+**Decisions:**
+- Terminología fiel a K8s (eliminación vs fallo sostenido) — pod-kill borra el objeto Pod vía API; sostiene la tesis de visibilidad. NO "matar"/"terminar".
+- Identificadores en cursiva (no monospace: Courier hacía ruido en Times).
+- Datos "a petición" (no Zenodo) — meta = revista arbitrada; clúster productivo restringido.
+- Tabla II in-column por reducción de contenido (no dividir, no transponer, no ancho completo).
+
+**Results:**
+- Peer Review R3: dominio 83→85, métodos 87→89, writer-critic 98→98; agregado ≈88.7→90.2. Veredicto: Revisión Menor, LISTO PARA TIER PRIMARIO.
+- Ambos DOCX (v1-6, v2) regenerados y validados.
+
+**Commits:**
+- `623aad8` DOCX IEEE v2: refinamiento de formato + terminología K8s + Tabla II in-column (pusheado)
+- `db3d827` Peer review Ronda 3 (v2): re-evaluación + corrección Clopper–Pearson (pusheado)
+
+**Status:**
+- Done: refinamiento DOCX v2 completo, terminología, Tabla II, R3 aprobada, todo en origin/main.
+- Pending: elegir revista arbitrada objetivo (alinear plantilla); arreglar 5 refs del v1-6 conceptual (va PRIMERO); revisión visual opcional de rayas de inciso; el v2 espera su turno tras someter el v1.
