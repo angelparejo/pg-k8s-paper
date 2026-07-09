@@ -301,3 +301,84 @@
 **Status:**
 - Done: v2 reencuadrado, revisado (Menor) y con residuos aplicados; todo commiteado. Sin push.
 - Pending: v1-6 (aplicar 5 refs + [Accessed] + elegir revista primaria); luego LaTeX + empaquetado del v2 citando al v1; Nivel-3 (fallo de nodo real, multi-operador) para el 2.º artículo.
+
+## 2026-07-08 05:20 — Pausa por tokens: refs corregidas; conversión DOCX IEEE pendiente
+
+**Operations:**
+- Corregidas las 5 referencias dudosas ([5],[10],[11],[14],[15]) en v1-6 Y v2 con fuentes reales verificadas por web (Crossref/Springer/ACM/MDPI); [15] era fabricada (Santos/FGCS) → C. Mega SummerSOC 2023. Commit e6c8024.
+- v1-6: fechas de acceso reales en [19][20][21] + [17] preciso (lineage-driven, no "framework Jepsen"). Commit 670a790.
+- Analizado conference-template-letter.docx = template IEEE Conference (US Letter, 2 col, OOXML Strict). Sin conversores (pandoc/LO/python-docx). Método decidido: regenerar solo word/document.xml reutilizando el esqueleto del template, script stdlib scripts/md2ieee_docx.py vía coder.
+
+**Decisions:**
+- [15] fabricada corregida en AMBOS artículos (integridad cruzada).
+- Conversión DOCX: por defecto v1-6 primero; script reutilizable para v2.
+
+**Status:**
+- Done: integridad de referencias cerrada en ambos artículos (todo commiteado hasta 670a790).
+- Pending: generar el .docx IEEE (ver memoria project_docx_ieee_conversion_pending — método, mapeo y caveats listos; figura = paso manual); elegir revista primaria (diferido por el usuario). SESSION_REPORT/research_journal quedan sin commitear.
+
+## 2026-07-08 — Conversión DOCX IEEE COMPLETADA + consolidación git
+
+**Operations:**
+- Reconocimiento del template `conference-template-letter.docx`: confirmado OOXML *Strict* (`w:conformance="strict"`); extraídos los `<w:sectPr>` reales (título 1-col + titlePg/footer rId8; cuerpo 2-col continuo); verificada la AUTONUMERACIÓN en `numbering.xml` (Heading1=I., Heading2=A., references=[n], figurecaption=Fig. n., tablehead=TABLE I., bulletlist=viñeta); mapeados los estilos del template.
+- Creado `scripts/md2ieee_docx.py` (Python stdlib puro, air-gapped): conserva el esqueleto del zip byte a byte y regenera SOLO `word/document.xml` en namespace Strict; elimina la numeración manual del .md; envuelve tablas anchas en interludios a 1 columna con saltos de sección; rótulos "Resumen—"/"Palabras Clave—"; encabezados sin numeral romano → Heading5 sin numerar.
+- Generados y validados: `articulo_angelparejov1-6_IEEE.docx` (6 H1, 9 H2, 23 refs, 1 tabla, 4 sectPr) y `articulo_angelparejov2-experimental_IEEE.docx` (8 H1, 14 H2, 2 H5, 27 refs, 2 tablas, 6 sectPr).
+- Validación (ambos): 18 archivos del zip, esqueleto byte-idéntico al template salvo document.xml; todos los pStyle existen en styles.xml; XML bien formado; Strict OK.
+- Git: commit aa0dddd; movido a rama feature y de vuelta (best practice), luego CONSOLIDADO en main por decisión del usuario (flujo solo-autor). `git push origin main`: publicados 26 commits pendientes (d36c408..aa0dddd); rama feature borrada local+remota. origin/main YA sincronizado.
+
+**Decisions:**
+- Hacerlo directo (sin agente coder): ya tenía toda la verdad de campo del template; más eficiente.
+- Flujo git solo-autor: trabajar en main y hacer push al cerrar sesión; ramas solo para experimentos descartables.
+
+**Results:**
+- Documentos Word finales en la RAÍZ del repo: `articulo_angelparejov1-6_IEEE.docx` y `articulo_angelparejov2-experimental_IEEE.docx`.
+- Único paso manual pendiente en cada .docx: insertar la imagen de la Fig. 1 (marcador `[INSERTAR AQUÍ: paper/figures/fig1_modelo_multicapa.pdf]`).
+
+**Commits:**
+- `aa0dddd` DOCX IEEE: script stdlib md2ieee_docx.py + salidas v1-6 y v2 (ahora en main, pusheado)
+
+**Status:**
+- Done: conversión DOCX IEEE de ambos artículos con cumplimiento 100%; script reutilizable; main pusheado a GitHub.
+- Pending: insertar Fig. 1 manualmente en los .docx; elegir revista primaria (diferido); SESSION_REPORT/research_journal de esta entrada sin commitear (sesión no cerrada).
+
+## 2026-07-08 — Refinamiento de formato DOCX IEEE (EN CURSO, pausa ~1h)
+
+**Contexto:** iterando el formato de los .docx generados por scripts/md2ieee_docx.py sobre revisión visual del usuario. Base = commit aa0dddd (ya en main/GitHub). TODO lo de esta sesión está SIN COMMITEAR (working tree: scripts/md2ieee_docx.py, ambos .docx, SESSION_REPORT.md, research_journal.md).
+
+**Cambios YA aplicados y validados (regenerar con los 2 comandos de abajo reproduce el estado):**
+1. Tablas IN-COLUMN fieles al template (antes cruzaban a ancho completo vía saltos de sección; se eliminaron). Anchos en PUNTOS, tblW=0pt/auto, centradas, tblLayout fixed. Solo 2 sectPr (título + cuerpo).
+2. Figura Fig. 1 INCRUSTADA en ambos: SVG nativo (paper/figures/fig1_modelo_multicapa.svg, Word 2016+) + PNG de respaldo generado en stdlib (cajas de colores O/K/D/M, sin texto). Añade word/media/image1.png + image2.svg, rId13(png)/rId14(svg) en document.xml.rels, Default png/svg en [Content_Types].xml. Resto del esqueleto sigue byte-idéntico. Drawing con svgBlip, in-column (251pt ancho).
+3. Bloque de AUTOR multilínea (antes 1 sola línea): párrafo Author sz=18 (9pt) con 4 líneas por <w:br/> — Nombre / Universidad de Carabobo / Valencia, Estado Carabobo, Venezuela / email — + 1 línea en blanco extra tras el email. Parser split_author() separa por em-dash y parte "Nombre, Organización".
+4. nbsp (U+00A0) antes de TODA cita [n] del cuerpo (parse_inline) para que no queden huérfanas al saltar de línea (v1-6: 62 citas, v2: 73). Fix pedido para "...recuperación [9].".
+5. Tabla II (v2, detectada por "¿Promueve?" en el header): anchos a medida [40,55,92,22,42]pt, márgenes de celda reducidos a 2pt L/R, valores de las 4 columnas derechas centrados (center_cols={1,2,3,4}, jc override sobre tablecopy). Encabezado "Escenario (mecanismo)" angosto para partir en 2 líneas; ¿Promueve? y RTO/indisponibilidad ensanchados para 1 línea; RPO reducida.
+
+**PENDIENTE (lo que dijo el usuario: "aun hay que ajustar"):**
+- Revisar visualmente Tabla II en el v2: RTO/indisponibilidad (92pt) está AL BORDE de caber en 1 línea con métricas estimadas de Times 8pt; si aún se parte, la salida limpia es sacar SOLO esa tabla a ancho completo (table*, cruzando 2 columnas) — el mecanismo de saltos de sección ya existió y se puede reintroducir selectivamente. "(mecanismo)" podría partirse una línea más.
+- Confirmar si "justificar valores" = centrado (lo que hice) o justificado estricto (jc=both del template). Si es lo segundo, quitar el center_cols.
+- Posibles ajustes adicionales del usuario tras revisar.
+- Cuando el usuario apruebe: commitear TODO el conjunto en main + push (flujo solo-autor ya acordado). Actualizar memoria project_docx_ieee_conversion_pending.
+
+**Comandos para regenerar (reproduce el estado actual):**
+- `python3 scripts/md2ieee_docx.py articulo_angelparejov1-6.md conference-template-letter.docx articulo_angelparejov1-6_IEEE.docx`
+- `python3 scripts/md2ieee_docx.py articulo_angelparejov2-experimental.md conference-template-letter.docx articulo_angelparejov2-experimental_IEEE.docx`
+
+**Datos del template (verificados, no re-derivar):** tablecolhead sz=16(8pt) negrita; tablecopy sz=16 jc=both(justificado); tablehead jc=center; márgenes de celda default 5.4pt/lado; ancho de columna del cuerpo 2-col ≈ 251pt; autonumeración Heading1=I. / Heading2=A. / references=[n] / figurecaption=Fig.n. / tablehead=TABLE I.; Author sz=18 con 5 líneas por <w:br/>.
+
+## 2026-07-08 — Refinamiento DOCX IEEE v2 (ronda 2: amarillos revisión usuario)
+
+**Contexto:** el usuario revisó `articulo_angelparejov2-experimental_IEEE_rev.docx` y marcó 43 fragmentos en amarillo. Decisiones tomadas vía AskUserQuestion. Plan: `quality_reports/plans/2026-07-08_docx-ieee-refinamiento-v2.md`.
+
+**Decisiones (usuario):** Q1 resultados → Tabla II + repo público Zenodo con DOI; Q2 nodo → seudónimo `nodo-lab-01`; Q3 código → monospace (Courier New); Q4 "matar" → formalizar a "terminar".
+
+**Operations:**
+- `scripts/md2ieee_docx.py`: (1) `run()` +param `mono`→rFonts Courier New; (2) `parse_inline()` maneja `` `código` ``→mono y `<br>`→`<w:br/>`; (3) `parse_markdown()` reconoce `![alt](ruta)`→figura, OMITE la imagen si le sigue un pie `**Fig.**` (evita figura duplicada en v2, que tiene ambas); (4) anchos Tabla II `[56,38,76,22,59]`.
+- `articulo_angelparejov2-experimental.md`: "matar"→"terminar" (×2)+"del kill"→"de la terminación"; `tcolp293`→`nodo-lab-01` (×2); `§X`→"Sección X"/"Secciones" (×9); raya final L110→coma; nota Tabla II sin ruta; encabezados Tabla II con `<br>`; sección "Disponibilidad de datos" reescrita con DOI Zenodo (placeholder 10.5281/zenodo.XXXXXXX).
+- Regenerados ambos DOCX.
+
+**Results (validación v2):** 0 backticks, 0 `![`, 0 §, 0 tcolp293, 0 "matar", 0 rutas internas; 2 `nodo-lab-01`, 165 runs Courier, 1 figura incrustada, 1 DOI Zenodo, 2 tablas.
+
+**Decisiones de experto aplicadas sin pregunta:** § no es estilo IEEE→"Sección"; guiones de inciso —RAE correcto— se mantienen; `f(·)` es notación válida, sin cambio.
+
+**Status:**
+- Done: script + markdown v2 refinados; ambos DOCX regenerados y validados.
+- Pending: (1) usuario debe crear depósito Zenodo y sustituir DOI placeholder; (2) revisión visual de Tabla II y guiones; (3) commit + push tras aprobación (aún SIN COMMITEAR, incluye la ronda 1 previa).
