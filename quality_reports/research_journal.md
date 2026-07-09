@@ -118,3 +118,10 @@
 **Score:** N/A (tarea de formato/edición, revisión visual del usuario)
 **Verdict:** Aplicados 43 amarillos del usuario: backticks→monospace, imagen Markdown incrustada (sin duplicar), §→"Sección", nodo seudónimo nodo-lab-01, "matar"→"terminar", rutas internas→DOI Zenodo, encabezados Tabla II a 2 líneas. Ambos DOCX regenerados y validados (0 backticks/§/rutas; figura 1×).
 **Report:** SESSION_REPORT.md (entrada 2026-07-08 ronda 2); plan quality_reports/plans/2026-07-08_docx-ieee-refinamiento-v2.md
+
+### 2026-07-08 — Peer Review Ronda 3 (re-evaluación tras sesión DOCX IEEE)
+**Phase:** Peer Review
+**Target:** articulo_angelparejov2-experimental.md (commit 623aad8)
+**Score:** dominio 83→85, métodos 87→89, writer-critic 98→98; promedio árbitros 85→87; agregado ≈88.7→90.2
+**Verdict:** Revisión Menor — listo para tier primario. Terminología K8s (eliminación/fallo sostenido) sube dominio y métodos; residuos R2 cerrados. MUST único: corregir etiqueta "(regla de tres)"→Clopper–Pearson en §VI (línea 208, valores ya correctos).
+**Report:** quality_reports/reviews/2026-07-08_v2_r3_editorial_decision.md (+ 3 reportes r3)
