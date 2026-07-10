@@ -86,6 +86,9 @@ este paper (idioma, formato regional, competitividad). Solo aspiracional.
 
 ## 4. Recomendación (2026-07-09, tras verificar deadlines)
 
+> **DECISIÓN 2026-07-10 (usuario):** el v2 va a **CACIC 2026 (sprint)**. Se ejecuta el plan de recorte/reformateo LNCS (§8.3, plan APPROVED). El v1-6 se sube a Zenodo → el v2 cita [v1-6] con DOI (placeholder hasta obtenerlo). Se elige la opción 2 de §7 (v2 a CACIC citando al v1-6 como preprint).
+
+
 1. 🎯 **Ventana urgente → CACIC 2026 (deadline 29-jul-2026, ~20 días).** Español, formato IEEE
    ya listo (~10 pp), congreso de referencia en Argentina (RedUNCI). Es la única venue con
    deadline abierto y encaje total idioma+formato. **Decisión bloqueante:** choca con la

@@ -1,6 +1,6 @@
 # Plan — Recorte y reformateo del v2-experimental a LNCS para CACIC 2026
 
-**Estado:** DRAFT (pendiente de aprobación + de decidir si vamos a CACIC — ver §7 de `convocatorias_y_venues.md`)
+**Estado:** BLOQUES 1–3 COMPLETADOS (2026-07-10). Recorte + reformateo LNCS + compuerta de calidad hechos → `paper/cacic/main.tex` compila en **10 páginas** con `llncs.cls` (pdflatex), sin refs indefinidas ni overfull, resumen ~145 palabras. Externalizadas §III–IV al `[v1-6]` (Tabla I eliminada, refs Patroni/Crunchy/Raft/k8s-nodes trasladadas al v1-6 → 20 refs). **writer-critic: 96/100** (informe `quality_reports/reviews/2026-07-10_v2-cacic_writer-critic.md`; 3 retoques de estilo aplicados). Pendientes SOLO administrativos: (a) **workshop = WPDP** (Procesamiento Distribuido y Paralelo — ELEGIDO 2026-07-10); (b) sustituir DOI real de `[parejo2026]` cuando el usuario suba el v1-6 a Zenodo; (c) confirmar sistema de envío SAC del congreso.
 **Fecha:** 2026-07-09
 **Deadline duro:** 29/07/2026 (~20 días)
 **Objetivo:** producir `articulo_angelparejov2-cacic.*` en **formato Springer LNCS (1 col, A4, 10 pt), ≤10 páginas**, en español, apto para envío a CACIC 2026 (workshop WPDP / WBDDM / WARSO).
