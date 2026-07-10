@@ -125,3 +125,10 @@
 **Score:** dominio 83→85, métodos 87→89, writer-critic 98→98; promedio árbitros 85→87; agregado ≈88.7→90.2
 **Verdict:** Revisión Menor — listo para tier primario. Terminología K8s (eliminación/fallo sostenido) sube dominio y métodos; residuos R2 cerrados. MUST único: corregir etiqueta "(regla de tres)"→Clopper–Pearson en §VI (línea 208, valores ya correctos).
 **Report:** quality_reports/reviews/2026-07-08_v2_r3_editorial_decision.md (+ 3 reportes r3)
+
+### 2026-07-09 — Librarian / Orchestrator (venues + estructura de trabajo)
+**Phase:** Presentation / Submission-prep
+**Target:** opciones de publicación del v2; hacer citable el v1-6; ramas de publicación
+**Score:** N/A
+**Verdict:** Deadlines verificados (CACIC 2026 ABIERTO hasta 29-jul; bases = LNCS 1-col ≤10 pp, NO IEEE → v2 requiere recorte ~49%). v1-6 confirmado desbloqueado (5 refs corregidas en e6c8024) y preparado como preprint Zenodo (metadatos + cita lista, falta DOI del usuario). Creadas 4 ramas pub/<venue> (cacic-2026, informatica-sistemas, clei-2027, impacto) + main como fuente de verdad; guía de trabajo git+Claude. Todo pusheado.
+**Report:** quality_reports/convocatorias_y_venues.md; plans/2026-07-09_recorte-lncs-cacic.md; plans/2026-07-09_ramas-publicacion.md; zenodo_deposito_v1-6.md; GUIA_TRABAJO.md

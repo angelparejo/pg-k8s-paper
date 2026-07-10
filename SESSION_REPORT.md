@@ -408,3 +408,38 @@
 **Status:**
 - Done: refinamiento DOCX v2 completo, terminología, Tabla II, R3 aprobada, todo en origin/main.
 - Pending: elegir revista arbitrada objetivo (alinear plantilla); arreglar 5 refs del v1-6 conceptual (va PRIMERO); revisión visual opcional de rayas de inciso; el v2 espera su turno tras someter el v1.
+
+## 2026-07-09 — Venues, bases CACIC (LNCS), v1-6 citable y ramas de publicación
+
+**Operations:**
+- `quality_reports/convocatorias_y_venues.md`: deadlines verificados por web (CACIC 29-jul, IyS 8–16 pp, CLEI sin CFP); nueva §8 (bases CACIC 2026) y §7 (conflicto con estrategia secuencial); corregida premisa "CACIC=IEEE" → LNCS.
+- `quality_reports/referencias_por_verificar.md`: eliminada contradicción interna (marcado ✅ CERRADO).
+- `quality_reports/plans/2026-07-09_recorte-lncs-cacic.md`: nuevo — presupuesto de recorte del v2 por sección (~−49%).
+- `quality_reports/zenodo_deposito_v1-6.md`: nuevo — metadatos Zenodo + cita en IEEE/LNCS/BibTeX (DOI placeholder).
+- `quality_reports/plans/2026-07-09_ramas-publicacion.md`: nuevo — modelo main + pub/*.
+- 4 ramas creadas y pusheadas: `pub/cacic-2026`, `pub/informatica-sistemas`, `pub/clei-2027`, `pub/impacto`, cada una con `PUBLICACION.md`.
+- `GUIA_TRABAJO.md`: nuevo — git (ramas/switch/merge) + cómo trabajar con Claude.
+- Memoria: actualizadas comm_language_spanish, project_sequential_publication, project_venue_options; nueva project_publication_branches; índice MEMORY.md.
+
+**Decisions:**
+- Confirmado que las 5 refs del v1-6 YA estaban corregidas (e6c8024) → v1-6 desbloqueado; solo falta venue.
+- CACIC usa LNCS (no IEEE) → el v2 (~9.100 palabras) requiere recorte ~49% para ≤10 pp; estrategia: comprimir III–IV apoyándose en el v1-6.
+- v1-6 se hará citable vía preprint Zenodo (CC BY 4.0) — decisión del usuario.
+- Una rama git por venue (pub/*); main = fuente de verdad. Actualiza la nota previa "ramas solo para experimentos".
+
+**Results:**
+- Panorama de venues cerrado con deadlines reales; CACIC 2026 es la ventana urgente (29-jul).
+- v1-6 listo para depósito (falta paso manual del usuario: exportar PDF + subir a Zenodo + pasar DOI).
+- Estructura de ramas operativa y respaldada en origin.
+
+**Commits:**
+- `3541f45` Venues v2: deadlines verificados + cierre de bloqueo de refs v1-6
+- `b276713` Bases CACIC 2026 (LNCS, no IEEE) + plan de recorte a LNCS del v2
+- `09e1f3c` Paquete de depósito Zenodo para el v1-6
+- `86b4b6b` Plan de ramas de publicación por venue
+- `cb13d37`/`5450173`/`070bd12`/`336592a` fichas PUBLICACION.md (cacic/iys/clei/impacto)
+- `0ba0a49` Guía de trabajo git + Claude
+
+**Status:**
+- Done: análisis de venues, bases CACIC, paquete Zenodo v1-6, 4 ramas + guía, todo en origin.
+- Pending: (1) usuario sube PDF v1-6 a Zenodo y pasa DOI; (2) decidir venue del v2 (CACIC vs sin prisa); (3) ejecutar plan de recorte LNCS en la rama elegida + insertar autocita al v1-6.
