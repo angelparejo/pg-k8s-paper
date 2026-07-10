@@ -120,4 +120,6 @@ O, si se prefiere mantener una fuente específica de Red Hat:
 | [5] + [14] | Media | Consolidar ambas en una sola cita a la documentación oficial del patrón Operator de Kubernetes (o Philips 2016 para [5], Red Hat Developer 2021 real para [14] si se prefieren dos fuentes distintas). |
 | [10] | Media | Sustituir por Khan et al. (2023), Big Data and Cognitive Computing — mismo tema, año, y probablemente la fuente real pretendida. |
 
-Ninguna de estas correcciones requiere reescribir el argumento del artículo — en los cinco casos, las afirmaciones sustantivas sobreviven con fuentes reales equivalentes. El artículo no ha sido editado; esta lista queda como trabajo pendiente para antes de someter.
+Ninguna de estas correcciones requiere reescribir el argumento del artículo — en los cinco casos, las afirmaciones sustantivas sobreviven con fuentes reales equivalentes.
+
+> **✅ CERRADO (2026-07-08, commit `e6c8024`; verificado 2026-07-09):** las 5 correcciones YA se aplicaron al documento y a `Bibliography_base.bib`. La tabla de "acciones pendientes" de arriba es histórica — no queda ninguna acción de referencias pendiente. Estado real = encabezado del archivo.
