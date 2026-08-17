@@ -3,7 +3,7 @@
 **Cuándo:** Fase 4 del `PROCEDIMIENTO.md`, y de nuevo (ítems G1–G4) en la reanudación de cada ventana posterior (paso R6).
 **Regla absoluta:** basta **un solo NO PASA** para **abortar**. No se inyecta nada hasta que TODOS los ítems estén en PASA. Ante la duda → NO-GO. Ver `ABORTO.md`.
 
-**Contexto de riesgo:** el operador CNPG es **compartido** con cuatro clústeres CNPG preexistentes (`pg-alfa`, `pg-beta`, `pg-gamma`, `gitlab/pg-delta`); además, 3 de sus primarios (pg-beta-1, pg-gamma-3, pg-delta-2) **co-residen hoy en el nodo del lab `nodo-lab-01`**. Ninguna inyección puede alcanzarlos. La contención descansa en cuatro capas independientes que este checklist verifica una por una:
+**Contexto de riesgo:** el operador CNPG es **compartido** con cuatro clústeres CNPG preexistentes (`pg-alfa`, `pg-beta`, `pg-gamma`, `ns-delta/pg-delta`); además, 3 de sus primarios (pg-beta-1, pg-gamma-3, pg-delta-2) **co-residen hoy en el nodo del lab `nodo-lab-01`**. Ninguna inyección puede alcanzarlos. La contención descansa en cuatro capas independientes que este checklist verifica una por una:
 1. Chaos Mesh `clusterScoped:false` + `enableFilterNamespace:true` + `targetNamespace:pg-chaos-lab`.
 2. `chaos-daemon` confinado por `nodeSelector` al nodo del lab (`nodo-lab-01`).
 3. Todo selector acotado por `namespaces:[pg-chaos-lab]` + `cnpg.io/cluster: pglab-cnpg-exp`.
@@ -91,7 +91,7 @@ kubectl -n pg-chaos-lab get deploy -l app.kubernetes.io/component=controller-man
 # El lab SÍ debe tener la annotation:
 echo -n "pg-chaos-lab (debe: enabled) -> "; kubectl get ns pg-chaos-lab -o jsonpath='{.metadata.annotations.chaos-mesh\.org/inject}{"\n"}'
 # Los 4 clústeres CNPG preexistentes NO deben tenerla (paso 0.7):
-for ns in pg-alfa pg-beta pg-gamma gitlab; do
+for ns in pg-alfa pg-beta pg-gamma ns-delta; do
   echo -n "$ns (debe: vacío) -> "; kubectl get ns "$ns" -o jsonpath='{.metadata.annotations.chaos-mesh\.org/inject}{"\n"}'
 done
 ```

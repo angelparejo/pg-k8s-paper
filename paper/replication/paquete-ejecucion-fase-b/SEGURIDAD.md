@@ -4,7 +4,7 @@ Este documento está dirigido al responsable de seguridad y al DBA de producció
 
 ## Situación
 
-- El operador **CloudNativePG 1.28.0 ya está instalado** (namespace `cnpg-operator`) y gestiona **cuatro clústeres preexistentes**: `pg-alfa` (producción), `gitlab/pg-delta` (infraestructura de GitLab), y `pg-beta` + `pg-gamma` (no productivos). **Ninguno de los cuatro se toca.**
+- El operador **CloudNativePG 1.28.0 ya está instalado** (namespace `cnpg-operator`) y gestiona **cuatro clústeres preexistentes**: `pg-alfa` (producción), `ns-delta/pg-delta` (infraestructura de un servicio interno), y `pg-beta` + `pg-gamma` (no productivos). **Ninguno de los cuatro se toca.**
 - El piloto añade un **quinto** clúster (`pglab-cnpg-exp`), nuevo, en un namespace nuevo (`pg-chaos-lab`), gestionado por **ese mismo operador compartido**.
 - El operador es compartido; **los experimentos no**. Toda inyección de fallos apunta exclusivamente al clúster experimental.
 

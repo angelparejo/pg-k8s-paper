@@ -160,7 +160,7 @@
 
 **Hallazgos del reconocimiento (clúster real):**
 - K8s v1.34.6 · RHEL 9.8 · containerd 2.2.4 · 8 nodos (3 control-plane + 5 workers).
-- Operador CNPG 1.28.0 en `cnpg-operator`, gestiona **4 clústeres CNPG** (no 3): pg-alfa (prod, primary pg-alfa-2), pg-beta, pg-gamma, gitlab/pg-delta.
+- Operador CNPG 1.28.0 en `cnpg-operator`, gestiona **4 clústeres CNPG** (no 3): pg-alfa (prod, primary pg-alfa-2), pg-beta, pg-gamma, ns-delta/pg-delta.
 - Nodo del lab = **nodo-lab-01** (worker, huawei-san/fc, ocioso 4% CPU/2% mem) — pero **co-aloja 3 primaries ajenos** (pg-beta-1, pg-gamma-3, pg-delta-2) + ArgoCD/Harbor/Prometheus.
 - SC única `huawei-ch-xfs` (default, Retain, WaitForFirstConsumer). Kyverno inerte; Argo Rollouts ninguno; ArgoCD con apps sar-suite (no tocan pg-*/lab); Linkerd activo pero pg-* NO meshado.
 
@@ -443,3 +443,51 @@
 **Status:**
 - Done: análisis de venues, bases CACIC, paquete Zenodo v1-6, 4 ramas + guía, todo en origin.
 - Pending: (1) usuario sube PDF v1-6 a Zenodo y pasa DOI; (2) decidir venue del v2 (CACIC vs sin prisa); (3) ejecutar plan de recorte LNCS en la rama elegida + insertar autocita al v1-6.
+
+## 2026-08-16 — Entorno (silabeo ES + ImageMagick), figuras a grises y PDF definitivo Faraute
+
+**Contexto:** el envío a Faraute estaba bloqueado por el punto 9 de la guía (figuras en escala
+de grises) y no había ninguna herramienta de imagen en el entorno: ni `convert`, ni ghostscript,
+ni `pdftoppm`, ni netpbm, ni PIL. `apt` no llegaba a los repositorios.
+
+**Diagnóstico de red (la causa no era apt):**
+- El **puerto 53 está bloqueado en toda la máquina**: Windows tampoco resuelve (`nslookup` da
+  cuatro timeouts). Ningún DNS responde — ni corporativo (172.24.2.245), ni Wi-Fi (172.18.2.205),
+  ni NordVPN (103.86.96.100), ni públicos (1.1.1.1 / 8.8.8.8 / 9.9.9.9).
+- Causa: **conflicto de VPNs simultáneas**. NordVPN secuestra la tabla de rutas con el truco
+  clásico de OpenVPN (`0.0.0.0/1` + `128.0.0.0/1` vía 10.100.0.1) mientras los DNS que Windows
+  quiere usar solo son alcanzables por el túnel de Check Point. WSL usa `networkingMode=mirrored`,
+  así que hereda el problema de Windows.
+- **La salida TCP sí funciona** (HTTP directo por IP: 0,08 s; DoH por 443: resuelve sin problema).
+
+**Operations:**
+- Instalados `texlive-lang-spanish` (2023.20240207-1) e `imagemagick` (6.9.12-98) resolviendo los
+  repos por DNS-over-HTTPS y fijándolos temporalmente en `/etc/hosts`. Parche ya retirado.
+  Script idempotente en el scratchpad de la sesión.
+- Verificación independiente 4/4 (`spanish.ldf`, `hyph-es.tex`, `language.dat`, `convert`) más
+  **prueba funcional**: TeX ahora parte `me-ca-nis-mos`, `al-ma-ce-na-mien-to`, `in-fra-es-truc-tu-ra`.
+- Figuras del cuerpo (Fig2/Fig4/Fig5) → `Gray` 1 canal, 300 dpi conservados. Originales a color
+  respaldados en `figures/color-originales/`. Copias renombradas para la entrega en `figuras-envio/`.
+- `main.pdf` regenerado (2 pasadas) y `main_final_12pp.pdf` sincronizado.
+- `CHECKLIST_ENVIO_FARAUTE.md` (B1 + sección C) y `PENDIENTE_MI_LADO.md` actualizados.
+
+**Hallazgo importante:**
+- **`main.tex` nunca cargaba `silabeo-es.tex`**: no hay `\input{silabeo-es}` ni un solo
+  `\hyphenation{}` en el documento. El PDF del 13-ago se compiló **sin silabeo español alguno**
+  (ni patrones, que no estaban instalados, ni el parche, que no se cargaba) — llevaba cortes de
+  palabra con reglas inglesas. Las 254 líneas que genera `scripts/silabeo_es.py` son código
+  muerto. **Decisión pendiente del usuario:** retirar el archivo y el script, o dejarlos.
+
+**Results:**
+- `main.pdf`: **12 páginas**, 0 overfull, 0 underfull, 0 referencias sin resolver.
+- PDF íntegramente en `DeviceGray` (0 `DeviceRGB`) → cumple el punto 9 de la guía.
+- Mejora neta: desapareció el overfull de 1 pt que registraba la versión previa y **la paginación
+  no se movió** (seguía el riesgo de pasarse del límite de 12 pp; no se materializó).
+- Tamaño del PDF: 1,33 MB → 926 KB.
+
+**Status:**
+- Done: entorno instalado y verificado; figuras a grises + renombradas; PDF definitivo regenerado;
+  checklists al día; B1 del envío cerrado.
+- Pending: (1) DOI de Zenodo y sustitución en 5 archivos; (2) lectura final del PDF y confirmación
+  de autor/ORCID; (3) envío a faraute@uc.edu.ve; (4) decidir sobre `silabeo-es.tex` (código muerto);
+  (5) **todo el trabajo de agosto sigue sin commitear**.

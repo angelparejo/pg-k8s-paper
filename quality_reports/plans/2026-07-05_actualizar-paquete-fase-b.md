@@ -7,7 +7,7 @@
 
 Durante esta sesión, en **modo desacoplado** (Claude genera comandos de solo-lectura, el usuario los ejecuta por VPN y pega la salida), reconocimos el clúster Kubernetes productivo real donde se ejecutará el piloto de Fase B. El paquete `paper/replication/paquete-ejecucion-fase-b/` se había escrito con **placeholders** y con **supuestos** que el reconocimiento ha refutado en tres puntos materiales:
 
-1. **No son 3 clústeres CNPG productivos, sino 4 preexistentes.** El operador CNPG 1.28.0 (compartido) gestiona `pg-alfa`, `pg-beta`, `pg-gamma` y `gitlab/pg-delta`. El experimental sería el **5.º**, no el 4.º.
+1. **No son 3 clústeres CNPG productivos, sino 4 preexistentes.** El operador CNPG 1.28.0 (compartido) gestiona `pg-alfa`, `pg-beta`, `pg-gamma` y `ns-delta/pg-delta`. El experimental sería el **5.º**, no el 4.º.
 2. **Chaos Mesh 2.7.x es incompatible con el clúster real.** Corre Kubernetes **v1.34.6**; Chaos Mesh 2.7 solo soporta hasta K8s 1.28. Hay que subir a **Chaos Mesh v2.8.3** (soporta 1.30–1.35 e incluye los parches de seguridad "Chaotic Deputy").
 3. **El nodo del lab (nodo-lab-01) NO está vacío de bases de datos ajenas.** Co-aloja **3 primaries CNPG** (pg-beta-1, pg-gamma-3, pg-delta-2). La barrera #2 y la compuerta G5, que asumían "ningún pod productivo en el nodo del lab", quedan **falsas** y darían NO-GO. Decisión del usuario: **mantener nodo-lab-01** (es el worker nonprod designado por convención de ops) y **reescribir** la narrativa de seguridad para reconocer la co-tenencia honestamente.
 
@@ -19,7 +19,7 @@ Durante esta sesión, en **modo desacoplado** (Claude genera comandos de solo-le
 |---|---|
 | Kubernetes | v1.34.6 · RHEL 9.8 (Plow) · kernel 5.14 · containerd 2.2.4 |
 | Operador CNPG | 1.28.0 · namespace `cnpg-operator` · deploy `cnpg-cloudnative-pg` (2/2) |
-| Clústeres CNPG preexistentes (4) | `pg-alfa/pg-alfa` (3 inst, primary pg-alfa-2) · `pg-beta/pg-beta` (2, primary pg-beta-1) · `pg-gamma/pg-gamma` (2, primary pg-gamma-3) · `gitlab/pg-delta` (2, primary pg-delta-2) |
+| Clústeres CNPG preexistentes (4) | `pg-alfa/pg-alfa` (3 inst, primary pg-alfa-2) · `pg-beta/pg-beta` (2, primary pg-beta-1) · `pg-gamma/pg-gamma` (2, primary pg-gamma-3) · `ns-delta/pg-delta` (2, primary pg-delta-2) |
 | Clasificación | pg-alfa = producción · pg-delta = infra crítica (GitLab) · pg-beta, pg-gamma = no productivos. **Término operativo: "preexistentes" (no tocar ninguno).** |
 | StorageClass | `huawei-ch-xfs` (default) · `csi.huawei.com` · `reclaimPolicy: Retain` · `WaitForFirstConsumer` |
 | Nodo del lab | `nodo-lab-01` (worker, `storage=huawei-san`, `fc=true`, 64c/~503GiB, ocioso: 4% CPU / 2% mem) |
@@ -34,7 +34,7 @@ Sustituir en `PROCEDIMIENTO.md` y `RESPONSABLES.md`:
 - `<NS-OPERADOR>` → `cnpg-operator`
 - `<SC-HUAWEI>` → `huawei-ch-xfs`
 - `<WORKER-LAB>` → `nodo-lab-01`
-- `<NS-PROD-1> <NS-PROD-2> <NS-PROD-3>` (CHECKLIST G2.2, l.91) → **4 namespaces**: `pg-alfa pg-beta pg-gamma gitlab`
+- `<NS-PROD-1> <NS-PROD-2> <NS-PROD-3>` (CHECKLIST G2.2, l.91) → **4 namespaces**: `pg-alfa pg-beta pg-gamma ns-delta`
 - Contexto de `kubectl` en RESPONSABLES → dejar en blanco (específico de la sesión del ejecutor).
 
 ### B. Reencuadre "3 productivos" → "4 preexistentes" (afecta README, SEGURIDAD, PROCEDIMIENTO, CHECKLIST, ABORTO, RESPONSABLES)

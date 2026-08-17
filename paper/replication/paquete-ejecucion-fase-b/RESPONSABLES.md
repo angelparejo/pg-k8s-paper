@@ -26,7 +26,7 @@ Prellenado con el reconocimiento del **2026-07-05**. **Reconfirmar en el paso 0.
 | 1 | pg-alfa | pg-alfa | 3 | primario **pg-alfa-2** (nodo-02); réplicas pg-alfa-1 (nodo-03), pg-alfa-3 (nodo-04) | healthy 3/3 |
 | 2 | pg-beta | pg-beta | 2 | primario **pg-beta-1** (nodo-lab-01 ⚠️ nodo del lab); réplica pg-beta-2 (nodo-04) | healthy 2/2 |
 | 3 | pg-gamma | pg-gamma | 2 | primario **pg-gamma-3** (nodo-lab-01 ⚠️ nodo del lab); réplica pg-gamma-1 (nodo-03) | healthy 2/2 |
-| 4 | pg-delta | gitlab | 2 | primario **pg-delta-2** (nodo-lab-01 ⚠️ nodo del lab); réplica pg-delta-1 (nodo-04) | healthy 2/2 |
+| 4 | pg-delta | ns-delta | 2 | primario **pg-delta-2** (nodo-lab-01 ⚠️ nodo del lab); réplica pg-delta-1 (nodo-04) | healthy 2/2 |
 
 > ⚠️ **Co-tenencia conocida:** 3 primarios preexistentes (pg-beta-1, pg-gamma-3, pg-delta-2) co-residen en `nodo-lab-01`, el nodo del lab. Aceptado: la protección es G1 (ningún manifiesto los selecciona), no el aislamiento de nodo. El primario de producción `pg-alfa-2` **no** está en nodo-lab-01.
 

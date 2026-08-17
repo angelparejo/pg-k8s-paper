@@ -1,7 +1,7 @@
 # PROCEDIMIENTO — Piloto Fase B (solo CloudNativePG) · pg-chaos-lab
 
 **Audiencia:** equipo ejecutor (puede no conocer el contexto de la investigación).
-**Regla de oro:** este piloto crea **un quinto clúster CNPG nuevo y aislado** (`pglab-cnpg-exp`) gestionado por el operador CNPG **ya instalado y compartido**. Los **cuatro clústeres CNPG preexistentes NO se tocan** (`pg-alfa`, `pg-beta`, `pg-gamma`, `gitlab/pg-delta`). Toda inyección de fallos está acotada por **doble filtro: namespace `pg-chaos-lab` + nombre de clúster `pglab-cnpg-exp`**.
+**Regla de oro:** este piloto crea **un quinto clúster CNPG nuevo y aislado** (`pglab-cnpg-exp`) gestionado por el operador CNPG **ya instalado y compartido**. Los **cuatro clústeres CNPG preexistentes NO se tocan** (`pg-alfa`, `pg-beta`, `pg-gamma`, `ns-delta/pg-delta`). Toda inyección de fallos está acotada por **doble filtro: namespace `pg-chaos-lab` + nombre de clúster `pglab-cnpg-exp`**.
 
 **Qué hace / qué NO hace:**
 - ✅ Crea `pglab-cnpg-exp` en el namespace nuevo `pg-chaos-lab`, le mete carga e inyecta fallos **solo a él**.
@@ -156,7 +156,7 @@ sudo ctr -n k8s.io images ls | grep -E 'cloudnative-pg/postgresql:16.13'
 ```bash
 kubectl get clusters.postgresql.cnpg.io -A
 ```
-- Esperado: exactamente **4** clústeres preexistentes (`pg-alfa`, `pg-beta`, `pg-gamma`, `gitlab/pg-delta`). **Anotarlos** (nombre + namespace + nodos) en `RESPONSABLES.md`.
+- Esperado: exactamente **4** clústeres preexistentes (`pg-alfa`, `pg-beta`, `pg-gamma`, `ns-delta/pg-delta`). **Anotarlos** (nombre + namespace + nodos) en `RESPONSABLES.md`.
 - Verificaciones de seguridad sobre esa lista:
   - Ninguno se llama `pglab-cnpg-exp`. Si alguno coincide → cambiar el nombre experimental (p. ej. `pglab-cnpg-exp2`) en **todos** los manifiestos antes de seguir.
   - Ninguno está en el namespace `pg-chaos-lab`.
