@@ -1,0 +1,17 @@
+# Cuota dura: el laboratorio no puede crecer mas alla de esto.
+# Proteccion primaria de capacidad frente al entorno productivo compartido.
+# Camino B: un unico cluster experimental (pglab-cnpg-exp), 3 instancias.
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: pg-chaos-lab-quota
+  namespace: pg-chaos-lab
+spec:
+  hard:
+    requests.cpu: "6"
+    requests.memory: 12Gi
+    limits.cpu: "8"
+    limits.memory: 16Gi
+    requests.storage: 60Gi           # 1 cluster x 3 PVC (15Gi) + margen
+    persistentvolumeclaims: "6"
+    pods: "15"

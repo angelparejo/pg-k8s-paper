@@ -1,0 +1,31 @@
+# Runner OCIOSO para F4: se despliega una vez y se ejecuta pgbench dentro de el
+# via `kubectl exec` (corridas controladas de duracion fija con --progress=1).
+# A diferencia de pgbench-cnpg.yaml (bucle infinito de carga de fondo), este NO
+# genera carga por si mismo: duerme hasta que el arnes run-f4-latency.sh lo invoca.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgbench-runner-cnpg
+  namespace: pg-chaos-lab
+  labels: {app: pgbench-runner, target: cnpg}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: pgbench-runner, target: cnpg}}
+  template:
+    metadata:
+      labels: {app: pgbench-runner, target: cnpg}
+    spec:
+      nodeSelector: {pg-chaos-lab/member: "true"}
+      containers:
+        - name: runner
+          image: ghcr.io/cloudnative-pg/postgresql:16.13   # incluye pgbench/psql
+          env:
+            - name: PGHOST
+              value: pglab-cnpg-exp-rw
+            - name: PGUSER
+              value: lab
+            - name: PGDATABASE
+              value: labdb
+            - name: PGPASSWORD
+              valueFrom: {secretKeyRef: {name: pglab-cnpg-exp-app, key: password}}
+          command: ["/bin/bash","-c","sleep infinity"]

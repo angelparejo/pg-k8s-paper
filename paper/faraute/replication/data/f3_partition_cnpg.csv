@@ -1,0 +1,13 @@
+tipo,rep,partition_dur_s,outage_s,promocion,pod_ready_durante,primary_before,primary_after,injection_utc
+exploratoria,1,149,149.46,no,NA,pglab-cnpg-exp-2,pglab-cnpg-exp-2,2026-07-07T14:38:47.936Z
+sonda_larga,1,300,305.83,no,True,pglab-cnpg-exp-2,pglab-cnpg-exp-2,2026-07-07T14:59:45.463Z
+fija,1,60,60.74,no,True,pglab-cnpg-exp-2,pglab-cnpg-exp-2,2026-07-07T15:10:19.702Z
+fija,2,60,60.77,no,True,pglab-cnpg-exp-2,pglab-cnpg-exp-2,2026-07-07T15:12:51.003Z
+fija,3,60,60.76,no,True,pglab-cnpg-exp-2,pglab-cnpg-exp-2,2026-07-07T15:15:22.343Z
+fija,4,60,60.75,no,True,pglab-cnpg-exp-2,pglab-cnpg-exp-2,2026-07-07T15:17:53.596Z
+fija,5,60,60.73,no,True,pglab-cnpg-exp-2,pglab-cnpg-exp-2,2026-07-07T15:20:24.944Z
+fija,6,60,60.75,no,True,pglab-cnpg-exp-2,pglab-cnpg-exp-2,2026-07-07T15:22:56.303Z
+fija,7,60,60.76,no,True,pglab-cnpg-exp-2,pglab-cnpg-exp-2,2026-07-07T15:25:27.593Z
+fija,8,60,60.78,no,True,pglab-cnpg-exp-2,pglab-cnpg-exp-2,2026-07-07T15:27:58.922Z
+fija,9,60,60.74,no,True,pglab-cnpg-exp-2,pglab-cnpg-exp-2,2026-07-07T15:30:30.260Z
+fija,10,60,60.74,no,True,pglab-cnpg-exp-2,pglab-cnpg-exp-2,2026-07-07T15:33:01.563Z

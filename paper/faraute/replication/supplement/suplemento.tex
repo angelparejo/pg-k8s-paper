@@ -1,0 +1,104 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,provide=*]{babel}
+\usepackage{mathptmx}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,array}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+\setlength{\parskip}{4pt}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thetable}{S\arabic{table}}
+
+\title{\bfseries Material Suplementario --- Métodos y Resultados Extendidos\\[4pt]
+\large Análisis multicapa de operadores de PostgreSQL y almacenamiento CSI en Kubernetes:\\
+estudio empírico de CloudNativePG bajo fallos inyectados (Fase 1)}
+\author{Angel A. Parejo R.\\ \small Universidad de Carabobo, Valencia, Venezuela --- ORCID 0009-0001-9737-7116}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Nota.} Este documento acompaña al artículo homónimo enviado a la Revista FARAUTE de Ciencias y Tecnología (UC/FACYT) y forma parte del depósito de reproducibilidad (Zenodo, DOI por asignar). Recoge el detalle metodológico y estadístico que, por el límite de extensión del artículo, no cabe en el cuerpo principal, y documenta explícitamente los puntos que un árbitro necesita para auditar los resultados. Todas las cifras aquí y en el artículo se reproducen ejecutando \texttt{execution-package/manifiestos/scripts/analyze.py} sobre los CSV de \texttt{data/}.
+
+\section{Propósito y alcance}
+La Fase 1 caracteriza empíricamente el comportamiento de CloudNativePG (CNPG) 1.28.0 bajo tres escenarios de fallo reproducibles de forma segura en un clúster productivo: F1 (\emph{pod-kill}), F2 (\emph{pod-failure}) y F3 (partición de red), más un F4 (latencia de E/S) no ejecutable. El análisis es descriptivo (medianas, rangos intercuartílicos e intervalos de confianza de mediana) más un único contraste de dos grupos intra-CNPG (F1 vs.\ F2). Este suplemento amplía las Secciones~5 y~6 del artículo.
+
+\section{Metodología extendida}
+\subsection{Entorno}
+Kubernetes v1.34.6; PostgreSQL 16.13; CNPG 1.28.0; Chaos Mesh 2.8.3; Calico 3.31.4; almacenamiento CSI Huawei 4.10.1 (\texttt{csi.huawei.com}) sobre \emph{Fibre Channel} (SAN); \emph{StorageClass} con \emph{Retain} y \emph{WaitForFirstConsumer}. Entorno \emph{air-gapped}: imágenes importadas localmente.
+
+\subsection{Aislamiento (tres controles + malla)}
+El clúster experimental se fijó por afinidad al nodo de laboratorio, compartido con otras cargas. El aislamiento no descansó en la exclusividad del nodo sino en: (i) Chaos Mesh restringido al espacio de nombres; (ii) doble filtro de selección (espacio de nombres + nombre de clúster) en cada manifiesto de fallo; (iii) verificación previa (\emph{dry-run}) que confirmó, para cada selector, resolución exclusiva a los pods del clúster experimental. Además, los pods se excluyeron de la malla (Linkerd) para no introducir un \emph{proxy} en la ruta de datos que sesgara RTO/latencia.
+
+\subsection{Verificador de transacciones (\texttt{tx-verifier}) y semántica ante ACK perdido}
+El verificador inserta identificadores BIGINT monótonos generados por un contador de cliente y anota cada COMMIT con marca de tiempo. Ante un fallo \textbf{reintenta el mismo identificador} (no avanza el contador), de modo que los cortes no crean huecos artificiales y un hueco en la tabla de verdad equivale a una escritura reconocida y perdida (proxy del RPO por contigüidad de la secuencia).
+
+Esto resuelve el caso frontera de un COMMIT \emph{confirmado pero no reconocido} (el primario persistió la fila pero el ACK se perdió por el corte): al reintentar el mismo id, un error de \textbf{clave duplicada} revela que la escritura \emph{sí} había persistido (``commit fantasma''). El verificador detecta el duplicado y lo contabiliza como escritura persistida, no como pérdida; por eso el RPO no se sobreestima. El mecanismo está en el manifiesto \texttt{execution-package/manifiestos/30-workload/tx-verifier-cnpg.yaml} (la línea que reintenta el mismo id y detecta el duplicado como \emph{commit} fantasma).
+
+\subsection{Granularidad y precisión de medición}
+El verificador opera en bucle apretado sin espera entre escrituras exitosas; ante un fallo aplica una espera de 0{,}2~s y un \texttt{PGCONNECT\_TIMEOUT} de 2~s. La \textbf{granularidad de medición del RTO} (hueco entre COMMIT consecutivos) es, por tanto, $\approx 0{,}2$~s. Las marcas de tiempo de COMMIT tienen resolución de milisegundos; la incertidumbre sistemática en el punto de recuperación es de $\pm 0{,}2$~s (la cadencia del sondeo). Las cifras a dos decimales deben leerse con esa incertidumbre.
+
+\section{Escenarios, muestra y exclusiones}
+F1 y F2: $n=10$ cada uno. F3: 10 inyecciones fijas de 60~s (usadas en el RTO) más 2 exploratorias (149~s y 300~s) excluidas del cálculo del RTO; no-promoción observada en las 12 (0/12). El tamaño muestral responde a las ventanas de mantenimiento del clúster productivo; no se hizo cálculo formal de potencia. Dada la no-normalidad esperada, se reportan medianas e IQR.
+
+\paragraph{Exclusiones (transparencia).} Se excluyeron: (a) la 1.\textsuperscript{a} inyección de F2 ($\approx 80{,}5$~s, arranque en frío: caché fría, cola de reconciliación no calentada, primer ciclo de recreación); (b) las 2 inyecciones exploratorias de F3; (c) un identificador espurio negativo de un arranque previo. La exclusión (a) es \textbf{conservadora respecto al hallazgo principal}: incluir los 80{,}5~s \emph{amplía} la brecha F1--F2 (Tabla~\ref{tab:sens}), luego no favorece la tesis.
+
+\begin{table}[t]
+\centering
+\caption{Análisis de sensibilidad de la exclusión de F2 (arranque en frío).}
+\label{tab:sens}
+\begin{tabular}{lccc}
+\toprule
+Conjunto F2 & $n$ & Mediana (s) & Brecha F2$-$F1 (s) \\
+\midrule
+Analizado (sin arranque en frío) & 10 & 36{,}75 & 28{,}84 \\
+Con la 1.\textsuperscript{a} inyección ($\approx$80{,}5 s) & 11 & 36{,}92 & 29{,}01 \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\footnotesize Incluir el punto excluido eleva la mediana de F2 y \emph{ensancha} la brecha respecto a F1 (mediana 7{,}91~s). La exclusión es, por tanto, conservadora.
+\end{table}
+
+\section{Estadística completa}
+Todas las cantidades se reproducen con \texttt{analyze.py} (biblioteca estándar de Python).
+
+\paragraph{Descriptivos.} F1: mediana 7{,}91~s, IQR [7{,}62,\,8{,}01], rango [6{,}61,\,8{,}17]. F2: mediana 36{,}75~s, IQR [36{,}20,\,37{,}06], rango [35{,}51,\,38{,}32]. Razón de medianas F2/F1 $= 4{,}65\times$.
+
+\paragraph{Intervalos de confianza de mediana (distribución-libre).} Con $n=10$ se usan los estadísticos de orden 2.\textsuperscript{o} y 9.\textsuperscript{o}, $[x_{(2)},x_{(9)}]$, con cobertura
+\begin{equation*}
+1-2\sum_{k=0}^{1}\binom{10}{k}0{,}5^{10}=0{,}9785\;(\approx 97{,}9\%).
+\end{equation*}
+Resulta: F1 $[6{,}85,\,8{,}15]$~s; F2 $[36{,}05,\,37{,}66]$~s; F3 fija $[60{,}74,\,60{,}77]$~s.
+
+\paragraph{Contraste F1 vs.\ F2.} Mann--Whitney $U=0$ (separación total, sin solapamiento). El $p$ exacto bilateral es
+\begin{equation*}
+p=\frac{2}{\binom{20}{10}}=\frac{2}{184\,756}=1{,}083\times10^{-5},
+\end{equation*}
+que es el \textbf{piso teórico} alcanzable con $n=10$ por grupo: el test está saturado y el peso probatorio recae en el tamaño de efecto y el mecanismo, no en la magnitud del $p$. Aproximación normal: $z=-3{,}78$ ($p\approx1{,}6\times10^{-4}$). Correlación rango-biserial $=1{,}00$. Diferencia de medianas resistente (Hodges--Lehmann) $=28{,}96$~s.
+
+\paragraph{Prueba de permutación (robustez ante no-independencia).} Las 10 repeticiones se ejecutaron en serie; en F2 hay una asociación débil orden--RTO (Spearman $\rho\approx0{,}62$, valor crítico exacto para $n=10$ a $\alpha=0{,}05$ es $0{,}648$; \emph{no} significativa). Como el test de Mann--Whitney es él mismo una prueba de permutación y la separación entre grupos es \emph{total}, cualquier reordenamiento admisible que respete los bloques mantiene $U=0$; el $p$ de permutación coincide con $2/\binom{20}{10}$. La conclusión no depende, pues, del supuesto de intercambiabilidad.
+
+\paragraph{No-promoción (Clopper--Pearson).} Cota superior \textbf{unilateral} al 95\,\% con 0 éxitos: $1-0{,}05^{1/n}$. F2 (0/10): $\le 25{,}9\%$. F3 (0/12): $\le 22{,}1\%$. (La cota bilateral al 95\,\% sería $30{,}8\%$ y $26{,}5\%$.) La conclusión de no-promoción se apoya sobre todo en el mecanismo observado, no solo en el conteo.
+
+\paragraph{RPO nulo: mecanismo.} El RPO fue 0 en los tres escenarios; solo F1 lo pone a prueba de forma no trivial (hay promoción real). Con replicación asíncrona, un \emph{pod-kill} podría en principio descartar WAL confirmado no propagado; que no ocurriera en 10/10 se atribuye a un retardo de replicación (\emph{lag}) $\approx 0$ bajo carga ligera (pgbench \texttt{-s 10}, 4 clientes). \textbf{Es una inferencia de mecanismo, no una medición}: no se registró el LSN \emph{lag} durante las corridas (medición asignada a la Fase~2). La co-localización intra-nodo implica además que la replicación no atravesó red inter-nodo, por lo que el RPO=0 de F1 no prueba todavía la durabilidad ante partición o latencia inter-nodo reales.
+
+\section{F4 (IOChaos / FUSE): bloqueo de instrumentación}
+El escenario F4 (sensibilidad del RTO a latencia de E/S de 0, 20, 50 y 100~ms vía IOChaos) \textbf{no fue ejecutable} sobre CNPG. El inyector FUSE \texttt{toda} de Chaos Mesh hizo \emph{ptrace attach} sobre PostgreSQL, pero al montar el sistema de archivos FUSE falló con \texttt{Read-only file system (os error 30)} y entró en reintentos. Causa: CNPG endurece sus pods con \texttt{readOnlyRootFilesystem: true} (junto con \texttt{runAsNonRoot} y descarte de capacidades), mientras que \texttt{toda} requiere una raíz escribible para su andamiaje de montaje. La configuración era correcta (el \emph{dry-run} de selectores resolvió solo a los pods del clúster experimental; el \texttt{PodIOChaos} llevaba ruta, contenedor y parámetros correctos): es una \textbf{incompatibilidad}, no un error de configuración. Es una limitación de este par de herramientas, no una propiedad general. Dos vías para la Fase~2: (i) test confirmatorio desactivando \texttt{readOnlyRootFilesystem} para aislar la causa; (ii) limitación de ancho de banda de E/S a nivel de \emph{cgroup} (\texttt{io.max}), que no depende de FUSE ni modifica el sistema bajo prueba. Los manifiestos de F4 se incluyen en el depósito para referencia.
+
+\section{Limitaciones extendidas}
+\begin{itemize}[leftmargin=1.2em,itemsep=2pt,topsep=2pt]
+\item \textbf{Un operador, una categoría de almacenamiento:} solo CNPG sobre CSI en red (SAN/FC). La comparación con Zalando/Patroni y Crunchy es analítica (Tabla~1 del artículo) y se asigna a la Fase~2.
+\item \textbf{Topología co-localizada:} las tres instancias residieron en un único nodo elegible; el \emph{failover} es intra-nodo y un fallo de nodo completo no es \emph{testeable} por construcción. El RTO de F2 es una \textbf{cota inferior} del real ante pérdida de nodo (no captura la latencia \emph{detach/attach} del volumen CSI).
+\item \textbf{Carga pequeña:} pgbench \texttt{-s 10} ($\approx$150~MB), 4 clientes: no es un peor caso; central para el \emph{lag} $\approx 0$ y el RPO=0.
+\item \textbf{Solo asíncrono:} el modo síncrono no se varió; las cifras de RPO corresponden a replicación asíncrona.
+\end{itemize}
+
+\section*{Disponibilidad}
+Datos limpios, manifiestos, \texttt{tx-verifier}, scripts y este suplemento se depositan en Zenodo (DOI por asignar, CC-BY-4.0; código MIT). Los registros crudos del verificador y los eventos del operador se facilitan a petición por el acceso restringido del clúster productivo.
+
+\end{document}

@@ -1,0 +1,47 @@
+# Chaos Mesh v2.8.3 -- instalacion RESTRINGIDA AL NAMESPACE en entorno air-gapped.
+# (2.8 soporta K8s 1.30-1.35; el cluster corre 1.34.6. Chaos Mesh 2.7 NO sirve: tope K8s 1.28.)
+# helm template chaos-mesh ./chaos-mesh-2.8.3.tgz -n pg-chaos-lab -f values-airgapped.yaml > chaos-mesh-rendered.yaml
+# kubectl apply -f chaos-mesh-rendered.yaml
+#
+# clusterScoped=false: el controlador solo gestiona recursos del namespace de
+# instalacion; no puede tocar otros namespaces (proteccion clave en produccion).
+clusterScoped: false
+
+# Solo namespaces con la etiqueta chaos-mesh.org/inject=enabled son objetivos validos.
+controllerManager:
+  enableFilterNamespace: true
+  replicaCount: 1
+  targetNamespace: pg-chaos-lab
+  # enabledControllers se DEJA en "*" (todos). Acotarlo a nombres tipo
+  # [podchaos, iochaos] NO funciona en 2.8.3: no casan con los nombres reales de
+  # los reconcilers y se desactivan TODOS (0 controladores -> el caos no se aplica).
+  # El crashloop de clusterScoped:false (informers cluster-scoped de remoteclusters
+  # y physicalmachines -> "forbidden at the cluster scope") se resuelve con el RBAC
+  # minimo de solo-lectura en 11-rbac-clusterscoped-read.yaml, NO acotando controllers.
+  enabledControllers:
+    - "*"
+  # Air-gapped: fijar el controller al nodo del lab, donde estan importadas las
+  # imagenes de Chaos Mesh (evita ImagePullBackOff si cae en otro nodo) y ademas
+  # confina todo Chaos Mesh al nodo del laboratorio.
+  nodeSelector:
+    pg-chaos-lab/member: "true"
+
+chaosDaemon:
+  runtime: containerd
+  socketPath: /run/containerd/containerd.sock
+  # Limitar el DaemonSet a los nodos donde correra el laboratorio.
+  # Etiquetar antes: kubectl label node <worker-N> pg-chaos-lab/member=true
+  nodeSelector:
+    pg-chaos-lab/member: "true"
+
+dashboard:
+  create: false          # opcional; en air-gapped se opera por CLI/manifiestos
+
+dnsServer:
+  create: false          # no se usan fallos de DNS en este diseno
+
+# Registro local air-gapped: ajustar si las imagenes se re-etiquetaron
+# (p. ej. registry.local:5000/chaos-mesh/...). Si se importaron con ctr
+# conservando el nombre original ghcr.io/..., dejar por defecto.
+# images:
+#   registry: registry.local:5000

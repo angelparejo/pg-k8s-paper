@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "Si usa estos datos o código, cite el depósito y el artículo asociado."
+title: "Datos y paquete de ejecución — Estudio empírico de CloudNativePG bajo fallos inyectados (Fase 1)"
+type: dataset
+authors:
+  - family-names: "Parejo R."
+    given-names: "Angel A."
+    affiliation: "Universidad de Carabobo, Valencia, Venezuela"
+    orcid: "https://orcid.org/0009-0001-9737-7116"
+version: "1.0-fase1"
+date-released: "2026-08-12"
+license: CC-BY-4.0
+keywords:
+  - Kubernetes
+  - PostgreSQL
+  - CloudNativePG
+  - CSI
+  - "inyección de fallos"
+  - "chaos engineering"
+  - failover
+  - RTO
+  - RPO
+doi: "10.5281/zenodo.XXXXXXX"   # reservar en Zenodo y sustituir
+preferred-citation:
+  type: article
+  title: "Análisis multicapa de operadores de PostgreSQL y almacenamiento CSI en Kubernetes: un marco de análisis y un estudio empírico de CloudNativePG bajo fallos inyectados"
+  authors:
+    - family-names: "Parejo R."
+      given-names: "Angel A."
+  journal: "Revista FARAUTE de Ciencias y Tecnología (UC/FACYT)"
+  year: 2026

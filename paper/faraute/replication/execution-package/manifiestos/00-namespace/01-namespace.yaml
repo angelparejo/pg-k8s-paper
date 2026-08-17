@@ -1,0 +1,22 @@
+# Namespace aislado del laboratorio. Etiquetas usadas por RBAC, cuotas,
+# politicas Calico y el alcance de Chaos Mesh.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pg-chaos-lab
+  annotations:
+    # El laboratorio NO entra en el service mesh Linkerd: coincide con produccion
+    # (los namespaces pg-* de CNPG no estan meshados) y evita contaminar la
+    # medicion de RTO/latencia con un sidecar linkerd-proxy en la ruta.
+    linkerd.io/inject: disabled
+    # enableFilterNamespace de Chaos Mesh reconoce este marcador como ANNOTATION
+    # (NO como label): sin el, el selector reporta "namespace is not enabled" y
+    # "no pod is selected" -> ningun experimento inyecta (fail-safe). Verificado
+    # contra la doc oficial. Los 4 clusteres preexistentes NO lo tienen -> protegidos.
+    chaos-mesh.org/inject: enabled
+  labels:
+    app.kubernetes.io/part-of: pg-chaos-lab
+    # (Se mantiene tambien como label por si alguna version usa namespaceSelector
+    # en los webhooks; el filtro de inyeccion real es la ANNOTATION de arriba.)
+    chaos-mesh.org/inject: enabled
+    pod-security.kubernetes.io/enforce: privileged   # chaos-daemon lo requiere; validar con el equipo de seguridad

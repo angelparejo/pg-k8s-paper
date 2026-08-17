@@ -1,0 +1,21 @@
+# F4 - Latencia de E/S +100 ms sobre el volumen del primario (CNPG).
+# Nivel 0 ms = linea base sin IOChaos. La inyeccion es via FUSE dentro del pod:
+# NO afecta a la SAN Huawei ni a otros consumidores del arreglo.
+apiVersion: chaos-mesh.org/v1alpha1
+kind: IOChaos
+metadata:
+  name: f4-iolatency-100ms-cnpg
+  namespace: pg-chaos-lab
+spec:
+  action: latency
+  mode: one
+  selector:
+    namespaces: [pg-chaos-lab]
+    labelSelectors:
+      cnpg.io/cluster: pglab-cnpg-exp
+      cnpg.io/instanceRole: primary
+  volumePath: /var/lib/postgresql/data
+  path: "/var/lib/postgresql/data/**"
+  delay: "100ms"
+  percent: 100
+  duration: 10m
