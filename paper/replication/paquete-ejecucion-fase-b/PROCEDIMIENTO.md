@@ -1,7 +1,7 @@
 # PROCEDIMIENTO — Piloto Fase B (solo CloudNativePG) · pg-chaos-lab
 
 **Audiencia:** equipo ejecutor (puede no conocer el contexto de la investigación).
-**Regla de oro:** este piloto crea **un quinto clúster CNPG nuevo y aislado** (`pglab-cnpg-exp`) gestionado por el operador CNPG **ya instalado y compartido**. Los **cuatro clústeres CNPG preexistentes NO se tocan** (`pg-prod`, `pg-cert`, `pg-dev`, `gitlab/pg-gitlab`). Toda inyección de fallos está acotada por **doble filtro: namespace `pg-chaos-lab` + nombre de clúster `pglab-cnpg-exp`**.
+**Regla de oro:** este piloto crea **un quinto clúster CNPG nuevo y aislado** (`pglab-cnpg-exp`) gestionado por el operador CNPG **ya instalado y compartido**. Los **cuatro clústeres CNPG preexistentes NO se tocan** (`pg-alfa`, `pg-beta`, `pg-gamma`, `ns-delta/pg-delta`). Toda inyección de fallos está acotada por **doble filtro: namespace `pg-chaos-lab` + nombre de clúster `pglab-cnpg-exp`**.
 
 **Qué hace / qué NO hace:**
 - ✅ Crea `pglab-cnpg-exp` en el namespace nuevo `pg-chaos-lab`, le mete carga e inyecta fallos **solo a él**.
@@ -16,10 +16,10 @@
 |---|---|
 | Namespace del operador CNPG | `cnpg-operator` (deploy `cnpg-cloudnative-pg`, imagen `...cloudnative-pg:1.28.0`) |
 | StorageClass del CSI Huawei | `huawei-ch-xfs` (default · `csi.huawei.com` · `reclaimPolicy: Retain` · `WaitForFirstConsumer`) |
-| Nodo del laboratorio | `tcolp293` (worker con `storage=huawei-san`, `fc=true`) |
+| Nodo del laboratorio | `nodo-lab-01` (worker con `storage=huawei-san`, `fc=true`) |
 | Entorno verificado | Kubernetes v1.34.6 · RHEL 9.8 · kernel 5.14 · containerd 2.2.4 |
 
-> ⚠️ `tcolp293` **co-aloja hoy 3 primaries CNPG ajenos** (pg-cert-1, pg-dev-3, pg-gitlab-2), además de ArgoCD/Harbor/Prometheus. El aislamiento del piloto **no** depende de que el nodo esté vacío, sino del filtro de namespace + doble selector + nombre único + dry-run G1 (ver `SEGURIDAD.md` y `CHECKLIST-GONOGO.md` G1/G5).
+> ⚠️ `nodo-lab-01` **co-aloja hoy 3 primaries CNPG ajenos** (pg-beta-1, pg-gamma-3, pg-delta-2), además de ArgoCD/Harbor/Prometheus. El aislamiento del piloto **no** depende de que el nodo esté vacío, sino del filtro de namespace + doble selector + nombre único + dry-run G1 (ver `SEGURIDAD.md` y `CHECKLIST-GONOGO.md` G1/G5).
 > Todos los comandos asumen `kubectl` con el contexto correcto. Verificar: `kubectl config current-context`.
 
 ---
@@ -72,7 +72,7 @@ Antes de inyectar en una ventana posterior, ejecutar en orden:
 - [ ] **R3.** Aislamiento del laboratorio intacto:
   ```bash
   kubectl get pods -A -l app.kubernetes.io/instance=chaos-mesh -o wide     # solo en pg-chaos-lab
-  kubectl -n pg-chaos-lab get pods -o wide | grep chaos-daemon             # solo en tcolp293
+  kubectl -n pg-chaos-lab get pods -o wide | grep chaos-daemon             # solo en nodo-lab-01
   kubectl get ns pg-chaos-lab --show-labels | grep chaos-mesh.org/inject   # label intacto
   kubectl -n pg-chaos-lab get resourcequota                                # cuota activa
   kubectl get nodes -l pg-chaos-lab/member=true                            # nodos del lab intactos
@@ -135,14 +135,14 @@ kubectl get clusterinformation default -o jsonpath='{.spec.calicoVersion}{"\n"}'
 - Si difiere: registrar la versión real y consultar con el responsable antes de F3.
 - [ ] PASA
 
-**0.5 Nodo del laboratorio etiquetado (`tcolp293`)**
+**0.5 Nodo del laboratorio etiquetado (`nodo-lab-01`)**
 ```bash
 kubectl get nodes -l pg-chaos-lab/member=true
-kubectl get pods -A -o wide --field-selector spec.nodeName=tcolp293 | grep -v pg-chaos-lab
+kubectl get pods -A -o wide --field-selector spec.nodeName=nodo-lab-01 | grep -v pg-chaos-lab
 ```
-- Esperado: `tcolp293` etiquetado. La segunda orden **sí** listará cargas ajenas: `tcolp293` es el worker nonprod designado y **co-aloja 3 primaries CNPG** (pg-cert-1, pg-dev-3, pg-gitlab-2) además de ArgoCD/Harbor/Prometheus. **Esto es esperado y aceptado**: el aislamiento del piloto NO depende de que el nodo esté vacío (ver `SEGURIDAD.md` barrera 2 y `CHECKLIST-GONOGO.md` G5), sino del filtro de namespace + doble selector + nombre único + dry-run G1. Los escenarios son estrictamente pod-scoped (F1/F2 `pod-failure`, F4 IOChaos-FUSE); no se ejecuta ningún fallo de nodo ni StressChaos que pudiera alcanzar a los vecinos.
-- Si el nodo no está etiquetado: etiquetar (con visto bueno) `kubectl label node tcolp293 pg-chaos-lab/member=true`.
-- [ ] PASA — nodo del lab = `tcolp293`
+- Esperado: `nodo-lab-01` etiquetado. La segunda orden **sí** listará cargas ajenas: `nodo-lab-01` es el worker nonprod designado y **co-aloja 3 primaries CNPG** (pg-beta-1, pg-gamma-3, pg-delta-2) además de ArgoCD/Harbor/Prometheus. **Esto es esperado y aceptado**: el aislamiento del piloto NO depende de que el nodo esté vacío (ver `SEGURIDAD.md` barrera 2 y `CHECKLIST-GONOGO.md` G5), sino del filtro de namespace + doble selector + nombre único + dry-run G1. Los escenarios son estrictamente pod-scoped (F1/F2 `pod-failure`, F4 IOChaos-FUSE); no se ejecuta ningún fallo de nodo ni StressChaos que pudiera alcanzar a los vecinos.
+- Si el nodo no está etiquetado: etiquetar (con visto bueno) `kubectl label node nodo-lab-01 pg-chaos-lab/member=true`.
+- [ ] PASA — nodo del lab = `nodo-lab-01`
 
 **0.6 Imágenes importadas en CADA nodo del lab** (ejecutar en el nodo, no en kubectl)
 ```bash
@@ -156,7 +156,7 @@ sudo ctr -n k8s.io images ls | grep -E 'cloudnative-pg/postgresql:16.13'
 ```bash
 kubectl get clusters.postgresql.cnpg.io -A
 ```
-- Esperado: exactamente **4** clústeres preexistentes (`pg-prod`, `pg-cert`, `pg-dev`, `gitlab/pg-gitlab`). **Anotarlos** (nombre + namespace + nodos) en `RESPONSABLES.md`.
+- Esperado: exactamente **4** clústeres preexistentes (`pg-alfa`, `pg-beta`, `pg-gamma`, `ns-delta/pg-delta`). **Anotarlos** (nombre + namespace + nodos) en `RESPONSABLES.md`.
 - Verificaciones de seguridad sobre esa lista:
   - Ninguno se llama `pglab-cnpg-exp`. Si alguno coincide → cambiar el nombre experimental (p. ej. `pglab-cnpg-exp2`) en **todos** los manifiestos antes de seguir.
   - Ninguno está en el namespace `pg-chaos-lab`.
@@ -164,7 +164,7 @@ kubectl get clusters.postgresql.cnpg.io -A
 # Ubicación de TODOS los primarios preexistentes (cuáles co-residen en el nodo del lab):
 kubectl get pods -A -l cnpg.io/instanceRole=primary -o wide
 ```
-  - Nota: **3 de los primarios preexistentes (pg-cert-1, pg-dev-3, pg-gitlab-2) co-residen hoy en `tcolp293`**, el nodo del lab. Esto es **conocido y aceptado**; la protección no descansa en su ausencia sino en G1 (ningún manifiesto de fallo los selecciona) — se demuestra en la compuerta (`CHECKLIST-GONOGO.md`, G1 y G5). El primario de producción `pg-prod-2` **no** está en `tcolp293`.
+  - Nota: **3 de los primarios preexistentes (pg-beta-1, pg-gamma-3, pg-delta-2) co-residen hoy en `nodo-lab-01`**, el nodo del lab. Esto es **conocido y aceptado**; la protección no descansa en su ausencia sino en G1 (ningún manifiesto de fallo los selecciona) — se demuestra en la compuerta (`CHECKLIST-GONOGO.md`, G1 y G5). El primario de producción `pg-alfa-2` **no** está en `nodo-lab-01`.
 - [ ] PASA — clústeres preexistentes anotados: ____________________
 
 **0.8 El namespace del laboratorio NO existe todavía**
@@ -257,7 +257,7 @@ kubectl get pods -A -l app.kubernetes.io/instance=chaos-mesh -o wide
 # chaos-daemon SOLO en nodos del lab (cuenta == nº de nodos del lab):
 kubectl -n pg-chaos-lab get pods -o wide | grep chaos-daemon
 ```
-- Esperado: todos los pods de Chaos Mesh en `pg-chaos-lab`; `chaos-daemon` únicamente en `tcolp293`; `clusterScoped:false`, `enableFilterNamespace:true`, `targetNamespace:pg-chaos-lab` en el rendered.
+- Esperado: todos los pods de Chaos Mesh en `pg-chaos-lab`; `chaos-daemon` únicamente en `nodo-lab-01`; `clusterScoped:false`, `enableFilterNamespace:true`, `targetNamespace:pg-chaos-lab` en el rendered.
 - Si algún `chaos-daemon` aparece en un nodo que no es del lab: **detener**, revisar `nodeSelector`, borrar el rendered y reinstalar.
 - [ ] PASA
 
@@ -276,7 +276,7 @@ kubectl -n pg-chaos-lab get cluster pglab-cnpg-exp -w   # esperar estado saludab
 ```bash
 kubectl -n pg-chaos-lab get pods -l cnpg.io/cluster=pglab-cnpg-exp -o wide
 ```
-- Esperado: `pglab-cnpg-exp-1/2/3` en `Running`, en nodos `tcolp293`.
+- Esperado: `pglab-cnpg-exp-1/2/3` en `Running`, en nodos `nodo-lab-01`.
 
 **3.3 Desplegar carga y verificador e inicializar pgbench (una sola vez):**
 ```bash

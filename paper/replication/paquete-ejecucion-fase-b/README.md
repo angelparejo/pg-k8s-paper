@@ -2,9 +2,11 @@
 
 Paquete autocontenido para que un equipo ejecutor (que puede no conocer el contexto de la investigación) realice, de forma segura, un piloto de inyección de fallos sobre **un único clúster PostgreSQL nuevo y aislado** en un clúster Kubernetes **productivo**.
 
+> **Nombres seudonimizados (2026-08-17).** Los nodos (`nodo-lab-01`, `nodo-02`…`nodo-04`) y los clústeres PostgreSQL preexistentes (`pg-alfa`, `pg-beta`, `pg-gamma`, `pg-delta`) son seudónimos, porque este paquete se publica junto al artículo. La correspondencia con los nombres reales está en `.claude/state/mapeo-seudonimos-infra.md`, que no se versiona. Quien ejecute el piloto debe traducirlos a su entorno.
+
 ## En una frase
 
-Se crea un **quinto** clúster CloudNativePG (`pglab-cnpg-exp`), nuevo y aislado en el namespace `pg-chaos-lab`, gestionado por el operador CNPG **ya instalado y compartido** con cuatro clústeres CNPG preexistentes (`pg-prod`, `pg-cert`, `pg-dev`, `gitlab/pg-gitlab`). Se le inyectan fallos controlados (terminación de pod, indisponibilidad sostenida, partición de red, latencia de E/S) y se miden RTO y RPO. **Los cuatro clústeres preexistentes no se tocan.**
+Se crea un **quinto** clúster CloudNativePG (`pglab-cnpg-exp`), nuevo y aislado en el namespace `pg-chaos-lab`, gestionado por el operador CNPG **ya instalado y compartido** con cuatro clústeres CNPG preexistentes (`pg-alfa`, `pg-beta`, `pg-gamma`, `ns-delta/pg-delta`). Se le inyectan fallos controlados (terminación de pod, indisponibilidad sostenida, partición de red, latencia de E/S) y se miden RTO y RPO. **Los cuatro clústeres preexistentes no se tocan.**
 
 ## Qué hace / qué NO hace
 

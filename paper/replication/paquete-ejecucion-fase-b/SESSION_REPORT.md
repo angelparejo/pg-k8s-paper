@@ -17,7 +17,7 @@
 
 **Results:**
 - 23 CRDs establecidas; RBAC + 3 webhooks cluster-scoped creados; controller + daemon confinados.
-- `chaos-controller-manager` y `chaos-daemon` **1/1 Running, ambos en tcolp293**; daemon único (1 nodo del lab); endpoints del controller poblados (`:10250,:10081,:10080`); rollout OK.
+- `chaos-controller-manager` y `chaos-daemon` **1/1 Running, ambos en nodo-lab-01**; daemon único (1 nodo del lab); endpoints del controller poblados (`:10250,:10081,:10080`); rollout OK.
 - FASE 2 = PASA.
 
 **Status:**
@@ -29,7 +29,7 @@
 **Modo:** DESACOPLADO (usuario ejecuta por VPN desde TCOLP292).
 
 **Operations:**
-- FASE 3: creado `pglab-cnpg-exp` (3 instancias healthy en tcolp293, 3 PVCs Bound 15Gi huawei-ch-xfs); desplegados pgbench + tx-verifier; `pgbench -i -s 10` (1M filas); pgbench en régimen (tps≈478, 0 fallidas), verificador con COMMITs crecientes. PASA.
+- FASE 3: creado `pglab-cnpg-exp` (3 instancias healthy en nodo-lab-01, 3 PVCs Bound 15Gi huawei-ch-xfs); desplegados pgbench + tx-verifier; `pgbench -i -s 10` (1M filas); pgbench en régimen (tps≈478, 0 fallidas), verificador con COMMITs crecientes. PASA.
 - FASE 4 PASO A (12/12 PASA): G1.1-G1.5, G2.1-G2.3, G4, G5, G7, G8. G1.2 (dry-run autoritativo) confirma que los 6 manifiestos resuelven a 1 solo pod (pglab-cnpg-exp-1) en pg-chaos-lab.
 - Recuperación de archivos que no se copiaron a TCOLP292: recreado `manifiestos/scripts/dry-run-selectores.py` (ASCII heredoc, base64 falló por corrupción de pegado); `estado-inicial.txt` reubicado al dir del paquete.
 - FIX del webhook/crashloop (ver Decisions).
@@ -59,7 +59,7 @@
 **Instrumentación de RTO (corregida):** la sonda activa de `run-experiment.sh` (kubectl exec ~1 s) es demasiado gruesa para el outage breve del failover (medía RTO≈0 y agotaba el guard de 120 s). **Decisión:** RTO/RPO se miden con el **gap del verificador** (~100 ms). `run-experiment.sh` reescrito a v3 (solo orquesta: inyecta → confirma failover por cambio de primario → recupera → limpia, con marcas de tiempo). `parse-verifier.py` mejorado: lista todos los gaps ≥1 s (= RTO por repetición) + RPO.
 
 **Operaciones destacadas:**
-- Chaos Mesh v2.8.3 instalado y confinado a tcolp293; clúster experimental + carga; GO/NO-GO completo (G1.2 dry-run: 6 manifiestos → 1 solo pod pglab-cnpg-exp-1).
+- Chaos Mesh v2.8.3 instalado y confinado a nodo-lab-01; clúster experimental + carga; GO/NO-GO completo (G1.2 dry-run: 6 manifiestos → 1 solo pod pglab-cnpg-exp-1).
 - Recuperación de archivos no transferidos a TCOLP292 (scripts/) vía base64 en trozos + sha256 (MobaXterm suelta líneas en pegados grandes).
 
 **Estado al cierre:** experimental healthy 3/3 (primario -2), sin experimentos activos, 4 preexistentes intactos. `results.csv` en TCOLP292 tiene ~3 filas espurias (intentos con la sonda vieja) — BORRAR mañana antes de las reps.

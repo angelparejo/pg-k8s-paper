@@ -18,7 +18,7 @@
 **Phase:** Execution (preparación del piloto empírico para la v2)
 **Target:** paper/replication/paquete-ejecucion-fase-b/ (11 archivos) + memory/
 **Score:** N/A (documentación/manifiestos; no ejecutado contra clúster)
-**Verdict:** Reconocido el clúster productivo real en **modo desacoplado** (solo-lectura; el usuario ejecutó por VPN y pegó salidas) y actualizado el paquete Fase B en consecuencia. Tres refutaciones materiales de los supuestos previos: (1) **no son 3 clústeres productivos sino 4 CNPG preexistentes** (pg-prod, pg-cert, pg-dev, gitlab/pg-gitlab); el experimental es el 5.º. (2) **Chaos Mesh 2.7.x es incompatible** con K8s v1.34.6 → subido a **v2.8.3** (soporta 1.30–1.35; parches "Chaotic Deputy"; verificado por WebSearch/WebFetch en chaos-mesh.org). (3) El nodo del lab **tcolp293 co-aloja 3 primaries CNPG ajenos** (pg-cert-1, pg-dev-3, pg-gitlab-2) → la barrera #2 y G5 (que asumían "nodo vacío") se **reescribieron**: la contención descansa en filtro de namespace + doble selector + nombre único + dry-run G1, no en aislamiento de nodo (decisión del usuario: mantener tcolp293). Además: placeholders resueltos (`cnpg-operator`, SC `huawei-ch-xfs` con reclaimPolicy Retain → teardown de PV a mano, nodo `tcolp293`); Linkerd excluido del lab vía `linkerd.io/inject: disabled` en namespace + `inheritedMetadata` del clúster (coincide con prod: pg-* no meshado → sin salvedad de validez externa). Verificado: 0 placeholders, 0 residuos de encuadre viejo, YAML parsea. Memoria del proyecto corregida.
+**Verdict:** Reconocido el clúster productivo real en **modo desacoplado** (solo-lectura; el usuario ejecutó por VPN y pegó salidas) y actualizado el paquete Fase B en consecuencia. Tres refutaciones materiales de los supuestos previos: (1) **no son 3 clústeres productivos sino 4 CNPG preexistentes** (pg-alfa, pg-beta, pg-gamma, ns-delta/pg-delta); el experimental es el 5.º. (2) **Chaos Mesh 2.7.x es incompatible** con K8s v1.34.6 → subido a **v2.8.3** (soporta 1.30–1.35; parches "Chaotic Deputy"; verificado por WebSearch/WebFetch en chaos-mesh.org). (3) El nodo del lab **nodo-lab-01 co-aloja 3 primaries CNPG ajenos** (pg-beta-1, pg-gamma-3, pg-delta-2) → la barrera #2 y G5 (que asumían "nodo vacío") se **reescribieron**: la contención descansa en filtro de namespace + doble selector + nombre único + dry-run G1, no en aislamiento de nodo (decisión del usuario: mantener nodo-lab-01). Además: placeholders resueltos (`cnpg-operator`, SC `huawei-ch-xfs` con reclaimPolicy Retain → teardown de PV a mano, nodo `nodo-lab-01`); Linkerd excluido del lab vía `linkerd.io/inject: disabled` en namespace + `inheritedMetadata` del clúster (coincide con prod: pg-* no meshado → sin salvedad de validez externa). Verificado: 0 placeholders, 0 residuos de encuadre viejo, YAML parsea. Memoria del proyecto corregida.
 **Report:** quality_reports/plans/2026-07-05_actualizar-paquete-fase-b.md (plan aprobado) · paper/replication/paquete-ejecucion-fase-b/
 
 ### 2026-07-05 15:32 — Coder (mejora de seguridad — compuerta GO/NO-GO)
@@ -139,3 +139,44 @@
 **Score:** 96/100
 **Verdict:** Recorte ~49% preservó integridad del argumento y trazabilidad numérica íntegra; autosuficiente sin el v1-6; cadena de citas [parejo2026] honesta; convenciones LNCS correctas. Solo 3 retoques de estilo (C1–C3), aplicados. Apto para envío a CACIC.
 **Report:** quality_reports/reviews/2026-07-10_v2-cacic_writer-critic.md
+
+### 2026-08-12 22:40 — Conversión Faraute + validaciones + Grupo A
+**Phase:** Execution / Peer Review
+**Target:** paper/faraute/main.tex (conversión de articulo_angelparejo-ITC.docx a formato Revista FARAUTE)
+**Score:** writer-critic 70→~84 (bloqueante de páginas persiste); verifier PASS; domain-referee 80; methods-referee 79
+**Verdict:** Conversión fiel a Faraute (2-col, Times12, autor-año, bib alfabética), compila 19pp limpio. Estadística verificada 3× (correcta). Aplicado Grupo A (leyendas tabla debajo, resumen 145pal, silabeo ES, overfull Ec., "Fuente:" Fig3/4) + depósito Zenodo (paper/faraute/replication/). PENDIENTE de autorización: recorte a ≤12pp (usuario difirió), revisiones de árbitros (Jepsen, reencuadre visibilidad, semántica verificador), correcciones de refs (Burckhardt→S., Taft→R.), grises de figuras (sin tool local).
+**Report:** quality_reports/reviews/faraute_*.md (5 archivos)
+
+### 2026-08-12 23:10 — Grupo B (recorte nivel seguro) + racionalización de figuras
+**Phase:** Execution
+**Target:** paper/faraute/main.tex
+**Score:** N/A (recorte autorizado nivel seguro)
+**Verdict:** 19→17 pp. Eliminadas Fig1 (modelo, "tautológica" per domain-referee) y Fig3 (boxplot, redundante con Fig4 + criticada por methods-referee) → quedan 3 figs (testbed/timeline/visibilidad, renumeradas). Condensadas §7 (−370 pal, remite a §5-§6), §8 (−340, quita duplicación de Fase 2), §4.3/§4.4 (−200) y §1 (fusión). Cuerpo 8093→~7180 palabras. Compila limpio, 0 overfull, 0 refs sin resolver. Preservado el detalle metodológico/estadístico que los árbitros valoraron. PENDIENTE: 17→12 pp requiere recorte PROFUNDO (mover detalle a Zenodo) o holgura del editor — usuario debe decidir. Grises pospuestos (color por ahora, sin tool local).
+**Report:** quality_reports/reviews/faraute_sintesis_recomendaciones.md
+
+### 2026-08-12 23:45 — Depósito Zenodo Opción 2 (reproducibilidad + suplemento)
+**Phase:** Submission (reproducibilidad)
+**Target:** paper/faraute/replication/ (+ zenodo-deposito-fase1.zip)
+**Score:** N/A
+**Verdict:** Construida Opción 2. analyze.py REESCRITO (stdlib) reproduce TODAS las cifras del artículo (F1 7,91/F2 36,75; U=0 p=1,083e-5; z=-3,78; rb=1,00; HL 28,96; CP 25,9%/22,1%; IC cobertura 97,9%; Spearman 0,62<crít 0,648). Corregido bug: valor crítico Spearman por tabla exacta (0,648) en vez de aprox-t (0,62) → ahora "no significativa" como el paper. Añadidos: DATA_DICTIONARY.md, CITATION.cff, LICENSE.md (CC-BY-4.0 datos / MIT código), suplemento.pdf (4 pp) con métodos+estadística extendidos que responden a methods-referee MAJOR 1/3/5 (semántica ACK-perdido del verificador, sensibilidad de exclusiones, permutación). ZIP listo para Zenodo. PENDIENTE usuario: reservar DOI en Zenodo y sustituir 'DOI por asignar'.
+**Report:** paper/faraute/replication/README.md
+
+### 2026-08-13 00:05 — Grupos C y D aplicados (revisiones de árbitros + referencias)
+**Phase:** Execution / Peer Review (respuesta a árbitros)
+**Target:** paper/faraute/main.tex
+**Score:** N/A (edición autorizada "Todo C+D")
+**Verdict:** Verificado por web: Burckhardt→Sebastian(S.) y Taft→Rebecca(R.) CORREGIDOS; Han/Chen/Khan OK. Añadidas refs: Kingsbury & Alvaro "Elle" PVLDB 2021 (Jepsen, C1) y PostgreSQL 16 doc (D4); mejorada spec CSI (D3). C2 reencuadre a visibilidad (§3.2 andamiaje + §8 predicado V(fallo,K) como contribución destacada). C3 salvedad intra-nodo en resumen ES/EN (146/144 pal ≤150). C4 p-valor saturado, C5 permutación, C6 semántica ACK-perdido del verificador (§5.2), C8 sensibilidad de exclusiones, C9 anclaje del "comportamiento anticipado" (§6.3, evita hombre de paja), C10 Clopper-Pearson unilateral + cota inferior F2 en Tabla 2. Compila limpio 18pp (17→18 por las adiciones). Responde domain-referee MAJOR 1-5 y methods-referee MAJOR 1-5. PENDIENTE: recorte profundo a 12pp; grises.
+**Report:** quality_reports/reviews/faraute_sintesis_recomendaciones.md
+
+### 2026-08-13 01:10 — Recorte profundo a 12 pp (modo automático)
+**Phase:** Execution
+**Target:** paper/faraute/main.tex (versión final) + main_referencia_extendida_18pp.* (referencia)
+**Score:** N/A
+**Verdict:** Recorte profundo 18→12 pp apoyado en el suplemento. Condensadas TODAS las secciones (§1-§8) moviendo detalle fino (IC, sensibilidad de exclusiones, permutación, F4 completo, aislamiento) al material suplementario del Zenodo, con remisiones explícitas. PRESERVADO: 3 figuras (testbed/timeline/visibilidad), 2 tablas, 6 ecuaciones, todas las cifras (7,91/36,75/4,65×/U=0/p=1,1e-5/HL 28,96/613253/0-12/CP 25,9-22,1%/97,9%/Spearman 0,62), reencuadre a visibilidad (C2), Jepsen (C1), salvedades intra-nodo (C3), semántica ACK-perdido. Resumen 146/abstract 144 (≤150). Layout: Fig4 a 1 columna, titlespacing y parskip ajustados. Compila limpio 12 pp, 0 refs sin resolver, 1 overfull 1pt (cosmético). Versión 18pp preservada como referencia consultable. Entregable: main_final_12pp.pdf.
+
+### 2026-08-16 17:45 — Coder/Data-engineer (entorno + figuras + PDF definitivo Faraute)
+**Phase:** Execution / Submission-prep
+**Target:** entorno TeX/ImageMagick; paper/faraute/figures/; paper/faraute/main.pdf
+**Score:** N/A (tarea de entorno y producción de entregable)
+**Verdict:** Desbloqueado el envío a Faraute. (1) DIAGNÓSTICO DE RED: el puerto 53 está bloqueado en toda la máquina (Windows tampoco resuelve) por conflicto entre NordVPN —que secuestra la tabla de rutas con 0.0.0.0/1/128.0.0.0/1— y la VPN Check Point corporativa; la salida TCP/80 y TCP/443 sí funciona. Instalados `texlive-lang-spanish` y `imagemagick` resolviendo los repos por DNS-over-HTTPS y fijándolos temporalmente en /etc/hosts (parche ya retirado). Verificación independiente 4/4 + prueba funcional de silabeo (me-ca-nis-mos, al-ma-ce-na-mien-to, in-fra-es-truc-tu-ra). (2) HALLAZGO: `main.tex` NUNCA cargaba `silabeo-es.tex` —no hay \input ni \hyphenation—, de modo que el PDF del 13-ago se compiló sin silabeo español alguno (cortes con reglas inglesas). El parche de 254 líneas de scripts/silabeo_es.py es código muerto; pendiente decidir si se retira. (3) FIGURAS: las 3 del cuerpo (Fig2/Fig4/Fig5) convertidas a Gray 1-canal conservando 300 dpi; legibilidad revisada una por una —el color era decorativo, la semántica está en las etiquetas—; originales preservados en figures/color-originales/; copias renombradas para la entrega en figuras-envio/ (Fig1/Fig2/Fig3). (4) ENTREGABLE: main.pdf regenerado = 12 pp, 0 overfull, 0 underfull, 0 refs sin resolver, PDF íntegro en DeviceGray (0 DeviceRGB); main_final_12pp.pdf sincronizado (md5 idéntico). Mejora neta: el overfull de 1pt que registraba la versión previa desapareció y la paginación no se movió. PENDIENTE del usuario: DOI Zenodo, lectura final y envío.
+**Report:** paper/faraute/CHECKLIST_ENVIO_FARAUTE.md (B1 resuelto); PENDIENTE_MI_LADO.md

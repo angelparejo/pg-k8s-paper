@@ -10,7 +10,7 @@ Verificar tras **cada** inyección (y de forma continua durante F2/F4, que son l
 
 - **Alertas activas fuera de `pg-chaos-lab`** — cualquier alerta de los cuatro clústeres preexistentes o de infraestructura compartida.
 - **Degradación del plano de control** — latencia p99 del API server o `etcd_disk_wal_fsync` peor que la línea base; timeouts de `kubectl`.
-- **Cualquier anomalía en los cuatro clústeres preexistentes** — un clúster preexistente que cambie de nº de instancias, pierda el primario, haga failover, entre en `CrashLoopBackOff`, o cuyo pod se reprograme coincidiendo en el tiempo con una inyección. **Atención especial** a pg-cert, pg-dev y pg-gitlab, cuyos primarios co-residen con el lab en `tcolp293`.
+- **Cualquier anomalía en los cuatro clústeres preexistentes** — un clúster preexistente que cambie de nº de instancias, pierda el primario, haga failover, entre en `CrashLoopBackOff`, o cuyo pod se reprograme coincidiendo en el tiempo con una inyección. **Atención especial** a pg-beta, pg-gamma y pg-delta, cuyos primarios co-residen con el lab en `nodo-lab-01`.
 - **Presión de E/S anómala en nodos que NO son del laboratorio.**
 - **Un `chaos-daemon` aparece en un nodo que no es del lab**, o un experimento selecciona un pod fuera de `pg-chaos-lab`.
 - **La verificación de igualdad (Fase 6.3) o la reanudación (R2) detecta un cambio en recursos preexistentes.**

@@ -3,9 +3,9 @@
 **Cuándo:** Fase 4 del `PROCEDIMIENTO.md`, y de nuevo (ítems G1–G4) en la reanudación de cada ventana posterior (paso R6).
 **Regla absoluta:** basta **un solo NO PASA** para **abortar**. No se inyecta nada hasta que TODOS los ítems estén en PASA. Ante la duda → NO-GO. Ver `ABORTO.md`.
 
-**Contexto de riesgo:** el operador CNPG es **compartido** con cuatro clústeres CNPG preexistentes (`pg-prod`, `pg-cert`, `pg-dev`, `gitlab/pg-gitlab`); además, 3 de sus primarios (pg-cert-1, pg-dev-3, pg-gitlab-2) **co-residen hoy en el nodo del lab `tcolp293`**. Ninguna inyección puede alcanzarlos. La contención descansa en cuatro capas independientes que este checklist verifica una por una:
+**Contexto de riesgo:** el operador CNPG es **compartido** con cuatro clústeres CNPG preexistentes (`pg-alfa`, `pg-beta`, `pg-gamma`, `ns-delta/pg-delta`); además, 3 de sus primarios (pg-beta-1, pg-gamma-3, pg-delta-2) **co-residen hoy en el nodo del lab `nodo-lab-01`**. Ninguna inyección puede alcanzarlos. La contención descansa en cuatro capas independientes que este checklist verifica una por una:
 1. Chaos Mesh `clusterScoped:false` + `enableFilterNamespace:true` + `targetNamespace:pg-chaos-lab`.
-2. `chaos-daemon` confinado por `nodeSelector` al nodo del lab (`tcolp293`).
+2. `chaos-daemon` confinado por `nodeSelector` al nodo del lab (`nodo-lab-01`).
 3. Todo selector acotado por `namespaces:[pg-chaos-lab]` + `cnpg.io/cluster: pglab-cnpg-exp`.
 4. Nombre de clúster único `pglab-cnpg-exp` (ningún preexistente lo comparte).
 
@@ -91,7 +91,7 @@ kubectl -n pg-chaos-lab get deploy -l app.kubernetes.io/component=controller-man
 # El lab SÍ debe tener la annotation:
 echo -n "pg-chaos-lab (debe: enabled) -> "; kubectl get ns pg-chaos-lab -o jsonpath='{.metadata.annotations.chaos-mesh\.org/inject}{"\n"}'
 # Los 4 clústeres CNPG preexistentes NO deben tenerla (paso 0.7):
-for ns in pg-prod pg-cert pg-dev gitlab; do
+for ns in pg-alfa pg-beta pg-gamma ns-delta; do
   echo -n "$ns (debe: vacío) -> "; kubectl get ns "$ns" -o jsonpath='{.metadata.annotations.chaos-mesh\.org/inject}{"\n"}'
 done
 ```
@@ -154,7 +154,7 @@ kubectl get nodes -l pg-chaos-lab/member=true -o name
 
 ## G5 — Co-residentes en el nodo del lab: inventario y confirmación de que ninguno es objetivo
 
-> El nodo del lab (`tcolp293`) **no está vacío**: co-aloja 3 primaries CNPG ajenos (pg-cert-1, pg-dev-3, pg-gitlab-2) y cargas de infra (ArgoCD/Harbor/Prometheus). La contención **no** depende de su ausencia —imposible aquí— sino de **G1** + del filtro de namespace. Este ítem lo hace explícito y verificable.
+> El nodo del lab (`nodo-lab-01`) **no está vacío**: co-aloja 3 primaries CNPG ajenos (pg-beta-1, pg-gamma-3, pg-delta-2) y cargas de infra (ArgoCD/Harbor/Prometheus). La contención **no** depende de su ausencia —imposible aquí— sino de **G1** + del filtro de namespace. Este ítem lo hace explícito y verificable.
 
 ```bash
 for n in $(kubectl get nodes -l pg-chaos-lab/member=true -o name | cut -d/ -f2); do

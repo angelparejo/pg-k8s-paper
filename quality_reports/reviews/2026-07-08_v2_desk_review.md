@@ -8,7 +8,7 @@
 Ningún criterio de desk-reject se cumple:
 1. **Ajuste:** correcto — estudio empírico de sistemas cloud-native sobre clúster productivo + marco conceptual.
 2. **Contribución clara:** marco de evaluación multicapa (taxonomía + S=(O,K,M,D) + invariantes) + validación empírica en CNPG; hallazgo central no obvio = el failover lo determina la **visibilidad del fallo ante Kubernetes**, con gradiente de tres comportamientos (kill→promueve 7.91 s; failure→recrea en sitio 36.75 s; partición→CP). El contraste ~4.6× kill-vs-fail es genuino y publicable.
-3. **Sin fallo fatal visible:** las tres limitaciones (un operador, un backend SAN/FC, fallo de nodo no testeable por co-localización en tcolp293) están declaradas con honestidad; F2 enmarcado como cota inferior; F4 reconvertido en hallazgo de instrumentación.
+3. **Sin fallo fatal visible:** las tres limitaciones (un operador, un backend SAN/FC, fallo de nodo no testeable por co-localización en nodo-lab-01) están declaradas con honestidad; F2 enmarcado como cota inferior; F4 reconvertido en hallazgo de instrumentación.
 4. **Umbral:** en rango para el tier primario (borderline para el secundario FGCS/JSS por un operador + n=10 + sin fallo de nodo real).
 5. **Sin scoop:** existe chaos-testing de CNPG (LitmusChaos CI) y comparativas de industria [22][23], pero ninguno propone el marco formal + invariantes ni aísla el mecanismo de visibilidad.
 

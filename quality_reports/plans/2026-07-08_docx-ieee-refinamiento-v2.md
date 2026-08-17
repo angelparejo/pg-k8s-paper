@@ -5,7 +5,7 @@
 
 ## Decisiones del usuario
 - Q1 Resultados → **Tabla II + repo público con DOI (Zenodo)**. Quitar rutas internas de la prosa; citar DOI (placeholder por asignar).
-- Q2 Nodo → seudónimo **`nodo-lab-01`** (reemplaza `tcolp293` en todo el doc).
+- Q2 Nodo → seudónimo **`nodo-lab-01`** (reemplaza `nodo-lab-01` en todo el doc).
 - Q3 Código → **monospace/typewriter** (Courier New), sin backticks.
 - Q4 "matar" → **formalizar a "terminar/eliminar"** en prosa; identificador `pod-kill` se mantiene.
 
@@ -17,7 +17,7 @@
 
 ## Cambios en el MARKDOWN (articulo_angelparejov2-experimental.md)
 - "matar el pod" → "terminar el pod" (L5 abstract, L206); "del kill" → "de la terminación" (L189).
-- `tcolp293` → `nodo-lab-01` (L161 ×1, L163 ×2).
+- `nodo-lab-01` → `nodo-lab-01` (L161 ×1, L163 ×2).
 - `§X` → "Sección X" / "Secciones X y Y" (L163,181,189,200×2,202,204×2,236).
 - L110: raya final "—en paralelo…" → coma.
 - L200 nota Tabla II: quitar `(data/cleaned/*.csv)`.
@@ -25,4 +25,4 @@
 - L258 Disponibilidad de datos: reescribir con DOI Zenodo (placeholder), sin rutas internas.
 
 ## Verificación
-- Regenerar ambos DOCX; validar XML bien formado; conteo de estilos; 0 backticks literales; figura incrustada; § ausente; `nodo-lab-01` presente y `tcolp293` ausente.
+- Regenerar ambos DOCX; validar XML bien formado; conteo de estilos; 0 backticks literales; figura incrustada; § ausente; `nodo-lab-01` presente y `nodo-lab-01` ausente.

@@ -6,13 +6,13 @@ Rellenar **antes** de agendar la primera ventana. Es requisito del GO/NO-GO (ít
 
 | Rol | Nombre | Contacto | Responsabilidad |
 |---|---|---|---|
-| **Aprobador del change** | Angel A. Parejo R. | aparejo@alitronslt.com | Aprueba la ventana y el alcance (solo `pg-chaos-lab`) |
-| **Ejecutor** | Angel A. Parejo R. | aparejo@alitronslt.com | Ejecuta el `PROCEDIMIENTO.md` paso a paso |
-| **Monitor de producción** | Angel A. Parejo R. | aparejo@alitronslt.com | Vigila los **4 clústeres CNPG preexistentes** durante toda la ventana |
-| **Autoridad de aborto** | Angel A. Parejo R. | aparejo@alitronslt.com | Puede detener el piloto en cualquier momento (ver `ABORTO.md`) |
-| **DBA de producción (guardia)** | Angel A. Parejo R. | aparejo@alitronslt.com | Punto de escalado ante cualquier anomalía en producción |
-| **Responsable de almacenamiento (SAN)** | Angel A. Parejo R. | aparejo@alitronslt.com | Coordina pool/QoS del lab y el borrado final de PVCs |
-| **Responsable de plataforma / K8s** | Angel A. Parejo R. | aparejo@alitronslt.com | Etiquetado de nodos, Chaos Mesh, plano de control |
+| **Aprobador del change** | Angel A. Parejo R. | angelparejo@gmail.com | Aprueba la ventana y el alcance (solo `pg-chaos-lab`) |
+| **Ejecutor** | Angel A. Parejo R. | angelparejo@gmail.com | Ejecuta el `PROCEDIMIENTO.md` paso a paso |
+| **Monitor de producción** | Angel A. Parejo R. | angelparejo@gmail.com | Vigila los **4 clústeres CNPG preexistentes** durante toda la ventana |
+| **Autoridad de aborto** | Angel A. Parejo R. | angelparejo@gmail.com | Puede detener el piloto en cualquier momento (ver `ABORTO.md`) |
+| **DBA de producción (guardia)** | Angel A. Parejo R. | angelparejo@gmail.com | Punto de escalado ante cualquier anomalía en producción |
+| **Responsable de almacenamiento (SAN)** | Angel A. Parejo R. | angelparejo@gmail.com | Coordina pool/QoS del lab y el borrado final de PVCs |
+| **Responsable de plataforma / K8s** | Angel A. Parejo R. | angelparejo@gmail.com | Etiquetado de nodos, Chaos Mesh, plano de control |
 
 > **Operador único:** Angel A. Parejo R. asume todos los roles, incluida la **autoridad de aborto**, para este piloto. Confirma conocer y tener a mano `ABORTO.md`.
 > La **autoridad de aborto** debe estar presente o localizable durante toda cada ventana. No se inyecta sin ella.
@@ -23,16 +23,16 @@ Prellenado con el reconocimiento del **2026-07-05**. **Reconfirmar en el paso 0.
 
 | # | Nombre del clúster | Namespace | Nº instancias | Nodos (primario/réplicas) — al 2026-07-05 | Estado inicial |
 |---|---|---|---|---|---|
-| 1 | pg-prod | pg-prod | 3 | primario **pg-prod-2** (tcolp295); réplicas pg-prod-1 (tcolp296), pg-prod-3 (tcolp300) | healthy 3/3 |
-| 2 | pg-cert | pg-cert | 2 | primario **pg-cert-1** (tcolp293 ⚠️ nodo del lab); réplica pg-cert-2 (tcolp300) | healthy 2/2 |
-| 3 | pg-dev | pg-dev | 2 | primario **pg-dev-3** (tcolp293 ⚠️ nodo del lab); réplica pg-dev-1 (tcolp296) | healthy 2/2 |
-| 4 | pg-gitlab | gitlab | 2 | primario **pg-gitlab-2** (tcolp293 ⚠️ nodo del lab); réplica pg-gitlab-1 (tcolp300) | healthy 2/2 |
+| 1 | pg-alfa | pg-alfa | 3 | primario **pg-alfa-2** (nodo-02); réplicas pg-alfa-1 (nodo-03), pg-alfa-3 (nodo-04) | healthy 3/3 |
+| 2 | pg-beta | pg-beta | 2 | primario **pg-beta-1** (nodo-lab-01 ⚠️ nodo del lab); réplica pg-beta-2 (nodo-04) | healthy 2/2 |
+| 3 | pg-gamma | pg-gamma | 2 | primario **pg-gamma-3** (nodo-lab-01 ⚠️ nodo del lab); réplica pg-gamma-1 (nodo-03) | healthy 2/2 |
+| 4 | pg-delta | ns-delta | 2 | primario **pg-delta-2** (nodo-lab-01 ⚠️ nodo del lab); réplica pg-delta-1 (nodo-04) | healthy 2/2 |
 
-> ⚠️ **Co-tenencia conocida:** 3 primarios preexistentes (pg-cert-1, pg-dev-3, pg-gitlab-2) co-residen en `tcolp293`, el nodo del lab. Aceptado: la protección es G1 (ningún manifiesto los selecciona), no el aislamiento de nodo. El primario de producción `pg-prod-2` **no** está en tcolp293.
+> ⚠️ **Co-tenencia conocida:** 3 primarios preexistentes (pg-beta-1, pg-gamma-3, pg-delta-2) co-residen en `nodo-lab-01`, el nodo del lab. Aceptado: la protección es G1 (ningún manifiesto los selecciona), no el aislamiento de nodo. El primario de producción `pg-alfa-2` **no** está en nodo-lab-01.
 
 - [ ] Ninguno se llama `pglab-cnpg-exp`.
 - [ ] Ninguno está en el namespace `pg-chaos-lab`.
-- [ ] Ninguno es objetivo de ningún manifiesto de fallo (garantizado por G1 — la co-tenencia de 3 primarios en tcolp293 es conocida y no compromete el aislamiento).
+- [ ] Ninguno es objetivo de ningún manifiesto de fallo (garantizado por G1 — la co-tenencia de 3 primarios en nodo-lab-01 es conocida y no compromete el aislamiento).
 - [ ] `estado-inicial.txt` (paso 0.9) capturado y archivado.
 
 ## Parámetros del entorno (Fase 0 — ya resueltos 2026-07-05)
@@ -41,7 +41,7 @@ Prellenado con el reconocimiento del **2026-07-05**. **Reconfirmar en el paso 0.
 |---|---|
 | Namespace del operador CNPG | `cnpg-operator` (deploy `cnpg-cloudnative-pg`, 1.28.0) |
 | StorageClass del CSI Huawei | `huawei-ch-xfs` (default · `csi.huawei.com` · `reclaimPolicy: Retain` · `WaitForFirstConsumer`) |
-| Nodo del laboratorio | `tcolp293` (`storage=huawei-san`, `fc=true`) |
+| Nodo del laboratorio | `nodo-lab-01` (`storage=huawei-san`, `fc=true`) |
 | Entorno verificado | Kubernetes v1.34.6 · RHEL 9.8 · kernel 5.14 · containerd 2.2.4 · Chaos Mesh v2.8.3 |
 | Contexto de `kubectl` | _(rellenar el ejecutor en su sesión)_ |
 

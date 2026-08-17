@@ -11,7 +11,7 @@ Tomo partido por la severidad del árbitro de dominio (Mayor) sobre la de métod
 
 ## 1. Clasificación
 
-**FATAL:** ninguna. Las tres limitaciones de entorno (un operador, un backend SAN/FC, fallo de nodo no testeable por co-localización en `tcolp293`) están declaradas y fueron aceptadas en escritorio. El hallazgo central (visibilidad ante Kubernetes gobierna el failover; kill ~7.91 s vs failure ~36.75 s, 4.6×) sobrevive intacto a ambos informes.
+**FATAL:** ninguna. Las tres limitaciones de entorno (un operador, un backend SAN/FC, fallo de nodo no testeable por co-localización en `nodo-lab-01`) están declaradas y fueron aceptadas en escritorio. El hallazgo central (visibilidad ante Kubernetes gobierna el failover; kill ~7.91 s vs failure ~36.75 s, 4.6×) sobrevive intacto a ambos informes.
 
 **ADDRESSABLE (reencuadre/divulgación/texto, sin evidencia nueva de núcleo):**
 - **A1 — Sobreafirmación "modelo formal + validación"** (Dominio #1 ≈ Métodos #3, convergencia): S=(O,K,M,D) organiza pero no predice; se refinó post hoc; F2 **falsó** la predicción. Corrección de encuadre.

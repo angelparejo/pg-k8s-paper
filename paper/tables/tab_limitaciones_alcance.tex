@@ -14,6 +14,6 @@ No se ejecutan \texttt{drain}/\texttt{cordon} ni fallos a nivel de nodo (escenar
 \addlinespace
 F4 (latencia de E/S, IOChaos FUSE) no es ejecutable sobre CNPG: el \emph{hardening} del operador (\texttt{readOnlyRootFilesystem}) impide el montaje FUSE de \texttt{toda}. & La sensibilidad cuantitativa a latencia de E/S queda como trabajo futuro (mecanismo sin FUSE); el bloqueo se reporta como hallazgo hardening$\leftrightarrow$tooling. \\
 \addlinespace
-Laboratorio en un solo nodo (\texttt{tcolp293}) dentro de un clúster productivo compartido, con Chaos Mesh confinado al namespace. & Alta validez interna (aislamiento demostrado por compuerta GO/NO-GO); la validez externa multi-nodo no se aborda en este piloto. \\
+Laboratorio en un solo nodo (\texttt{nodo-lab-01}) dentro de un clúster productivo compartido, con Chaos Mesh confinado al namespace. & Alta validez interna (aislamiento demostrado por compuerta GO/NO-GO); la validez externa multi-nodo no se aborda en este piloto. \\
 \bottomrule
 \end{tabular}

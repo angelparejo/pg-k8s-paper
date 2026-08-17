@@ -1,6 +1,6 @@
 # Cluster CloudNativePG 1.28.0 -- PostgreSQL 16.13, 3 instancias.
 # Requiere el operador CNPG 1.28.0 ya instalado (namespace cnpg-operator, verificado 2026-07-05).
-# StorageClass resuelta: huawei-ch-xfs (csi.huawei.com, FC/SAN). Nodo del lab: tcolp293.
+# StorageClass resuelta: huawei-ch-xfs (csi.huawei.com, FC/SAN). Nodo del lab: nodo-lab-01.
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:

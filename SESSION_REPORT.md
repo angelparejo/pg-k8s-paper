@@ -160,12 +160,12 @@
 
 **Hallazgos del reconocimiento (clúster real):**
 - K8s v1.34.6 · RHEL 9.8 · containerd 2.2.4 · 8 nodos (3 control-plane + 5 workers).
-- Operador CNPG 1.28.0 en `cnpg-operator`, gestiona **4 clústeres CNPG** (no 3): pg-prod (prod, primary pg-prod-2), pg-cert, pg-dev, gitlab/pg-gitlab.
-- Nodo del lab = **tcolp293** (worker, huawei-san/fc, ocioso 4% CPU/2% mem) — pero **co-aloja 3 primaries ajenos** (pg-cert-1, pg-dev-3, pg-gitlab-2) + ArgoCD/Harbor/Prometheus.
+- Operador CNPG 1.28.0 en `cnpg-operator`, gestiona **4 clústeres CNPG** (no 3): pg-alfa (prod, primary pg-alfa-2), pg-beta, pg-gamma, ns-delta/pg-delta.
+- Nodo del lab = **nodo-lab-01** (worker, huawei-san/fc, ocioso 4% CPU/2% mem) — pero **co-aloja 3 primaries ajenos** (pg-beta-1, pg-gamma-3, pg-delta-2) + ArgoCD/Harbor/Prometheus.
 - SC única `huawei-ch-xfs` (default, Retain, WaitForFirstConsumer). Kyverno inerte; Argo Rollouts ninguno; ArgoCD con apps sar-suite (no tocan pg-*/lab); Linkerd activo pero pg-* NO meshado.
 
 **Decisions:**
-- Mantener tcolp293 como worker-lab (worker nonprod designado) pese a la co-tenencia — decisión del usuario. → Reescribir barrera #2 y G5 (contención por G1 + filtro namespace, no por aislamiento de nodo).
+- Mantener nodo-lab-01 como worker-lab (worker nonprod designado) pese a la co-tenencia — decisión del usuario. → Reescribir barrera #2 y G5 (contención por G1 + filtro namespace, no por aislamiento de nodo).
 - Chaos Mesh 2.7.2 → **v2.8.3** (2.7 tope K8s 1.28; 2.8 soporta 1.34; parches "Chaotic Deputy").
 - Excluir Linkerd del lab (`linkerd.io/inject: disabled` en namespace + inheritedMetadata) — coincide con prod, sin salvedad de validez externa.
 - Framing "3 productivos" → "4 preexistentes"; experimental = 5.º clúster; "4 primarios" → "5".
@@ -210,9 +210,9 @@
 **Modo:** DESACOPLADO (Claude genera comandos kubectl; el usuario los ejecuta por VPN/MobaXterm y pega la salida). Corriendo desde el host `TCOLP292`, dir `paquete-ejecucion-fase-b/`.
 
 **Progreso de ejecución (Ventana 1 = Fases 0–4 + F1 + F3):**
-- **FASE 0 — COMPLETA.** 0.1 K8s v1.34.6 ✓; 0.2 operador CNPG 1.28.0 en `cnpg-operator` 2/2 ✓; 0.4 Calico v3.31.4 ✓; **0.5 nodo `tcolp293` etiquetado `pg-chaos-lab/member=true`** (⚠️ escritura hecha, aditiva) ✓; 0.6 imágenes en tcolp293: `postgres:16.13` + `chaos-mesh:v2.8.3` + `chaos-daemon:v2.8.3` importadas ✓; 0.7 exactamente 4 clústeres CNPG sanos (primarios pg-cert-1/pg-dev-3/pg-gitlab-2 en tcolp293, pg-prod-2 en tcolp295) ✓; 0.8 `pg-chaos-lab` no existía ✓; **0.9 snapshot `estado-inicial.txt` capturado** (línea base para Fase 6.3) ✓.
+- **FASE 0 — COMPLETA.** 0.1 K8s v1.34.6 ✓; 0.2 operador CNPG 1.28.0 en `cnpg-operator` 2/2 ✓; 0.4 Calico v3.31.4 ✓; **0.5 nodo `nodo-lab-01` etiquetado `pg-chaos-lab/member=true`** (⚠️ escritura hecha, aditiva) ✓; 0.6 imágenes en nodo-lab-01: `postgres:16.13` + `chaos-mesh:v2.8.3` + `chaos-daemon:v2.8.3` importadas ✓; 0.7 exactamente 4 clústeres CNPG sanos (primarios pg-beta-1/pg-gamma-3/pg-delta-2 en nodo-lab-01, pg-alfa-2 en nodo-02) ✓; 0.8 `pg-chaos-lab` no existía ✓; **0.9 snapshot `estado-inicial.txt` capturado** (línea base para Fase 6.3) ✓.
 - **FASE 1 — COMPLETA.** `kubectl apply -f manifiestos/00-namespace/` → namespace `pg-chaos-lab` (labels `chaos-mesh.org/inject=enabled`, pod-security `privileged`; annotation `linkerd.io/inject=disabled`), ResourceQuota `pg-chaos-lab-quota` (uso 0), LimitRange, SA+Role+RoleBinding `chaos-experiments`. Todo PASA. ✓
-- **FASE 2 — SIGUIENTE (no iniciada).** Instalar Chaos Mesh v2.8.3 acotado. Plan: render seguro (`helm template ... -f values-airgapped.yaml --set 'controllerManager.nodeSelector.pg-chaos-lab/member=true' > chaos-mesh-rendered.yaml`) → inspección → ⚠️ `kubectl apply` → verificar confinamiento (controller + daemon solo en tcolp293). Ajuste aplicado al repo (`219e2dc`): controller fijado al nodo del lab (evita ImagePullBackOff air-gap).
+- **FASE 2 — SIGUIENTE (no iniciada).** Instalar Chaos Mesh v2.8.3 acotado. Plan: render seguro (`helm template ... -f values-airgapped.yaml --set 'controllerManager.nodeSelector.pg-chaos-lab/member=true' > chaos-mesh-rendered.yaml`) → inspección → ⚠️ `kubectl apply` → verificar confinamiento (controller + daemon solo en nodo-lab-01). Ajuste aplicado al repo (`219e2dc`): controller fijado al nodo del lab (evita ImagePullBackOff air-gap).
 - Pendientes tras Fase 2: FASE 3 (crear `pglab-cnpg-exp` 3 instancias, SC `huawei-ch-xfs` + carga pgbench/verificador), **FASE 4 (compuerta GO/NO-GO, obligatoria)**, FASE 5 (Ventana 1 = F1 pod-kill + F3 partición).
 
 **Decisions:**
@@ -231,7 +231,7 @@
 **Operations:**
 - Modo desacoplado (usuario ejecuta kubectl por VPN desde TCOLP292; Claude genera comandos).
 - Transferencia SFTP y verificación SHA256 de 7 archivos del arnés F4 (4 no habían llegado: run-f4-latency.sh, parse-f4.py, analyze.py-nuevo, pgbench-runner-cnpg.yaml). Estado acumulado (results.csv 20 filas, estado-inicial.txt) intacto.
-- Checklist de reentrada R1–R6: contexto, producción intacta (4 preexistentes + exp healthy), aislamiento (Chaos Mesh solo en tcolp293), cluster sano, runner desplegado, dry-run de los 3 selectores IOChaos = PASA.
+- Checklist de reentrada R1–R6: contexto, producción intacta (4 preexistentes + exp healthy), aislamiento (Chaos Mesh solo en nodo-lab-01), cluster sano, runner desplegado, dry-run de los 3 selectores IOChaos = PASA.
 - Validación individual F4 100 ms (previa al lote): baseline 0 ms vs 100 ms → latencia IDÉNTICA (~8.5 ms).
 - Diagnóstico: describe/eventos + logs chaos-daemon/controller.
 - Limpieza: finalizer del IOChaos atascado retirado (patch); runner F4 borrado; val logs renombrados a f4-VALIDACION-*.
@@ -372,10 +372,10 @@
 
 **Operations:**
 - `scripts/md2ieee_docx.py`: (1) `run()` +param `mono`→rFonts Courier New; (2) `parse_inline()` maneja `` `código` ``→mono y `<br>`→`<w:br/>`; (3) `parse_markdown()` reconoce `![alt](ruta)`→figura, OMITE la imagen si le sigue un pie `**Fig.**` (evita figura duplicada en v2, que tiene ambas); (4) anchos Tabla II `[56,38,76,22,59]`.
-- `articulo_angelparejov2-experimental.md`: "matar"→"terminar" (×2)+"del kill"→"de la terminación"; `tcolp293`→`nodo-lab-01` (×2); `§X`→"Sección X"/"Secciones" (×9); raya final L110→coma; nota Tabla II sin ruta; encabezados Tabla II con `<br>`; sección "Disponibilidad de datos" reescrita con DOI Zenodo (placeholder 10.5281/zenodo.XXXXXXX).
+- `articulo_angelparejov2-experimental.md`: "matar"→"terminar" (×2)+"del kill"→"de la terminación"; `nodo-lab-01`→`nodo-lab-01` (×2); `§X`→"Sección X"/"Secciones" (×9); raya final L110→coma; nota Tabla II sin ruta; encabezados Tabla II con `<br>`; sección "Disponibilidad de datos" reescrita con DOI Zenodo (placeholder 10.5281/zenodo.XXXXXXX).
 - Regenerados ambos DOCX.
 
-**Results (validación v2):** 0 backticks, 0 `![`, 0 §, 0 tcolp293, 0 "matar", 0 rutas internas; 2 `nodo-lab-01`, 165 runs Courier, 1 figura incrustada, 1 DOI Zenodo, 2 tablas.
+**Results (validación v2):** 0 backticks, 0 `![`, 0 §, 0 nodo-lab-01, 0 "matar", 0 rutas internas; 2 `nodo-lab-01`, 165 runs Courier, 1 figura incrustada, 1 DOI Zenodo, 2 tablas.
 
 **Decisiones de experto aplicadas sin pregunta:** § no es estilo IEEE→"Sección"; guiones de inciso —RAE correcto— se mantienen; `f(·)` es notación válida, sin cambio.
 
@@ -443,3 +443,51 @@
 **Status:**
 - Done: análisis de venues, bases CACIC, paquete Zenodo v1-6, 4 ramas + guía, todo en origin.
 - Pending: (1) usuario sube PDF v1-6 a Zenodo y pasa DOI; (2) decidir venue del v2 (CACIC vs sin prisa); (3) ejecutar plan de recorte LNCS en la rama elegida + insertar autocita al v1-6.
+
+## 2026-08-16 — Entorno (silabeo ES + ImageMagick), figuras a grises y PDF definitivo Faraute
+
+**Contexto:** el envío a Faraute estaba bloqueado por el punto 9 de la guía (figuras en escala
+de grises) y no había ninguna herramienta de imagen en el entorno: ni `convert`, ni ghostscript,
+ni `pdftoppm`, ni netpbm, ni PIL. `apt` no llegaba a los repositorios.
+
+**Diagnóstico de red (la causa no era apt):**
+- El **puerto 53 está bloqueado en toda la máquina**: Windows tampoco resuelve (`nslookup` da
+  cuatro timeouts). Ningún DNS responde — ni corporativo (172.24.2.245), ni Wi-Fi (172.18.2.205),
+  ni NordVPN (103.86.96.100), ni públicos (1.1.1.1 / 8.8.8.8 / 9.9.9.9).
+- Causa: **conflicto de VPNs simultáneas**. NordVPN secuestra la tabla de rutas con el truco
+  clásico de OpenVPN (`0.0.0.0/1` + `128.0.0.0/1` vía 10.100.0.1) mientras los DNS que Windows
+  quiere usar solo son alcanzables por el túnel de Check Point. WSL usa `networkingMode=mirrored`,
+  así que hereda el problema de Windows.
+- **La salida TCP sí funciona** (HTTP directo por IP: 0,08 s; DoH por 443: resuelve sin problema).
+
+**Operations:**
+- Instalados `texlive-lang-spanish` (2023.20240207-1) e `imagemagick` (6.9.12-98) resolviendo los
+  repos por DNS-over-HTTPS y fijándolos temporalmente en `/etc/hosts`. Parche ya retirado.
+  Script idempotente en el scratchpad de la sesión.
+- Verificación independiente 4/4 (`spanish.ldf`, `hyph-es.tex`, `language.dat`, `convert`) más
+  **prueba funcional**: TeX ahora parte `me-ca-nis-mos`, `al-ma-ce-na-mien-to`, `in-fra-es-truc-tu-ra`.
+- Figuras del cuerpo (Fig2/Fig4/Fig5) → `Gray` 1 canal, 300 dpi conservados. Originales a color
+  respaldados en `figures/color-originales/`. Copias renombradas para la entrega en `figuras-envio/`.
+- `main.pdf` regenerado (2 pasadas) y `main_final_12pp.pdf` sincronizado.
+- `CHECKLIST_ENVIO_FARAUTE.md` (B1 + sección C) y `PENDIENTE_MI_LADO.md` actualizados.
+
+**Hallazgo importante:**
+- **`main.tex` nunca cargaba `silabeo-es.tex`**: no hay `\input{silabeo-es}` ni un solo
+  `\hyphenation{}` en el documento. El PDF del 13-ago se compiló **sin silabeo español alguno**
+  (ni patrones, que no estaban instalados, ni el parche, que no se cargaba) — llevaba cortes de
+  palabra con reglas inglesas. Las 254 líneas que genera `scripts/silabeo_es.py` son código
+  muerto. **Decisión pendiente del usuario:** retirar el archivo y el script, o dejarlos.
+
+**Results:**
+- `main.pdf`: **12 páginas**, 0 overfull, 0 underfull, 0 referencias sin resolver.
+- PDF íntegramente en `DeviceGray` (0 `DeviceRGB`) → cumple el punto 9 de la guía.
+- Mejora neta: desapareció el overfull de 1 pt que registraba la versión previa y **la paginación
+  no se movió** (seguía el riesgo de pasarse del límite de 12 pp; no se materializó).
+- Tamaño del PDF: 1,33 MB → 926 KB.
+
+**Status:**
+- Done: entorno instalado y verificado; figuras a grises + renombradas; PDF definitivo regenerado;
+  checklists al día; B1 del envío cerrado.
+- Pending: (1) DOI de Zenodo y sustitución en 5 archivos; (2) lectura final del PDF y confirmación
+  de autor/ORCID; (3) envío a faraute@uc.edu.ve; (4) decidir sobre `silabeo-es.tex` (código muerto);
+  (5) **todo el trabajo de agosto sigue sin commitear**.
