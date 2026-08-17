@@ -491,3 +491,72 @@ ni `pdftoppm`, ni netpbm, ni PIL. `apt` no llegaba a los repositorios.
 - Pending: (1) DOI de Zenodo y sustitución en 5 archivos; (2) lectura final del PDF y confirmación
   de autor/ORCID; (3) envío a faraute@uc.edu.ve; (4) decidir sobre `silabeo-es.tex` (código muerto);
   (5) **todo el trabajo de agosto sigue sin commitear**.
+
+## 2026-08-17 06:42 — Cierre de pendientes Faraute: seudonimización, herramienta de DOI, carta al editor y commit de todo agosto
+
+**Contexto:** la sesión anterior dejó cinco pendientes; cuatro eran del usuario (DOI, lectura
+final, envío, decisión sobre el silabeo) y uno mío: *todo el trabajo de agosto seguía sin
+commitear*. Al preparar ese commit apareció un problema que no estaba en ninguna lista.
+
+**Hallazgo bloqueante (resuelto):**
+- El paquete de reproducibilidad que se sube a Zenodo llevaba los **nombres reales de la
+  infraestructura productiva** de un tercero: 38 apariciones de los nodos del clúster, el
+  inventario de los cuatro clústeres CNPG ajenos **con la ubicación exacta de sus primarios**,
+  el correo corporativo del autor (7 veces) y el servicio interno que aloja uno de esos
+  clústeres. El manuscrito sí estaba seudonimizado (`nodo-lab-01`); el paquete, no.
+- Se consultó al usuario con tres opciones. Eligió **seudonimizar conservando todo** (la
+  narrativa de gobernanza —SEGURIDAD, ABORTO, GO/NO-GO— es justo lo que valora un árbitro de
+  métodos, y seudonimizar no cuesta nada científicamente).
+
+**Operations:**
+- `scripts/seudonimizar_infra.py` (nuevo, stdlib): mapeo fijo y ordenado, `--check`/`--dry-run`,
+  verificación de residuos, mapeo privado en `.claude/state/` (ignorado por git). **336
+  sustituciones en 25 archivos.** Un falso positivo detectado y excluido: `bootstrap-icons.css`
+  tiene un icono llamado "gitlab".
+- `scripts/set_zenodo_doi.py` (nuevo, stdlib): fija el concept DOI, recompila los 3 PDF,
+  sincroniza el entregable, rearma el ZIP y verifica. Probado de extremo a extremo con un DOI
+  falso (respaldo → aplicar → verificar → restaurar).
+- `paper/faraute/carta_al_editor.md` (nuevo): carta al comité editorial lista para el correo.
+- `paper/faraute/main.tex`: Tabla 1 pasa a columnas `\raggedright` (la Tabla 2 ya las tenía).
+- `paper/faraute/silabeo-es.tex`: retirado tras commitearlo (recuperable en b800d21).
+- `quality_reports/convocatorias_y_venues.md`: nota de actualización — CACIC 2026 cerró.
+- Checklists de envío al día; memoria actualizada (nueva `project_seudonimos_infra`).
+
+**Decisiones:**
+- Seudónimos elegidos por accuracy sobre la etiqueta que ofrecí: los nodos de producción son
+  `nodo-02`…`nodo-04`, no `nodo-lab-02`…, porque no son nodos de laboratorio. `nodo-lab-01`
+  se alinea con el seudónimo que ya usaba el manuscrito.
+- NO se seudonimizan `pglab-cnpg-exp` ni `pg-chaos-lab` (los crea y destruye el piloto) ni la
+  StorageClass del proveedor: el controlador CSI es información metodológica que el artículo
+  declara.
+- `silabeo_es.py` se conserva como contingencia (entorno air-gapped, DNS caído, la instalación
+  de texlive-lang-spanish costó); se retira solo su salida, que era código muerto.
+- `articulo_angelparejov2-experimental_IEEE_rev.docx` **NO se commitea**: contiene 2 apariciones
+  del nodo real dentro de su XML. Se deja sin versionar y se avisa al usuario.
+
+**Results:**
+- `main.pdf` = **12 pp**, 0 overfull, 0 referencias sin resolver, 0 `DeviceRGB`. La paginación
+  no se movió con ninguno de los cambios.
+- **Corrección de registro:** la entrada del 2026-08-16 decía "0 underfull". Era un falso
+  negativo — `main.log` está en ISO-8859 y `grep` lo trataba como binario, silenciando la
+  salida (`grep -a` lo revela). El conteo real era 17. Con el arreglo de la Tabla 1 bajan a 13:
+  quedan 4 cajas cosméticas de badness 1127–2486 (identificadores largos como
+  `readOnlyRootFilesystem` en columna angosta) y 9 `\vbox` normales de maqueta a dos columnas.
+- ZIP del depósito rearmado: 43 archivos, **0 identificadores reales** (verificado abriendo el
+  ZIP y buscando dentro).
+- Todo agosto commiteado en tres commits temáticos. **Sin pushear** (pendiente de tu visto bueno).
+
+**Commits:**
+- `9d4cf31` Faraute: entregable de 12 pp, carta al editor y automatización del DOI
+- `94da3d4` Seudonimizar los identificadores de la infraestructura productiva
+- `b800d21` Retirar silabeo-es.tex: código muerto y ya innecesario
+
+**Status:**
+- Done: seudonimización verificada; herramienta de DOI; carta al editor; arreglo tipográfico;
+  silabeo resuelto; checklists y memoria al día; todo agosto commiteado.
+- Pending (usuario): (1) `git push` cuando revises los tres commits; (2) subir el ZIP a Zenodo,
+  reservar DOI y ejecutar `set_zenodo_doi.py <DOI>`; (3) leer el PDF de 12 pp y confirmar
+  autor/ORCID; (4) enviar a faraute@uc.edu.ve con la carta y las 3 figuras; (5) **decidir el
+  destino del v2** — CACIC cerró el 29-jul y no consta si se envió; ojo con que Faraute y el
+  v2 son el mismo trabajo; (6) opcional: limpiar el historial de git anterior a 94da3d4, que
+  conserva los nombres reales.

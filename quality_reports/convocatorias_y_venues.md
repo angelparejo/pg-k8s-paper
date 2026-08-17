@@ -5,8 +5,30 @@
 > un Marco de Análisis y un Estudio Empírico de CloudNativePG bajo Fallos Inyectados").
 > Documento vivo — ampliar en próximas sesiones.
 >
-> **Última actualización:** 2026-07-09 (deadlines verificados vía web)
+> **Última actualización:** 2026-08-17
 > **Artículo evaluado:** `articulo_angelparejov2-experimental_IEEE_rev.docx`
+
+> ### ⚠️ Actualización 2026-08-17 — la ventana de CACIC 2026 ya cerró
+>
+> El deadline de CACIC 2026 era el **29-jul-2026** y hoy es el **17-ago-2026**: pasó hace
+> casi tres semanas. Todo lo que dice este documento sobre "ventana urgente" y "decisión
+> urgente" quedó vencido. El recorte a LNCS 10 pp se ejecutó el 2026-07-10 (`paper/cacic/`,
+> writer-critic 96) y está en la rama `pub/cacic-2026`, pero **no consta en el repositorio
+> si el envío se hizo**: no hay acuse, ni fecha de envío, ni entrada de bitácora que lo
+> registre. Dos cosas que hacen falta y solo el usuario puede resolver:
+>
+> 1. **Confirmar si el v2 se sometió a CACIC** antes del 29-jul. Si sí, registrar aquí la
+>    fecha y el acuse, y esperar la notificación (5–9 oct 2026). Si no, el trabajo de
+>    `paper/cacic/` sigue sirviendo: LNCS es el formato de varios congresos de la región.
+> 2. **Reencaminar el v2** al siguiente destino. Con CACIC cerrado, la opción más accionable
+>    del §7 vuelve a ser **Informática y Sistemas (UTM)**, de envío continuo. Nótese que
+>    entretanto el pipeline se desvió al **v2 en formato Faraute** (`paper/faraute/`, 12 pp,
+>    listo para enviar), que es *el mismo estudio empírico* en otra revista: hay que decidir
+>    si Faraute y el destino del v2 son el mismo envío o dos artículos distintos, porque
+>    **enviar el mismo trabajo a dos revistas a la vez no es admisible**.
+>
+> Las secciones siguientes se conservan tal como se escribieron el 2026-07-09/10: son el
+> registro de lo que se sabía entonces, no el estado de hoy.
 
 ---
 
