@@ -1,0 +1,31 @@
+# Carga sintetica continua contra el primario CNPG.
+# Inicializar una sola vez:  kubectl -n pg-chaos-lab exec deploy/pgbench-cnpg -- \
+#   pgbench -i -s 10 -h pglab-cnpg-exp-rw -U lab labdb
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgbench-cnpg
+  namespace: pg-chaos-lab
+  labels: {app: pgbench, target: cnpg}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: pgbench, target: cnpg}}
+  template:
+    metadata:
+      labels: {app: pgbench, target: cnpg}
+    spec:
+      nodeSelector: {pg-chaos-lab/member: "true"}
+      containers:
+        - name: pgbench
+          image: ghcr.io/cloudnative-pg/postgresql:16.13   # incluye pgbench/psql
+          env:
+            - name: PGPASSWORD
+              valueFrom: {secretKeyRef: {name: pglab-cnpg-exp-app, key: password}}
+          command: ["/bin/bash","-c"]
+          args:
+            - |
+              until pg_isready -h pglab-cnpg-exp-rw -U lab; do sleep 2; done
+              # -T 0 no existe: bucle infinito de rondas de 60 s, tolera failovers
+              while true; do
+                pgbench -h pglab-cnpg-exp-rw -U lab -c 4 -j 2 -T 60 --no-vacuum labdb || sleep 2
+              done

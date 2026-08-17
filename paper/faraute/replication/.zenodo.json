@@ -1,0 +1,21 @@
+{
+  "title": "Datos y paquete de ejecución — Análisis multicapa de operadores de PostgreSQL y almacenamiento CSI en Kubernetes: estudio empírico de CloudNativePG bajo fallos inyectados (Fase 1 piloto)",
+  "upload_type": "dataset",
+  "description": "Datos limpios de RTO/RPO por escenario de fallo (F1 pod-kill, F2 pod-failure, F3 partición de red), paquete de ejecución (manifiestos de Kubernetes/Chaos Mesh, cliente verificador de transacciones tx-verifier, carga pgbench y script de análisis en Python stdlib que reproduce todas las cifras del artículo) y un material suplementario de métodos y resultados extendidos (métodos ampliados, semántica del verificador ante ACK perdido, análisis de sensibilidad de exclusiones, estadística completa con fórmulas, prueba de permutación y narrativa del bloqueo de F4). Estudio empírico piloto de CloudNativePG sobre un clúster Kubernetes productivo. Acompaña al artículo homónimo enviado a la Revista FARAUTE de Ciencias y Tecnología (UC/FACYT). Los registros crudos del verificador y los eventos del operador no se incluyen por ejecutarse sobre un clúster productivo bajo acceso restringido; el material depositado permite auditar los resultados y reproducir el diseño en un clúster equivalente.",
+  "creators": [
+    {
+      "name": "Parejo R., Angel A.",
+      "affiliation": "Universidad de Carabobo, Valencia, Venezuela",
+      "orcid": "0009-0001-9737-7116"
+    }
+  ],
+  "keywords": [
+    "Kubernetes", "PostgreSQL", "CloudNativePG", "CSI", "inyección de fallos",
+    "chaos engineering", "failover", "RTO", "RPO", "Chaos Mesh"
+  ],
+  "language": "spa",
+  "access_right": "open",
+  "license": "CC-BY-4.0",
+  "version": "1.0-fase1",
+  "notes": "Licencia dual: datos y documentación bajo CC-BY-4.0; código (scripts) bajo MIT (ver LICENSE.md). Reservar el DOI en Zenodo antes de publicar y sustituir 'DOI por asignar' / '10.5281/zenodo.XXXXXXX' en CITATION.cff, el suplemento y el manuscrito por el concept DOI."
+}

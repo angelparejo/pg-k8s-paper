@@ -1,0 +1,48 @@
+# Cliente contador-de-verdad: inserta IDs secuenciales, registra cada COMMIT
+# confirmado con timestamp y, tras cada interrupcion, verifica visibilidad
+# => RPO = COMMITs confirmados no visibles; RTO = hueco entre el ultimo COMMIT
+# antes del fallo y el primero despues (analisis con scripts/parse-verifier.py).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tx-verifier-cnpg
+  namespace: pg-chaos-lab
+  labels: {app: tx-verifier, target: cnpg}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: tx-verifier, target: cnpg}}
+  template:
+    metadata:
+      labels: {app: tx-verifier, target: cnpg}
+    spec:
+      nodeSelector: {pg-chaos-lab/member: "true"}
+      containers:
+        - name: verifier
+          image: ghcr.io/cloudnative-pg/postgresql:16.13
+          env:
+            - name: PGHOST
+              value: pglab-cnpg-exp-rw
+            - name: PGUSER
+              value: lab
+            - name: PGDATABASE
+              value: labdb
+            - name: PGPASSWORD
+              valueFrom: {secretKeyRef: {name: pglab-cnpg-exp-app, key: password}}
+            - name: PGCONNECT_TIMEOUT
+              value: "2"
+          command: ["/bin/bash","-c"]
+          args:
+            - |
+              psql -c "CREATE TABLE IF NOT EXISTS truth(id BIGINT PRIMARY KEY, ts TIMESTAMPTZ DEFAULT now())"
+              i=$(psql -tAc "SELECT COALESCE(MAX(id),0) FROM truth" || echo 0)
+              echo "# start id=$i $(date -u +%FT%T.%3NZ)"
+              while true; do
+                i=$((i+1))
+                if psql -qAt -c "INSERT INTO truth(id) VALUES ($i)" >/dev/null 2>&1; then
+                  echo "COMMIT $i $(date -u +%FT%T.%3NZ)"
+                else
+                  echo "FAIL   $i $(date -u +%FT%T.%3NZ)"
+                  i=$((i-1))            # reintentar el mismo id: detecta duplicado=commit fantasma
+                  sleep 0.2
+                fi
+              done
