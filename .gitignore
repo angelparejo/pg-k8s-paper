@@ -38,6 +38,14 @@ Thumbs.db
 *:Zone.Identifier
 *:mshield
 
+# No publicables — se quedan en la máquina, nunca en el remoto
+# correcionesa.txt: reporte interno de operaciones de otro entorno corporativo
+#   (llegó por un pegado accidental del portapapeles; no tiene relación con el paper).
+# *_IEEE_rev.docx: conserva 2 apariciones del nombre real del nodo en su XML
+#   (ver scripts/seudonimizar_infra.py y la memoria project_seudonimos_infra).
+correcionesa.txt
+articulo_angelparejov2-experimental_IEEE_rev.docx
+
 # Claude Code local files (not shared across machines)
 .claude/settings.local.json
 .claude/state/*
