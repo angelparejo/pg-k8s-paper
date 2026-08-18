@@ -560,3 +560,68 @@ commitear*. Al preparar ese commit apareció un problema que no estaba en ningun
   destino del v2** — CACIC cerró el 29-jul y no consta si se envió; ojo con que Faraute y el
   v2 son el mismo trabajo; (6) opcional: limpiar el historial de git anterior a 94da3d4, que
   conserva los nombres reales.
+
+## 2026-08-17 — Contraste del artículo actual con el documento revisado por la tutora
+
+**Encargo:** verificar si el último artículo es consecuente con las ideas y planteamientos
+del documento revisado por la tutora, y si respeta el espíritu de sus recomendaciones.
+Insumos aportados: `articulo_angelparejov2-experimental_entregable-bea.docx` y
+`correcionesa.txt`.
+
+**Hallazgo sobre los insumos (importante):**
+- `correcionesa.txt` **no contiene correcciones**. Son dos textos pegados por error: un
+  reporte interno de operaciones del Centro Alterno Maracaibo firmado por Anibal Parejo
+  (líneas 1–41) y un fragmento del transcript de la terminal de la sesión del 16-ago de este
+  mismo proyecto (44–56).
+- El DOCX **no trae comentarios ni control de cambios** (`w:comment`/`w:ins`/`w:del` = 0,
+  `trackChanges` off) y sus metadatos dicen `lastModifiedBy: Angel Parejo`, 2026-07-09: es el
+  entregable que produjo `md2ieee_docx.py`, no un documento anotado por ella.
+- **Pero sí lleva su mano encima:** difiere del `..._IEEE.docx` versionado en git en
+  exactamente **8 ediciones** escritas directamente sobre el texto.
+
+**Operations:**
+- Extracción del DOCX con detección de namespace (es OOXML **Strict**,
+  `purl.oclc.org/ooxml/...`; el parser falla con el namespace Transitional habitual).
+- Comparación sistemática contra `paper/faraute/main.tex`: cifras (34 comprobadas una a
+  una), corpus de referencias, estructura de secciones, extensión y encuadre.
+- Diff palabra a palabra entre las tres versiones DOCX (bea / IEEE versionado / IEEE_rev).
+- Informe en `quality_reports/reviews/2026-08-17_consecuencia-con-documento-revisado-tutora.md`.
+
+**Results:**
+- **Las 8 ediciones:** 4 correcciones reales (concordancias "analizan"/"surgen"; estilo "las
+  decisiones", "no promoción" sin guion) — **las 4 sobreviven en el artículo actual**— y 2
+  erratas que ella introdujo al editar ("Palabras c lave", "La Fig. 1 . Ilustra") que **no**
+  se arrastraron. Las otras 2 son espaciado sin efecto.
+- **Fidelidad conceptual íntegra:** mismas 8 secciones y orden, tesis multicapa, modelo
+  S=(O,K,M,D) con su justificación de notación, las 4 dimensiones, los 3 invariantes
+  (incluida la disponibilidad como métrica y no invariante), Tabla I, metodología completa y
+  **todas las cifras sin una sola alteración**. Referencias 27↔27, mismo corpus salvo
+  +Kingsbury & Alvaro (Jepsen/Elle) y +doc PostgreSQL.
+- **Recorte:** cuerpo de ~8.581 → ~4.270 palabras (−50 %). Se perdió desarrollo
+  argumental (introducción, §4, el ejemplo de persistencia/almacenamiento distribuido) y
+  estadística fina (z=−3,78, IC por escenario, permutación) que fue al suplemento. Ninguna
+  tesis abandonada.
+- **Cinco decisiones posteriores a su revisión que ella no ha visto:** (1) el modelo cede el
+  primer plano al predicado V(fallo,K) y además se eliminó su figura; (2) "trabajo futuro" →
+  "Fase 2 ya diseñada" con factorial 2×2 (compromiso fuerte, y el entorno productivo no
+  permite instalar otros operadores); (3) se rebaja la novedad de F2 ("un lector
+  familiarizado podría anticiparlo"); (4) datos de "a petición" → depósito público en
+  Zenodo; (5) cambia la revista de destino (IEEE → Faraute), con tres versiones paralelas
+  del mismo trabajo en circulación.
+
+**Decisions:**
+- Se versiona el DOCX base como procedencia (verificado: 0 identificadores reales).
+- `correcionesa.txt` NO se versiona —reporte interno de otro entorno corporativo— y se añade
+  al `.gitignore` junto con `..._IEEE_rev.docx` (conserva el nodo real en su XML), para que
+  ningún `git add -A` futuro los publique.
+- No se responde a "¿respeta el espíritu de sus recomendaciones?": no hay recomendaciones de
+  fondo en el material. Se pide el insumo real (DOCX con comentarios, correo, foto o notas).
+
+**Commits:**
+- `b1a01ee` Contraste del artículo actual con el documento revisado por la tutora
+
+**Status:**
+- Done: contraste completo, informe, procedencia versionada, .gitignore blindado.
+- Pending: (1) llevarle a la tutora la lista de los 5 cambios que no ha visto; (2) conseguir
+  sus recomendaciones de fondo para cerrar la tercera parte del encargo; (3) siguen abiertos
+  los pendientes de Faraute (DOI, lectura final, envío) y la decisión de destino del v2.
