@@ -80,8 +80,12 @@ def limpiar_math(s):
     return s
 
 
-def limpiar(s):
-    """Normaliza el texto plano de LaTeX (sin marcas de formato)."""
+def limpiar(s, *, recortar=True):
+    """Normaliza el texto plano de LaTeX (sin marcas de formato).
+
+    Con recortar=False conserva los espacios de los extremos: son los que
+    separan un run con formato del texto contiguo (\textit{...} y vecinos).
+    """
     s = re.sub(r"\\url\{([^}]*)\}", r"\1", s)
     s = re.sub(r"\\phantomsection|\\begingroup|\\endgroup", "", s)
     s = re.sub(r"\$([^$]*)\$", lambda m: limpiar_math(m.group(1)), s)
@@ -92,7 +96,7 @@ def limpiar(s):
     s = s.replace("~", "\u00a0")
     s = re.sub(r"\\par\b", "", s)
     s = re.sub(r"\s+", " ", s)
-    return s.strip()
+    return s.strip() if recortar else s
 
 
 # ---------------------------------------------------------------------------
@@ -116,6 +120,7 @@ def run(texto, *, cursiva=False, negrita=False, mono=False, tam=None):
 
 def runs_desde_tex(s):
     """Traduce \\textit, \\emph, \\textbf y \\texttt a runs con formato."""
+    s = s.strip()
     piezas = []
     patron = re.compile(r"\\(textit|emph|textbf|texttt|textsc)\{([^{}]*)\}")
     pos = 0
@@ -129,7 +134,8 @@ def runs_desde_tex(s):
         pos = m.end()
     if pos < len(s):
         piezas.append((s[pos:], {}))
-    return "".join(run(limpiar(t), **e) for t, e in piezas if limpiar(t))
+    return "".join(run(limpiar(t, recortar=False), **e)
+                   for t, e in piezas if limpiar(t, recortar=False))
 
 
 def parrafo(contenido_runs, *, estilo=None, alineacion=None, sangria=None,
