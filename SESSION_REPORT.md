@@ -625,3 +625,57 @@ Insumos aportados: `articulo_angelparejov2-experimental_entregable-bea.docx` y
 - Pending: (1) llevarle a la tutora la lista de los 5 cambios que no ha visto; (2) conseguir
   sus recomendaciones de fondo para cerrar la tercera parte del encargo; (3) siguen abiertos
   los pendientes de Faraute (DOI, lectura final, envío) y la decisión de destino del v2.
+
+## 2026-08-18 23:51 — Faraute 12 pp: ronda de revisión, verificación de referencias y tres defectos silenciosos del PDF
+
+**Operations:**
+- `paper/faraute/main.tex` — ediciones del `.docx` revisado + abstract retraducido desde el resumen revisado.
+- `paper/faraute/main.tex` (preámbulo) — `newunicodechar` para `—` `–` `«` `»` `¿` `¡`; `\hyphenation{Bailis}`;
+  `\fignota` con `\raggedright`; Tabla 2 `[tb]` → `[!tb]`.
+- `scripts/tex2docx_revision.py` — corregido `runs_desde_tex()`: `limpiar(..., recortar=False)`.
+- Regenerados `main.pdf`, `main_final_12pp.pdf` y `articulo_faraute_12pp_para_revision.docx`.
+- Verificación web de las 28 referencias contra fuente primaria (USENIX, VLDB, ACM, IEEE, MDPI, Springer, dblp, RAE/FundéuRAE).
+
+**Decisions:**
+- Rechazado `continua`→`continúa` (§5.2): `continua` es el adjetivo correcto.
+- Rechazado `y Crunchy… que adopta` (§3.1): rompía el paralelismo de la enumeración.
+- Rechazado "latencia de las transacciones **y de la** pérdida de datos" (§4.4): convertía cuatro métricas en tres
+  y generaba "la latencia de la pérdida de datos".
+- Mantenido "la combinación de operador y tipo de almacenamiento" (§4.4) sin artículo: es una afirmación genérica
+  y solo se midió un operador.
+- Guiones: se **quitaron** en vez de uniformarse (`no promoción`, `no normalidad`, `de distribución libre`). Extenderlos
+  habría dejado escondidos dos problemas de redacción que solo aparecieron al quitarlos.
+- Tabla 2 con `[!tb]` y no como `table*`: con `table*` se colaba en la p9 detrás de la Fig. 2, invirtiendo el orden de cita.
+- `simplyblock` pasa a `Engelbert, C. (2024)` conservando *simplyblock Blog* como publicación, para no perder la señal
+  de que es material de fabricante.
+
+**Results:**
+- **92 rayas (—) se perdían en silencio**: XeTeX + Type1 T1 sin mapeo de U+2014. Explicaba 4 observaciones de puntuación
+  que parecían comas o dos puntos ausentes.
+- **14 caracteres falsificados**: `«` `»` dibujados como glifos superpuestos con micro-kerns y `¿` como `£` (slot 0xA3).
+  `Missing character` se mantuvo en **0** todo el tiempo — el log no lo detecta.
+- **Tabla 2 aterrizaba en la p12**, sobre las referencias: el flotante mide ~450 pt contra el techo de `\topfraction`
+  (456,9 pt) y LaTeX lo difería sin emitir warning. Ahora en la p8, con los flotantes en orden de cita (T1 p6, F1 p7,
+  T2 p8, F2 p9, F3 p10).
+- **Nota de tabla centrada** (`leftskip`=`rightskip`=`0pt plus 1fil`) cuando la regla 8 de Faraute exige alineación a la
+  izquierda. Corregido y verificado: `leftskip`=`0pt`, tamaño 9,9626 pt = 10 pt nominales.
+- **Referencias:** 24/28 exactas. Corregidas: Chen et al. citaba el preprint arXiv de un trabajo ya publicado en
+  ACSW '26 pp. 22–31 (y es la referencia con la que se delimita la brecha); título real de Portworx; fecha/autoría de
+  simplyblock; páginas de van Renesse (91–104); título de Stonebraker sin guion.
+- **Cumplimiento de la guía:** autoría completa en la lista (Han 13, Taft 17) — el "et al." de Faraute es solo para la
+  cita en texto; nombres de revista abreviados (estilo `Ann. Math. Stat.` del ejemplo de la guía); fechas de consulta.
+- **Bug del conversor DOCX:** 17 de ~21 "diferencias" del `.docx` revisado no eran ediciones, sino espacios que
+  `runs_desde_tex()` se comía junto a `\textit{}`.
+- El conteo se mantuvo en **12 pp exactas** en todas las recompilaciones, pese a sumar 92 rayas, 28 nombres de autor
+  y una referencia entera.
+
+**Commits:**
+- Ninguno. Todo en el working tree por acuerdo con el usuario; commit previsto para el 2026-08-19.
+
+**Status:**
+- Done: revisión aplicada, referencias verificadas, formato alineado con la guía, PDF y DOCX regenerados
+  (12 pp, 0 errores, 0 `Missing character`, 0 overfull).
+- Pending: (1) **commit** de `main.tex`, los 2 PDF y `scripts/tex2docx_revision.py`; (2) **paso a paso del DOI de
+  Zenodo** — es lo siguiente acordado, con `scripts/set_zenodo_doi.py` y `paper/faraute/GUIA_ZENODO.md` ya listos;
+  (3) lectura final del PDF por el autor; (4) envío a faraute@uc.edu.ve.
+- Nota: `main_referencia_extendida_18pp.tex` NO recibió esta ronda de correcciones.
