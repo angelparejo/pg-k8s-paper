@@ -29,8 +29,20 @@ PDF y rearma el ZIP.
       Con `--check` informa el estado sin tocar nada; con `--dry-run` muestra sin escribir.
 - [ ] Volver a subir el ZIP rearmado (ahora lleva el DOI dentro) y **publicar** el depósito.
 
+## 2bis. Ronda de revisión — HECHA 2026-08-18 ✅
+- [x] Ediciones del documento revisado aplicadas y *abstract* retraducido desde el resumen.
+- [x] Tres defectos que el log **no** delataba: 92 rayas que se perdían, `«` `»` `¿` que se
+      imprimían mal (`¿` salía como `£`) y la Tabla 2 aterrizando en la última página, encima
+      de las referencias. Los tres corregidos y verificados en los *content streams* del PDF.
+- [x] Nota al pie de tabla alineada a la izquierda (punto 8 de la guía); salía centrada.
+- [x] Las 28 referencias verificadas contra fuente primaria; 5 corregidas. La importante:
+      *Chen et al.* citaba un preprint de arXiv de un trabajo ya arbitrado en ACSW '26.
+- [x] Versión de 18 pp sincronizada con los mismos arreglos.
+
 ## 3. Revisión final
-- [ ] Leer el PDF de 12 pp completo (`main_final_12pp.pdf`).
+- [ ] Leer el PDF de 12 pp completo (`main_final_12pp.pdf`). Fíjate sobre todo en las **rayas
+      (—)**, que es la primera vez que se imprimen, y en la **nota de la Tabla 2**, que debe
+      leer «¿Prom.?» y «CP» con sus comillas angulares.
 - [ ] Confirmar autor / afiliación / correo / ORCID.
 
 ## 4. Envío
@@ -40,4 +52,8 @@ PDF y rearma el ZIP.
 - [ ] Guardar acuse y fecha.
 
 ---
+**Nota:** el artículo compila con **`xelatex`** (no `pdflatex`), y en este proyecto **un log
+limpio no prueba que el PDF esté bien**: los literales UTF-8 que XeTeX no mapea a la fuente
+Type1 se falsifican en silencio. Si añades algún carácter no-ASCII nuevo, verifícalo.
+
 **Nota:** se envía la versión de **12 pp**. La de **18 pp** (`main_referencia_extendida_18pp.pdf`) y el **suplemento** son tu respaldo para el arbitraje.

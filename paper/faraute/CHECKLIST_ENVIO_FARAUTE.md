@@ -11,7 +11,8 @@
 ## A. Estado del manuscrito (LISTO ✅)
 
 - [x] Versión final **12 páginas** — `paper/faraute/main_final_12pp.pdf` (= `main.pdf` / `main.tex`)
-- [x] Compila limpio con `pdflatex` (2 pasadas), 0 referencias sin resolver, 0 *overfull*
+- [x] Compila limpio con **`xelatex`** (3 pasadas; el entorno no tiene `latexmk` ni `biber`),
+  0 errores, 0 referencias sin resolver, 0 *overfull*, 0 `Missing character`
 - [x] **Corrección de registro (2026-08-17):** las notas previas decían "0 *underfull*". Era un
   falso negativo: `main.log` está en ISO-8859 y `grep` lo trataba como binario, silenciando la
   salida. El conteo real era 17. La Tabla 1 usaba columnas `X` justificadas mientras la Tabla 2
@@ -20,7 +21,30 @@
   bibliografía, de *badness* 1127–2486 (cosméticas: una pizca de espacio interpalabra por
   identificadores largos como `readOnlyRootFilesystem` en una columna angosta), más 9 `\vbox`
   normales de una maqueta a dos columnas con flotantes. **La paginación no se movió: sigue en 12 pp.**
-- [x] Versión extendida de referencia (18 pp) preservada — `main_referencia_extendida_18pp.pdf` (NO se envía; es para tu consulta)
+- [x] **Ronda de revisión (2026-08-18)** aplicada a las dos versiones. Además de las
+  ediciones de contenido, destapó tres defectos que **el log de LaTeX no delataba**:
+  1. XeTeX sobre fuentes Type1 T1 descartaba `U+2014`: **92 rayas ausentes** del PDF de
+     12 pp (119 en el de 18 pp). Esto sí avisa en el log, pero nadie lo mira.
+  2. Peor: `«` `»` se dibujaban como glifos superpuestos con micro-*kerns* y `¿` salía como
+     **`£`**. Aquí `Missing character` se quedaba en **0**, porque LaTeX fabricaba el
+     sustituto en vez de fallar. Mitigado con `newunicodechar` en el preámbulo.
+  3. La **Tabla 2 aterrizaba en la última página**, encima de las referencias: el flotante
+     mide ~450 pt contra el techo de `\topfraction` (456,9 pt) y LaTeX lo difería sin
+     emitir aviso. Resuelto con `[!tb]`.
+  > **Regla que sale de aquí:** en este proyecto **un log limpio no prueba que el PDF esté
+  > bien**. Para verificar de verdad los glifos hay que descomprimir los *content streams*
+  > del PDF y mirar los códigos: correcto = un glifo por carácter dentro del mismo bloque
+  > `TJ`; roto = varios `Td` de micro-desplazamiento intercalados.
+- [x] **Referencias verificadas contra fuente primaria** (2026-08-18): 24 de 28 exactas.
+  Corregidas: *Chen et al.* citaba el preprint de arXiv de un trabajo **ya publicado y
+  arbitrado** en ACSW '26 (pp. 22–31) —y es justo la referencia con la que se delimita la
+  brecha—; título real de Portworx; `simplyblock` → *Engelbert, C. (2024)*; páginas de
+  *van Renesse* (91–104); título de *Stonebraker* sin guion.
+- [x] Versión extendida de referencia (18 pp) preservada — `main_referencia_extendida_18pp.pdf`
+  (NO se envía; es para tu consulta). **Sincronizada con la ronda del 2026-08-18**: mismos
+  arreglos de glifos, mismas referencias corregidas, misma ortografía y misma colocación de
+  la Tabla 2. Lo único que NO se propagó es la reescritura de §2, porque ahí las dos
+  versiones divergen a propósito (la de 18 pp lleva la exposición larga).
 - [x] Cifras verificadas 3× (reproducibles con `replication/execution-package/manifiestos/scripts/analyze.py`)
 - [x] Revisiones de árbitros incorporadas (Jepsen/Elle; reencuadre a V(fallo,K); salvedades intra-nodo; semántica ACK-perdido; correcciones de referencias)
 
@@ -105,9 +129,14 @@ Todos satisfechos por la plantilla LaTeX; deja constancia al revisar el PDF:
 - [x] Papel Carta, márgenes 2,5 cm por lado
 - [x] Título español (TNR 14, MAYÚS, negrita, centrado) → título inglés (12, negrita)
 - [x] Información de autor con superíndice y correo
-- [x] Resumen ≤ 150 palabras (146) + 3–5 palabras clave alfabéticas; Abstract (144) + Keywords en inglés
+- [x] Resumen ≤ 150 palabras (**149**) + 3–5 palabras clave alfabéticas; Abstract (**140**) + Keywords
+  en inglés. ⚠️ El resumen está a **una palabra** del límite: cualquier añadido lo rebasa.
 - [x] Secciones numeradas en negrita
 - [x] Figuras "Fig." y tablas "Tabla", TNR 10, alineadas a la izquierda, **debajo**
+- [x] **Notas al pie de tabla** también alineadas a la izquierda (punto 8 de la guía dice
+  "junto con sus descripciones"). Salían **centradas**, heredado del `\centering` del
+  entorno `table`; `\fignota` lleva ahora `\raggedright`. Verificado midiendo
+  `leftskip`/`rightskip` y el tamaño real (9,9626 pt = 10 pt nominales).
 - [x] Ecuaciones numeradas entre paréntesis, citadas como "Ec."
 - [x] Unidades SI
 - [x] Referencias autor-año alfabéticas en formato Faraute; citas (Autor, año) / (A & B, año) / (A et al., año)
