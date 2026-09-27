@@ -3,6 +3,18 @@
 \usepackage[T1]{fontenc}
 \usepackage[spanish,provide=*]{babel}
 \usepackage{mathptmx}
+% Este documento se compila con xelatex (ver scripts/set_zenodo_doi.py). XeTeX no
+% mapea ciertos literales UTF-8 a la fuente Type1 T1: la raya desaparece y « » ¿ ¡
+% se falsifican con glifos compuestos, sin que «Missing character» lo detecte.
+% Hoy el texto no usa ninguno, asi que esto no cambia nada; esta puesto para que
+% escribir una raya mas adelante no rompa el PDF en silencio.
+\usepackage{newunicodechar}
+\newunicodechar{—}{\textemdash}
+\newunicodechar{–}{\textendash}
+\newunicodechar{«}{\guillemotleft}
+\newunicodechar{»}{\guillemotright}
+\newunicodechar{¿}{\textquestiondown}
+\newunicodechar{¡}{\textexclamdown}
 \usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs,array}

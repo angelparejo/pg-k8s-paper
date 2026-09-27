@@ -25,7 +25,7 @@ Qué toca (y por qué son dos grupos distintos):
         paper/faraute/replication/.zenodo.json   (campo "notes")
         paper/faraute/replication/README.md      (sección "Cómo obtener el DOI")
 
-Después de escribir: recompila main.tex y suplemento.tex (2 pasadas de pdflatex
+Después de escribir: recompila main.tex y suplemento.tex (3 pasadas de xelatex
 cada uno), rearma zenodo-deposito-fase1.zip y verifica que no queden marcadores.
 
 Solo biblioteca estándar. Sin dependencias externas.
@@ -186,9 +186,22 @@ def aplicar(doi, dry_run):
 
 
 def compilar():
-    """Recompila los PDF (2 pasadas). Devuelve True si todos salieron bien."""
-    if shutil.which("pdflatex") is None:
-        print("  ! pdflatex no esta en el PATH: recompila a mano los PDF.")
+    """Recompila los PDF con xelatex (3 pasadas).
+
+    El motor importa. Estos documentos llevan un preambulo de estilo pdfLaTeX
+    (inputenc + fontenc[T1] + mathptmx) pero se construyen y se verifican con
+    xelatex. Compilarlos con el otro motor da un PDF valido, y hasta con la
+    misma paginacion, pero no es el mismo artefacto que se reviso: cambia el
+    interletraje y cambian los bytes. En un deposito con DOI permanente eso no
+    debe pasar.
+
+    Tres pasadas, no dos: con el .aux frio hacen falta para estabilizar las
+    referencias cruzadas y la colocacion de los flotantes.
+
+    Devuelve True si todos salieron bien.
+    """
+    if shutil.which("xelatex") is None:
+        print("  ! xelatex no esta en el PATH: recompila a mano los PDF.")
         return False
     ok = True
     for directorio, nombre in COMPILE_TARGETS:
@@ -196,9 +209,9 @@ def compilar():
         if not tex.exists():
             print("  ! ausente, se omite: %s" % tex.relative_to(ROOT))
             continue
-        for pasada in (1, 2):
+        for pasada in (1, 2, 3):
             resultado = subprocess.run(
-                ["pdflatex", "-interaction=nonstopmode", nombre + ".tex"],
+                ["xelatex", "-interaction=nonstopmode", nombre + ".tex"],
                 cwd=str(directorio),
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
