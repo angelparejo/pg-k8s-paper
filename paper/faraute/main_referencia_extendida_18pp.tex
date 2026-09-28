@@ -75,14 +75,21 @@
 % ---- Enlaces ----
 \usepackage[hidelinks,breaklinks]{hyperref}
 \usepackage{xurl}
+% xurl permite cortar la URL en cualquier caracter, y partia «https» como
+% «ht|tps». Se restringen los cortes a separadores reales; el Urlmuskip deja
+% que la URL se estire un poco para no encarecer la linea al no poder cortar.
+\def\UrlBreaks{\do\/\do\-\do\_\do\.\do\=\do\&\do\?\do\#\do\%}
+\def\UrlBigBreaks{\do\:\do\@}
+\setlength{\Urlmuskip}{0mu plus 3mu}
 
 % ---- Numeración de ecuaciones como "Ec." al citar (guía, punto 11) ----
 \newcommand{\Ec}[1]{Ec.~(\ref{#1})}
 
 % ---- Nota de figura/tabla en tamaño 10 (Times) ----
 % Nota al pie de tabla: alineada a la izquierda y a 10 pt (guia Faraute, punto 8).
-% El \raggedright es necesario porque el entorno table abre con \centering.
-\newcommand{\fignota}[1]{\par\vspace{2pt}\begingroup\footnotesize\raggedright
+% El \justifying es necesario porque el entorno table abre con \centering:
+% sin el, la nota sale CENTRADA, no justificada.
+\newcommand{\fignota}[1]{\par\vspace{2pt}\begingroup\footnotesize\justifying
   \textbf{Nota:} #1\par\endgroup}
 
 \begin{document}
@@ -411,13 +418,13 @@ Durante la preparación de este trabajo, el autor utilizó herramientas de intel
 \phantomsection
 \section*{Bibliografía}
 \begingroup
-\footnotesize
+\footnotesize\raggedright
 % Formato de la revista (medido sobre Vol 17 2022-1.pdf): todas las lineas
 % a ras del margen, sin sangria francesa, y una linea en blanco entre
 % entradas (salto de 27,6 pt frente a 13,8 pt de interlineado = 2x).
 \setlength{\parindent}{0pt}
 \setlength{\leftskip}{0pt}
-\setlength{\parskip}{\baselineskip}
+\setlength{\parskip}{8pt}
 
 Alquraan, A., H. Takruri, M. Alfatafta \& S. Al-Kiswany. (2018). An analysis of network-partitioning failures in cloud systems. \textit{Proc. 13th USENIX Symp. Operating Systems Design and Implementation (OSDI~18)}. USENIX Association. Carlsbad, CA, USA. pp.~51--68.\par
 Alvaro, P. \& S. Tymon. (2018). Abstracting the geniuses away from failure testing. \textit{Commun. ACM} 61(1): 54--61.\par
