@@ -11,7 +11,7 @@
 
 ---
 
-Valencia, [FECHA]
+Valencia, 27 de septiembre de 2026
 
 Señores
 **Comité Editorial**
@@ -45,7 +45,7 @@ tiempo de recuperación a 36,75 s; la partición de red, por su parte, preserva 
 consistencia. En ninguno de los escenarios se perdió una transacción confirmada (RPO nulo).
 Este resultado tiene una consecuencia práctica directa para quien opera bases de datos sobre
 Kubernetes, y se enuncia en el artículo con la salvedad que corresponde: por la
-co-localización intra-nodo del banco de pruebas, se sostienen el contraste entre escenarios
+colocalización intranodo del banco de pruebas, se sostienen el contraste entre escenarios
 y el mecanismo que lo explica, no las magnitudes absolutas.
 
 En atención a la política de reproducibilidad, los datos limpios de RTO y RPO, el paquete de
@@ -67,8 +67,7 @@ análisis y las conclusiones son obra exclusiva del autor, quien revisó y valid
 del contenido.
 
 El manuscrito se ajusta a las normas de la revista: doce páginas, doble columna, Times New
-Roman 12, papel carta con márgenes de 2,5 cm, resumen de 146 palabras con su versión en
-inglés, referencias en formato autor-año ordenadas alfabéticamente y figuras en escala de
+Roman 12, papel carta con márgenes de 2,5 cm, resumen de 149 palabras con su versión en inglés de 140, referencias en formato autor-año ordenadas alfabéticamente y figuras en escala de
 grises a 300 dpi, que se adjuntan además como archivos independientes.
 
 Quedo a su disposición para cualquier aclaratoria o para atender las observaciones que el
