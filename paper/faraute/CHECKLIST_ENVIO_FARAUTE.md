@@ -149,14 +149,14 @@ Todos satisfechos por la plantilla LaTeX; deja constancia al revisar el PDF:
 
 ---
 
-## D. Logística de envío
+## D. Logística de envío — COMPLETADA 2026-09-27 ✅
 
-- [ ] Manuscrito en **PDF** (aceptado por la guía; alternativa MSWord ≥ XP no necesaria)
-- [ ] Adjuntar las **3 copias digitales de figuras** (Fig1/Fig2/Fig3, grises, 300 dpi, JPEG/TIFF)
-- [ ] Cuerpo del correo: `carta_al_editor.md` (ver B4)
-- [ ] (Recomendado) Mencionar en el cuerpo del correo el **DOI del material suplementario** (Zenodo)
-- [ ] Enviar a **faraute@uc.edu.ve**
-- [ ] Guardar acuse/fecha de envío
+- [x] Enviado a **faraute@uc.edu.ve** el 2026-09-27; acuse de recibo confirmado.
+- [x] Adjuntos: manuscrito PDF (12 pp), 3 figuras en grises a 300 dpi, y el fuente
+  LaTeX con el suplemento, remitido por adelantado para el arte final.
+- [x] Cuerpo del correo: carta al editor.
+- [x] Depósito Zenodo v1.0.2 publicado y verificado antes del envío, de modo que el
+  concept DOI del manuscrito resuelve a material correcto.
 
 ---
 

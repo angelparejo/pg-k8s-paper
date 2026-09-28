@@ -72,11 +72,13 @@ PDF y rearma el ZIP.
 - [x] PDF de 12 pp leído completo por el autor; conforme.
 - [x] Autor, afiliación, correo y ORCID confirmados.
 
-## 4. Envío
-- [ ] Enviar PDF + 3 figuras (grises, 300 dpi) a **faraute@uc.edu.ve**.
-- [x] Carta al editor redactada: `carta_al_editor.md` (lista para pegar como cuerpo del
-      correo; solo falta la fecha y, si se conoce, el nombre del editor en ejercicio).
-- [ ] Guardar acuse y fecha.
+## 4. Envío — HECHO 2026-09-27 ✅
+- [x] Enviado a **faraute@uc.edu.ve** el 2026-09-27, con acuse de recibo confirmado.
+- [x] Adjuntos: `articulo_angel_parejo_final.pdf`, las 3 figuras de `figuras-envio/`
+      (grises, 300 dpi) y `entrega-latex.zip` (fuente LaTeX + suplemento).
+- [x] Carta al editor enviada como cuerpo del correo.
+- [x] Entrega paralela a la tutora: `entrega-latex.zip`.
+- [ ] Queda esperar el dictamen del arbitraje.
 
 ---
 **Nota:** el artículo compila con **`xelatex`** (no `pdflatex`), y en este proyecto **un log

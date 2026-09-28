@@ -679,3 +679,57 @@ Insumos aportados: `articulo_angelparejov2-experimental_entregable-bea.docx` y
   Zenodo** — es lo siguiente acordado, con `scripts/set_zenodo_doi.py` y `paper/faraute/GUIA_ZENODO.md` ya listos;
   (3) lectura final del PDF por el autor; (4) envío a faraute@uc.edu.ve.
 - Nota: `main_referencia_extendida_18pp.tex` NO recibió esta ronda de correcciones.
+
+## 2026-09-27 — Faraute: cierre del depósito Zenodo y ENVÍO del artículo
+
+**Operations:**
+- Commit de la ronda del 2026-08-18, que llevaba 40 días en el árbol de trabajo (5 commits separados).
+- Propagada esa ronda a `main_referencia_extendida_18pp.tex`, que arrastraba los mismos defectos.
+- `scripts/set_zenodo_doi.py`: motor `pdflatex` → `xelatex`, 2 → 3 pasadas.
+- Depósito Zenodo publicado; concept DOI fijado en los 8 puntos del proyecto.
+- Renombrados los entregables: `main_final_12pp.pdf` → `articulo_angel_parejo_final.pdf`,
+  `figures/` → `figuras/`, `entrega-tutor-latex.zip` → `entrega-latex.zip` (y su interior).
+- **Artículo enviado a faraute@uc.edu.ve el 2026-09-27, con acuse de recibo.**
+
+**Decisions:**
+- **Concept DOI y no DOI de versión** en el manuscrito. Se pagó sola tres veces: hubo v1.0, v1.0.1
+  y v1.0.2, cada una con su propio DOI de versión, y el manuscrito no se tocó ni una vez.
+- **Bibliografía con sangría francesa y justificada.** Se midieron las cuatro combinaciones: la
+  sangría da a TeX 1,2 em más de margen y baja el peor *badness* de 10000 —el máximo— a 4467.
+- **`raggedright` → `justifying` en la nota de tabla.** Quitar el `raggedright` no la justificaba:
+  la dejaba CENTRADA, porque el entorno `table` abre con `\centering`.
+- **No corregir la ortografía del suplemento** (10 guiones): habría obligado a una versión de
+  Zenodo sin ganancia real. Anotado como deliberado para que nadie lo «arregle».
+- **Sí corregir los desbordes del suplemento**: ahí se perdía texto impreso.
+- El ejemplar publicado de la revista (`Vol 17 2022-1.pdf`) queda fuera del control de versiones:
+  obra de terceros, y este repositorio es plantilla pública.
+
+**Results:**
+- **Zenodo publicado.** Concept DOI `10.5281/zenodo.23004248`; v1.0.2-fase1 =
+  `10.5281/zenodo.23005296`. ZIP verificado byte a byte contra la API: md5
+  `14c53cffec14d1d569fbbe386a52be73`.
+- **Formato tomado del ejemplar real de la revista**, midiendo coordenadas de texto en su PDF:
+  la bibliografía de Faraute no usa sangría francesa y separa entradas con línea en blanco; la
+  sección se titula «Bibliografía», no «Referencias».
+- **Tres defectos del suplemento**, el peor de 111,7 pt: la ruta
+  `execution-package/manifiestos/scripts/analyze.py` se salía del papel y perdía el `.py` —
+  justo el script que reproduce las cifras.
+- **URLs que se partían dentro del esquema** (`ht|tps://`), corregido restringiendo `\UrlBreaks`.
+- **«van Renesse» → «Van Renesse»**: los *tussenvoegsels* neerlandeses se capitalizan cuando no
+  los precede el nombre o la inicial. El autor lo detectó; yo lo había descartado con seguridad
+  excesiva.
+- Estado final: artículo 12 pp, versión extendida 18 pp, suplemento 4 pp; los tres con 0 errores,
+  0 `Missing character` y 0 *overfull*.
+
+**Commits:** `f22f44a` … `e327061` (16 commits).
+
+**Status:**
+- Done: TODO el trabajo de preparación y el envío.
+- Pending: esperar el dictamen del arbitraje. Si aceptan, el arte final exige migrar a la hoja
+  de estilo de la revista (`CyT_UC.sty` + `CyT_UC.tex`), que el `main.tex` actual no usa.
+
+**Nota de método:** durante casi toda la sesión conté las cajas desbordadas con el patrón
+`Overfull ..hbox`, que exige dos caracteres donde el log escribe `Overfull \hbox`, con uno. Los
+«0 overfull» reportados no valían. Al corregirlo, el artículo y la versión de 18 pp resultaron
+tener 0 de verdad; los tres del suplemento llevaban toda la sesión ocultos y los encontró el
+autor leyendo el PDF, no la herramienta.
