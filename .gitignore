@@ -46,6 +46,11 @@ Thumbs.db
 correcionesa.txt
 articulo_angelparejov2-experimental_IEEE_rev.docx
 
+# Ejemplar publicado de la revista, usado como referencia de maquetación.
+# Es obra de terceros con su propio copyright: se consulta en local, no se
+# redistribuye desde este repositorio (que además es plantilla pública).
+paper/faraute/Vol 17 2022-1.pdf
+
 # Claude Code local files (not shared across machines)
 .claude/settings.local.json
 .claude/state/*
