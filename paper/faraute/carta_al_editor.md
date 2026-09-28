@@ -85,6 +85,17 @@ ORCID: 0009-0001-9737-7116
 **Adjuntos:**
 
 1. `articulo_angel_parejo_final.pdf` — manuscrito completo (12 páginas).
-2. `figuras-envio/Fig1.jpg` — banco de pruebas (escala de grises, 300 dpi).
-3. `figuras-envio/Fig2.jpg` — línea de tiempo de los escenarios F1 y F2 (escala de grises, 300 dpi).
-4. `figuras-envio/Fig3.jpg` — predicado de visibilidad (escala de grises, 300 dpi).
+2. `Fig1.jpg` — banco de pruebas (escala de grises, 300 dpi).
+3. `Fig2.jpg` — línea de tiempo de los escenarios F1 y F2 (escala de grises, 300 dpi).
+4. `Fig3.jpg` — predicado de visibilidad (escala de grises, 300 dpi).
+5. `entrega-latex.zip` — fuente LaTeX del manuscrito y sus figuras, que remito por
+   adelantado para agilizar el arte final en caso de aceptación. Se compila con XeLaTeX;
+   las instrucciones van en el `LEEME.txt` incluido.
+
+---
+
+> **Nota interna (no forma parte del correo).** La guía de la revista pide PDF o MS Word
+> para el arbitraje inicial y reserva LaTeX para el arte final de los artículos aceptados,
+> con su propia hoja de estilo (`CyT_UC.sty` + `CyT_UC.tex`, en
+> facyt.uc.edu.ve/investigacion/faraute). El punto 5 se presenta por eso como adelanto
+> voluntario. Si el artículo se acepta, habrá que migrar `main.tex` a esa plantilla.

@@ -62,11 +62,9 @@ PDF y rearma el ZIP.
 > versión nueva, el suplemento corregido entrará de forma natural; hasta entonces, **se deja
 > como está**.
 
-## 3. Revisión final
-- [ ] Leer el PDF de 12 pp completo (`articulo_angel_parejo_final.pdf`). Fíjate sobre todo en las **rayas
-      (—)**, que es la primera vez que se imprimen, y en la **nota de la Tabla 2**, que debe
-      leer «¿Prom.?» y «CP» con sus comillas angulares.
-- [ ] Confirmar autor / afiliación / correo / ORCID.
+## 3. Revisión final — HECHA 2026-09-27 ✅
+- [x] PDF de 12 pp leído completo por el autor; conforme.
+- [x] Autor, afiliación, correo y ORCID confirmados.
 
 ## 4. Envío
 - [ ] Enviar PDF + 3 figuras (grises, 300 dpi) a **faraute@uc.edu.ve**.

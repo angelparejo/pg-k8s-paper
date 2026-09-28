@@ -102,10 +102,14 @@ Además recompila `main.tex`, la versión de 18 pp y el suplemento (2 pasadas ca
 sincroniza `articulo_angel_parejo_final.pdf`, rearma el ZIP y verifica que no quede ningún marcador.
 `--check` informa el estado; `--dry-run` muestra los cambios sin escribirlos.
 
-### B3. Revisión final del autor
-- [ ] Lectura completa del PDF de 12 pp (coherencia tras el recorte)
-- [ ] Confirmar datos de autor: nombre, afiliación, correo (`angelparejo@gmail.com`), ORCID `0009-0001-9737-7116`
-- [ ] Confirmar que el correo de correspondencia es el correcto
+### B3. Revisión final del autor — HECHA 2026-09-27 ✅
+
+- [x] PDF de 12 páginas leído íntegro por el autor, que lo da por conforme.
+- [x] Autor, afiliación, correo y ORCID confirmados.
+- [x] Verificación técnica final: 12 pp, 0 errores, 0 `Missing character`, 0 *overfull*,
+  0 `DeviceRGB`; figuras a 300 dpi en 1 canal; DOI de Zenodo presente.
+
+---
 
 ### B4. Carta al editor — REDACTADA 2026-08-17 ✅
 - [x] Borrador listo en `carta_al_editor.md`, para pegar como cuerpo del correo. Cubre:
