@@ -39,11 +39,17 @@ PDF y rearma el ZIP.
       *Chen et al.* citaba un preprint de arXiv de un trabajo ya arbitrado en ACSW '26.
 - [x] Versión de 18 pp sincronizada con los mismos arreglos.
 
-## 2ter. Zenodo — CERRADO 2026-09-28 ✅ (no tocar)
+## 2ter. Zenodo — REABIERTO 2026-09-27 ⚠️ (falta subir v1.0.2)
 - [x] Depósito publicado. **Concept DOI: `10.5281/zenodo.23004248`** — es el que cita el
       artículo y resuelve siempre a la última versión.
 - [x] Versiones: `1.0-fase1` (`...23004249`) y `1.0.1-fase1` (`...23004520`, la vigente).
-- [x] El ZIP del repositorio es **byte a byte** el publicado: md5 `b6af11bc73723157677a1e43668633d5`.
+- [ ] **PENDIENTE: subir la versión `1.0.2-fase1`.** El suplemento publicado tiene tres cajas
+      desbordadas, la peor de **111,7 pt**: en la nota inicial se sale del papel la ruta
+      `execution-package/manifiestos/scripts/analyze.py` y se pierde el `.py`. Es la ruta del
+      script que reproduce las cifras, así que el defecto ataca justo el cometido del depósito.
+      Corregido en el repositorio (cortes explícitos + `emergencystretch`); el ZIP nuevo tiene
+      md5 `14c53cffec14d1d569fbbe386a52be73`, 114 637 bytes.
+- [x] El ZIP publicado hasta ahora: md5 `b6af11bc73723157677a1e43668633d5`.
 
 > ⚠️ **DECISIÓN DELIBERADA (2026-09-28): no corregir `replication/supplement/suplemento.tex`.**
 > Conserva la ortografía anterior a la regla RAE de prefijos —`co-localización`,

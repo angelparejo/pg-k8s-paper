@@ -31,10 +31,14 @@ estudio empírico de CloudNativePG bajo fallos inyectados (Fase 1)}
 \author{Angel A. Parejo R.\\ \small Universidad de Carabobo, Valencia, Venezuela --- ORCID 0009-0001-9737-7116}
 \date{}
 
+% Permite a TeX una pasada extra con mas elasticidad antes de rendirse y
+% desbordar el margen. Sin esto, la linea de los descriptivos se salia 19,8 pt.
+\setlength{\emergencystretch}{1em}
+
 \begin{document}
 \maketitle
 
-\noindent\textbf{Nota.} Este documento acompaña al artículo homónimo enviado a la Revista FARAUTE de Ciencias y Tecnología (UC/FACYT) y forma parte del depósito de reproducibilidad (Zenodo, DOI: 10.5281/zenodo.23004248). Recoge el detalle metodológico y estadístico que, por el límite de extensión del artículo, no cabe en el cuerpo principal, y documenta explícitamente los puntos que un árbitro necesita para auditar los resultados. Todas las cifras aquí y en el artículo se reproducen ejecutando \texttt{execution-package/manifiestos/scripts/analyze.py} sobre los CSV de \texttt{data/}.
+\noindent\textbf{Nota.} Este documento acompaña al artículo homónimo enviado a la Revista FARAUTE de Ciencias y Tecnología (UC/FACYT) y forma parte del depósito de reproducibilidad (Zenodo, DOI: 10.5281/zenodo.23004248). Recoge el detalle metodológico y estadístico que, por el límite de extensión del artículo, no cabe en el cuerpo principal, y documenta explícitamente los puntos que un árbitro necesita para auditar los resultados. Todas las cifras aquí y en el artículo se reproducen ejecutando \texttt{execution-package/\allowbreak manifiestos/\allowbreak scripts/\allowbreak analyze.py} sobre los CSV de \texttt{data/}.
 
 \section{Propósito y alcance}
 La Fase 1 caracteriza empíricamente el comportamiento de CloudNativePG (CNPG) 1.28.0 bajo tres escenarios de fallo reproducibles de forma segura en un clúster productivo: F1 (\emph{pod-kill}), F2 (\emph{pod-failure}) y F3 (partición de red), más un F4 (latencia de E/S) no ejecutable. El análisis es descriptivo (medianas, rangos intercuartílicos e intervalos de confianza de mediana) más un único contraste de dos grupos intra-CNPG (F1 vs.\ F2). Este suplemento amplía las Secciones~5 y~6 del artículo.
@@ -79,7 +83,7 @@ Con la 1.\textsuperscript{a} inyección ($\approx$80{,}5 s) & 11 & 36{,}92 & 29{
 \section{Estadística completa}
 Todas las cantidades se reproducen con \texttt{analyze.py} (biblioteca estándar de Python).
 
-\paragraph{Descriptivos.} F1: mediana 7{,}91~s, IQR [7{,}62,\,8{,}01], rango [6{,}61,\,8{,}17]. F2: mediana 36{,}75~s, IQR [36{,}20,\,37{,}06], rango [35{,}51,\,38{,}32]. Razón de medianas F2/F1 $= 4{,}65\times$.
+\paragraph{Descriptivos.} F1: mediana 7{,}91~s, IQR [7{,}62,\,8{,}01], \allowbreak rango [6{,}61,\,8{,}17]. \allowbreak F2: mediana 36{,}75~s, \allowbreak IQR [36{,}20,\,37{,}06], \allowbreak rango [35{,}51,\,38{,}32]. Razón de medianas F2/F1 $= 4{,}65\times$.
 
 \paragraph{Intervalos de confianza de mediana (distribución-libre).} Con $n=10$ se usan los estadísticos de orden 2.\textsuperscript{o} y 9.\textsuperscript{o}, $[x_{(2)},x_{(9)}]$, con cobertura
 \begin{equation*}
@@ -111,6 +115,6 @@ El escenario F4 (sensibilidad del RTO a latencia de E/S de 0, 20, 50 y 100~ms v�
 \end{itemize}
 
 \section*{Disponibilidad}
-Datos limpios, manifiestos, \texttt{tx-verifier}, scripts y este suplemento se depositan en Zenodo (DOI: 10.5281/zenodo.23004248, CC-BY-4.0; código MIT). Los registros crudos del verificador y los eventos del operador se facilitan a petición por el acceso restringido del clúster productivo.
+Datos limpios, manifiestos, \texttt{tx-verifier}, scripts y este suplemento se depositan en Zenodo (DOI: 10.5281/\allowbreak zenodo.23004248, CC-BY-4.0; código MIT). Los registros crudos del verificador y los eventos del operador se facilitan a petición por el acceso restringido del clúster productivo.
 
 \end{document}
