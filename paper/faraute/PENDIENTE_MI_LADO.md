@@ -50,6 +50,12 @@ PDF y rearma el ZIP.
 > `intra-nodo`, `inter-nodo`, `no-promoción`, `no-normalidad`, `distribución-libre`,
 > 10 apariciones—, mientras que el artículo ya usa las formas soldadas.
 >
+> ⚠️ **Y no rearmes el ZIP sin necesidad.** `rearmar_zip()` **nunca** reproduce el mismo
+> md5, ni siquiera con los archivos idénticos: `zipfile` guarda la fecha de modificación de
+> cada fichero, y basta un `git checkout` o una recompilación para cambiarla. El ZIP **tal
+> como está versionado** es el publicado; si lo rearmas y el md5 cambia, no significa que el
+> contenido difiera. Para restaurarlo: `git checkout -- paper/faraute/zenodo-deposito-fase1.zip`.
+
 > **No es un descuido.** Corregirlo cambiaría el ZIP, obligaría a publicar una tercera
 > versión en Zenodo por 10 guiones y rompería la identidad byte a byte con el depósito.
 > El suplemento es coherente consigo mismo. Cuando se depositen los datos de la Fase 2 como
