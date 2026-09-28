@@ -20,7 +20,7 @@ keywords:
   - failover
   - RTO
   - RPO
-doi: "10.5281/zenodo.XXXXXXX"   # reservar en Zenodo y sustituir
+doi: "10.5281/zenodo.23004248"
 preferred-citation:
   type: article
   title: "Análisis multicapa de operadores de PostgreSQL y almacenamiento CSI en Kubernetes: un marco de análisis y un estudio empírico de CloudNativePG bajo fallos inyectados"

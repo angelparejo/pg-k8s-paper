@@ -17,5 +17,5 @@
   "access_right": "open",
   "license": "CC-BY-4.0",
   "version": "1.0-fase1",
-  "notes": "Licencia dual: datos y documentación bajo CC-BY-4.0; código (scripts) bajo MIT (ver LICENSE.md). Reservar el DOI en Zenodo antes de publicar y sustituir 'DOI por asignar' / '10.5281/zenodo.XXXXXXX' en CITATION.cff, el suplemento y el manuscrito por el concept DOI."
+  "notes": "Licencia dual: datos y documentación bajo CC-BY-4.0; código (scripts) bajo MIT (ver LICENSE.md). Concept DOI del depósito: 10.5281/zenodo.23004248 (citado en el manuscrito y en el suplemento)."
 }

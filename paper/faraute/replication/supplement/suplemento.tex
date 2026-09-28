@@ -34,7 +34,7 @@ estudio empírico de CloudNativePG bajo fallos inyectados (Fase 1)}
 \begin{document}
 \maketitle
 
-\noindent\textbf{Nota.} Este documento acompaña al artículo homónimo enviado a la Revista FARAUTE de Ciencias y Tecnología (UC/FACYT) y forma parte del depósito de reproducibilidad (Zenodo, DOI por asignar). Recoge el detalle metodológico y estadístico que, por el límite de extensión del artículo, no cabe en el cuerpo principal, y documenta explícitamente los puntos que un árbitro necesita para auditar los resultados. Todas las cifras aquí y en el artículo se reproducen ejecutando \texttt{execution-package/manifiestos/scripts/analyze.py} sobre los CSV de \texttt{data/}.
+\noindent\textbf{Nota.} Este documento acompaña al artículo homónimo enviado a la Revista FARAUTE de Ciencias y Tecnología (UC/FACYT) y forma parte del depósito de reproducibilidad (Zenodo, DOI: 10.5281/zenodo.23004248). Recoge el detalle metodológico y estadístico que, por el límite de extensión del artículo, no cabe en el cuerpo principal, y documenta explícitamente los puntos que un árbitro necesita para auditar los resultados. Todas las cifras aquí y en el artículo se reproducen ejecutando \texttt{execution-package/manifiestos/scripts/analyze.py} sobre los CSV de \texttt{data/}.
 
 \section{Propósito y alcance}
 La Fase 1 caracteriza empíricamente el comportamiento de CloudNativePG (CNPG) 1.28.0 bajo tres escenarios de fallo reproducibles de forma segura en un clúster productivo: F1 (\emph{pod-kill}), F2 (\emph{pod-failure}) y F3 (partición de red), más un F4 (latencia de E/S) no ejecutable. El análisis es descriptivo (medianas, rangos intercuartílicos e intervalos de confianza de mediana) más un único contraste de dos grupos intra-CNPG (F1 vs.\ F2). Este suplemento amplía las Secciones~5 y~6 del artículo.
@@ -111,6 +111,6 @@ El escenario F4 (sensibilidad del RTO a latencia de E/S de 0, 20, 50 y 100~ms v�
 \end{itemize}
 
 \section*{Disponibilidad}
-Datos limpios, manifiestos, \texttt{tx-verifier}, scripts y este suplemento se depositan en Zenodo (DOI por asignar, CC-BY-4.0; código MIT). Los registros crudos del verificador y los eventos del operador se facilitan a petición por el acceso restringido del clúster productivo.
+Datos limpios, manifiestos, \texttt{tx-verifier}, scripts y este suplemento se depositan en Zenodo (DOI: 10.5281/zenodo.23004248, CC-BY-4.0; código MIT). Los registros crudos del verificador y los eventos del operador se facilitan a petición por el acceso restringido del clúster productivo.
 
 \end{document}

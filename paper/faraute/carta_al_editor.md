@@ -52,7 +52,7 @@ En atención a la política de reproducibilidad, los datos limpios de RTO y RPO,
 ejecución (manifiestos de Kubernetes y de Chaos Mesh, el cliente verificador de
 transacciones, la carga de trabajo y los guiones de análisis) y un material suplementario de
 métodos y estadística extendidos se depositan públicamente en Zenodo
-(**DOI por asignar**). Todas las cifras del artículo se reproducen ejecutando el guion de
+(**DOI: 10.5281/zenodo.23004248**). Todas las cifras del artículo se reproducen ejecutando el guion de
 análisis incluido en ese depósito. Los registros crudos del verificador se facilitan a
 petición, ya que el experimento se ejecutó sobre un clúster productivo bajo acceso
 restringido.

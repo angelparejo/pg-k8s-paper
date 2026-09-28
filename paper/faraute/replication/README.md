@@ -50,12 +50,14 @@ F4 IOChaos (no ejecutable sobre CNPG por incompatibilidad FUSE / `readOnlyRootFi
 ver el suplemento). Entorno: Kubernetes 1.34.6, PostgreSQL 16.13, CNPG 1.28.0, Chaos Mesh 2.8.3,
 Calico 3.31.4, CSI Huawei 4.10.1 (SAN/FC).
 
-## Cómo obtener el DOI (Zenodo)
-1. Crear un nuevo *upload* en Zenodo y arrastrar el contenido de esta carpeta (o su ZIP).
-2. En el formulario, **"Reserve DOI"** para obtener el DOI antes de publicar.
-3. Sustituir `DOI por asignar` / `10.5281/zenodo.XXXXXXX` en `CITATION.cff`, `.zenodo.json`,
-   el suplemento y el manuscrito (sección Disponibilidad de datos) por el **concept DOI**.
-4. Publicar. El *concept DOI* (todas las versiones) es el que se cita en el artículo.
+## DOI del depósito (Zenodo)
+Este depósito se cita con su **concept DOI** (todas las versiones):
+
+> 10.5281/zenodo.23004248 — https://doi.org/10.5281/zenodo.23004248
+
+El mismo DOI aparece en `CITATION.cff`, `.zenodo.json`, el suplemento y el manuscrito
+(sección de disponibilidad de datos). Si se publica una versión nueva del depósito, el
+concept DOI no cambia: no hay que reeditar el artículo.
 
 ## Nota de acceso
 El experimento se ejecutó sobre un clúster productivo bajo acceso restringido; por ello no se
