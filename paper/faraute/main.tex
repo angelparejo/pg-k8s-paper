@@ -155,7 +155,7 @@ El argumento central de este artículo es que la confiabilidad de las cargas con
 El estudio empírico es una fase piloto (Fase~1) cuyo alcance está delimitado por las restricciones del clúster productivo (Sección~5).
 
 \section{Trabajos relacionados}
-La literatura se agrupa en tres líneas con un marco común. La \emph{orquestación de clústeres} arranca en Borg y Omega, base de Kubernetes (Schwarzkopf et al., 2013; Burns et al., 2016), donde la CSI abstrae el almacenamiento persistente (Kubernetes, 2024) y el patrón \textit{Operator} consolida la gestión declarativa (Kubernetes, 2026b). En \emph{bases de datos distribuidas} destacan el teorema CAP y sus relecturas (Gilbert \& Lynch, 2002; Bailis \& Ghodsi, 2013), la consistencia eventual fuerte (Burckhardt, 2014) y su materialización en CockroachDB (Taft et al., 2020). Estas propiedades se nombran según la taxonomía canónica de la \textit{dependability} y su cadena falta--error--fallo (Avizienis et al., 2004). La tercera línea, \emph{recuperación y replicación}, aporta el WAL (Stonebraker \& Kemnitz, 1991; Han et al., 2024) y el efecto de la replicación en el \textit{failover} (van Renesse \& Schneider, 2004). El despliegue de sistemas \textit{stateful} mediante operadores ha ganado atención (Dobies \& Wood, 2020; Mega, 2023), aunque rara vez caracteriza el comportamiento ante fallos inyectados, brecha que este trabajo aborda.
+La literatura se agrupa en tres líneas con un marco común. La \emph{orquestación de clústeres} arranca en Borg y Omega, base de Kubernetes (Schwarzkopf et al., 2013; Burns et al., 2016), donde la CSI abstrae el almacenamiento persistente (Kubernetes, 2024) y el patrón \textit{Operator} consolida la gestión declarativa (Kubernetes, 2026b). En \emph{bases de datos distribuidas} destacan el teorema CAP y sus relecturas (Gilbert \& Lynch, 2002; Bailis \& Ghodsi, 2013), la consistencia eventual fuerte (Burckhardt, 2014) y su materialización en CockroachDB (Taft et al., 2020). Estas propiedades se nombran según la taxonomía canónica de la \textit{dependability} y su cadena falta--error--fallo (Avizienis et al., 2004). La tercera línea, \emph{recuperación y replicación}, aporta el WAL (Stonebraker \& Kemnitz, 1991; Han et al., 2024) y el efecto de la replicación en el \textit{failover} (Van Renesse \& Schneider, 2004). El despliegue de sistemas \textit{stateful} mediante operadores ha ganado atención (Dobies \& Wood, 2020; Mega, 2023), aunque rara vez caracteriza el comportamiento ante fallos inyectados, brecha que este trabajo aborda.
 
 Una cuarta vertiente, metodológica, verifica la resiliencia mediante inyección controlada de fallos: el \textit{chaos engineering} (Basiri et al., 2016), la inyección dirigida por linaje (Alvaro \& Tymon, 2018) y la caracterización empírica de particiones de red en producción (Alquraan et al., 2018). En la verificación de consistencia y durabilidad de bases de datos, la metodología Jepsen y su verificador Elle (Kingsbury \& Alvaro, 2021) son la referencia canónica; el \textit{tx-verifier} de este trabajo comparte ese espíritu con un alcance más acotado —durabilidad transaccional a nivel de \textit{commit}, contigüidad de una secuencia monótona como \textit{proxy} del RPO— sobre un operador concreto. El propio CloudNativePG incorpora pruebas de caos en su integración continua (LitmusChaos elimina el primario repetidamente) para validar el \textit{failover} (Drees, 2026), pero sin cuantificar su coste ni distinguir comportamientos; y Chen et al. (2026) evalúan la resiliencia del plano de orquestación, no de un operador con estado. Existen además comparaciones de industria entre operadores (Engelbert, 2024; Portworx, 2024), limitadas a listas de características. La brecha que este artículo cierra no es la ausencia de inyección de fallos en Kubernetes, sino la combinación específica de operador de PostgreSQL, almacenamiento CSI y un verificador a nivel de \textit{commit} que cuantifica la durabilidad y la consistencia observables, con la interacción entre capas —poco abordada— en el centro.
 
@@ -372,13 +372,13 @@ El autor utilizó herramientas de inteligencia artificial generativa únicamente
 \phantomsection
 \section*{Bibliografía}
 \begingroup
-\footnotesize\raggedright
-% Formato de la revista (medido sobre Vol 17 2022-1.pdf): todas las lineas
-% a ras del margen, sin sangria francesa, y una linea en blanco entre
-% entradas (salto de 27,6 pt frente a 13,8 pt de interlineado = 2x).
-\setlength{\parindent}{0pt}
-\setlength{\leftskip}{0pt}
-\setlength{\parskip}{8pt}
+\footnotesize
+\setlength{\parindent}{-1.2em}
+\setlength{\leftskip}{1.2em}
+\setlength{\parskip}{4pt}
+% LaTeX suprime la sangria del primer parrafo tras un encabezado, asi que
+% la primera entrada se quedaba sin el saliente. \indent la fuerza.
+\indent
 
 Alquraan, A., H. Takruri, M. Alfatafta \& S. Al-Kiswany. (2018). An analysis of network-partitioning failures in cloud systems. \textit{Proc. 13th USENIX Symp. Operating Systems Design and Implementation (OSDI~18)}. USENIX Association. Carlsbad, CA, USA. pp.~51--68.\par
 Alvaro, P. \& S. Tymon. (2018). Abstracting the geniuses away from failure testing. \textit{Commun. ACM} 61(1): 54--61.\par
@@ -408,7 +408,7 @@ PostgreSQL Global Development Group. (2024). PostgreSQL 16 documentation: stream
 Schwarzkopf, M., A. Konwinski, M. Abd-El-Malek \& J. Wilkes. (2013). Omega: flexible, scalable schedulers for large compute clusters. \textit{Proc. EuroSys}. ACM. pp.~351--364.\par
 Stonebraker, M. \& G. Kemnitz. (1991). The POSTGRES next generation database management system. \textit{Commun. ACM} 34(10): 78--92.\par
 Taft, R., I. Sharif, A. Matei, N. VanBenschoten, J. Lewis, T. Grieger, K. Niemi, A. Woods, A. Birzin, R. Poss, P. Bardea, A. Ranade, B. Darnell, B. Gruneir, J. Jaffray, L. Zhang \& P. Mattis. (2020). CockroachDB: the resilient geo-distributed SQL database. \textit{Proc. ACM SIGMOD Int. Conf. Management of Data}. ACM. pp.~1493--1509.\par
-van Renesse, R. \& F. B. Schneider. (2004). Chain replication for supporting high throughput and availability. \textit{Proc. OSDI}. USENIX Association. pp.~91--104.\par
+Van Renesse, R. \& F. B. Schneider. (2004). Chain replication for supporting high throughput and availability. \textit{Proc. OSDI}. USENIX Association. pp.~91--104.\par
 \endgroup
 
 \end{document}

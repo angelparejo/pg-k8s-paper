@@ -167,7 +167,7 @@ La literatura relevante se agrupa en tres líneas. La primera, sobre orquestaci�
 
 La segunda línea, sobre bases de datos distribuidas, ha tratado con amplitud la consistencia, la resiliencia y la tolerancia a fallos. Sistemas como CockroachDB evidencian el papel de la replicación en entornos distribuidos, mientras que el teorema CAP fija los límites entre consistencia, disponibilidad y tolerancia a particiones (Gilbert \& Lynch, 2002; Bailis \& Ghodsi, 2013; Taft et al., 2020). Trabajos posteriores profundizan en modelos de consistencia —incluida la verificación formal de la consistencia eventual fuerte (Burckhardt, 2014)—, mientras que la taxonomía canónica de la dependabilidad fija el vocabulario de referencia para clasificar fallos, errores y fallas (\textit{fault/error/failure}) en sistemas confiables (Avizienis et al., 2004).
 
-La tercera línea aborda recuperación, replicación y rendimiento en bases de datos. Los estudios basados en \textit{Write-Ahead Logging} (WAL) destacan su papel en la durabilidad y la recuperación (Stonebraker \& Kemnitz, 1991; Han et al., 2024), y las evaluaciones de estrategias de replicación muestran su impacto en la calidad del \textit{failover} y en la latencia de propagación (van Renesse \& Schneider, 2004). Más recientemente, el despliegue de aplicaciones con estado y de bases de datos en Kubernetes mediante operadores ha ganado atención (Dobies \& Wood, 2020; Mega, 2023). Mega (2023), por ejemplo, orquesta cargas con estado como servicios sobre Kubernetes mediante el \textit{framework} de operadores, con foco en la gestión de su ciclo de vida; pero, como el resto de esa línea, no caracteriza el comportamiento de \textit{failover}, consistencia y durabilidad ante fallos inyectados —precisamente el foco de este trabajo.
+La tercera línea aborda recuperación, replicación y rendimiento en bases de datos. Los estudios basados en \textit{Write-Ahead Logging} (WAL) destacan su papel en la durabilidad y la recuperación (Stonebraker \& Kemnitz, 1991; Han et al., 2024), y las evaluaciones de estrategias de replicación muestran su impacto en la calidad del \textit{failover} y en la latencia de propagación (Van Renesse \& Schneider, 2004). Más recientemente, el despliegue de aplicaciones con estado y de bases de datos en Kubernetes mediante operadores ha ganado atención (Dobies \& Wood, 2020; Mega, 2023). Mega (2023), por ejemplo, orquesta cargas con estado como servicios sobre Kubernetes mediante el \textit{framework} de operadores, con foco en la gestión de su ciclo de vida; pero, como el resto de esa línea, no caracteriza el comportamiento de \textit{failover}, consistencia y durabilidad ante fallos inyectados —precisamente el foco de este trabajo.
 
 Una cuarta vertiente, de carácter metodológico, es la verificación empírica de la resiliencia y la consistencia mediante la inyección controlada de fallos. El \textit{chaos engineering} propone experimentar deliberadamente con fallos para exponer debilidades del sistema antes de que se manifiesten sin control (Basiri et al., 2016); en la tradición de la verificación de garantías bajo fallo, la inyección de fallos dirigida por linaje (\textit{lineage-driven fault injection}) automatiza la búsqueda de las combinaciones de fallos capaces de violar las garantías de un sistema distribuido (Alvaro \& Tymon, 2018). Estudios empíricos sobre fallos de partición de red en sistemas \textit{cloud} en producción han caracterizado además su frecuencia y severidad (Alquraan et al., 2018), lo que refuerza la relevancia del escenario de partición contemplado en la Sección~5. En la verificación de consistencia y durabilidad de bases de datos bajo fallos inyectados, la metodología Jepsen y su verificador Elle —que infiere anomalías de aislamiento a partir de observaciones experimentales (Kingsbury \& Alvaro, 2021)— constituyen la referencia canónica. El cliente de verificación (\textit{tx-verifier}) de este trabajo comparte ese espíritu, pero con un alcance más acotado: no comprueba la linealizabilidad general, sino la durabilidad transaccional a nivel de \textit{commit} —contigüidad de una secuencia monótona como \textit{proxy} del RPO— sobre un operador de PostgreSQL concreto. Estas líneas aportan los fundamentos metodológicos para verificar los invariantes de consistencia y disponibilidad definidos en la Sección~3.4.
 
@@ -418,13 +418,13 @@ Durante la preparación de este trabajo, el autor utilizó herramientas de intel
 \phantomsection
 \section*{Bibliografía}
 \begingroup
-\footnotesize\raggedright
-% Formato de la revista (medido sobre Vol 17 2022-1.pdf): todas las lineas
-% a ras del margen, sin sangria francesa, y una linea en blanco entre
-% entradas (salto de 27,6 pt frente a 13,8 pt de interlineado = 2x).
-\setlength{\parindent}{0pt}
-\setlength{\leftskip}{0pt}
-\setlength{\parskip}{8pt}
+\footnotesize
+\setlength{\parindent}{-1.2em}
+\setlength{\leftskip}{1.2em}
+\setlength{\parskip}{4pt}
+% LaTeX suprime la sangria del primer parrafo tras un encabezado, asi que
+% la primera entrada se quedaba sin el saliente. \indent la fuerza.
+\indent
 
 Alquraan, A., H. Takruri, M. Alfatafta \& S. Al-Kiswany. (2018). An analysis of network-partitioning failures in cloud systems. \textit{Proc. 13th USENIX Symp. Operating Systems Design and Implementation (OSDI~18)}. USENIX Association. Carlsbad, CA, USA. pp.~51--68.\par
 Alvaro, P. \& S. Tymon. (2018). Abstracting the geniuses away from failure testing. \textit{Commun. ACM} 61(1): 54--61.\par
@@ -454,7 +454,7 @@ PostgreSQL Global Development Group. (2024). PostgreSQL 16 documentation: stream
 Schwarzkopf, M., A. Konwinski, M. Abd-El-Malek \& J. Wilkes. (2013). Omega: flexible, scalable schedulers for large compute clusters. \textit{Proc. EuroSys}. ACM. pp.~351--364.\par
 Stonebraker, M. \& G. Kemnitz. (1991). The POSTGRES next generation database management system. \textit{Commun. ACM} 34(10): 78--92.\par
 Taft, R., I. Sharif, A. Matei, N. VanBenschoten, J. Lewis, T. Grieger, K. Niemi, A. Woods, A. Birzin, R. Poss, P. Bardea, A. Ranade, B. Darnell, B. Gruneir, J. Jaffray, L. Zhang \& P. Mattis. (2020). CockroachDB: the resilient geo-distributed SQL database. \textit{Proc. ACM SIGMOD Int. Conf. Management of Data}. ACM. pp.~1493--1509.\par
-van Renesse, R. \& F. B. Schneider. (2004). Chain replication for supporting high throughput and availability. \textit{Proc. OSDI}. USENIX Association. pp.~91--104.\par
+Van Renesse, R. \& F. B. Schneider. (2004). Chain replication for supporting high throughput and availability. \textit{Proc. OSDI}. USENIX Association. pp.~91--104.\par
 \endgroup
 
 \end{document}
