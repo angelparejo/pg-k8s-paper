@@ -30,8 +30,9 @@
 \newunicodechar{»}{\guillemotright}
 \newunicodechar{¿}{\textquestiondown}
 \newunicodechar{¡}{\textexclamdown}
-% Evita que «Bailis» se parta como «Bai-lis» al final de linea
-\hyphenation{Bailis}
+% Evita que «Bailis» se parta como «Bai-lis», y que las siglas se silabeen
+% («OS-DI», «USE-NIX» aparecian partidas en la bibliografia).
+\hyphenation{Bailis OSDI USENIX}
 
 % ---- Papel Carta, márgenes justificados de 2,5 cm por cada lado ----
 \usepackage[letterpaper,left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
@@ -415,14 +416,14 @@ Durante la preparación de este trabajo, el autor utilizó herramientas de intel
 \setlength{\leftskip}{1.2em}
 \setlength{\parskip}{4pt}
 
-Alquraan, A., H. Takruri, M. Alfatafta \& S. Al-Kiswany. (2018). An analysis of network-partitioning failures in cloud systems. \textit{Proc. 13th USENIX Symp. Operating Systems Design and Implementation (OSDI 18)}. USENIX Association. Carlsbad, CA, USA. pp. 51--68.\par
+Alquraan, A., H. Takruri, M. Alfatafta \& S. Al-Kiswany. (2018). An analysis of network-partitioning failures in cloud systems. \textit{Proc. 13th USENIX Symp. Operating Systems Design and Implementation (OSDI~18)}. USENIX Association. Carlsbad, CA, USA. pp.~51--68.\par
 Alvaro, P. \& S. Tymon. (2018). Abstracting the geniuses away from failure testing. \textit{Commun. ACM} 61(1): 54--61.\par
 Avizienis, A., J.-C. Laprie, B. Randell \& C. Landwehr. (2004). Basic concepts and taxonomy of dependable and secure computing. \textit{IEEE Trans. Dependable Secure Comput.} 1(1): 11--33.\par
 Bailis, P. \& A. Ghodsi. (2013). Eventual consistency today: limitations, extensions, and beyond. \textit{Commun. ACM} 56(5): 55--63.\par
 Basiri, A., N. Behnam, R. de Rooij, L. Hochstein, L. Kosewski, J. Reynolds \& C. Rosenthal. (2016). Chaos engineering. \textit{IEEE Softw.} 33(3): 35--41.\par
 Burckhardt, S. (2014). Principles of eventual consistency. \textit{Found. Trends Program. Lang.} 1(1--2): 1--150.\par
 Burns, B., B. Grant, D. Oppenheimer, E. Brewer \& J. Wilkes. (2016). Borg, Omega, and Kubernetes. \textit{ACM Queue} 14(1): 70--93.\par
-Chen, Z., M. Goudarzi \& A. N. Toosi. (2026). An empirical evaluation of Kubernetes resilience in cloud--edge deployments using failure injection techniques. \textit{Proc. 2026 Australasian Computer Science Week (ACSW '26)}. ACM. pp. 22--31.\par
+Chen, Z., M. Goudarzi \& A. N. Toosi. (2026). An empirical evaluation of Kubernetes resilience in cloud--edge deployments using failure injection techniques. \textit{Proc. 2026 Australasian Computer Science Week (ACSW '26)}. ACM. pp.~22--31.\par
 CloudNativePG. (2026). CloudNativePG documentation. [En línea]. Disponible: \url{https://cloudnative-pg.io/docs/} [Consultado: 7 de julio de 2026].\par
 Crunchy Data. (2026). PGO: the Postgres Operator from Crunchy Data --- documentation. [En línea]. Disponible: \url{https://access.crunchydata.com/documentation/postgres-operator/latest/} [Consultado: 7 de julio de 2026].\par
 Dobies, J. \& J. Wood. (2020). \textit{Kubernetes Operators: automating the container orchestration platform}. O'Reilly Media. Sebastopol, CA, USA.\par
@@ -435,15 +436,15 @@ Kingsbury, K. \& P. Alvaro. (2021). Elle: inferring isolation anomalies from exp
 Kubernetes. (2024). Container storage interface (CSI). \textit{Kubernetes Documentation}. [En línea]. Disponible: \url{https://kubernetes.io/docs/concepts/storage/volumes/} y la especificación versionada en \url{https://github.com/container-storage-interface/spec} [Consultado: 2024].\par
 Kubernetes. (2026a). Nodes: node controller, condiciones del nodo y desalojo basado en taints. \textit{Kubernetes Documentation}. [En línea]. Disponible: \url{https://kubernetes.io/docs/concepts/architecture/nodes/} [Consultado: 7 de julio de 2026].\par
 Kubernetes. (2026b). Operator pattern. \textit{Kubernetes Documentation}. [En línea]. Disponible: \url{https://kubernetes.io/docs/concepts/extend-kubernetes/operator/} [Consultado: 8 de julio de 2026].\par
-Mega, C. (2023). Orchestrating information governance workloads as stateful services using Kubernetes operator framework. \textit{Service-Oriented Computing (SummerSOC 2023), Commun. Comput. Inf. Sci.}, vol. 1847. Springer. Cham, Switzerland. pp. 125--143.\par
-Ongaro, D. \& J. Ousterhout. (2014). In search of an understandable consensus algorithm (Raft). \textit{Proc. USENIX Annual Technical Conf. (USENIX ATC)}. USENIX Association. pp. 305--319.\par
+Mega, C. (2023). Orchestrating information governance workloads as stateful services using Kubernetes operator framework. \textit{Service-Oriented Computing (SummerSOC 2023), Commun. Comput. Inf. Sci.}, vol. 1847. Springer. Cham, Switzerland. pp.~125--143.\par
+Ongaro, D. \& J. Ousterhout. (2014). In search of an understandable consensus algorithm (Raft). \textit{Proc. USENIX Annual Technical Conf. (USENIX ATC)}. USENIX Association. pp.~305--319.\par
 Patroni. (2026). Patroni: a template for PostgreSQL HA with ZooKeeper, etcd or Consul --- documentation. [En línea]. Disponible: \url{https://patroni.readthedocs.io/} [Consultado: 7 de julio de 2026].\par
 Portworx. (2024). Kubernetes operator for PostgreSQL: how to choose and set up one. \textit{Portworx Blog}. [En línea]. Disponible: \url{https://portworx.com/blog/choosing-a-kubernetes-operator-for-postgresql/} [Consultado: 7 de julio de 2026].\par
 PostgreSQL Global Development Group. (2024). PostgreSQL 16 documentation: streaming replication y \texttt{synchronous\_commit}. [En línea]. Disponible: \url{https://www.postgresql.org/docs/16/} [Consultado: 2024].\par
-Schwarzkopf, M., A. Konwinski, M. Abd-El-Malek \& J. Wilkes. (2013). Omega: flexible, scalable schedulers for large compute clusters. \textit{Proc. EuroSys}. ACM. pp. 351--364.\par
+Schwarzkopf, M., A. Konwinski, M. Abd-El-Malek \& J. Wilkes. (2013). Omega: flexible, scalable schedulers for large compute clusters. \textit{Proc. EuroSys}. ACM. pp.~351--364.\par
 Stonebraker, M. \& G. Kemnitz. (1991). The POSTGRES next generation database management system. \textit{Commun. ACM} 34(10): 78--92.\par
-Taft, R., I. Sharif, A. Matei, N. VanBenschoten, J. Lewis, T. Grieger, K. Niemi, A. Woods, A. Birzin, R. Poss, P. Bardea, A. Ranade, B. Darnell, B. Gruneir, J. Jaffray, L. Zhang \& P. Mattis. (2020). CockroachDB: the resilient geo-distributed SQL database. \textit{Proc. ACM SIGMOD Int. Conf. Management of Data}. ACM. pp. 1493--1509.\par
-van Renesse, R. \& F. B. Schneider. (2004). Chain replication for supporting high throughput and availability. \textit{Proc. OSDI}. USENIX Association. pp. 91--104.\par
+Taft, R., I. Sharif, A. Matei, N. VanBenschoten, J. Lewis, T. Grieger, K. Niemi, A. Woods, A. Birzin, R. Poss, P. Bardea, A. Ranade, B. Darnell, B. Gruneir, J. Jaffray, L. Zhang \& P. Mattis. (2020). CockroachDB: the resilient geo-distributed SQL database. \textit{Proc. ACM SIGMOD Int. Conf. Management of Data}. ACM. pp.~1493--1509.\par
+van Renesse, R. \& F. B. Schneider. (2004). Chain replication for supporting high throughput and availability. \textit{Proc. OSDI}. USENIX Association. pp.~91--104.\par
 \endgroup
 
 \end{document}
