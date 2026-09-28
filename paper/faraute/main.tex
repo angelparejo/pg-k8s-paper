@@ -266,7 +266,7 @@ El manifiesto del clúster experimental solicitaba antiafinidad entre instancias
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=\linewidth]{figures/Fig2.jpg}
+\includegraphics[width=\linewidth]{figuras/Fig2.jpg}
 \caption{Banco de pruebas: clúster experimental colocalizado en nodo-lab-01, con clientes de carga (pgbench) y verificación (tx-verifier), e inyectores de fallo con doble filtro de selección; las cargas productivas quedan fuera del dominio de fallo.}
 \label{fig:testbed}
 \end{figure}
@@ -320,7 +320,7 @@ Emergió un resultado contraintuitivo: la recuperación tras \textit{pod-kill} (
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=\linewidth]{figures/Fig4.jpg}
+\includegraphics[width=\linewidth]{figuras/Fig4.jpg}
 \caption{Ventana de indisponibilidad de escritura a escala real: F1 (7,91~s, promoción de réplica) frente a F2 (36,75~s, recreación in situ del pod). Fuente: mediciones del piloto.}
 \label{fig:timeline}
 \end{figure}
@@ -346,7 +346,7 @@ Es una extensión propuesta motivada por la evidencia, no derivada formalmente. 
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=\linewidth]{figures/Fig5.jpg}
+\includegraphics[width=\linewidth]{figuras/Fig5.jpg}
 \caption{Predicado de visibilidad $V(\text{fallo},K)$: la promoción se dispara solo cuando el plano de control observa el pod como eliminado (F1); si el pod persiste (F2, F3), el operador no promueve.}
 \label{fig:visibilidad}
 \end{figure}

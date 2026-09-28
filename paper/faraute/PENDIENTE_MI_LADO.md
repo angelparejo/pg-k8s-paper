@@ -9,7 +9,7 @@ Lista corta y accionable. Detalle completo en `CHECKLIST_ENVIO_FARAUTE.md`.
       las barras F1/F2 se distinguen por longitud y por su etiqueta en el eje.
 - [x] Copias renombradas para el envío en `figuras-envio/`:
       `Fig1.jpg` (banco de pruebas) · `Fig2.jpg` (timeline) · `Fig3.jpg` (predicado de visibilidad).
-- [x] Originales a color preservados en `figures/color-originales/` por si hay que rehacer algo.
+- [x] Originales a color preservados en `figuras/color-originales/` por si hay que rehacer algo.
 - [x] `main.pdf` regenerado: 12 pp, PDF íntegro en `DeviceGray` (0 `DeviceRGB`).
 
 ## 2. DOI en Zenodo — automatizado 2026-08-17 ⚙️
@@ -25,7 +25,7 @@ PDF y rearma el ZIP.
       Sustituye el marcador en los 7 sitios donde vive (manuscrito, versión extendida,
       suplemento, `CITATION.cff`, `.zenodo.json`, `README.md` del depósito y la carta al
       editor), recompila `main.tex`, la versión de 18 pp y el suplemento, sincroniza
-      `main_final_12pp.pdf`, rearma el ZIP y verifica que no quede ningún marcador.
+      `articulo_angel_parejo_final.pdf`, rearma el ZIP y verifica que no quede ningún marcador.
       Con `--check` informa el estado sin tocar nada; con `--dry-run` muestra sin escribir.
 - [ ] Volver a subir el ZIP rearmado (ahora lleva el DOI dentro) y **publicar** el depósito.
 
@@ -57,7 +57,7 @@ PDF y rearma el ZIP.
 > como está**.
 
 ## 3. Revisión final
-- [ ] Leer el PDF de 12 pp completo (`main_final_12pp.pdf`). Fíjate sobre todo en las **rayas
+- [ ] Leer el PDF de 12 pp completo (`articulo_angel_parejo_final.pdf`). Fíjate sobre todo en las **rayas
       (—)**, que es la primera vez que se imprimen, y en la **nota de la Tabla 2**, que debe
       leer «¿Prom.?» y «CP» con sus comillas angulares.
 - [ ] Confirmar autor / afiliación / correo / ORCID.

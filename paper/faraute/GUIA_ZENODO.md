@@ -68,7 +68,7 @@ Con el número que te dio Zenodo. El guion, solo:
 - sustituye el marcador en los **7 sitios** donde vive (manuscrito, versión extendida de
   18 pp, suplemento ×2, `CITATION.cff`, `.zenodo.json`, `README.md` del depósito y la carta
   al editor);
-- recompila los **tres PDF** y sincroniza `main_final_12pp.pdf`;
+- recompila los **tres PDF** y sincroniza `articulo_angel_parejo_final.pdf`;
 - **rearma el ZIP** con el DOI ya dentro;
 - verifica que no quede ningún marcador y te lo dice.
 

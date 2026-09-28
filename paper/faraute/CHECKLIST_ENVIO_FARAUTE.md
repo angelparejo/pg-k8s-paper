@@ -10,7 +10,7 @@
 
 ## A. Estado del manuscrito (LISTO ✅)
 
-- [x] Versión final **12 páginas** — `paper/faraute/main_final_12pp.pdf` (= `main.pdf` / `main.tex`)
+- [x] Versión final **12 páginas** — `paper/faraute/articulo_angel_parejo_final.pdf` (= `main.pdf` / `main.tex`)
 - [x] Compila limpio con **`xelatex`** (3 pasadas; el entorno no tiene `latexmk` ni `biber`),
   0 errores, 0 referencias sin resolver, 0 *overfull*, 0 `Missing character`
 - [x] **Corrección de registro (2026-08-17):** las notas previas decían "0 *underfull*". Era un
@@ -62,11 +62,11 @@ La guía Faraute (punto 9) exige figuras en **blanco y negro o escala de grises*
   F1/F2 se distinguen por longitud y por su etiqueta en el eje, no por el tono. No hizo
   falta regenerar ninguna con patrones.
 - [x] Copias renombradas para la entrega en **`figuras-envio/`**:
-  `Fig1.jpg` ← `figures/Fig2.jpg` (banco de pruebas) ·
-  `Fig2.jpg` ← `figures/Fig4.jpg` (timeline) ·
-  `Fig3.jpg` ← `figures/Fig5.jpg` (predicado de visibilidad).
+  `Fig1.jpg` ← `figuras/Fig2.jpg` (banco de pruebas) ·
+  `Fig2.jpg` ← `figuras/Fig4.jpg` (timeline) ·
+  `Fig3.jpg` ← `figuras/Fig5.jpg` (predicado de visibilidad).
   Los `\includegraphics` de `main.tex` no se tocaron.
-- [x] Originales a color preservados en `figures/color-originales/`.
+- [x] Originales a color preservados en `figuras/color-originales/`.
 - [x] `main.pdf` regenerado: 12 pp, 0 overfull, 0 underfull, 0 refs sin resolver.
   El PDF quedó íntegramente en `DeviceGray` (0 `DeviceRGB`).
 
@@ -99,7 +99,7 @@ El guion sustituye el marcador donde realmente vive y hace el resto del trabajo:
 > "5 archivos" de esta checklist estaba incompleta y no distinguía ambos casos.
 
 Además recompila `main.tex`, la versión de 18 pp y el suplemento (2 pasadas cada uno),
-sincroniza `main_final_12pp.pdf`, rearma el ZIP y verifica que no quede ningún marcador.
+sincroniza `articulo_angel_parejo_final.pdf`, rearma el ZIP y verifica que no quede ningún marcador.
 `--check` informa el estado; `--dry-run` muestra los cambios sin escribirlos.
 
 ### B3. Revisión final del autor

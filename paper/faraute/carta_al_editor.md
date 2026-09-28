@@ -84,7 +84,7 @@ ORCID: 0009-0001-9737-7116
 
 **Adjuntos:**
 
-1. `main_final_12pp.pdf` — manuscrito completo (12 páginas).
+1. `articulo_angel_parejo_final.pdf` — manuscrito completo (12 páginas).
 2. `figuras-envio/Fig1.jpg` — banco de pruebas (escala de grises, 300 dpi).
 3. `figuras-envio/Fig2.jpg` — línea de tiempo de los escenarios F1 y F2 (escala de grises, 300 dpi).
 4. `figuras-envio/Fig3.jpg` — predicado de visibilidad (escala de grises, 300 dpi).

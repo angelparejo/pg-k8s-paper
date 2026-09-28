@@ -294,8 +294,8 @@ def main():
     if not args.no_compile:
         print("\n2) Recompilacion de PDF")
         compilar()
-        # main_final_12pp.pdf es la copia entregable de main.pdf
-        entregable = FARAUTE / "main_final_12pp.pdf"
+        # articulo_angel_parejo_final.pdf es la copia entregable de main.pdf
+        entregable = FARAUTE / "articulo_angel_parejo_final.pdf"
         principal = FARAUTE / "main.pdf"
         if principal.exists():
             shutil.copyfile(principal, entregable)
@@ -312,7 +312,7 @@ def main():
                 print("      %s:%d" % (ruta, numero))
         return 1
     print("  OK sin marcadores de DOI pendientes.")
-    print("\nListo. Revisa main_final_12pp.pdf y publica el deposito en Zenodo.")
+    print("\nListo. Revisa articulo_angel_parejo_final.pdf y publica el deposito en Zenodo.")
     return 0
 
 
