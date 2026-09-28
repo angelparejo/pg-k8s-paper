@@ -39,6 +39,23 @@ PDF y rearma el ZIP.
       *Chen et al.* citaba un preprint de arXiv de un trabajo ya arbitrado en ACSW '26.
 - [x] Versión de 18 pp sincronizada con los mismos arreglos.
 
+## 2ter. Zenodo — CERRADO 2026-09-28 ✅ (no tocar)
+- [x] Depósito publicado. **Concept DOI: `10.5281/zenodo.23004248`** — es el que cita el
+      artículo y resuelve siempre a la última versión.
+- [x] Versiones: `1.0-fase1` (`...23004249`) y `1.0.1-fase1` (`...23004520`, la vigente).
+- [x] El ZIP del repositorio es **byte a byte** el publicado: md5 `b6af11bc73723157677a1e43668633d5`.
+
+> ⚠️ **DECISIÓN DELIBERADA (2026-09-28): no corregir `replication/supplement/suplemento.tex`.**
+> Conserva la ortografía anterior a la regla RAE de prefijos —`co-localización`,
+> `intra-nodo`, `inter-nodo`, `no-promoción`, `no-normalidad`, `distribución-libre`,
+> 10 apariciones—, mientras que el artículo ya usa las formas soldadas.
+>
+> **No es un descuido.** Corregirlo cambiaría el ZIP, obligaría a publicar una tercera
+> versión en Zenodo por 10 guiones y rompería la identidad byte a byte con el depósito.
+> El suplemento es coherente consigo mismo. Cuando se depositen los datos de la Fase 2 como
+> versión nueva, el suplemento corregido entrará de forma natural; hasta entonces, **se deja
+> como está**.
+
 ## 3. Revisión final
 - [ ] Leer el PDF de 12 pp completo (`main_final_12pp.pdf`). Fíjate sobre todo en las **rayas
       (—)**, que es la primera vez que se imprimen, y en la **nota de la Tabla 2**, que debe
