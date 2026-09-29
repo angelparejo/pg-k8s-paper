@@ -4,7 +4,8 @@ Acompaña al artículo *"Análisis multicapa de operadores de PostgreSQL y almac
 en Kubernetes: un marco de análisis y un estudio empírico de CloudNativePG bajo fallos
 inyectados"* (Revista FARAUTE de Ciencias y Tecnología, UC/FACYT).
 
-**Autor:** Angel A. Parejo R. — Universidad de Carabobo (ORCID 0009-0001-9737-7116)
+**Autores:** Herrera, M.; Grimón, F.; Parejo, A. — Universidad de Carabobo
+**Correspondencia:** Parejo, A. (ORCID 0009-0001-9737-7116)
 **Licencias:** datos/documentación CC-BY-4.0 · código MIT (ver `LICENSE.md`)
 **DOI:** *por asignar en Zenodo* (ver "Cómo obtener el DOI" abajo)
 

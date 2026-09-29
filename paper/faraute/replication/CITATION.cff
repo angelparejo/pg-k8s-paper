@@ -3,8 +3,14 @@ message: "Si usa estos datos o código, cite el depósito y el artículo asociad
 title: "Datos y paquete de ejecución — Estudio empírico de CloudNativePG bajo fallos inyectados (Fase 1)"
 type: dataset
 authors:
-  - family-names: "Parejo R."
-    given-names: "Angel A."
+  - family-names: "Herrera"
+    given-names: "M."
+    affiliation: "Universidad de Carabobo, Valencia, Venezuela"
+  - family-names: "Grimón"
+    given-names: "F."
+    affiliation: "Universidad de Carabobo, Valencia, Venezuela"
+  - family-names: "Parejo"
+    given-names: "A."
     affiliation: "Universidad de Carabobo, Valencia, Venezuela"
     orcid: "https://orcid.org/0009-0001-9737-7116"
 version: "1.0-fase1"
@@ -25,7 +31,11 @@ preferred-citation:
   type: article
   title: "Análisis multicapa de operadores de PostgreSQL y almacenamiento CSI en Kubernetes: un marco de análisis y un estudio empírico de CloudNativePG bajo fallos inyectados"
   authors:
-    - family-names: "Parejo R."
-      given-names: "Angel A."
+    - family-names: "Herrera"
+      given-names: "M."
+    - family-names: "Grimón"
+      given-names: "F."
+    - family-names: "Parejo"
+      given-names: "A."
   journal: "Revista FARAUTE de Ciencias y Tecnología (UC/FACYT)"
   year: 2026
