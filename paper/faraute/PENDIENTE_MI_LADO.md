@@ -68,6 +68,25 @@ PDF y rearma el ZIP.
 > versión nueva, el suplemento corregido entrará de forma natural; hasta entonces, **se deja
 > como está**.
 
+## 2quater. Autoría de tres autores — CERRADO 2026-09-29 ✅
+Requisito del postgrado: el artículo pasa a tres firmantes en este orden y formato literal.
+
+- [x] Portada: `Herrera, M.` · `Grimón, F.` · `Parejo, A.` — correspondencia: Parejo, A.
+- [x] Agradecimientos en plural, con los tres nombrados; fuera «(autoría única)».
+- [x] Carta al editor en plural, firmada en nombre de los autores.
+- [x] Depósito alineado: `.zenodo.json`, `CITATION.cff`, `README.md`, `LICENSE.md` y el
+      suplemento llevan los tres.
+- [x] **Zenodo v1.0.3-fase1** (`10.5281/zenodo.23027861`) publicada y verificada: ZIP byte a
+      byte con el repositorio (md5 `453e66533890963bbf8a69a03ba5c690`) y los tres creators con
+      la forma correcta en los metadatos web.
+- [x] **Artículo reenviado a la revista** con la autoría corregida.
+- [x] Variantes del nombre registradas en ORCID («Also known as»), que es lo que une las
+      formas `Parejo, A.`, `Parejo R., Angel A.` y el nombre completo con y sin acentos.
+
+> **No tocar `execution-package/RESPONSABLES.md`.** Conserva a Parejo, A. como operador único
+> y así debe seguir: no es autoría, es el registro de quién tuvo la autoridad de aborto sobre
+> un clúster en producción. Ponerle tres nombres sería falso.
+
 ## 3. Revisión final — HECHA 2026-09-27 ✅
 - [x] PDF de 12 pp leído completo por el autor; conforme.
 - [x] Autor, afiliación, correo y ORCID confirmados.

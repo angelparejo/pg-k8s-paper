@@ -733,3 +733,42 @@ Insumos aportados: `articulo_angelparejov2-experimental_entregable-bea.docx` y
 «0 overfull» reportados no valían. Al corregirlo, el artículo y la versión de 18 pp resultaron
 tener 0 de verdad; los tres del suplemento llevaban toda la sesión ocultos y los encontró el
 autor leyendo el PDF, no la herramienta.
+
+## 2026-09-29 — Faraute: autoría de tres autores y reenvío
+
+**Operations:**
+- Portada de las dos versiones: `Herrera, M.` · `Grimón, F.` · `Parejo, A.`, correspondencia a
+  Parejo, A.; correos `mherrera@uc.edu.ve`, `fmdproy@gmail.com`, `angelparejo@gmail.com`.
+- Agradecimientos reescritos en plural en ambas versiones; carta al editor en plural.
+- Depósito alineado: `.zenodo.json`, `CITATION.cff`, `README.md`, `LICENSE.md` y `suplemento.tex`.
+- Zenodo **v1.0.3-fase1** publicada (`10.5281/zenodo.23027861`) y metadatos web corregidos.
+- **Artículo reenviado** a faraute@uc.edu.ve con la autoría corregida.
+
+**Decisions:**
+- **Formato literal** (`Herrera, M.`) por requisito del postgrado, pese a que la guía pide
+  «primer nombre completo… primer apellido completo» y a que ellas firman nombre primero en sus
+  propias publicaciones (Interciencia 2006). Efecto colateral útil: evita resolver el segundo
+  apellido de Herrera, que aparece como «de Pantoja» (2006) y «Colmenares» (fuentes recientes).
+- **Agradecimientos: cambio mínimo.** Una primera versión antepuso un reparto tipo CRediT que el
+  autor no pidió; se revirtió a la redacción original en plural. En la de 18 pp se retiró la frase
+  «El autor único realizó…», que existía para declarar singularidad.
+- **Declaración de IA en impersonal** («se emplearon»): las herramientas las usó quien redactó,
+  así que el plural directo sería impreciso.
+- **`RESPONSABLES.md` intacto.** Registro operativo, no autoría: Parejo, A. fue operador único y
+  tuvo la autoridad de aborto. Tres nombres ahí serían falsos.
+- **Opción C** sobre la B inicial: el autor pidió eliminar toda inconsistencia, así que se
+  actualizaron también los ficheros internos del ZIP, lo que obligó a la v1.0.3.
+
+**Results:**
+- Autoría coherente en cinco frentes: portada, agradecimientos, metadatos web de Zenodo, ficheros
+  internos del depósito y documentación.
+- ZIP publicado verificado byte a byte: md5 `453e66533890963bbf8a69a03ba5c690`.
+- Concept DOI `10.5281/zenodo.23004248` sin cambios **por cuarta vez**; el manuscrito no se ha
+  reeditado ni una sola vez por causa de los DOI.
+- 12 y 18 pp, suplemento 4 pp; los tres con 0 errores, 0 `Missing character`, 0 *overfull*.
+
+**Commits:** `d71a490`, `55ed8e3`, `b26d93b` + cierre.
+
+**Status:**
+- Done: autoría corregida en todo, depósito actualizado, artículo reenviado.
+- Pending: dictamen del arbitraje. Si aceptan, migrar a la hoja de estilo `CyT_UC`.
