@@ -21,7 +21,7 @@ Universidad de Carabobo
 
 Estimados señores:
 
-Tengo el agrado de someter a su consideración, para su evaluación y eventual publicación
+Tenemos el agrado de someter a su consideración, para su evaluación y eventual publicación
 en la Revista FARAUTE de Ciencias y Tecnología, el manuscrito titulado **«Análisis multicapa
 de operadores de PostgreSQL y almacenamiento CSI en Kubernetes: un marco de análisis y un
 estudio empírico de CloudNativePG bajo fallos inyectados»**, en la modalidad de **artículo
@@ -57,25 +57,26 @@ análisis incluido en ese depósito. Los registros crudos del verificador se fac
 petición, ya que el experimento se ejecutó sobre un clúster productivo bajo acceso
 restringido.
 
-Declaro que el manuscrito es original e inédito, que no ha sido publicado ni se encuentra en
-proceso de evaluación simultánea en otra revista, y que su contenido es de mi entera
-responsabilidad como autor único. La investigación no recibió financiamiento externo y no
-existen conflictos de interés. Conforme a las buenas prácticas vigentes, dejo constancia en
+Los autores declaramos que el manuscrito es original e inédito, que no ha sido publicado ni se
+encuentra en proceso de evaluación simultánea en otra revista, y que su contenido es de nuestra
+entera responsabilidad. La investigación no recibió financiamiento externo y no
+existen conflictos de interés. Conforme a las buenas prácticas vigentes, dejamos constancia en
 el propio manuscrito de que se emplearon herramientas de inteligencia artificial generativa
 únicamente como apoyo de redacción y estilo; la concepción, la ejecución experimental, el
-análisis y las conclusiones son obra exclusiva del autor, quien revisó y validó la totalidad
-del contenido.
+análisis y las conclusiones son obra de los autores, quienes revisaron y validaron la
+totalidad del contenido.
 
 El manuscrito se ajusta a las normas de la revista: doce páginas, doble columna, Times New
 Roman 12, papel carta con márgenes de 2,5 cm, resumen de 149 palabras con su versión en inglés de 140, referencias en formato autor-año ordenadas alfabéticamente y figuras en escala de
 grises a 300 dpi, que se adjuntan además como archivos independientes.
 
-Quedo a su disposición para cualquier aclaratoria o para atender las observaciones que el
+Quedamos a su disposición para cualquier aclaratoria o para atender las observaciones que el
 arbitraje estime pertinentes, y agradezco de antemano la atención prestada.
 
 Atentamente,
 
-**Angel A. Parejo R.**
+**Parejo, A.** — autor de correspondencia, en nombre de los autores
+Herrera, M. · Grimón, F. · Parejo, A.
 Universidad de Carabobo — Valencia, estado Carabobo, Venezuela
 Correo: angelparejo@gmail.com
 ORCID: 0009-0001-9737-7116

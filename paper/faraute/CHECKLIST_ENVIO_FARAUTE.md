@@ -1,7 +1,8 @@
 # Checklist de envío — Revista FARAUTE de Ciencias y Tecnología (UC/FACYT)
 
 **Manuscrito:** *Análisis multicapa de operadores de PostgreSQL y almacenamiento CSI en Kubernetes: un marco de análisis y un estudio empírico de CloudNativePG bajo fallos inyectados*
-**Autor:** Angel A. Parejo R. — Universidad de Carabobo
+**Autores:** Herrera, M.; Grimón, F.; Parejo, A. — Universidad de Carabobo
+**Correspondencia:** Parejo, A. (angelparejo@gmail.com)
 **Tipo:** Artículo científico (≤ 12 páginas)
 **Destino:** faraute@uc.edu.ve
 **Fecha de esta checklist:** 2026-08-13
