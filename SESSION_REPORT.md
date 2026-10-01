@@ -512,7 +512,7 @@ commitear*. Al preparar ese commit apareció un problema que no estaba en ningun
 - `scripts/seudonimizar_infra.py` (nuevo, stdlib): mapeo fijo y ordenado, `--check`/`--dry-run`,
   verificación de residuos, mapeo privado en `.claude/state/` (ignorado por git). **336
   sustituciones en 25 archivos.** Un falso positivo detectado y excluido: `bootstrap-icons.css`
-  tiene un icono llamado "gitlab".
+  tiene un icono llamado "ns-delta".
 - `scripts/set_zenodo_doi.py` (nuevo, stdlib): fija el concept DOI, recompila los 3 PDF,
   sincroniza el entregable, rearma el ZIP y verifica. Probado de extremo a extremo con un DOI
   falso (respaldo → aplicar → verificar → restaurar).
@@ -772,3 +772,42 @@ autor leyendo el PDF, no la herramienta.
 **Status:**
 - Done: autoría corregida en todo, depósito actualizado, artículo reenviado.
 - Pending: dictamen del arbitraje. Si aceptan, migrar a la hoja de estilo `CyT_UC`.
+
+## 2026-10-01 — Purga de identificadores de infraestructura del historial público
+
+**Operations:**
+- Auditoría previa al `git push`: `scripts/seudonimizar_infra.py` estaba **versionado en un
+  repositorio público** con el mapeo completo dentro. Su propio docstring afirmaba que la
+  correspondencia vivía en `.claude/state/`, ignorado por git; el código la tenía embebida.
+- Refactor: `cargar_mapeo()` lee los pares de `.claude/state/mapeo-seudonimos-infra.md` y aborta
+  si falta. Los patrones de residuo se derivan del mapeo en vez de reproducir los nombres.
+  `guardar_mapeo()` deja de reconstruir el archivo.
+- Respaldo completo antes de tocar nada: `/home/asolar/respaldo-pg-k8s-paper-20261001-1838.bundle`.
+- `git filter-repo --replace-text --replace-message` sobre 241 commits y 5 ramas.
+- Push forzado de `main` y las cuatro `pub/*`.
+
+**Decisions:**
+- **Se excluyó la regla `ns-delta → ns-delta`.** Aparece en `bootstrap-icons.css` como nombre de
+  icono de terceros; sustituirla habría corrompido el archivo sin proteger nada. Lo que
+  identifica la infraestructura es `pg-delta`, que sí se sustituyó.
+- Se reescribieron también los **mensajes de commit**: contenían `nodo-lab-01`, `pg-alfa`,
+  `pg-beta`, `pg-gamma` y `pg-delta`. Mirar solo el contenido de los archivos habría dejado
+  la mitad del rastro.
+- No se tocaron las ramas de plantilla (`dev`, `feat/*`, `feature/*`, `fix/*`, `gh-pages`,
+  `update/*`): la auditoría las encontró limpias.
+
+**Results:**
+- Clon recién descargado de GitHub: **limpio en contenido, mensajes y árbol**. 210 commits.
+- El ZIP de Zenodo conserva su md5 `2ab146e8f47672a68daad4e9abaaf066`, así que el depósito
+  publicado sigue coincidiendo con el repositorio pese a la reescritura.
+- El repositorio **no tiene forks** (verificado por la API de GitHub), de modo que nadie clonó
+  el historial con los nombres reales.
+
+**Status:**
+- Done: historial purgado y publicado.
+- Pending: (1) pedir a GitHub que purgue la caché de objetos antiguos —siguen accesibles por
+  SHA directo— en https://support.github.com/contact; (2) **avisar a quien administre esa
+  infraestructura**: la información estuvo pública durante meses y reescribir el historial
+  reduce la exposición futura, no deshace la pasada.
+
+**Nota:** cualquier clon anterior queda inservible; hay que volver a clonar, no hacer `pull`.
