@@ -29,36 +29,51 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+RUTA_MAPEO = ROOT / ".claude" / "state" / "mapeo-seudonimos-infra.md"
 
 # ---------------------------------------------------------------------------
-# Mapeo. El ORDEN IMPORTA: 'pg-delta' antes que 'gitlab', y la frase sobre
-# GitLab antes que el nombre suelto del namespace.
+# El orden importa: lo mas especifico primero, para que un nombre corto no
+# consuma a uno largo que lo contiene. cargar_mapeo() lo garantiza ordenando
+# por longitud descendente.
 # ---------------------------------------------------------------------------
-MAPEO = [
-    # correo corporativo -> correo académico del autor
-    ("angelparejo@gmail.com", "angelparejo@gmail.com"),
-    # clústeres CNPG preexistentes (ajenos al experimento)
-    ("pg-delta", "pg-delta"),
-    ("pg-alfa", "pg-alfa"),
-    ("pg-beta", "pg-beta"),
-    ("pg-gamma", "pg-gamma"),
-    # el namespace de GitLab y la mención al servicio que aloja
-    ("infraestructura de GitLab", "infraestructura de un servicio interno"),
-    ("gitlab", "ns-delta"),
-    # nodos del clúster. nodo-lab-01 es el nodo del laboratorio: se alinea con el
-    # seudónimo que ya usa el manuscrito.
-    ("nodo-lab-01", "nodo-lab-01"),
-    ("nodo-02", "nodo-02"),
-    ("nodo-03", "nodo-03"),
-    ("nodo-04", "nodo-04"),
-]
+# El mapeo NO vive aqui. Este archivo esta versionado en un repositorio publico,
+# asi que llevar dentro los nombres reales anularia el proposito del guion: durante
+# meses expuso justo lo que pretendia ocultar. Se lee de .claude/state/, ignorado
+# por git. Si el archivo no existe, el guion se niega a trabajar en vez de adivinar.
+def cargar_mapeo():
+    """Lee los pares real -> seudonimo de la tabla Markdown privada."""
+    if not RUTA_MAPEO.exists():
+        sys.exit(
+            "ERROR: no se encuentra el mapeo privado en %s\n"
+            "       Es deliberado que no este en el repositorio: contiene los nombres\n"
+            "       reales de la infraestructura. Recuperalo de tu copia local o de\n"
+            "       una copia de seguridad antes de ejecutar este guion."
+            % RUTA_MAPEO.relative_to(ROOT)
+        )
+    pares = []
+    for linea in RUTA_MAPEO.read_text(encoding="utf-8").splitlines():
+        celdas = [c.strip() for c in linea.split("|")]
+        # filas de la tabla: | real | seudonimo | que es |
+        if len(celdas) >= 4 and celdas[1] and celdas[2]:
+            real, seudo = celdas[1], celdas[2]
+            if real in ("Real", "---") or set(real) <= set("-: "):
+                continue
+            real = real.split(" (")[0].strip()
+            pares.append((real, seudo))
+    if not pares:
+        sys.exit("ERROR: el mapeo de %s no contiene ninguna fila valida."
+                 % RUTA_MAPEO.relative_to(ROOT))
+    # Lo mas especifico primero, para que un nombre corto no consuma a uno largo.
+    pares.sort(key=lambda par: -len(par[0]))
+    return pares
 
 # Detecta residuos tras aplicar el mapeo (algo que se nos haya escapado).
-RESIDUOS = [
-    re.compile(r"tcolp\d+"),
-    re.compile(r"\bdominio-corporativo\b"),
-    re.compile(r"pg-(prod|cert|dev|gitlab)\b"),
-]
+def residuos():
+    """Patrones que delatan un nombre real sin seudonimizar.
+
+    Se derivan del mapeo privado para no reproducir aqui los nombres.
+    """
+    return [re.compile(r"\b%s\b" % re.escape(real)) for real, _ in cargar_mapeo()]
 
 EXT_BINARIAS = {
     ".pdf", ".zip", ".docx", ".doc", ".jpg", ".jpeg", ".png", ".gif", ".svg",
@@ -109,7 +124,7 @@ def escanear():
         if texto is None:
             continue
         cuentas = {}
-        for patron in RESIDUOS:
+        for patron in residuos():
             encontrados = patron.findall(texto)
             if encontrados:
                 cuentas[patron.pattern] = len(encontrados)
@@ -128,7 +143,7 @@ def aplicar(dry_run):
             continue
         original = texto
         detalle = []
-        for viejo, nuevo in MAPEO:
+        for viejo, nuevo in cargar_mapeo():
             n = texto.count(viejo)
             if n:
                 texto = texto.replace(viejo, nuevo)
@@ -145,36 +160,17 @@ def aplicar(dry_run):
 
 
 def guardar_mapeo():
-    """Guarda la correspondencia en .claude/state/ (ignorado por git)."""
-    RUTA_MAPEO.parent.mkdir(parents=True, exist_ok=True)
-    lineas = [
-        "# Mapeo de seudónimos de infraestructura (PRIVADO)",
-        "",
-        "Este archivo vive en `.claude/state/`, que está ignorado por git: la",
-        "correspondencia queda en tu máquina y no se publica. Generado por",
-        "`scripts/seudonimizar_infra.py`.",
-        "",
-        "| Real | Seudónimo | Qué es |",
-        "|---|---|---|",
-        "| nodo-lab-01 | nodo-lab-01 | nodo del laboratorio (co-aloja 3 primarios ajenos) |",
-        "| nodo-02 | nodo-02 | worker con el primario de producción |",
-        "| nodo-03 | nodo-03 | worker con réplicas |",
-        "| nodo-04 | nodo-04 | worker con réplicas |",
-        "| pg-alfa | pg-alfa | clúster CNPG de producción |",
-        "| pg-beta | pg-beta | clúster CNPG de certificación |",
-        "| pg-gamma | pg-gamma | clúster CNPG de desarrollo |",
-        "| pg-delta | pg-delta | clúster CNPG del servicio de repositorios |",
-        "| gitlab (namespace) | ns-delta | namespace del servicio de repositorios |",
-        "| angelparejo@gmail.com | angelparejo@gmail.com | correo del autor |",
-        "",
-        "No se tocó `pglab-cnpg-exp` ni el namespace `pg-chaos-lab` (son del",
-        "experimento, no de producción), ni los nombres de la StorageClass del",
-        "proveedor de almacenamiento: el artículo declara el controlador CSI",
-        "empleado porque es información metodológica necesaria.",
-        "",
-    ]
-    RUTA_MAPEO.write_text("\n".join(lineas), encoding="utf-8")
-    print("  OK mapeo privado en %s" % RUTA_MAPEO.relative_to(ROOT))
+    """Antes generaba el mapeo privado; ahora ese archivo es la fuente de verdad.
+
+    Se conserva como no-op para no romper a quien la invoque. El mapeo se
+    mantiene a mano en .claude/state/ y NUNCA se reconstruye desde aqui: hacerlo
+    obligaria a llevar los nombres reales dentro de un archivo versionado, que es
+    exactamente el fallo que este cambio corrige.
+    """
+    if RUTA_MAPEO.exists():
+        print("  OK mapeo privado presente en %s" % RUTA_MAPEO.relative_to(ROOT))
+    else:
+        print("  ! falta el mapeo privado en %s" % RUTA_MAPEO.relative_to(ROOT))
 
 
 def informar(hallazgos):
