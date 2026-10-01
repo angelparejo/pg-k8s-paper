@@ -6,9 +6,6 @@ authors:
   - family-names: "Herrera"
     given-names: "M."
     affiliation: "Universidad de Carabobo, Valencia, Venezuela"
-  - family-names: "Grimón"
-    given-names: "F."
-    affiliation: "Universidad de Carabobo, Valencia, Venezuela"
   - family-names: "Parejo"
     given-names: "A."
     affiliation: "Universidad de Carabobo, Valencia, Venezuela"
@@ -33,8 +30,6 @@ preferred-citation:
   authors:
     - family-names: "Herrera"
       given-names: "M."
-    - family-names: "Grimón"
-      given-names: "F."
     - family-names: "Parejo"
       given-names: "A."
   journal: "Revista FARAUTE de Ciencias y Tecnología (UC/FACYT)"

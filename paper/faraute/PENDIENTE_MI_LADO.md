@@ -68,7 +68,7 @@ PDF y rearma el ZIP.
 > versión nueva, el suplemento corregido entrará de forma natural; hasta entonces, **se deja
 > como está**.
 
-## 2quater. Autoría de tres autores — CERRADO 2026-09-29 ✅
+## 2quater. Autoría de tres autores — SUPERADA el 2026-10-01 (ver 2quinquies)
 Requisito del postgrado: el artículo pasa a tres firmantes en este orden y formato literal.
 
 - [x] Portada: `Herrera, M.` · `Grimón, F.` · `Parejo, A.` — correspondencia: Parejo, A.
@@ -86,6 +86,30 @@ Requisito del postgrado: el artículo pasa a tres firmantes en este orden y form
 > **No tocar `execution-package/RESPONSABLES.md`.** Conserva a Parejo, A. como operador único
 > y así debe seguir: no es autoría, es el registro de quién tuvo la autoridad de aborto sobre
 > un clúster en producción. Ponerle tres nombres sería falso.
+
+## 2quinquies. Autoría de DOS autores — CERRADO 2026-10-01 ✅
+El jurado de la revista pidió dejar una sola tutora. **Esta es la autoría vigente** y deja sin
+efecto el apartado anterior.
+
+- [x] Autoría final: **`Herrera, M.` · `Parejo, A.`** — correspondencia: Parejo, A.
+      Sale Grimón, F. y su correo `fmdproy@gmail.com`.
+- [x] Alineado en **todo**: artículo de 12 pp, versión extendida de 18 pp, suplemento, carta al
+      editor, paquete LaTeX, y los metadatos del depósito (`.zenodo.json`, `CITATION.cff`,
+      `README.md`, `LICENSE.md`).
+- [x] Barrido de verificación: ni «Grimón» ni `fmdproy` en ningún fuente, ZIP ni PDF publicable.
+- [ ] **PENDIENTE: publicar la v1.0.4 en Zenodo** con el ZIP nuevo
+      (md5 `8282ce218c35d852239446f5323ccf43`, 114 705 bytes) y dejar los *creators* del registro
+      en dos. El concept DOI `10.5281/zenodo.23004248` no cambia.
+- [ ] **PENDIENTE: reenviar el artículo** a la revista con la autoría corregida.
+
+> **Nota sobre el historial de Zenodo.** Las versiones v1.0 a v1.0.2 llevan un autor y la v1.0.3
+> lleva tres. No se borran: Zenodo es un archivo permanente y esas versiones conservan su DOI.
+> El historial mostrará, por tanto, dos cambios de autoría. Es el precio de corregirlo bien, y
+> es preferible a que el depósito contradiga al artículo publicado.
+
+> **Sigue sin tocarse `execution-package/RESPONSABLES.md`**, que conserva a Parejo, A. como
+> operador único: es el registro de quién tuvo la autoridad de aborto sobre el clúster, no una
+> atribución de autoría.
 
 ## 3. Revisión final — HECHA 2026-09-27 ✅
 - [x] PDF de 12 pp leído completo por el autor; conforme.

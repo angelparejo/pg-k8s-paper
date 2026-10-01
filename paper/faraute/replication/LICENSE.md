@@ -6,14 +6,14 @@ Este depósito usa **licencias distintas para datos/documentación y para códig
   (Creative Commons Atribución 4.0 Internacional). https://creativecommons.org/licenses/by/4.0/
 - **Código** (`execution-package/manifiestos/scripts/*.py`, `*.sh`): **MIT** (texto abajo).
 
-Al citar, atribuya a: Herrera, M.; Grimón, F. y Parejo, A. (Universidad de Carabobo), y el artículo asociado
+Al citar, atribuya a: Herrera, M. y Parejo, A. (Universidad de Carabobo), y el artículo asociado
 (ver `CITATION.cff`).
 
 ---
 
 ## MIT License (código)
 
-Copyright (c) 2026 Herrera, M.; Grimón, F.; Parejo, A.
+Copyright (c) 2026 Herrera, M.; Parejo, A.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

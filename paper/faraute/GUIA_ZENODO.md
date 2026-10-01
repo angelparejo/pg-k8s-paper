@@ -100,7 +100,7 @@ Repasa la ficha una última vez y pulsa **Publish**.
 |---|---|
 | **Resource type** | `Dataset` |
 | **Title** | Datos y paquete de ejecución — Análisis multicapa de operadores de PostgreSQL y almacenamiento CSI en Kubernetes: estudio empírico de CloudNativePG bajo fallos inyectados (Fase 1 piloto) |
-| **Creators** | Tres, en este orden: `Herrera, M.` · `Grimón, F.` · `Parejo, A.` — todos con afiliación `Universidad de Carabobo, Valencia, Venezuela`. Solo Parejo, A. tiene ORCID registrado: `0009-0001-9737-7116`. **Los metadatos de un registro publicado son editables sin subir versión nueva**, así que este cambio no exige una v1.0.3. |
+| **Creators** | Dos, en este orden: `Herrera, M.` · `Parejo, A.` — ambos con afiliación `Universidad de Carabobo, Valencia, Venezuela`. Solo Parejo, A. tiene ORCID: `0009-0001-9737-7116`. **Los metadatos de un registro publicado son editables sin versión nueva**; el botón para confirmar se llama «Publish» y no crea versión. |
 | **Description** | El texto completo está en `replication/.zenodo.json`, campo `description` (991 caracteres). Ábrelo y cópialo tal cual |
 | **License** | `Creative Commons Attribution 4.0 International (CC-BY-4.0)` |
 | **Version** | `1.0-fase1` |
