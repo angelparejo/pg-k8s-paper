@@ -112,6 +112,19 @@ efecto el apartado anterior.
 > operador único: es el registro de quién tuvo la autoridad de aborto sobre el clúster, no una
 > atribución de autoría.
 
+## 2sexies. Portada del TEG y DOI partido — CERRADO 2026-10-01 ✅
+- [x] `PortadaTGEDS.docx` rellenada y convertida: **1 página**, tamaño Carta.
+      Título del artículo centrado · `AUTOR: Parejo, Angel` · `TUTOR: Herrera, Mirella` ·
+      `Valencia, 01-10-2026` (formato día-mes-año del propio documento).
+      Hubo que retirar 5 párrafos de relleno —el template reservaba sitio para un título de
+      una línea— y ensanchar el bloque AUTOR/TUTOR, que solo tenía 2,9 cm y partía los nombres.
+- [x] **Defecto del DOI corregido:** el silabeo español partía «zenodo» y el PDF imprimía
+      `10.5281/zeno-do.23004248`, un guion que no está en el identificador. Afectaba al artículo
+      y al suplemento. Resuelto con `\hyphenation{... zenodo Zenodo}` y un `\allowbreak` tras la
+      barra. Lo detectó la inspección visual del PDF, imposible antes de instalar poppler.
+- [x] **Zenodo v1.0.5-fase1** (`10.5281/zenodo.23091570`) publicada y verificada: md5
+      `2ab146e8f47672a68daad4e9abaaf066`, byte a byte con el repositorio.
+
 ## 3. Revisión final — HECHA 2026-09-27 ✅
 - [x] PDF de 12 pp leído completo por el autor; conforme.
 - [x] Autor, afiliación, correo y ORCID confirmados.
