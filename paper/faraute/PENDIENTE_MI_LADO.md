@@ -97,9 +97,10 @@ efecto el apartado anterior.
       editor, paquete LaTeX, y los metadatos del depósito (`.zenodo.json`, `CITATION.cff`,
       `README.md`, `LICENSE.md`).
 - [x] Barrido de verificación: ni «Grimón» ni `fmdproy` en ningún fuente, ZIP ni PDF publicable.
-- [ ] **PENDIENTE: publicar la v1.0.4 en Zenodo** con el ZIP nuevo
-      (md5 `8282ce218c35d852239446f5323ccf43`, 114 705 bytes) y dejar los *creators* del registro
-      en dos. El concept DOI `10.5281/zenodo.23004248` no cambia.
+- [x] **Zenodo v1.0.4-fase1 publicada** — `10.5281/zenodo.23091122`. Creators: Herrera, M. y
+      Parejo, A. ZIP verificado contra la API: md5 `8282ce218c35d852239446f5323ccf43`,
+      114 705 bytes, byte a byte con el repositorio. El concept DOI `10.5281/zenodo.23004248`
+      sigue intacto tras cinco versiones.
 - [ ] **PENDIENTE: reenviar el artículo** a la revista con la autoría corregida.
 
 > **Nota sobre el historial de Zenodo.** Las versiones v1.0 a v1.0.2 llevan un autor y la v1.0.3
