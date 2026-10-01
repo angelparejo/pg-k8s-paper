@@ -31,8 +31,10 @@
 \newunicodechar{¿}{\textquestiondown}
 \newunicodechar{¡}{\textexclamdown}
 % Evita que «Bailis» se parta como «Bai-lis», y que las siglas se silabeen
-% («OS-DI», «USE-NIX» aparecian partidas en la bibliografia).
-\hyphenation{Bailis OSDI USENIX}
+% («OS-DI», «USE-NIX» aparecian partidas en la bibliografia). «zenodo» entra
+% porque el DOI se imprimia como «10.5281/zeno-do.23004248» y ese guion se
+% confunde con parte del identificador.
+\hyphenation{Bailis OSDI USENIX zenodo Zenodo}
 
 % ---- Papel Carta, márgenes justificados de 2,5 cm por cada lado ----
 \usepackage[letterpaper,left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
@@ -364,7 +366,7 @@ Este trabajo abordó los sistemas PostgreSQL en Kubernetes desde una perspectiva
 El análisis evidencia que la confiabilidad \textit{stateful} en Kubernetes no depende solo del operador o del almacenamiento, sino del comportamiento emergente de su interacción, con \textit{trade-offs} entre rendimiento, disponibilidad y consistencia que atraviesan capas. El aporte de fondo es doble: acercar la teoría de sistemas distribuidos a la práctica en Kubernetes y entregar una herramienta reutilizable —el modelo $S=(O,K,M,D)$ con sus invariantes operacionalizados y el predicado $V(\text{fallo},K)$— aplicable a otras configuraciones; su validación se ampliará en la Fase~2 (Sección~7).
 
 \section*{Agradecimientos}
-En la preparación de este manuscrito se emplearon herramientas de inteligencia artificial generativa únicamente para mejorar la redacción, la gramática y el estilo; la concepción, el modelo, la ejecución experimental, el análisis y las conclusiones son obra de los autores —Herrera, M. y Parejo, A.—, que revisaron y validaron todo el contenido. La investigación no recibió financiamiento externo y los autores declaran no tener conflictos de interés. Los datos limpios de RTO/RPO, el paquete de ejecución (manifiestos, \textit{tx-verifier}, carga pgbench y scripts de análisis) y un material suplementario se depositan públicamente en Zenodo (DOI: 10.5281/zenodo.23004248); los registros crudos del verificador se facilitan a petición por el acceso restringido del clúster productivo, y el material depositado permite reproducir el diseño en un clúster equivalente.
+En la preparación de este manuscrito se emplearon herramientas de inteligencia artificial generativa únicamente para mejorar la redacción, la gramática y el estilo; la concepción, el modelo, la ejecución experimental, el análisis y las conclusiones son obra de los autores —Herrera, M. y Parejo, A.—, que revisaron y validaron todo el contenido. La investigación no recibió financiamiento externo y los autores declaran no tener conflictos de interés. Los datos limpios de RTO/RPO, el paquete de ejecución (manifiestos, \textit{tx-verifier}, carga pgbench y scripts de análisis) y un material suplementario se depositan públicamente en Zenodo (DOI: 10.5281/\allowbreak zenodo.23004248); los registros crudos del verificador se facilitan a petición por el acceso restringido del clúster productivo, y el material depositado permite reproducir el diseño en un clúster equivalente.
 
 % ============================================================================
 %  BIBLIOGRAFÍA — orden alfabético, formato Faraute (autor. año. título...)
