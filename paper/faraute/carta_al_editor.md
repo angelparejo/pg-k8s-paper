@@ -76,7 +76,7 @@ arbitraje estime pertinentes, y agradezco de antemano la atención prestada.
 Atentamente,
 
 **Parejo, A.** — autor de correspondencia, en nombre de los autores
-Herrera, M. · Grimón, F. · Parejo, A.
+Herrera, M. · Parejo, A.
 Universidad de Carabobo — Valencia, estado Carabobo, Venezuela
 Correo: angelparejo@gmail.com
 ORCID: 0009-0001-9737-7116
