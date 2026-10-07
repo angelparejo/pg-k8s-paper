@@ -1,7 +1,7 @@
 {
-  "title": "Datos y paquete de ejecución — Análisis multicapa de operadores de PostgreSQL y almacenamiento CSI en Kubernetes: estudio empírico de CloudNativePG bajo fallos inyectados (Fase 1 piloto)",
+  "title": "Datos y paquete de ejecución — Caracterización empírica de la conmutación por error de CloudNativePG en Kubernetes (Fase 1 piloto)",
   "upload_type": "dataset",
-  "description": "Datos limpios de RTO/RPO por escenario de fallo (F1 pod-kill, F2 pod-failure, F3 partición de red), paquete de ejecución (manifiestos de Kubernetes/Chaos Mesh, cliente verificador de transacciones tx-verifier, carga pgbench y script de análisis en Python stdlib que reproduce todas las cifras del artículo) y un material suplementario de métodos y resultados extendidos (métodos ampliados, semántica del verificador ante ACK perdido, análisis de sensibilidad de exclusiones, estadística completa con fórmulas, prueba de permutación y narrativa del bloqueo de F4). Estudio empírico piloto de CloudNativePG sobre un clúster Kubernetes productivo. Acompaña al artículo homónimo enviado a la Revista FARAUTE de Ciencias y Tecnología (UC/FACYT). Los registros crudos del verificador y los eventos del operador no se incluyen por ejecutarse sobre un clúster productivo bajo acceso restringido; el material depositado permite auditar los resultados y reproducir el diseño en un clúster equivalente.",
+  "description": "Datos limpios de RTO/RPO por escenario de fallo (F1 pod-kill, F2 pod-failure, F3 partición de red), paquete de ejecución (manifiestos de Kubernetes/Chaos Mesh, cliente verificador de transacciones tx-verifier, carga pgbench y script de análisis en Python stdlib que reproduce todas las cifras del artículo) y un material suplementario de métodos y resultados extendidos (métodos ampliados, semántica del verificador ante ACK perdido, análisis de sensibilidad de exclusiones, estadística completa con fórmulas, prueba de permutación y narrativa del bloqueo de F4). Estudio empírico piloto de CloudNativePG sobre un clúster Kubernetes productivo. Acompaña al artículo homónimo enviado a la Revista FARAUTE de Ciencias y Tecnología (UC/FACYT). Los registros crudos del verificador no se incluyen por ejecutarse sobre un clúster productivo bajo acceso restringido y se facilitan a petición. Los eventos del plano de control y los registros del operador durante las inyecciones NO se conservaron y el entorno ya no está disponible, de modo que no pueden facilitarse; el material depositado permite auditar los resultados y reproducir el diseño en un clúster equivalente.",
   "creators": [
     {
       "name": "Herrera, M.",
@@ -28,6 +28,6 @@
   "language": "spa",
   "access_right": "open",
   "license": "CC-BY-4.0",
-  "version": "1.0-fase1",
-  "notes": "Licencia dual: datos y documentación bajo CC-BY-4.0; código (scripts) bajo MIT (ver LICENSE.md). Concept DOI del depósito: 10.5281/zenodo.23004248 (citado en el manuscrito y en el suplemento)."
+  "version": "1.1-fase1",
+  "notes": "Licencia dual: datos y documentación bajo CC-BY-4.0; código (scripts) bajo MIT (ver LICENSE.md). Concept DOI del depósito: 10.5281/zenodo.23004248 (citado en el manuscrito y en el suplemento). Versión 1.1: añade f2_podfailure_cnpg_excluida.csv (la inyección de F2 descartada, para que la exclusión sea auditable), amplía analyze.py con el análisis de sensibilidad de esa exclusión, y corrige la nota de acceso: los eventos del operador no se conservaron. Acompaña a la versión revisada del artículo tras el arbitraje."
 }

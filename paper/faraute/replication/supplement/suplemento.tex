@@ -17,7 +17,7 @@
 \newunicodechar{¡}{\textexclamdown}
 \usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
 \usepackage{amsmath,amssymb}
-\usepackage{booktabs,array}
+\usepackage{booktabs,array,tabularx}
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
 \usepackage{xurl}
@@ -26,7 +26,7 @@
 \renewcommand{\thetable}{S\arabic{table}}
 
 \title{\bfseries Material Suplementario --- Métodos y Resultados Extendidos\\[4pt]
-\large Análisis multicapa de operadores de PostgreSQL y almacenamiento CSI en Kubernetes:\\
+\large Caracterización empírica de la conmutación por error de CloudNativePG en Kubernetes:\\
 estudio empírico de CloudNativePG bajo fallos inyectados (Fase 1)}
 \author{Herrera, M. \quad Parejo, A.\\ \small Universidad de Carabobo, Valencia, Venezuela\\ \small Correspondencia: Parejo, A. --- ORCID 0009-0001-9737-7116}
 \date{}
@@ -38,6 +38,7 @@ estudio empírico de CloudNativePG bajo fallos inyectados (Fase 1)}
 % ese guion se confunde con parte del identificador.
 \hyphenation{zenodo Zenodo}
 
+\newcommand{\fignota}[1]{\par\vspace{2pt}\begingroup\footnotesize\textbf{Nota:} #1\par\endgroup}
 \begin{document}
 \maketitle
 
@@ -98,26 +99,114 @@ Resulta: F1 $[6{,}85,\,8{,}15]$~s; F2 $[36{,}05,\,37{,}66]$~s; F3 fija $[60{,}74
 \begin{equation*}
 p=\frac{2}{\binom{20}{10}}=\frac{2}{184\,756}=1{,}083\times10^{-5},
 \end{equation*}
-que es el \textbf{piso teórico} alcanzable con $n=10$ por grupo: el test está saturado y el peso probatorio recae en el tamaño de efecto y el mecanismo, no en la magnitud del $p$. Aproximación normal: $z=-3{,}78$ ($p\approx1{,}6\times10^{-4}$). Correlación rango-biserial $=1{,}00$. Diferencia de medianas resistente (Hodges--Lehmann) $=28{,}96$~s.
+que es el \textbf{piso teórico} alcanzable con $n=10$ por grupo: el test está saturado y el peso probatorio recae en el tamaño del efecto y el mecanismo, no en la magnitud del $p$. Aproximación normal: $z=-3{,}78$ ($p\approx1{,}6\times10^{-4}$). Correlación rango-biserial $=1{,}00$. Diferencia de medianas resistente (Hodges--Lehmann) $=28{,}96$~s.
 
-\paragraph{Prueba de permutación (robustez ante no-independencia).} Las 10 repeticiones se ejecutaron en serie; en F2 hay una asociación débil orden--RTO (Spearman $\rho\approx0{,}62$, valor crítico exacto para $n=10$ a $\alpha=0{,}05$ es $0{,}648$; \emph{no} significativa). Como el test de Mann--Whitney es él mismo una prueba de permutación y la separación entre grupos es \emph{total}, cualquier reordenamiento admisible que respete los bloques mantiene $U=0$; el $p$ de permutación coincide con $2/\binom{20}{10}$. La conclusión no depende, pues, del supuesto de intercambiabilidad.
+\paragraph{Prueba de permutación (robustez ante no-independencia).} Las 10 repeticiones se ejecutaron en serie; en F2 hay una asociación orden--RTO de magnitud moderada a fuerte (Spearman $\rho\approx0{,}62$, valor crítico exacto para $n=10$ a $\alpha=0{,}05$ es $0{,}648$; \emph{no} significativa). El escenario está, además, completamente confundido con el bloque horario (F1 por la tarde, F2 por la noche), de modo que no existe esquema de permutación capaz de separar escenario y bloque: exigir que se respeten los bloques deja una sola reasignación admisible, la identidad. Por eso la conclusión se apoya en el tamaño del efecto y en el mecanismo, y no en el $p$.
 
-\paragraph{No-promoción (Clopper--Pearson).} Cota superior \textbf{unilateral} al 95\,\% con 0 éxitos: $1-0{,}05^{1/n}$. F2 (0/10): $\le 25{,}9\%$. F3 (0/12): $\le 22{,}1\%$. (La cota bilateral al 95\,\% sería $30{,}8\%$ y $26{,}5\%$.) La conclusión de no-promoción se apoya sobre todo en el mecanismo observado, no solo en el conteo.
+\paragraph{Cotas binomiales (Clopper--Pearson).} Cota superior \textbf{unilateral} al 95\,\% con 0 éxitos: $1-0{,}05^{1/n}$. F2 (0/10): $\le 25{,}9\%$. F3 (0/12): $\le 22{,}1\%$. (La cota bilateral al 95\,\% sería $30{,}8\%$ y $26{,}5\%$.) La conclusión de no-promoción se apoya sobre todo en el mecanismo observado, no solo en el conteo.
 
 \paragraph{RPO nulo: mecanismo.} El RPO fue 0 en los tres escenarios; solo F1 lo pone a prueba de forma no trivial (hay promoción real). Con replicación asíncrona, un \emph{pod-kill} podría en principio descartar WAL confirmado no propagado; que no ocurriera en 10/10 se atribuye a un retardo de replicación (\emph{lag}) $\approx 0$ bajo carga ligera (pgbench \texttt{-s 10}, 4 clientes). \textbf{Es una inferencia de mecanismo, no una medición}: no se registró el LSN \emph{lag} durante las corridas (medición asignada a la Fase~2). La co-localización intra-nodo implica además que la replicación no atravesó red inter-nodo, por lo que el RPO=0 de F1 no prueba todavía la durabilidad ante partición o latencia inter-nodo reales.
 
 \section{F4 (IOChaos / FUSE): bloqueo de instrumentación}
 El escenario F4 (sensibilidad del RTO a latencia de E/S de 0, 20, 50 y 100~ms vía IOChaos) \textbf{no fue ejecutable} sobre CNPG. El inyector FUSE \texttt{toda} de Chaos Mesh hizo \emph{ptrace attach} sobre PostgreSQL, pero al montar el sistema de archivos FUSE falló con \texttt{Read-only file system (os error 30)} y entró en reintentos. Causa: CNPG endurece sus pods con \texttt{readOnlyRootFilesystem: true} (junto con \texttt{runAsNonRoot} y descarte de capacidades), mientras que \texttt{toda} requiere una raíz escribible para su andamiaje de montaje. La configuración era correcta (el \emph{dry-run} de selectores resolvió solo a los pods del clúster experimental; el \texttt{PodIOChaos} llevaba ruta, contenedor y parámetros correctos): es una \textbf{incompatibilidad}, no un error de configuración. Es una limitación de este par de herramientas, no una propiedad general. Dos vías para la Fase~2: (i) test confirmatorio desactivando \texttt{readOnlyRootFilesystem} para aislar la causa; (ii) limitación de ancho de banda de E/S a nivel de \emph{cgroup} (\texttt{io.max}), que no depende de FUSE ni modifica el sistema bajo prueba. Los manifiestos de F4 se incluyen en el depósito para referencia.
 
+\section{Reparto de responsabilidades por capa (Tabla~S1)}
+Síntesis analítica del comportamiento documentado de los tres operadores; sustenta la discusión de la Sección~3.3 del artículo y \emph{no} es una medición empírica.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Tipo de fallo} & \textbf{Operador ($O$)} & \textbf{Kubernetes ($K$)} & \textbf{Almacenamiento CSI ($M$)} \\
+\midrule
+Fallo del pod primario &
+Detecta la pérdida del líder y promueve una réplica (CloudNativePG: gestor de instancias propio; Zalando y Crunchy: Patroni) &
+Actualiza \textit{Services} y \textit{Endpoints} hacia el nuevo primario. CNPG gestiona los pods directamente, sin \textit{StatefulSet}: es el operador, no el \textit{kubelet}, quien crea el pod sustituto y lo incorpora como réplica &
+Reasocia el PVC existente al pod recreado; sin acciones sobre los datos \\
+Fallo de nodo &
+Ordena la promoción de una réplica si el primario residía en el nodo afectado &
+Marca el nodo \textit{NotReady} ($\approx$50~s por defecto en Kubernetes v1.34, \textit{node-monitor-grace-period}; la documentación de CNPG sitúa entre 40 y 55~s el intervalo hasta que el pod queda marcado como no listo) y desaloja los pods tras el umbral de tolerancia ($\approx$5~min por defecto, \textit{tolerationSeconds}) (Kubernetes, 2026a) &
+Local: datos inaccesibles hasta recuperar el nodo. En red o distribuido: un volumen RWO de un nodo caído no se desasocia hasta que vence el temporizador del controlador de \textit{attach/detach} ($\approx$6~min) o se aplica la marca \texttt{node.kubernetes.io/\allowbreak out-of-\allowbreak service} \\
+Partición de red &
+Debe evitar el \textit{split-brain}: cercado (\textit{fencing}) del antiguo primario (Patroni: expiración del \textit{lease} en el DCS, que en Kubernetes son objetos nativos —\textit{Endpoints} o \textit{ConfigMaps}— y no un etcd propio; CloudNativePG: estado reconciliado en el \textit{API server}) &
+El \textit{API server} actúa como punto único de coordinación; una minoría del plano de control bloquea la reconciliación &
+En red: E/S bloqueada o degradada; distribuido: la pérdida de quórum puede congelar las escrituras \\
+\bottomrule
+\end{tabularx}
+\caption{Responsabilidad de detección y recuperación por capa y tipo de fallo.}
+\label{tab:s1}
+\fignota{síntesis analítica del comportamiento documentado por capa ante cada tipo de fallo; no es una medición empírica. $O$ = operador, $K$ = plano de control de Kubernetes, $M$ = almacenamiento CSI. Fuente: documentación de CloudNativePG (CloudNativePG, 2026), Patroni (Patroni, 2026) y Crunchy (Crunchy Data, 2026); parámetros de desalojo de Kubernetes (Kubernetes, 2026a).}
+\end{table}
+
+\section{Derivaciones trasladadas desde el artículo}
+
+\subsection*{Poder de detección del RPO}
+El \texttt{tx-verifier} escribe de forma estrictamente secuencial: cada inserción es una invocación
+independiente de \texttt{psql} que espera su confirmación antes de lanzar la siguiente, de modo que
+hay, a lo sumo, \textbf{una transacción en ejecución}. La pérdida máxima detectable por inyección es, por
+tanto, de \emph{un} identificador, y solo si ese \textit{commit} cae en la ventana entre el
+reconocimiento al cliente y el envío a la réplica. Con replicación asíncrona y retardo próximo a
+cero bajo la carga ligera empleada, la probabilidad de que esa ventana sea observable en una
+inyección dada es pequeña.
+
+Lo que el piloto acredita es, pues, una cota y no una garantía. Con $x=0$ pérdidas en $n=10$
+inyecciones válidas, la cota superior unilateral al 95\,\% de Clopper--Pearson es
+$1-0{,}05^{1/10}=0{,}2589$, es decir, \textbf{25,9\,\%} para la probabilidad de pérdida por
+\textit{failover}. Un sistema que perdiera una fracción apreciable de las transacciones elegibles
+podría haber pasado inadvertido en diez repeticiones. Añádase que \textbf{solo se verificaron las
+transacciones del verificador}: las de pgbench, con cuatro clientes concurrentes, no se
+comprobaron, de modo que la afirmación de ausencia de pérdida no se extiende a ellas.
+
+\subsection*{Rejilla de muestreo dependiente del escenario (F3)}
+La nota de la tabla del artículo declara una granularidad de instrumento de $\approx 0{,}2$~s. Es
+correcta para F1 y F2, y \textbf{no} lo es para F3. El verificador espera 0,2~s tras un fallo y
+reintenta, pero su tiempo de espera de conexión es de 2~s (\texttt{PGCONNECT\_TIMEOUT}). Cuál de
+los dos domina depende de cómo falle la conexión:
+
+\begin{itemize}[leftmargin=1.2em,itemsep=2pt,topsep=2pt]
+\item En F1 y F2 el pod desaparece o deja de estar listo, el \textit{endpoint} del servicio se
+retira y la conexión se \emph{rechaza} de inmediato. El ciclo lo fija la espera de 0,2~s.
+\item En F3 el pod permanece \textit{Ready}, el \textit{endpoint} no se retira y la política
+\emph{descarta} los paquetes en silencio. Cada intento agota los 2~s, y la rejilla efectiva pasa a
+ser de ese orden.
+\end{itemize}
+
+Por eso la indisponibilidad de F3 se reporta como indistinguible de la duración inyectada y no con
+dos decimales: la precisión aparente de las repeticiones no procede de la resolución del
+instrumento, sino de que lo medido es la duración de la propia política.
+
+\subsection*{Conexiones establecidas y \textit{conntrack} (F3)}
+Calico aplica la política a las conexiones \emph{nuevas}; las ya establecidas sobreviven hasta que
+se reinicien o expiren, porque las cadenas de política del \textit{workload endpoint} aceptan el
+tráfico ya seguido por \textit{conntrack}. Felix ofrece una opción experimental para purgar ese
+estado al cambiar la política, lo que confirma que el comportamiento por omisión es el descrito
+(Calico, 2026). En F3 esto implica que la replicación en \textit{streaming} y la vigilancia del
+gestor de instancias contra el \textit{API server}, ambas establecidas antes de la inyección,
+siguieron con toda probabilidad activas. \textbf{Consecuencia para la Fase~2:} un aislamiento por
+iptables o eBPF seguirá siendo insuficiente si no purga el estado de \textit{conntrack} o emplea
+reglas que no exceptúen las conexiones establecidas.
+
+\subsection*{Ventana efectiva de F2}
+El manifiesto de F2 declara \texttt{duration: 10m}, pero el arnés (\texttt{run-experiment.sh})
+retira la inyección en cuanto agota su bucle de detección de promoción, de 240 sondeos a 0,5~s
+($\approx$120~s). Como en F2 nunca hay cambio de primario, el bucle se agota siempre y la ventana
+efectiva es de unos dos minutos. La recuperación observada (36,7~s) precede con holgura a esa
+retirada, de modo que no es atribuible a ella.
+
+\section{Diseño de la Fase 2}
+Lo que este piloto no pudo resolver queda asignado a una Fase~2 ya diseñada, que se ejecutará en un clúster multinodo dedicado y fuera de producción, en el marco del Trabajo de Especialización en Desarrollo de Software de la FaCyT-UC. Su requisito previo es un protocolo de validación del inyector: cada escenario deberá acreditar, mediante los eventos del operador y el estado del pod ante el plano de control, que indujo el fallo que nombra antes de que su medición se dé por válida. Sobre esa base se abordan seis cuestiones. F2 se repetirá con terminación directa del proceso (\texttt{container-kill} o \texttt{SIGKILL} periódico), sin tocar la especificación del pod, para contrastar el resultado con los 36,7~s de la reconciliación. F3 se reconstruirá con aislamiento completo por iptables o eBPF, que cierre también el tráfico de \textit{host}, y permitirá ejercitar la comprobación \texttt{isolationCheck}. El fallo de nodo se probará con antiafinidad \emph{obligatoria}, midiendo el desalojo y la reasociación del volumen. F4 se inyectará por \texttt{io.max} de \textit{cgroups}~v2, sin FUSE. El retardo de replicación se instrumentará registrando \texttt{pg\_current\_wal\_lsn()} y \texttt{pg\_last\_wal\_replay\_lsn()} bajo una carga de escritura intensiva, para dar poder de detección al RPO. Y el contraste entre operadores y clases de almacenamiento, hoy solo analítico, pasará a ser empírico. Todo ello bajo un diseño factorial 2$\times$2: replicación asíncrona frente a síncrona por quórum, y topología colocalizada frente a distribuida.
+
 \section{Limitaciones extendidas}
 \begin{itemize}[leftmargin=1.2em,itemsep=2pt,topsep=2pt]
 \item \textbf{Un operador, una categoría de almacenamiento:} solo CNPG sobre CSI en red (SAN/FC). La comparación con Zalando/Patroni y Crunchy es analítica (Tabla~1 del artículo) y se asigna a la Fase~2.
-\item \textbf{Topología co-localizada:} las tres instancias residieron en un único nodo elegible; el \emph{failover} es intra-nodo y un fallo de nodo completo no es \emph{testeable} por construcción. El RTO de F2 es una \textbf{cota inferior} del real ante pérdida de nodo (no captura la latencia \emph{detach/attach} del volumen CSI).
+\item \textbf{Topología co-localizada:} las tres instancias residieron en un único nodo elegible; el \emph{failover} es intra-nodo y un fallo de nodo completo no es \emph{testeable} por construcción. El RTO de F2 \textbf{no} acota el real ante pérdida de nodo: CNPG es \emph{shared-nothing} y la reasociación del volumen no está en el camino crítico del \emph{failover}; además, F2 no reprodujo una indisponibilidad genuina (véase el artículo).
 \item \textbf{Carga pequeña:} pgbench \texttt{-s 10} ($\approx$150~MB), 4 clientes: no es un peor caso; central para el \emph{lag} $\approx 0$ y el RPO=0.
 \item \textbf{Solo asíncrono:} el modo síncrono no se varió; las cifras de RPO corresponden a replicación asíncrona.
 \end{itemize}
 
 \section*{Disponibilidad}
-Datos limpios, manifiestos, \texttt{tx-verifier}, scripts y este suplemento se depositan en Zenodo (DOI: 10.5281/\allowbreak zenodo.23004248, CC-BY-4.0; código MIT). Los registros crudos del verificador y los eventos del operador se facilitan a petición por el acceso restringido del clúster productivo.
+Datos limpios, manifiestos, \texttt{tx-verifier}, scripts y este suplemento se depositan en Zenodo (DOI: 10.5281/\allowbreak zenodo.23004248, CC-BY-4.0; código MIT). Los registros crudos del verificador, las marcas del arnés y los eventos del plano de control no se conservaron: quedaron en el clúster productivo, que ya no está disponible. No pueden facilitarse. Por eso el mecanismo de F2 se presenta en el artículo como inferencia a partir de los manifiestos, no como observación.
 
 \end{document}

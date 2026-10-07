@@ -18,7 +18,7 @@
 \usepackage{mathptmx}          % Times para texto y matemáticas
 \usepackage[scaled=0.9]{helvet}
 \usepackage{courier}
-\usepackage{microtype}
+\usepackage[protrusion=true,final]{microtype}
 % XeTeX + fuentes Type1 (mathptmx/T1) no mapea U+2014: sin esto las rayas
 % se pierden silenciosamente en el PDF (92 casos detectados).
 \usepackage{newunicodechar}
@@ -38,7 +38,7 @@
 
 % ---- Papel Carta, márgenes justificados de 2,5 cm por cada lado ----
 \usepackage[letterpaper,left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
-\setlength{\columnsep}{0.7cm}
+\setlength{\columnsep}{0.6cm}
 
 % ---- Espaciado simple ----
 \usepackage{setspace}
@@ -51,6 +51,9 @@
 \usepackage{multirow}
 \usepackage{tabularx}
 \usepackage{graphicx}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{patterns}
 \usepackage[flushleft]{threeparttable}
 
 % ---- Justificación ----
@@ -61,6 +64,9 @@
 
 % ---- Encabezados de sección: negrita y numerados (guía, punto 7) ----
 \usepackage{titlesec}
+% La revista compone todos los parrafos con sangria, incluido el primero
+% tras un encabezado; LaTeX la suprime por defecto ahi.
+\usepackage{indentfirst}
 \titleformat{\section}{\normalfont\bfseries}{\thesection.}{0.5em}{}
 \titleformat{\subsection}{\normalfont\bfseries}{\thesubsection.}{0.5em}{}
 \titlespacing*{\section}{0pt}{0.9ex plus .2ex}{0.4ex}
@@ -94,6 +100,21 @@
 \newcommand{\fignota}[1]{\par\vspace{2pt}\begingroup\footnotesize\justifying
   \textbf{Nota:} #1\par\endgroup}
 
+% ---- Colocacion de flotantes -------------------------------------------
+% Por defecto \dbltopfraction=0.7 impide colocar un table* mas alto que el 70%
+% de la columna: se difiere para siempre y arrastra a los flotantes siguientes
+% hasta el final del documento. Se amplian los margenes y se reduce el minimo
+% de texto exigido por pagina.
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\dbltopfraction}{0.92}
+\renewcommand{\textfraction}{0.06}
+\renewcommand{\floatpagefraction}{0.75}
+\renewcommand{\dblfloatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{dbltopnumber}{3}
+\setcounter{totalnumber}{5}
+
 \begin{document}
 
 % ============================================================================
@@ -104,12 +125,12 @@
 \begin{center}
 % ---- Título en español: Times New Roman 14, MAYÚSCULAS, negrita, centrado ----
 {\fontsize{14}{17}\selectfont\bfseries
-ANÁLISIS MULTICAPA DE OPERADORES DE POSTGRESQL Y ALMACENAMIENTO CSI EN KUBERNETES: UN MARCO DE ANÁLISIS Y UN ESTUDIO EMPÍRICO DE CLOUDNATIVEPG BAJO FALLOS INYECTADOS\par}
+CARACTERIZACIÓN EMPÍRICA DE LA CONMUTACIÓN POR ERROR DE CLOUDNATIVEPG EN KUBERNETES: RTO, RPO Y LOS LÍMITES DE LA INYECCIÓN DE FALLOS\par}
 
 \vspace{1em}
 % ---- Título en inglés: 12, negrita, iniciales mayúsculas ----
 {\fontsize{12}{15}\selectfont\bfseries
-Multilayer Analysis of PostgreSQL Operators and CSI Storage in Kubernetes: An Analytical Framework and an Empirical Study of CloudNativePG under Injected Faults\par}
+Empirical Characterization of CloudNativePG Failover in Kubernetes: RTO, RPO, and the Limits of Fault Injection\par}
 
 \vspace{1.2em}
 % ---- Información del autor ----
@@ -124,12 +145,12 @@ Multilayer Analysis of PostgreSQL Operators and CSI Storage in Kubernetes: An An
 % ---- Resumen: máx. 150 palabras, una sola columna justificada ----
 \begin{spacing}{1.0}
 \noindent\textbf{Resumen.}\; \small\justifying
-La adopción de Kubernetes para cargas con estado ha consolidado el uso de los operadores de PostgreSQL y de \textit{Container Storage Interface} (CSI), cuya interacción ante fallos rara vez se evalúa conjuntamente. Este artículo presenta un marco descriptivo —taxonomía, vocabulario común y el modelo $S=(O,K,M,D)$ con invariantes de consistencia, disponibilidad y durabilidad— y un estudio empírico de CloudNativePG mediante inyección de fallos en un clúster productivo bajo eliminación del primario (F1), indisponibilidad sostenida (F2) y partición de red (F3). El hallazgo central es que la variable que gobierna el \textit{failover} no es el fallo, sino su visibilidad ante Kubernetes: eliminar el pod primario promueve una réplica (RTO mediano 7,91~s), mientras que el fallo sostenido no promueve (36,75~s) y la partición preserva la consistencia. Ninguna transacción confirmada se perdió (RPO nulo). Por la colocalización intranodo, se sostienen el contraste F1/F2 y el mecanismo, no las magnitudes absolutas.
+La adopción de Kubernetes para cargas con estado ha consolidado el uso de operadores de PostgreSQL, cuyo comportamiento ante fallos rara vez se mide en producción. Este artículo la caracteriza empíricamente en CloudNativePG mediante inyección de fallos en un clúster productivo: eliminación del pod primario (F1), indisponibilidad sostenida del contenedor (F2) y partición de red (F3). F1 promovió una réplica en las diez repeticiones, con un RTO mediano de 7,9~s y sin pérdida de transacciones confirmadas. F2 no promovió, pero todo indica que los 36,7~s medidos corresponden a una reconciliación inducida por el propio inyector y no a la reacción ante una indisponibilidad genuina; y en F3 el fallo nunca llegó a ser visible para el plano de control, luego su ausencia de promoción no expresa preferencia por la consistencia. De ahí la contribución: en operadores declarativos, el mecanismo de inyección determina qué se mide.
 \par\vspace{0.5em}
 \noindent\textbf{\small Palabras clave:}\; {\small CloudNativePG; conmutación por error; inyección de fallos; Kubernetes; PostgreSQL.}
 \par\vspace{0.8em}
 \noindent\textbf{Abstract.}\; \small\justifying
-The adoption of Kubernetes for stateful workloads has consolidated the use of PostgreSQL operators and of the \textit{Container Storage Interface} (CSI), whose interaction under failure is rarely evaluated jointly. This paper presents a descriptive framework —a taxonomy, a common vocabulary, and the model $S=(O,K,M,D)$ with consistency, availability, and durability invariants— and an empirical study of CloudNativePG through fault injection on a production cluster under primary deletion (F1), sustained unavailability (F2), and network partition (F3). The central finding is that the variable governing failover is not the fault but its visibility to Kubernetes: deleting the primary pod promotes a replica (median RTO 7.91~s), whereas the sustained fault does not promote (36.75~s) and the partition preserves consistency. No committed transaction was lost (null RPO). Owing to intra-node co-location, the F1/F2 contrast and the mechanism hold, not the absolute magnitudes.
+The adoption of Kubernetes for stateful workloads has consolidated the use of PostgreSQL operators, whose behaviour under failure is rarely measured in production. This paper empirically characterizes CloudNativePG failover through fault injection on a production cluster: primary pod deletion (F1), sustained container unavailability (F2), and network partition (F3). F1 promoted a replica in all ten repetitions, with a median RTO of 7.9~s and no loss of committed transactions. F2 did not promote, but the 36.7~s measured are most plausibly attributable to an operator reconciliation induced by the injector itself rather than to the reaction to genuine unavailability; and in F3 the fault never became visible to the control plane, so the absence of promotion does not express a preference for consistency. Hence the methodological contribution: in declarative operators, the injection mechanism determines what is measured.
 \par\vspace{0.5em}
 \noindent\textbf{\small Keywords:}\; {\small CloudNativePG; failover; fault injection; Kubernetes; PostgreSQL.}
 \end{spacing}
@@ -142,231 +163,175 @@ The adoption of Kubernetes for stateful workloads has consolidated the use of Po
 % ============================================================================
 \justifying
 
-\section{Introducción}
-Kubernetes se ha convertido en la plataforma de facto para la orquestación de cargas de trabajo en contenedores, incluyendo aplicaciones con estado como las bases de datos (Schwarzkopf et al., 2013; Burns et al., 2016). Este avance ha favorecido el desarrollo de operadores de bases de datos, particularmente para PostgreSQL, como un mecanismo para automatizar la gestión del ciclo de vida, la replicación y los procesos de conmutación por error (\textit{failover}) (Dobies \& Wood, 2020; Kubernetes, 2026b).
+\section{Introducción}\label{sec:intro}
+Kubernetes es hoy la plataforma de facto para orquestar cargas en contenedores, incluidas las bases de datos (Schwarzkopf et al., 2013; Burns et al., 2016), lo que ha favorecido el desarrollo de operadores —en particular para PostgreSQL— que automatizan el ciclo de vida, la replicación y el \textit{failover} (Dobies \& Wood, 2020; Kubernetes, 2026b). En paralelo, la \textit{Container Storage Interface} (CSI) estandariza la integración de almacenamiento heterogéneo (Kubernetes, 2024). La literatura tiende a analizar estos componentes por separado (Gilbert \& Lynch, 2002; Bailis \& Ghodsi, 2013), pese a que la recuperación ante fallos depende de su interacción (Avizienis et al., 2004).
 
-En paralelo, la \textit{Container Storage Interface} (CSI) estandariza la integración de \textit{backends} de almacenamiento heterogéneos (Kubernetes, 2024). La literatura, sin embargo, tiende a analizar estos componentes de forma aislada —orquestación, consistencia distribuida o arquitectura de bases de datos (Gilbert \& Lynch, 2002; Bailis \& Ghodsi, 2013; Khan et al., 2023)—, pese a que la resiliencia y la recuperación ante fallos dependen de la interacción entre capas (Avizienis et al., 2004; Burckhardt, 2014).
-
-El argumento central de este artículo es que la confiabilidad de las cargas con estado en Kubernetes es un problema inherentemente multicapa: aunque un operador implemente una lógica de control correcta, su recuperación está condicionada por la latencia, la durabilidad, la topología y el \textit{failover} del \textit{backend}, y una capa de almacenamiento bien configurada no basta sin alineación con los supuestos del operador y la semántica de replicación. En este contexto, el trabajo presenta:
+Este artículo mide el coste del \textit{failover} de CloudNativePG en un clúster productivo y examina, para cada fallo inyectado, si el inyector reprodujo el fallo que nombra. Presenta:
 \begin{itemize}[leftmargin=1.2em,itemsep=2pt,topsep=2pt]
-\item Una taxonomía de operadores de PostgreSQL y de almacenamiento basado en CSI en Kubernetes.
-\item Un marco descriptivo con vocabulario común —el modelo $S=(O,K,M,D)$ e invariantes de durabilidad, disponibilidad y consistencia—, sin pretensión predictiva.
-\item El hallazgo empírico central: mediante inyección controlada de fallos sobre un clúster productivo, la variable que gobierna el \textit{failover} en CloudNativePG no es el fallo sino su \emph{visibilidad} ante Kubernetes; en particular, la indisponibilidad sostenida del primario (\textit{pod-failure}) no promueve réplica, en contra del comportamiento documentado —una refutación, no una confirmación—.
-\item La propuesta de extender el marco con un predicado de visibilidad $V(\text{fallo},K)$ —pod eliminado, \textit{NotReady}-recreado o \textit{Ready}—.
+\item Una taxonomía de operadores y de almacenamiento CSI, con un vocabulario común —el modelo $S=(O,K,M,D)$ y sus invariantes—, sin pretensión predictiva.
+\item La medición del coste del \textit{failover} de CloudNativePG ante la eliminación del primario: RTO mediano de 7,9~s y RPO nulo en diez repeticiones.
+\item El hallazgo metodológico central: de los cuatro escenarios diseñados, solo uno produjo el fallo que nominalmente modela. El \textit{pod-failure} de Chaos Mesh altera la especificación del pod, lo que —se argumenta— plantea una deriva y no una indisponibilidad; la \textit{NetworkPolicy} no aisló al primario del plano de control; y el inyector de E/S es incompatible con el endurecimiento del operador. Validar el inyector es, en operadores declarativos, condición previa a cualquier cifra de resiliencia.
 \end{itemize}
-El estudio empírico es una fase piloto (Fase~1) cuyo alcance está delimitado por las restricciones del clúster productivo (Sección~5).
+Es un estudio piloto, acotado por las restricciones del clúster productivo (Sección~\ref{sec:metodo}).
 
-\section{Trabajos relacionados}
-La literatura se agrupa en tres líneas con un marco común. La \emph{orquestación de clústeres} arranca en Borg y Omega, base de Kubernetes (Schwarzkopf et al., 2013; Burns et al., 2016), donde la CSI abstrae el almacenamiento persistente (Kubernetes, 2024) y el patrón \textit{Operator} consolida la gestión declarativa (Kubernetes, 2026b). En \emph{bases de datos distribuidas} destacan el teorema CAP y sus relecturas (Gilbert \& Lynch, 2002; Bailis \& Ghodsi, 2013), la consistencia eventual fuerte (Burckhardt, 2014) y su materialización en CockroachDB (Taft et al., 2020). Estas propiedades se nombran según la taxonomía canónica de la \textit{dependability} y su cadena falta--error--fallo (Avizienis et al., 2004). La tercera línea, \emph{recuperación y replicación}, aporta el WAL (Stonebraker \& Kemnitz, 1991; Han et al., 2024) y el efecto de la replicación en el \textit{failover} (Van Renesse \& Schneider, 2004). El despliegue de sistemas \textit{stateful} mediante operadores ha ganado atención (Dobies \& Wood, 2020; Mega, 2023), aunque rara vez caracteriza el comportamiento ante fallos inyectados, brecha que este trabajo aborda.
+\section{Trabajos relacionados}\label{sec:rel}
+Tres líneas convergen aquí. La \emph{orquestación de clústeres} arranca en Borg y Omega (Schwarzkopf et al., 2013; Burns et al., 2016), donde la CSI abstrae el almacenamiento persistente (Kubernetes, 2024) y el patrón \textit{Operator} consolida la gestión declarativa (Kubernetes, 2026b). En \emph{bases de datos distribuidas}, el teorema CAP y sus relecturas (Gilbert \& Lynch, 2002; Abadi, 2012; Bailis \& Ghodsi, 2013), con la disponibilidad y la consistencia nombradas según la taxonomía canónica de la \textit{dependability} (Avizienis et al., 2004). Y la \emph{recuperación y replicación}, que aporta el WAL (Mohan et al., 1992; Han et al., 2024). El despliegue \textit{stateful} mediante operadores ha ganado atención (Dobies \& Wood, 2020; Mega, 2023), pero rara vez caracteriza el comportamiento ante fallos inyectados.
 
-Una cuarta vertiente, metodológica, verifica la resiliencia mediante inyección controlada de fallos: el \textit{chaos engineering} (Basiri et al., 2016), la inyección dirigida por linaje (Alvaro \& Tymon, 2018) y la caracterización empírica de particiones de red en producción (Alquraan et al., 2018). En la verificación de consistencia y durabilidad de bases de datos, la metodología Jepsen y su verificador Elle (Kingsbury \& Alvaro, 2021) son la referencia canónica; el \textit{tx-verifier} de este trabajo comparte ese espíritu con un alcance más acotado —durabilidad transaccional a nivel de \textit{commit}, contigüidad de una secuencia monótona como \textit{proxy} del RPO— sobre un operador concreto. El propio CloudNativePG incorpora pruebas de caos en su integración continua (LitmusChaos elimina el primario repetidamente) para validar el \textit{failover} (Drees, 2026), pero sin cuantificar su coste ni distinguir comportamientos; y Chen et al. (2026) evalúan la resiliencia del plano de orquestación, no de un operador con estado. Existen además comparaciones de industria entre operadores (Engelbert, 2024; Portworx, 2024), limitadas a listas de características. La brecha que este artículo cierra no es la ausencia de inyección de fallos en Kubernetes, sino la combinación específica de operador de PostgreSQL, almacenamiento CSI y un verificador a nivel de \textit{commit} que cuantifica la durabilidad y la consistencia observables, con la interacción entre capas —poco abordada— en el centro.
+Una cuarta vertiente, metodológica, verifica la resiliencia por inyección controlada: el \textit{chaos engineering} (Basiri et al., 2016), la inyección dirigida por linaje (Alvaro \& Tymon, 2018) y la caracterización de particiones en producción (Alquraan et al., 2018). Para consistencia y durabilidad, la referencia canónica es Jepsen con su verificador Elle (Kingsbury \& Alvaro, 2021); el \textit{tx-verifier} comparte ese espíritu con alcance más acotado: durabilidad a nivel de \textit{commit} sobre un operador concreto. El propio CloudNativePG integra pruebas de caos en su integración continua, con comprobaciones de estilo Jepsen y métricas de \textit{failover} (Drees, 2026), orientadas a la no regresión del proyecto y no al coste del fallo en un despliegue dado; Chen et al. (2026) evalúan el plano de orquestación, no un operador con estado. La fiabilidad de los operadores en sí se ataca con pruebas automáticas —Sieve (Sun et al., 2022) y Acto (Gu et al., 2023)—, que recorren el espacio de estados del controlador: su objeto es el operador como programa, no el coste observable del fallo. En sentido inverso, trabajo independiente reprodujo un \textit{split-brain} en CloudNativePG bajo aislamiento completo, con escrituras confirmadas y luego perdidas (Sivko, 2026), resultado que acota la lectura de los escenarios de partición (Sección~\ref{sec:res}). La brecha que se cierra no es la ausencia de inyección de fallos en Kubernetes, sino la de una medición a nivel de \textit{commit} sobre un operador de PostgreSQL en producción, acompañada del examen de si el inyector produjo el fallo que nombra.
 
-\section{Modelo del sistema y marco de evaluación}
-\subsection{Taxonomía de operadores y almacenamiento}
-Se clasifican los componentes según su diseño operativo. Entre los operadores de PostgreSQL se distinguen tres enfoques: CloudNativePG (CNPG), \textit{cloud-native}, integra la lógica del operador con las primitivas y los bucles de reconciliación de Kubernetes; Zalando Postgres Operator depende de herramientas externas de alta disponibilidad (Patroni) como coordinación; y Crunchy Postgres for Kubernetes adopta una posición intermedia. El estudio empírico se limita a CNPG por una restricción del entorno productivo (Sección~5); el contraste con los demás se aborda analíticamente en la Tabla~\ref{tab:responsabilidad}. Estas diferencias influyen en cómo se detectan fallos, se ejecuta el \textit{failover} y se gestionan las transiciones de estado (Dobies \& Wood, 2020; Kubernetes, 2026b).
+\section{Marco de análisis}\label{sec:marco}
+\subsection{Taxonomía y modelo del sistema}\label{sec:taxo}
+Los operadores de PostgreSQL se ordenan aquí por \emph{quién decide la promoción}, que es la dimensión pertinente ante un fallo: en CloudNativePG (CNPG) decide el operador, dentro del bucle de reconciliación; en Zalando Postgres Operator y en Crunchy Postgres for Kubernetes~v5 decide Patroni en cada pod, por elección de líder sobre una clave con tiempo de vida. Ni la fuente de verdad ni el modelo de almacenamiento los separan: ambos enfoques descansan en el \textit{API server} y siguen una arquitectura \textit{shared-nothing} (Sección~\ref{sec:reparto}). De la decisión central cabe esperar mayor coherencia con el ciclo de vida de Kubernetes, y de la distribuida un perfil distinto de latencia de detección; son expectativas documentadas, no medidas aquí (Dobies \& Wood, 2020; Kubernetes, 2026b). El estudio se limita a CNPG por una restricción del entorno (Sección~\ref{sec:metodo}); el contraste con los demás es analítico (Tabla~S1 del suplemento).
 
-La CSI respalda tres categorías de almacenamiento (Kubernetes, 2024): local (baja latencia, mayor sensibilidad a fallos de nodo), distribuido —Ceph, Longhorn— (tolerancia a fallos por replicación, a costa de latencia) y en red (desacoplamiento topológico, comportamiento dependiente de la red). Cada categoría anticipa, a partir de su comportamiento documentado, un modo de recuperación distinto ante el mismo fallo —expectativa que la Sección~6 somete a prueba para CNPG—.
+El almacenamiento se ordena por \emph{dónde reside el dominio de fallo del volumen} (Kubernetes, 2024): \textit{adosado al nodo} (disco local, muere con él); \textit{replicado}, cuando el propio sistema mantiene copias en varios nodos (Ceph, Longhorn); y \textit{externo al clúster} (SAN, NFS), que sobrevive a la caída de cualquier nodo a costa de depender de la conectividad. El criterio hace las categorías excluyentes, cosa que las etiquetas habituales no logran: Ceph RBD y una SAN se acceden ambos por red, pero su dominio de fallo difiere. El piloto usa almacenamiento externo al clúster.
 
-\subsection{Modelo del sistema}
-A partir de la taxonomía descrita, el sistema se modela como una tupla, según la \Ec{eq:modelo}:
+Sobre esa taxonomía, el sistema se describe como una tupla, según la \Ec{eq:modelo}:
 \begin{equation}\label{eq:modelo}
 S = (O, K, M, D)
 \end{equation}
-Donde $O$ es la lógica del operador, $K$ el plano de control de Kubernetes, $M$ la capa de almacenamiento gestionada mediante CSI —se usa $M$, no $C$, para no colisionar con la consistencia $C(S)$ de la Sección~3.3— y $D$ el motor de base de datos (Schwarzkopf et al., 2013; Burns et al., 2016; Kubernetes, 2024). Más que una formulación matemática, es un vocabulario descriptivo —andamiaje organizativo, no un modelo predictivo ya validado— que permite razonar sobre cómo las decisiones en una capa se propagan al comportamiento global bajo fallo.
+Donde $O$ es la lógica del operador, $K$ el plano de control de Kubernetes, $M$ la capa de almacenamiento gestionada mediante CSI y $D$ el motor de base de datos (Schwarzkopf et al., 2013; Burns et al., 2016; Kubernetes, 2024). No es una formulación matemática sino un vocabulario descriptivo, andamiaje para razonar sobre cómo las decisiones de una capa se propagan al comportamiento global bajo fallo. Sobre él se organizan tres dimensiones de observación, enunciadas como tales  (qué se mira y con qué variable) y no como relaciones formales, porque a este nivel de evidencia una ecuación no añadiría contenido verificable: la \textit{resiliencia}, mediante el tipo de fallo, el tiempo de restablecimiento y la disponibilidad posterior (Avizienis et al., 2004); la \textit{consistencia}, mediante la diferencia entre transacciones confirmadas al cliente y transacciones visibles tras el fallo —donde la relectura PACELC es pertinente, pues el compromiso no se da solo entre consistencia y disponibilidad bajo partición, sino también entre consistencia y latencia en operación normal (Gilbert \& Lynch, 2002; Abadi, 2012; Bailis \& Ghodsi, 2013)—; y la \textit{interacción multicapa}, mediante el reparto de responsabilidades que instancia la Tabla~S1 del material suplementario.
 
-\subsection{Dimensiones de evaluación}
-Con base en el modelo anterior, se definen cuatro dimensiones principales que permiten evaluar el comportamiento del sistema desde diferentes perspectivas.
+\subsection{Invariantes del sistema}\label{sec:inv}
+Tres invariantes delimitan un comportamiento aceptable bajo fallo. El de \textit{consistencia}: toda transacción confirmada debe permanecer accesible tras la recuperación (Bailis \& Ghodsi, 2013). El de \textit{durabilidad}: toda operación registrada en el \textit{log} de escritura anticipada debe ser recuperable, según el protocolo canónico y su linaje posterior (Mohan et al., 1992; Han et al., 2024). El tiempo de recuperación (RTO) se trata, en cambio, como métrica observable y no como invariante: sin un objetivo de nivel de servicio declarado a priori, se mide y se contrasta entre escenarios, y es cada despliegue el que puede elevarlo a umbral de conformidad (Avizienis et al., 2004). Los tres se operacionalizan en las Secciones~\ref{sec:metodo} y~\ref{sec:res} mediante RPO, latencia de \textit{failover} y pérdida de transacciones.
 
-\textit{Resiliencia}: se modela según la \Ec{eq:resiliencia},
-\begin{equation}\label{eq:resiliencia}
-R(S) = f(F,\, T_{\text{recuperación}},\, A),
-\end{equation}
-con $F$ el tipo de fallo, $T_{\text{recuperación}}$ el tiempo de restablecimiento y $A$ la disponibilidad tras la recuperación; especializa la taxonomía canónica de la dependabilidad (Avizienis et al., 2004) al eje operador $\times$ almacenamiento $\times$ visibilidad.
+\subsection{Reparto de responsabilidades por capa}\label{sec:reparto}
+El comportamiento del sistema no se explica capa por capa de forma aislada. El material suplementario recoge, en su Tabla~S1, el reparto de responsabilidades de detección y recuperación entre capas para los tipos de fallo pertinentes, a partir del comportamiento documentado de CloudNativePG (CloudNativePG, 2026), Zalando Postgres Operator mediante Patroni (Patroni, 2026) y Crunchy Postgres for Kubernetes (Crunchy Data, 2026); es una síntesis analítica y no una medición. Tres de sus entradas conviene traerlas aquí, porque corrigen lecturas habituales.
 
-\textit{Consistencia}: se expresa según la \Ec{eq:consistencia},
-\begin{equation}\label{eq:consistencia}
-C(S) = f(\text{Tx}_{\text{confirmadas}},\, \text{Tx}_{\text{visibles}}),
-\end{equation}
-estableciendo como condición fundamental que toda transacción confirmada debe permanecer visible después de un evento de fallo. Este planteamiento se fundamenta en los principios de consistencia en sistemas distribuidos y en el teorema CAP (Gilbert \& Lynch, 2002; Bailis \& Ghodsi, 2013).
 
-\textit{Rendimiento}: se aproxima según la \Ec{eq:rendimiento},
-\begin{equation}\label{eq:rendimiento}
-P(S) = f(\text{latencia},\, \text{throughput}),
-\end{equation}
-lo que refleja cómo las decisiones de diseño y las características del almacenamiento influyen en la eficiencia del sistema, en línea con estudios comparativos de arquitecturas de bases de datos (Khan et al., 2023).
 
-\textit{Interacción multicapa}: se representa según la \Ec{eq:interaccion},
-\begin{equation}\label{eq:interaccion}
-I(S) = f(O \times K \times M \times D),
-\end{equation}
-que captura la dependencia entre operador, plano de control, almacenamiento y base de datos. La inclusión explícita de $K$ refleja su papel activo —punto único de coordinación durante una partición (Tabla~\ref{tab:responsabilidad})—, no meramente pasivo. Las funciones $f(\cdot)$ son organizativas: identifican las variables de cada dimensión, no relaciones cerradas ni derivadas analíticamente; su especificación operacional queda como trabajo futuro.
+Ante el fallo del pod primario, $O$ detecta y promueve, $K$ restablece el enrutamiento y $D$ retoma escrituras: el RTO emerge de la composición temporal de esas acciones. Importa quién hace qué, porque CNPG gestiona los pods directamente, sin \textit{StatefulSet}: no es el \textit{kubelet} quien recrea el pod, sino el propio operador. Ante el fallo del nodo, la secuencia es más larga de lo que suele suponerse: el plano de control marca el nodo \textit{NotReady} tras $\approx$50~s  (valor por defecto de \texttt{node-monitor-grace-period} en Kubernetes~v1.34; la documentación de CNPG lo sitúa entre 40 y 55~s), y el desalojo por marca no llega hasta agotarse la tolerancia, de 300~s por defecto (Kubernetes, 2026c). No hay que confundir desalojo con desaparición: en un nodo inalcanzable el \textit{kubelet} no puede confirmar la terminación, así que el objeto Pod permanece en \textit{Terminating} hasta que se borre el objeto Node o se aplique la marca \texttt{node.kubernetes.io/\allowbreak out-of-\allowbreak service}. El primario no pierde, por tanto, su identidad en el registro; CNPG promueve porque detecta la instancia como no sana, no porque el pod deje de existir. Ante una partición, el cercado (\textit{fencing}) expone un contraste que suele enunciarse mal: en Kubernetes, Patroni no despliega un etcd propio, sino que emplea objetos nativos del clúster  (\textit{Endpoints} o \textit{ConfigMaps}) como DCS, igual que Zalando Postgres Operator (Spilo) y Crunchy PGO~v5. Los tres descansan, pues, en el \textit{API server}; lo que los separa es quién decide la promoción.
 
-\subsection{Invariantes del sistema}
-El modelo se complementa con un conjunto de invariantes que permiten caracterizar un comportamiento aceptable del sistema bajo condiciones normales y de fallo:
-\begin{itemize}[leftmargin=1.2em,itemsep=2pt,topsep=2pt]
-\item \textit{Invariante de consistencia}: toda transacción confirmada debe permanecer accesible tras un proceso de recuperación, en concordancia con los modelos de consistencia en sistemas distribuidos (Bailis \& Ghodsi, 2013).
-\item \textit{Métrica de disponibilidad}: el tiempo de recuperación (RTO) se reporta como cantidad observable por escenario de fallo. En ausencia de un objetivo de nivel de servicio (SLO) declarado a priori, se enuncia como métrica medida y contrastada entre escenarios —no como umbral duro de conformidad—; un despliegue concreto puede elevarla a invariante atándola a un SLO objetivo (Avizienis et al., 2004).
-\item \textit{Invariante de durabilidad}: toda operación registrada en el \textit{log} de escritura anticipada (WAL) debe ser recuperable tras un fallo, tal como se establece en estudios sobre mecanismos de recuperación en bases de datos (Stonebraker \& Kemnitz, 1991; Han et al., 2024).
-\end{itemize}
-Cada invariante se operacionaliza en las Secciones~5 y~6 mediante métricas observables (RPO, latencia de \textit{failover}, pérdida de transacciones).
 
-\section{Análisis comparativo y discusión de escenarios}
-\subsection{Comparación entre operadores de PostgreSQL}
-Las variaciones en el diseño del plano de control y en el modelo de dependencias condicionan la gestión de fallos. De los operadores \textit{cloud-native} como CNPG cabe esperar mayor coherencia con el ciclo de vida de Kubernetes; de los que dependen de Patroni (Zalando), un efecto en la latencia de detección y promoción; y de los híbridos (Crunchy), un comportamiento intermedio. Estas afirmaciones se derivan del comportamiento documentado —no medido aquí, salvo para CNPG (Tabla~\ref{tab:responsabilidad})— y muestran que la resiliencia $R(S)$ depende tanto del operador como de su articulación con la coordinación, la replicación y la recuperación (Dobies \& Wood, 2020; Kubernetes, 2026b).
+\section{Metodología experimental}\label{sec:metodo}
+Todo lo que se afirma en esta sección y en la siguiente es auditable: los manifiestos del clúster, de la carga y de cada inyección, el \textit{tx-verifier}, los scripts de análisis y las series de RTO y RPO por repetición están depositados en Zenodo (DOI: 10.5281/\allowbreak zenodo.23004248), y se citan en adelante por su ruta dentro del paquete.
 
-\subsection{Impacto del tipo de almacenamiento CSI}
-El tipo de almacenamiento introduce variaciones en latencia, durabilidad y dominio de fallo. El local reduce la latencia (favorece $P(S)$) pero expone a fallos de nodo (afecta $R(S)$); el distribuido aporta persistencia y replicación a costa de latencia que puede afectar la visibilidad de las transacciones (Gilbert \& Lynch, 2002; Bailis \& Ghodsi, 2013); y el de red, menos predecible, introduce variabilidad en $I(S)$ según la conectividad (Avizienis et al., 2004).
+\subsection{Entorno, aislamiento y alcance}\label{sec:entorno}
+El experimento se ejecutó sobre un clúster Kubernetes en producción (v1.34.6) con PostgreSQL 16.13, CloudNativePG (CNPG) 1.28.0, red gestionada por Calico 3.31.4 y almacenamiento en red del controlador CSI de Huawei 4.10.1 (\texttt{csi.huawei.com}) sobre \textit{Fibre Channel}, aprovisionado por una \textit{StorageClass} con retención de volúmenes y enlace diferido al primer consumidor.
 
-\subsection{Interacción operador--almacenamiento}
-Uno de los aspectos más relevantes que surgen de este análisis es la dependencia entre el operador y el tipo de almacenamiento utilizado. Esta interacción resulta especialmente crítica, ya que el comportamiento del sistema no puede explicarse de forma aislada en cada capa. La Tabla~\ref{tab:responsabilidad} sintetiza, a partir del comportamiento documentado de CloudNativePG (CloudNativePG, 2026), Zalando Postgres Operator (Patroni) (Patroni, 2026) y Crunchy Postgres for Kubernetes (Crunchy Data, 2026), la distribución de responsabilidades de detección y recuperación entre capas para los principales tipos de fallo.
+La ejecución se acordó con el equipo de operaciones del clúster, que autorizó el experimento acotado a un espacio de nombres dedicado y no permitió instalar operadores nuevos por el riesgo sobre las cargas en producción; de ahí que el alcance se limite a CNPG, y que el contraste con los enfoques basados en Patroni se aborde de forma analítica (Tabla~S1) y se asigne a la Fase~2. Esa decisión deja dos fuentes de varianza fuera de control que conviene declarar. La primera: el operador CNPG era el mismo que atendía otros cuatro clústeres del entorno, luego su carga de reconciliación —no instrumentada— pudo afectar a la latencia de detección. La segunda: el nodo del laboratorio alojaba además instancias primarias ajenas al experimento, y ni la CPU ni la E/S del nodo se registraron durante las rondas.
 
-\begin{table*}[tb]
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
-\toprule
-\textbf{Tipo de fallo} & \textbf{Operador ($O$)} & \textbf{Kubernetes ($K$)} & \textbf{Almacenamiento CSI ($M$)} \\
-\midrule
-Fallo del pod primario &
-Detecta la pérdida del líder y promueve una réplica (CloudNativePG: gestor de instancias propio; Zalando y Crunchy: Patroni) &
-Reinicia el pod (\textit{kubelet}) y actualiza \textit{Services} y \textit{Endpoints} hacia el nuevo primario &
-Reasocia el PVC existente al pod recreado; sin acciones sobre los datos \\
-Fallo de nodo &
-Ordena la promoción de una réplica si el primario residía en el nodo afectado &
-Marca el nodo \textit{NotReady} ($\approx$40~s, \textit{node-monitor-grace-period}) y desaloja los pods tras el umbral de tolerancia ($\approx$5~min por defecto, \textit{tolerationSeconds}) (Kubernetes, 2026a) &
-Local: datos inaccesibles hasta recuperar el nodo; distribuido: las réplicas permiten reasociar (\textit{detach/attach}) el volumen en otro nodo \\
-Fallo de disco / volumen &
-Recrea la instancia y solicita resincronización desde el primario o desde respaldo (Crunchy: pgBackRest) &
-Reporta el PV como degradado y reprograma el pod según la \textit{StorageClass} &
-Distribuido (Ceph/Longhorn): reconstruye réplicas del volumen; local: pérdida del volumen, la durabilidad depende del WAL replicado \\
-Partición de red &
-Debe evitar el \textit{split-brain}: cercado (\textit{fencing}) del antiguo primario (Patroni: expiración del \textit{lease} en un DCS basado en consenso —etcd/Raft (Ongaro \& Ousterhout, 2014)—; CloudNativePG: estado reconciliado en el \textit{API server}) &
-El \textit{API server} actúa como punto único de coordinación; una minoría del plano de control bloquea la reconciliación &
-En red: E/S bloqueada o degradada; distribuido: la pérdida de quórum puede congelar las escrituras \\
-\bottomrule
-\end{tabularx}
-\caption{Responsabilidad de detección y recuperación por capa y tipo de fallo.}
-\label{tab:responsabilidad}
-\fignota{síntesis analítica del comportamiento documentado por capa ante cada tipo de fallo; no es una medición empírica. $O$ = operador, $K$ = plano de control de Kubernetes, $M$ = almacenamiento CSI. Fuente: documentación de CloudNativePG (CloudNativePG, 2026), Patroni (Patroni, 2026) y Crunchy (Crunchy Data, 2026); parámetros de desalojo de Kubernetes (Kubernetes, 2026a).}
-\end{table*}
+La inyección se realizó con Chaos Mesh 2.8.3 en un entorno \textit{air-gapped}, dentro de un espacio de nombres dedicado con cuotas y control de acceso, por lo que las cargas productivas quedaron fuera del dominio de fallo. El aislamiento descansó en tres controles —Chaos Mesh restringido al espacio de nombres, doble filtro de selección en cada manifiesto y verificación previa (\textit{dry-run}) de cada selector— y en excluir los pods de la malla de servicios para no sesgar las mediciones (detalle en el material suplementario).
 
-La Tabla~\ref{tab:responsabilidad} instancia $I(S)$: ante el fallo del pod primario, $O$ detecta y promueve, $K$ restablece el enrutamiento, $M$ reasocia el volumen y $D$ retoma escrituras; el RTO emerge de la composición temporal de estas acciones, no de una por separado. Ante una partición, el cercado (\textit{fencing}) expone un contraste de diseño: Patroni delega la fuente de verdad en un DCS por consenso (etcd/Raft (Ongaro \& Ousterhout, 2014)), mientras que CloudNativePG usa el estado reconciliado del \textit{API server}; ambos evitan el \textit{split-brain} por medios distintos.
+El manifiesto declaraba antiafinidad entre instancias en su modalidad \emph{preferente}, que es la que CNPG aplica por defecto; como el \textit{pool} de nodos elegibles se reducía a uno, el planificador la incumplió sin bloquear el despliegue y las tres instancias residieron en el mismo nodo. El \textit{failover} observado fue intranodo y el fallo de nodo completo no era comprobable por construcción (Sección~\ref{sec:disc}).
 
-\subsection{Implicaciones para la evaluación del sistema}
-El análisis pone de manifiesto que la evaluación de sistemas PostgreSQL en Kubernetes no puede abordarse desde una única dimensión: se observa un \textit{trade-off} entre rendimiento, resiliencia y consistencia, condicionado por la combinación de operador y tipo de almacenamiento (Gilbert \& Lynch, 2002; Avizienis et al., 2004; Bailis \& Ghodsi, 2013). Estos factores se cuantifican empíricamente en la Sección~6 mediante métricas como RTO, RPO, latencia de transacciones y pérdida de datos.
 
-\section{Metodología experimental}
-\subsection{Entorno, aislamiento y alcance}
-Con el fin de confrontar empíricamente el marco anterior con el comportamiento observado, se ejecutó un experimento sobre un clúster Kubernetes en producción (v1.34.6), con PostgreSQL 16.13 y almacenamiento en red respaldado por el controlador CSI de Huawei 4.10.1 (\texttt{csi.huawei.com}) sobre \textit{Fibre Channel} (SAN). El almacenamiento se aprovisionó a través de una \textit{StorageClass} con una política de retención de volúmenes (\textit{Retain}) y un enlace diferido al primer consumidor (\textit{WaitForFirstConsumer}), y la red se gestionó mediante Calico 3.31.4. El estudio empírico se realizó sobre CloudNativePG (CNPG) 1.28.0, exponente del enfoque \textit{cloud-native} de la taxonomía de la Sección~3.
+\subsection{Carga de trabajo y cliente de verificación}\label{sec:carga}
+El operador desplegó un clúster de tres instancias sometido a una carga sintética continua generada con pgbench (escala \texttt{-s 10}, 4 clientes y 2 hilos concurrentes), en rondas sucesivas de 60~s que toleraban \textit{failovers}. La replicación entre instancias se mantuvo en su modo asíncrono por defecto (PostgreSQL Global Development Group, 2024); el modo síncrono no se varió en este piloto, de modo que las cifras de RPO reportadas corresponden a replicación asíncrona.
 
-El alcance se limitó a un único operador por una restricción del entorno. El clúster era productivo y su equipo de operaciones no permitía instalar operadores nuevos —como Zalando Postgres Operator (Patroni/Spilo) o Crunchy Postgres for Kubernetes— por el riesgo que ello implicaba sobre las cargas en producción; el operador CNPG ya presente era, además, compartido con otros clústeres del entorno. Por tanto, el contraste con operadores basados en Patroni y con enfoques híbridos se aborda de forma analítica en la Tabla~\ref{tab:responsabilidad} —a partir de su comportamiento documentado— y se asigna a la Fase~2, a ejecutar en un entorno no productivo que permita su instalación. Las secciones posteriores remiten a esta justificación sin reiterarla.
+En paralelo, un cliente de verificación (\textit{tx-verifier}) insertó identificadores BIGINT monótonos y anotó cada COMMIT con su marca de tiempo; ante un fallo reintentó el mismo identificador, y por eso un hueco en la tabla de verdad equivale a una escritura reconocida y perdida (\textit{proxy} del RPO). El alcance del reintento es más estrecho de lo que parece: el cliente redirige el error a \texttt{/dev/null}, así que una violación de clave duplicada (la firma de un \textit{commit} que sí persistió) es indistinguible de un fallo de conexión. El diseño no detecta, pues, el \textit{commit} fantasma; de darse, habría reintentado el mismo identificador sin fin, y no se observó tal cosa. El comportamiento del cliente forma parte de la medición, así que conviene detallarlo (\texttt{30-workload/\allowbreak tx-verifier-cnpg.yaml}): cada inserción es una invocación independiente de \texttt{psql} sobre libpq contra el servicio \texttt{-rw} del clúster, por lo que abre una conexión nueva en cada iteración y no media ningún \textit{pooler}; el tiempo de espera de conexión se fijó en 2~s (\texttt{PGCONNECT\_TIMEOUT}) y el resto de parámetros de libpq, incluido el \textit{keepalive} de TCP, quedaron en sus valores por defecto; ante un fallo el cliente espera 0,2~s y reintenta el mismo identificador. El RTO reportado engloba, por tanto, la detección por el operador, la promoción, la actualización de los \textit{Endpoints} del servicio y el restablecimiento de la conexión del cliente, con una granularidad de $\approx 0{,}2$~s. Descomponerlo en esos tramos exigiría los eventos del plano de control, que no se conservaron (Sección~\ref{sec:rtorpo}).
 
-La inyección se realizó con Chaos Mesh 2.8.3 en un entorno \textit{air-gapped} (imágenes importadas localmente). El experimento se ejecutó en un espacio de nombres dedicado, con cuotas y control de acceso, de modo que las cargas productivas quedaron fuera del dominio de fallo. El aislamiento descansó en tres controles —Chaos Mesh restringido al espacio de nombres, un doble filtro de selección (espacio de nombres y clúster) en cada manifiesto, y una verificación previa (\textit{dry-run}) de cada selector— y en excluir los pods de la malla (Linkerd) para no sesgar las mediciones de RTO y latencia (el detalle, en el material suplementario).
+Quedan así operacionalizados los invariantes de la Sección~\ref{sec:marco}: el RPO como transacciones confirmadas no visibles tras el fallo, y el RTO como el hueco entre la última escritura reconocida y la primera aceptada. Al medirse con el reloj único del cliente, el RTO no depende de la sincronización entre nodos.
 
-El manifiesto del clúster experimental solicitaba antiafinidad entre instancias (\textit{topologyKey}: \texttt{kubernetes.io/hostname}), pero el \textit{pool} de nodos elegibles del laboratorio se reducía a nodo-lab-01. En consecuencia, las tres instancias (un primario y dos réplicas) residieron en ese único nodo (Fig.~\ref{fig:testbed}). El \textit{failover} observado fue, por tanto, intranodo, y la tolerancia a un fallo de nodo completo no era \textit{testeable} por construcción en este entorno. Esta restricción refuerza la lectura del escenario~(ii) como cota inferior del RTO ante pérdida de nodo (véanse la Sección~6 y las limitaciones de la Sección~7).
+\subsection{Escenarios de fallo y tamaño muestral}\label{sec:escenarios}
+Se aplicaron tres escenarios reproducibles con seguridad en producción: F1, eliminación del pod primario (PodChaos, modo \textit{pod-kill}); F2, indisponibilidad del primario (modo \textit{pod-failure}), con ventana nominal de 10~min, menor en la práctica (Sección~\ref{sec:rtorpo}); y F3, partición de red del primario mediante una \textit{NetworkPolicy} de Calico, sin Chaos Mesh, aplicada y revertida con \texttt{kubectl}. Un cuarto escenario, F4 —sensibilidad del RTO a la latencia de E/S (0, 20, 50 y 100~ms) por IOChaos sobre FUSE—, resultó no ejecutable (Sección~\ref{sec:io}) y queda para la Fase~2.
 
-\begin{figure}[tb]
-\centering
-\includegraphics[width=\linewidth]{figuras/Fig2.jpg}
-\caption{Banco de pruebas: clúster experimental colocalizado en nodo-lab-01, con clientes de carga (pgbench) y verificación (tx-verifier), e inyectores de fallo con doble filtro de selección; las cargas productivas quedan fuera del dominio de fallo.}
-\label{fig:testbed}
-\end{figure}
+F1 se repitió diez veces ($n=10$); se inyectó sin \texttt{gracePeriod} explícito, con lo cual rigió el valor por defecto (0~s) y la terminación fue abrupta, sin apagado ordenado del motor. F2 se inyectó once veces: la primera se descartó por arranque en frío (véase la Sección~\ref{sec:rtorpo}) y las diez restantes componen la muestra analizada ($n=10$); F3, diez veces fijas de 60~s más dos inyecciones exploratorias (149~s y 300~s) excluidas del RTO, sin promoción en las doce (0/12). El tamaño muestral respondió a las ventanas de mantenimiento del clúster. Con $n=10$ y una resolución de instrumento de $\approx0{,}2$~s, lo que se caracteriza es la tendencia central; la dispersión observada en F1 es del orden del error de medida, de modo que no se interpreta. Por la no normalidad esperada se reportan medianas y cuartiles.
 
-\subsection{Carga de trabajo y cliente de verificación}
-El operador desplegó un clúster de tres instancias sometido a una carga sintética continua generada con pgbench (escala \texttt{-s 10}, 4 clientes y 2 hilos concurrentes), en rondas sucesivas de 60~segundos que toleraban \textit{failovers}. La replicación entre instancias se mantuvo en su modo asíncrono por defecto (PostgreSQL Global Development Group, 2024); el modo síncrono no se varió en este piloto, de modo que las cifras de RPO reportadas corresponden a replicación asíncrona.
+Los fallos de nodo no se reprodujeron: el clúster no permite drenar nodos y las tres instancias residían en uno solo (Sección~\ref{sec:entorno}). Y F2 no los sustituye. CNPG es \emph{shared-nothing}: cada instancia posee su PVC, así que la promoción recae en una réplica que ya tiene montado su volumen, y la reasociación del volumen del antiguo primario no está en el camino crítico del \textit{failover} —solo interviene al reincorporarse como réplica—. Ante un fallo de nodo, el RTO estaría dominado por la detección (40--55~s) más la promoción, no por el almacenamiento. El caso se aborda analíticamente (Tabla~S1).
 
-En paralelo, un cliente de verificación (\textit{tx-verifier}) insertó identificadores BIGINT monótonos y anotó cada COMMIT con su marca de tiempo; ante un fallo reintentó el mismo identificador, de modo que un hueco en la tabla de verdad equivale a una escritura reconocida y perdida (\textit{proxy} del RPO). El reintento resuelve el caso frontera del ACK perdido: si el COMMIT sí persistió, la clave duplicada lo revela como «\textit{commit} fantasma» y se contabiliza como tal, no como pérdida, de modo que el RPO no se sobreestima (el detalle, en el material suplementario). La granularidad de medición del RTO —el hueco entre COMMIT consecutivos, con una espera de 0,2~s ante fallo— fue de $\approx 0{,}2$~s.
-
-Este diseño operacionalizó los invariantes de la Sección~3: el RPO como transacciones confirmadas no visibles tras el fallo y el RTO como el hueco entre la última escritura reconocida y la primera aceptada tras la recuperación; medido con el reloj único del cliente, el RTO no depende de la sincronización de relojes entre nodos.
-
-\subsection{Escenarios de fallo y tamaño muestral}
-Se aplicaron tres escenarios de fallo reproducibles de forma segura en un entorno productivo, que se corresponden con las métricas F1, F2 y F3 empleadas en los resultados: (i) F1, la eliminación del pod primario, mediante el experimento PodChaos en modo \textit{pod-kill} de Chaos Mesh; (ii) F2, la indisponibilidad sostenida del primario durante 10~minutos, mediante PodChaos en modo \textit{pod-failure}, como aproximación observable de un fallo de nodo desde la perspectiva del operador; y (iii) F3, la partición de red del primario mediante una \textit{NetworkPolicy} de Calico —sin intervención de Chaos Mesh—, aplicada y revertida mediante \texttt{kubectl}.
-
-Se planificó un cuarto escenario (F4): sensibilidad del RTO a la latencia de E/S (0, 20, 50 y 100~ms) mediante IOChaos a nivel de FUSE, que resultó no ejecutable sobre CNPG (Sección~6.2) y se le asigna a la Fase~2.
-
-F1 y F2 se repitieron diez veces cada uno ($n=10$); F3, diez veces fijas de 60~s más dos inyecciones exploratorias (149~s y 300~s) excluidas del RTO, sin promoción en las doce (0/12). El tamaño muestral respondió a las ventanas de mantenimiento del clúster productivo; $n=10$ caracteriza la tendencia central y la dispersión, no efectos marginales, y por la no normalidad esperada se reportaron medianas y rangos intercuartílicos.
-
-Los fallos de nodo —expulsión de pods y reasociación (\textit{detach/attach}) de volúmenes— no se reprodujeron: el clúster productivo no permite drenar nodos y las tres instancias residían en un único nodo elegible (Sección~5.1). Por ello, el escenario~(ii) no captura la latencia de reasociación del volumen CSI —dominante en un fallo de nodo genuino— y debe leerse como cota inferior del RTO real; el fallo de nodo se aborda analíticamente (Tabla~\ref{tab:responsabilidad}).
-
-\section{Resultados}
+\section{Resultados}\label{sec:res}
 Las mediciones sobre CNPG fueron descriptivas (medianas, IQR, intervalos de confianza de mediana) más un único contraste de dos grupos intra-CNPG (F1 frente a F2); por la no normalidad de RTO y RPO se reportaron medianas e IQR.
 
-\subsection{Tiempo de recuperación (RTO) y pérdida de datos (RPO)}
-La Tabla~\ref{tab:rto} resume los tres escenarios. El RPO fue nulo en todos, pero solo F1 puso a prueba la durabilidad de forma no trivial: al promover una réplica, $\text{RPO}=0$ implica que ninguna escritura reconocida sobrevivió solo en el primario caído (en F2 y F3 no hubo promoción, así que el RPO nulo es trivial). Que CNPG preserve $\text{RPO}=0$ en F1 bajo replicación asíncrona es un hallazgo genuino —no una garantía de diseño—, atribuible a un \textit{lag} de replicación $\approx 0$ bajo la carga ligera empleada (una inferencia de mecanismo, no medida: no se registró el LSN \textit{lag}) y acotado por la colocalización intranodo, que evita el enlace de red internodo (se retoma en la Sección~7). Al término del piloto, la tabla de verdad resultó contigua —identificadores 1 a 613\,253, sin huecos—: ninguna transacción confirmada se perdió. La variabilidad se concentró, pues, en el RTO.
+\subsection{Tiempo de recuperación (RTO) y pérdida de datos (RPO)}\label{sec:rtorpo}
+La Tabla~\ref{tab:rto} resume los tres escenarios. El RPO fue nulo en todos, pero solo F1 puso a prueba la durabilidad: al promover una réplica, $\text{RPO}=0$ implica que ninguna escritura reconocida sobrevivió únicamente en el primario caído; sin promoción, en F2 y F3 el RPO nulo es trivial. Que CNPG lo preserve en F1 bajo replicación asíncrona es un resultado y no una garantía de diseño, atribuible a un \textit{lag} de replicación $\approx 0$ bajo la carga ligera  (inferencia, no medida: no se registró el LSN, carencia que la Fase~2 subsana) y acotado por la colocalización intranodo (Sección~\ref{sec:disc}). La tabla de verdad resultó contigua, de 1 a 613\,253 sin huecos, una vez descartado un identificador espurio negativo que se registró fuera de toda ventana de inyección. No conviene sobreleer esa contigüidad. El verificador escribe en serie: en cada instante hay, a lo sumo, una transacción en ejecución, de modo que su poder de detección es limitado; con diez inyecciones válidas y cero pérdidas, la cota superior unilateral al 95\,\% para la probabilidad de pérdida por \textit{failover} es del 25,9\,\%. El dato es compatible con un RPO nulo; no lo acredita con fuerza. Las transacciones de pgbench, además, no se verificaron (derivación en el material suplementario). La variabilidad se concentró, pues, en el RTO.
 
 \begin{table}[!tb]
 \centering
 \footnotesize
-\renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\linewidth}{@{}c c >{\raggedright\arraybackslash}X c >{\raggedright\arraybackslash}p{1.9cm}@{}}
+\renewcommand{\arraystretch}{1.05}
+\begin{tabularx}{\linewidth}{@{}c c c >{\raggedright\arraybackslash}X c >{\raggedright\arraybackslash}p{1.7cm}@{}}
 \toprule
-\textbf{Esc.} & \textbf{¿Prom.?} & \textbf{RTO / indisp.} & \textbf{RPO} & \textbf{Comport. observado} \\
+\textbf{Esc.} & \textbf{n} & \textbf{¿Prom.?} & \textbf{Indisp. (mediana)} & \textbf{RPO} & \textbf{Comport. observado} \\
 \midrule
-F1 & Sí & 7,91 s & 0 & Failover rápido \\
-F2 & No & 36,75 s & 0 & Recreación in situ \\
-F3 & No & = duración partición & 0 & CP (consistencia) \\
-F4 & --- & No ejecutable & --- & Bloqueo (FUSE) \\
+F1 & 10 & Sí & 7,9 s\textsuperscript{a} & 0 & Failover rápido \\
+F2 & 10 & No & 36,7 s & 0 & Reinicio en sitio, mismo PVC \\
+F3 & 10 & No & = duración partición & 0 & Fallo no detectado \\
+F4 & --- & --- & No ejecutable & --- & Bloqueo (FUSE) \\
 \bottomrule
 \end{tabularx}
 \caption{RTO y RPO por escenario de fallo (CloudNativePG).}
 \label{tab:rto}
-\fignota{Escenarios: F1 = \textit{pod-kill} (eliminación del primario); F2 = \textit{pod-failure} (indisponibilidad sostenida); F3 = partición de red (\textit{NetworkPolicy} de Calico); F4 = latencia de E/S (IOChaos FUSE). RTO = tiempo hasta restablecer la escritura, medido como la mediana del hueco entre transacciones confirmadas por el cliente de verificación, con una granularidad de instrumento de $\approx 0{,}2$~s (véase la Sección~5.2); RPO = transacciones confirmadas no visibles tras el fallo (huecos en la secuencia de la tabla de verdad). «¿Prom.?» indica si el operador promovió una réplica a primario; «CP» denota el comportamiento observado en que el sistema privilegia la consistencia sobre la disponibilidad —el primario aislado no acepta escrituras por ser inalcanzable, sin \textit{split-brain}—, en sentido operacional y no como afirmación formal sobre la posición del sistema en el teorema CAP. Tamaños muestrales: F1 y F2, $n=10$; F3, 10 repeticiones fijas de 60~s más 2 inyecciones exploratorias, excluidas del cálculo del RTO (promoción en 0/12). El escenario F4 no fue ejecutable (véase la Sección~6.2). El RTO de F2 es una cota inferior del real ante un fallo de nodo genuino (no captura la latencia \textit{detach/attach} del volumen CSI; Sección~7). Fuente: mediciones del piloto.}
+\fignota{Escenarios: F1 = \textit{pod-kill}; F2 = \textit{pod-failure}; F3 = partición de red por \textit{NetworkPolicy}; F4 = latencia de E/S (IOChaos FUSE). RTO = mediana del hueco entre transacciones confirmadas por el cliente de verificación, con granularidad de instrumento de $\approx 0{,}2$~s, a la que se ajusta la precisión reportada (Sección~\ref{sec:carga}); RPO = transacciones confirmadas no visibles tras el fallo. «¿Prom.?» indica si el operador promovió una réplica. \textsuperscript{a}Solo F1 es un tiempo de recuperación en sentido propio; en F2 y F3 no hubo acción de recuperación y la cifra es la duración de la indisponibilidad. \textbf{Solo F1 reprodujo el fallo que nominalmente modela}: la cifra de F2 es atribuible a una reconciliación inducida por el inyector, y en F3 el fallo no llegó a ser visible para el plano de control. Ninguno de los dos escenarios sostiene, por tanto, conclusión alguna sobre la lógica de promoción (inferencia; Sección~\ref{sec:rtorpo}). Muestras: $n=10$ en F1 y F2; en F3, 10 repeticiones de 60~s más 2 exploratorias excluidas del RTO. Fuente: mediciones del piloto.}
 \end{table}
 
-En F1 (\textit{pod-kill}), CNPG ejecutó \textit{failover} en las diez repeticiones con un RTO mediano de \textbf{7,91~s} (IQR $\approx[7{,}62,\,8{,}01]$~s; rango 6,61--8,17). F2 (\textit{pod-failure}) no promovió en ninguna: el operador recreó el pod primario en su sitio —mismo nombre e idéntico PVC— con una indisponibilidad mediana de \textbf{36,75~s} (IQR $\approx[36{,}2,\,37{,}1]$~s; rango 35,5--38,3). F3 tampoco promovió: el pod aislado permaneció \textit{Ready} y la indisponibilidad igualó la duración de la partición (60~s $\rightarrow$ 60,75~s de mediana), con recuperación $<1$~s al retirar la \textit{NetworkPolicy}. Los intervalos de confianza de mediana (de distribución libre, cobertura $\approx 97{,}9\%$) y demás detalles estadísticos se recogen en el material suplementario.
+En F1 (\textit{pod-kill}), CNPG ejecutó \textit{failover} en las diez repeticiones con un RTO mediano de \textbf{7,9~s} (Q1--Q3: 7,6--8,0~s; rango 6,6--8,2~s). F2 (\textit{pod-failure}) no promovió en ninguna. Sobre la ventana: el manifiesto declara \texttt{duration:\ 10m}, pero el arnés retira la inyección al agotar su bucle de detección de promoción, a los $\approx$120~s, de modo que la ventana efectiva fue de unos dos minutos y no de diez; la recuperación precede con holgura a esa retirada. El operador recreó el pod primario en su sitio, con el mismo nombre e idéntico PVC, con una indisponibilidad mediana de \textbf{36,7~s} (Q1--Q3: 36,2--37,1~s; rango 35,5--38,3~s). F3 tampoco promovió: el pod aislado permaneció \textit{Ready} y la indisponibilidad resultó indistinguible de la duración inyectada ($\approx$61~s para 60~s de política), con recuperación inmediata al retirarla. No se reporta con mayor precisión a propósito: la rejilla de muestreo efectiva en F3 no es la de 0,2~s que rige en F1 y F2, porque la política descarta el tráfico en vez de rechazarlo y cada intento del cliente agota su espera de conexión (suplemento). La cifra de F3 mide cuánto duró la política, no una recuperación: no hubo ninguna que medir. Los intervalos de confianza de mediana y demás detalles estadísticos están en el material suplementario.
 
-La primera inyección de F2 ($\approx 80{,}5$~s, arranque en frío) se excluyó de la mediana, de forma simétrica a las dos exploratorias de F3; la exclusión es conservadora —incluirla \emph{ampliaría} la brecha F1--F2 (material suplementario)—. Dentro del lote de F2 se observó una asociación orden--RTO débil (Spearman $\rho\approx 0{,}62$), no significativa con $n=10$ ($\rho$ crítico $\approx 0{,}65$); es un orden de magnitud menor que la separación F1--F2 ($\approx 29$~s), por lo que no compromete el contraste.
+La primera de las once inyecciones de F2 (80,54~s, arranque en frío) se excluyó de la mediana. La exclusión es conservadora y de escaso efecto: la mediana de las diez retenidas es de 36,7~s y la de las once, 36,9~s; incluirla \emph{ampliaría} la brecha F1--F2. Se reportan ambas por tratarse de una decisión posterior a la ejecución. Dentro del lote de F2 se observó una asociación orden--RTO de magnitud moderada a fuerte (Spearman $\rho\approx 0{,}62$), que no alcanza significación con $n=10$ ($\rho$ crítico $\approx 0{,}65$) por falta de potencia, no por ser pequeña. Sugiere una deriva entre repeticiones; con todo, su efecto es un orden de magnitud menor que la separación F1--F2 ($\approx 29$~s), por lo que no compromete el contraste. Sí lo acota, en cambio, un rasgo del diseño que las marcas de tiempo depositadas dejan ver: los dos escenarios se ejecutaron en bloques separados —F1 entre las 13:54 y las 14:21~UTC, F2 entre las 22:22 y las 23:03, con una inyección cada $\approx 2{,}5$~min en F1 y cada $\approx 4{,}5$~min en F2—, y por eso el escenario queda confundido con la hora del día y con la carga de un clúster productivo compartido. Cabe esperar, aunque no se midió  (la carga del nodo no se instrumentó), que el sesgo opere en contra del resultado, pues la franja de mayor actividad corresponde a F1, que es el lote rápido; aun así, la alternancia de escenarios dentro de cada bloque queda pendiente para la Fase~2.
 
-Emergió un resultado contraintuitivo: la recuperación tras \textit{pod-kill} (F1) fue $\approx 4{,}65\times$ más rápida que tras \textit{pod-failure} (F2) —36,75 frente a 7,91~s— pese a tratarse del mismo componente (Fig.~\ref{fig:timeline}). La separación fue completa: Mann--Whitney $U=0$, correlación rango-biserial 1,00 y diferencia de Hodges--Lehmann de 28,96~s (el $p$ exacto, $\approx 1{,}1\times10^{-5}$, es el mínimo alcanzable con $n=10$ —test saturado—, por lo que el peso probatorio recae en el tamaño de efecto y el mecanismo, no en el $p$; una prueba de permutación que respeta el orden preserva la separación: material suplementario). El mecanismo: el \textit{pod-kill} elimina el pod y dispara promoción inmediata, mientras que el \textit{pod-failure} induce a esperar la recreación en su sitio. El RTO de F2 es una cota inferior del real ante fallo de nodo (Secciones~5 y~7).
+Los dos lotes no se solapan (Fig.~\ref{fig:timeline}): Mann--Whitney $U=0$ y diferencia de Hodges--Lehmann de 29,0~s. Con $n=10$ el $p$ exacto es el mínimo alcanzable, de modo que el peso probatorio recae en el tamaño del efecto y en el mecanismo, no en el contraste (detalle en el material suplementario). El mecanismo, sin embargo, no es el que una lectura directa sugiere: determinarlo obliga a examinar qué hace realmente cada inyector.
+
+\textit{Qué mide F2.} El escenario \textit{pod-failure} de Chaos Mesh no detiene el proceso de la base de datos: sustituye la imagen del contenedor por una imagen de pausa y sostiene esa sustitución durante la ventana indicada (Chaos Mesh, 2026). Parchear \texttt{image} en un pod en marcha no altera su política de descarga, fijada al crearlo, luego la imagen de pausa debe descargarse. Sobre un operador declarativo, esa modificación de la especificación del pod es ella misma una desviación respecto del estado deseado, y el clúster del piloto se declaró con \texttt{primaryUpdateStrategy:\ unsupervised} (\texttt{20-cluster/\allowbreak cluster-cnpg.yaml} del paquete depositado), sin fijar \texttt{failoverDelay} ni \texttt{primaryUpdateMethod}, por lo que rigen sus valores por defecto: 0~s y reinicio.
+
+Conviene además señalar que la imagen de pausa no figura entre las precargadas en el entorno \textit{air-gapped} (\texttt{images/image-list.txt}), por lo que lo más probable es que no llegara a descargarse y el contenedor quedara en \texttt{ImagePullBackOff}. La conclusión no depende de cuál de los dos cursos ocurriera: en ambos el proceso de base de datos deja de atender, la especificación del pod queda alterada y el operador la reconcilia reiniciando el pod en su sitio —con el mismo nombre y el mismo PVC, que es lo observado—. Los 36,7~s miden entonces cuánto tarda el operador en deshacer la alteración que introdujo la herramienta, no cuánto tarda en reaccionar ante un primario indisponible; la lectura de que «decide esperar» no se sostiene, y el propio manifiesto lo cierra: al no fijarse \texttt{failoverDelay} rige su valor por defecto de 0~s, de modo que, de haber percibido al primario como indisponible, el operador habría promovido sin demora. Que no promoviera es la evidencia de que no percibió indisponibilidad alguna. El segundo curso explicaría además el arranque en frío de la inyección descartada (80,54~s): el tiempo que el primer intento de descarga tarda en agotarse.
+
+Esta reconstrucción es una \emph{inferencia} a partir de los manifiestos depositados y del comportamiento documentado de ambas herramientas, no una observación: los eventos del plano de control y los registros del operador durante las inyecciones no se conservaron, y el entorno productivo ya no está disponible para volver a capturarlos. Discriminar entre las dos ramas, y confirmar el mecanismo, exige repetir F2 con un inyector que no toque la especificación del pod  (\texttt{SIGKILL} sostenido al proceso \texttt{postgres}, o bloqueo del puerto 5432) registrando los eventos del operador. Queda comprometido para la Fase~2 con el diseño ya especificado. Hasta entonces, la cifra de F2 debe leerse como el coste de una reconciliación forzada y no como un RTO.
+
+\textit{Qué mide F3.} La \textit{NetworkPolicy} denegó todo el tráfico de entrada y salida del pod primario, incluido el dirigido al \textit{API server}. No bastó, por dos razones que separar. La primera estaba anotada en los comentarios del propio manifiesto depositado (\texttt{40-experiments/\allowbreak f3-partition-\allowbreak cnpg.yaml}): las sondas del \textit{kubelet} parten del espacio de red del nodo, y una \textit{NetworkPolicy} gobierna el tráfico entre pods, no el que el propio nodo dirige a un pod local; el primario siguió, pues, \textit{Ready} ante el plano de control durante toda la partición. La segunda no se advirtió entonces y pesa más: Calico aplica la política a las conexiones \emph{nuevas}, pero exceptúa por \textit{conntrack} las ya establecidas, que sobreviven hasta que se reinicien o expiren  (Calico, 2026). Las conexiones de replicación en \textit{streaming} y la vigilancia del gestor de instancias contra el \textit{API server} precedían a la inyección, y por eso lo más probable es que siguieran vivas. Lo único que la política cortó con seguridad fueron las conexiones nuevas, y el cliente de verificación abre una por inserción (Sección~\ref{sec:carga}). Eso explica sin recurrir a los eventos perdidos por qué no se activó la comprobación de aislamiento del primario que CNPG incorpora desde la versión~1.27 (\texttt{probes.liveness.\allowbreak isolationCheck}): probablemente el primario nunca llegó a perder contacto con el \textit{API server}. Encaja además con la señal más nítida de los datos: la indisponibilidad iguala la duración de la política con precisión de centésimas  (60,8~s de mediana para 60~s inyectados; 305,8~s en una sonda larga de 300~s) y la recuperación es inferior a 1~s. No hay registro de que el operador emitiera evento alguno. La ausencia de promoción no expresa entonces una preferencia por la consistencia sobre la disponibilidad: expresa que el fallo no fue detectado. La distinción tiene consecuencias. Un experimento independiente que sí logró aislar por completo al primario documenta sobre CNPG el resultado contrario: con la configuración por defecto se promovió una réplica a los 38~s, el primario aislado siguió aceptando escrituras durante 177~s más  (de ellos, 99~s con ambos recibiendo escrituras de clientes) y, tras reunificar la red, 291 escrituras ya confirmadas se perdieron y otras 562 vieron su identificador reasignado a filas distintas. Su autor atribuye el solapamiento a la combinación de \texttt{failoverDelay} (0~s) y \texttt{smartShutdownTimeout} (180~s) por defecto, así que no es una propiedad del diseño de CNPG sino el producto de esa configuración (Sivko, 2026). Lo que el piloto observó no es, pues, que CNPG privilegie la consistencia bajo partición, sino que una \textit{NetworkPolicy} que deja intacto el tráfico de \textit{host} no basta para construir ese escenario.
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=\linewidth]{figuras/Fig4.jpg}
-\caption{Ventana de indisponibilidad de escritura a escala real: F1 (7,91~s, promoción de réplica) frente a F2 (36,75~s, recreación in situ del pod). Fuente: mediciones del piloto.}
+\begin{tikzpicture}
+\begin{axis}[
+  width=\linewidth, height=4.0cm,
+  xlabel={Repetición (orden de ejecución)},
+  ylabel={Indisponibilidad (s)},
+  label style={font=\footnotesize}, tick label style={font=\footnotesize},
+  xmin=0.4, xmax=10.6, xtick={1,...,10},
+  ymin=0, ymax=42, ytick={0,10,20,30,40},
+  ymajorgrids=true, grid style={gray!25},
+  axis line style={gray!60}, tick style={gray!60},
+  legend style={font=\footnotesize, draw=gray!50, at={(0.5,1.03)},
+                anchor=south, legend columns=2, column sep=1em},
+]
+\addplot[only marks,mark=square,mark size=2pt,draw=black] coordinates {(1,36.19) (2,36.21) (3,36.92) (4,35.51) (5,36.05) (6,37.66) (7,37.10) (8,36.95) (9,36.57) (10,38.32)};
+\addlegendentry{F2}
+\addplot[only marks,mark=o,mark size=2pt,draw=black] coordinates {(1,7.99) (2,7.86) (3,6.61) (4,8.15) (5,8.17) (6,8.02) (7,7.75) (8,6.85) (9,7.58) (10,7.95)};
+\addlegendentry{F1}
+\addplot[dashed,gray,domain=0.4:10.6,forget plot] {36.745};
+\addplot[dashed,gray,domain=0.4:10.6,forget plot] {7.905};
+\end{axis}
+\end{tikzpicture}
+\caption{Las diez repeticiones de cada escenario, en su orden de ejecución; las líneas
+discontinuas marcan las medianas (7,905 y 36,745~s). Los lotes no se solapan. Las dos magnitudes no
+son RTO comparables: la de F1 es un tiempo de recuperación por promoción de réplica, y la de F2,
+el tiempo que se infiere que tarda el operador en deshacer la alteración que introdujo el inyector
+(Sección~\ref{sec:rtorpo}). En F2 se aprecia la deriva ascendente que recoge el coeficiente de
+Spearman. Fuente: \texttt{data/f1\_rto\_cnpg.csv} y
+\texttt{data/f2\_podfailure\_\allowbreak cnpg.csv} del paquete depositado.}
 \label{fig:timeline}
 \end{figure}
 
-La no promoción en F2 (0/10) y F3 (0/12) admite cotas superiores unilaterales al 95\% (Clopper--Pearson) de $\le 25{,}9\%$ y $\le 22{,}1\%$, pero la conclusión se apoya sobre todo en el mecanismo observado —recreación con la misma identidad y PVC, o pod aislado \textit{Ready}— y no solo en el conteo.
+Los tres escenarios se articulan en torno a una misma variable, aunque no la que se anticipó. En F1 la eliminación del pod deja al plano de control sin primario; el operador registra el evento «\textit{Current primary isn't healthy, initiating a failover}» y promueve una réplica en $\approx 7{,}9$~s: es el único de los tres en que hubo una decisión de \textit{failover} que tomar. En F2 y F3 no hubo promoción porque no hubo fallo visible que la motivara —en F2 porque el inyector planteó una deriva de especificación en lugar de una indisponibilidad; en F3 porque el aislamiento fue parcial—. La variable que gobierna lo observado no es, entonces, el fallo nominal que el experimento pretende inducir, sino el estado en que el plano de control ve al primario; y ese estado lo fija tanto el fallo como el mecanismo de inyección empleado. De los cuatro escenarios diseñados, solo F1 produjo el fallo que decía producir: F4 ni siquiera llegó a ejecutarse (Sección~\ref{sec:io}).
 
-El hallazgo central que articula estos tres comportamientos es que la variable que determina el \textit{failover} en CloudNativePG no es el fallo en sí, sino su visibilidad ante Kubernetes. En F1, la muerte del contenedor deja el pod en \textit{NotReady}; el operador registra el evento «\textit{Current primary isn't healthy, initiating a failover}» y promueve una réplica en $\approx 7{,}9$~s. En F3, las sondas del \textit{kubelet} no se bloquean —el \textit{failsafe} de Calico preserva el tráfico de \textit{host}—, de modo que el pod aislado permanece \textit{Ready}, el operador no emite evento alguno y no promueve: elige consistencia sobre disponibilidad (comportamiento CP) sin incurrir en \textit{split-brain}. F2 refina el mecanismo: aunque el pod queda \textit{NotReady}, se recrea con la misma identidad y el mismo PVC, y el operador prefiere esperar esa recreación en su sitio antes que promover. La promoción de F1 se explica, por tanto, por la eliminación del pod —el primario deja de existir— y no por el mero estado \textit{NotReady}.
-
-\subsection{Sensibilidad a la latencia de E/S}
+\subsection{Sensibilidad a la latencia de E/S}\label{sec:io}
 El escenario F4 (sensibilidad del RTO a la latencia de E/S vía IOChaos) resultó no ejecutable sobre CNPG: el inyector de E/S de Chaos Mesh basado en FUSE (\texttt{toda}) falló al montar el sistema de archivos con \texttt{Read-only file system} porque CNPG endurece sus pods con \texttt{readOnlyRootFilesystem: true}, mientras que \texttt{toda} requiere una raíz escribible. No fue un error de configuración (el \textit{dry-run} de selectores y el recurso PodIOChaos eran correctos), sino una incompatibilidad entre ese inyector y el endurecimiento del operador —no una propiedad general de Chaos Mesh—. La medición cuantitativa se asigna a la Fase~2 por una vía que no dependa de FUSE (p.\,ej., \texttt{io.max} a nivel de \textit{cgroup}); el detalle completo está en el material suplementario.
 
-\subsection{Contraste entre el comportamiento anticipado y el observado}
-El marco anticipaba, por el comportamiento documentado (Tabla~\ref{tab:responsabilidad}), que el fallo del pod primario dispara la promoción; F1 confirmó esta expectativa casi trivial. El aporte de mayor peso está en F2: la indisponibilidad sostenida no promovió en ninguna de las diez repeticiones, en contra de la expectativa —derivada de tratarla como aproximación de un fallo de nodo— de que promovería. Un lector familiarizado con \textit{pod-failure} podría anticiparlo; el aporte no es la sorpresa, sino la confirmación empírica y el aislamiento del mecanismo: la promoción no depende del estado \textit{NotReady}, sino de la pérdida de identidad del pod (recreado con el mismo nombre y PVC). F3 exhibió el comportamiento CP —CNPG evita el \textit{split-brain} apoyándose en el \textit{API server} (última fila de la Tabla~\ref{tab:responsabilidad})—.
+\subsection{Contraste entre el comportamiento anticipado y el observado}\label{sec:contraste}
+Se anticipaba, por el comportamiento documentado (Tabla~S1), que el fallo del pod primario dispara la promoción; F1 lo confirmó. Las otras dos expectativas —que la indisponibilidad sostenida promovería, y que una partición obligaría al sistema a elegir entre consistencia y disponibilidad— no llegaron a ponerse a prueba, porque ninguno de los dos escenarios construyó la condición que suponía (Sección~\ref{sec:rtorpo}). no se refutaron, quedaron sin examinar.
 
-Los tres comportamientos comparten una misma variable de control que el marco actual no captura de forma explícita: la visibilidad del fallo ante Kubernetes (Fig.~\ref{fig:visibilidad}). De ahí que se proponga extender $S=(O,K,M,D)$ con un predicado de visibilidad $V(\text{fallo},K)$, según la \Ec{eq:visibilidad}, que registre el estado del pod primario ante el plano de control —eliminado (F1), \textit{NotReady}-recreado (F2) o \textit{Ready} (F3)— como la dimensión que ordena el gradiente de RTO observado:
-\begin{equation}\label{eq:visibilidad}
-\begin{aligned}
-V(\text{fallo},K) \in \{\,&\text{eliminado},\ \text{NotReady-recreado},\\
-&\text{Ready}\,\}.
-\end{aligned}
-\end{equation}
-Es una extensión propuesta motivada por la evidencia, no derivada formalmente. El bloqueo de F4 apunta a una segunda extensión: la \textit{inyectabilidad} de los fallos depende del endurecimiento del operador, algo que el modelo tampoco recoge. No se reclama una validación del marco, sino una caracterización empírica que señala hacia dónde extenderlo.
+La versión anterior proponía una regularidad: que la promoción estuviera condicionada a que el plano de control observase la pérdida de identidad del pod primario. Se retira. La evidencia disponible la contradice por dos vías independientes. Ante un fallo de nodo el objeto Pod no desaparece  (permanece en \textit{Terminating}) y, aun así, CNPG promueve. Y en el experimento de aislamiento completo ya citado hubo promoción con el pod del primario intacto y corriendo (Sivko, 2026). El disparador documentado es más simple y da cuenta de los tres escenarios: el operador promueve cuando detecta la instancia primaria como no sana, sujeto a \texttt{failoverDelay}. En F1 la detectó; en F2 y F3 no llegó a haber nada que detectar.
 
-\begin{figure}[tb]
-\centering
-\includegraphics[width=\linewidth]{figuras/Fig5.jpg}
-\caption{Predicado de visibilidad $V(\text{fallo},K)$: la promoción se dispara solo cuando el plano de control observa el pod como eliminado (F1); si el pod persiste (F2, F3), el operador no promueve.}
-\label{fig:visibilidad}
-\end{figure}
+El bloqueo de F4 apunta a una cuestión del mismo orden: la \textit{inyectabilidad} de un fallo depende del endurecimiento del operador. En conjunto, las cuatro observaciones apuntan a un problema conocido: la representatividad del fallo inyectado, sistematizada hace tiempo para la inyección de fallos de software (Natella et al., 2016). Lo que este piloto añade es su forma específica ante un reconciliador declarativo: un inyector que muta la especificación del recurso no inyecta un fallo, sino una deriva del estado deseado, y el bucle de reconciliación la absorbe como cualquier otra. La semántica del inyector queda transformada por el sistema que pretende perturbar, de modo que acreditar que produce el fallo que nombra es condición previa a cualquier cifra de resiliencia. Las herramientas de prueba automática de controladores atacan el problema complementario, la corrección del operador ante secuencias de estados (Sun et al., 2022; Gu et al., 2023).
 
-\section{Discusión}
-El comportamiento de PostgreSQL en Kubernetes no se explica por una sola capa: la interacción entre operador, almacenamiento y base de datos introduce efectos emergentes. La confiabilidad \textit{cloud-native} es, por tanto, inherentemente multicapa, y decisiones locales —operador o tipo de almacenamiento— tienen implicaciones globales en RTO, RPO o visibilidad de las transacciones (Gilbert \& Lynch, 2002; Avizienis et al., 2004; Bailis \& Ghodsi, 2013). La función $I(S)$ ofrece una base para interpretar estas dependencias, extendiendo enfoques que las analizan por separado.
 
-El alcance es una fase piloto acotada por el entorno productivo (Sección~5). Tres limitaciones, ya detalladas: (i) un único operador (CNPG) y una categoría de almacenamiento —CSI en red—, con la comparación asignada a la Fase~2 (Tabla~\ref{tab:responsabilidad}); (ii) el fallo de nodo no se reprodujo —colocalización intranodo—, por lo que el \textit{failover} es intranodo y tanto el RPO nulo de F1 como el RTO de F2 (cota inferior) deben leerse como acotados; y (iii) el análisis de E/S (F4) no fue ejecutable por la incompatibilidad FUSE/\texttt{readOnlyRootFilesystem}. Pese a ello, el trabajo conecta distintas líneas y operacionaliza sus invariantes con métricas observables en producción.
+\section{Discusión}\label{sec:disc}
+El piloto deja una lección que no se buscaba: el camino de un fallo hasta el motor de base de datos atraviesa capas que pueden impedir que llegue a plantearse como tal. En F2 el bucle de reconciliación del operador deshizo la perturbación antes de evaluar promoción alguna; en F3 la política de red nunca llegó a aislar al primario. La observación alcanza al operador y a la pila de red: la capa de almacenamiento gestionada mediante CSI no se ejercitó en este piloto (Avizienis et al., 2004).
 
-La Fase~2 —ya diseñada, con protocolo de ejecución e instrumentación desarrollados— ampliará la validación mediante un diseño factorial 2$\times$2 (replicación asíncrona frente a síncrona por quórum $\times$ topología colocalizada frente a antiafinidad multinodo), incorporando los operadores y categorías de almacenamiento no cubiertos y un escenario de fallo de nodo genuino.
+El alcance es una fase piloto acotada por el entorno productivo (Sección~\ref{sec:metodo}). Cuatro limitaciones, por orden de peso. La primera, y la que más condiciona la lectura, es la \textit{fidelidad de la inyección}: F2 no reprodujo una indisponibilidad genuina y F3 no logró aislar al primario, por lo que ninguno de los dos sostiene conclusión alguna sobre la lógica de promoción del operador; la única medición de \textit{failover} que se sostiene es la de F1. La segunda: el fallo de nodo no se reprodujo —las tres instancias residían en un único nodo elegible—, por lo que el \textit{failover} medido es intranodo y el RPO nulo de F1 debe leerse como acotado por la ausencia de enlace de red internodo. La tercera: un solo operador y una sola categoría de almacenamiento, con el contraste entre operadores sostenido analíticamente (Tabla~S1) y no medido. La cuarta: F4 no fue ejecutable (Sección~\ref{sec:io}). El valor del piloto no está, pues, en cuántos comportamientos caracteriza, sino en haber medido uno con precisión y haber identificado por qué los otros tres no eran medibles con el instrumental empleado.
 
-\section{Conclusiones}
-Este trabajo abordó los sistemas PostgreSQL en Kubernetes desde una perspectiva multicapa, considerando conjuntamente la interacción entre operadores, almacenamiento basado en CSI y la semántica de la base de datos. Como contribución principal, se presentó una taxonomía y un marco descriptivo —el vocabulario $S=(O,K,M,D)$ con sus invariantes— junto con un estudio empírico que lo confronta con el comportamiento observado mediante inyección controlada de fallos sobre un clúster productivo (Secciones~5 y~6), midiendo RTO, RPO y visibilidad de transacciones para CloudNativePG. El hallazgo central es que la variable que gobierna el \textit{failover} no es el fallo en sí, sino su visibilidad ante Kubernetes: la refutación de que la indisponibilidad sostenida del primario promovería una réplica —no lo hizo en ninguna de las diez repeticiones— es el resultado de mayor fuerza probatoria, y motiva extender el marco con un predicado de visibilidad $V(\text{fallo},K)$. La contribución conceptual de mayor alcance es, de hecho, ese predicado de visibilidad; la tupla $S=(O,K,M,D)$ actúa como andamiaje descriptivo que organiza el análisis, no como un modelo predictivo.
+Lo que este piloto no pudo resolver queda asignado a una Fase~2 ya diseñada, que se ejecutará en un clúster multinodo dedicado y fuera de producción, en el marco del Trabajo de Especialización en Desarrollo de Software de la FaCyT-UC. Su requisito previo es un protocolo de validación del inyector: cada escenario deberá acreditar, mediante los eventos del operador y el estado del pod ante el plano de control, que indujo el fallo que nombra antes de que su medición se dé por válida. Sobre esa base se abordan seis cuestiones —repetición de F2 sin tocar la especificación del pod, aislamiento completo en F3, fallo de nodo con antiafinidad obligatoria, F4 por \textit{cgroups}, instrumentación del retardo de replicación y comparación empírica entre operadores y clases de almacenamiento—, cuyo diseño detalla el material suplementario.
 
-El análisis evidencia que la confiabilidad \textit{stateful} en Kubernetes no depende solo del operador o del almacenamiento, sino del comportamiento emergente de su interacción, con \textit{trade-offs} entre rendimiento, disponibilidad y consistencia que atraviesan capas. El aporte de fondo es doble: acercar la teoría de sistemas distribuidos a la práctica en Kubernetes y entregar una herramienta reutilizable —el modelo $S=(O,K,M,D)$ con sus invariantes operacionalizados y el predicado $V(\text{fallo},K)$— aplicable a otras configuraciones; su validación se ampliará en la Fase~2 (Sección~7).
+\section{Conclusiones}\label{sec:concl}
+Este trabajo midió el coste del \textit{failover} de CloudNativePG en un clúster productivo, con inyección controlada de fallos y un verificador que registra, a nivel de \textit{commit}, qué escrituras confirmadas sobreviven. Ante la eliminación del pod primario promovió una réplica en las diez repeticiones, con un RTO mediano de 7,9~s y sin pérdida detectada: la tabla de verdad resultó contigua a lo largo de 613\,253 identificadores. Es una cifra de producción, con las restricciones que se declaran en la Sección~\ref{sec:disc}.
+
+El resultado de mayor alcance es metodológico y no estaba previsto: de los cuatro escenarios diseñados, solo uno reprodujo el fallo que nominalmente modela. El \textit{pod-failure} de Chaos Mesh altera la especificación del pod, y todo indica que un operador declarativo la trata como cualquier otra deriva del estado deseado (la comprobación directa queda para la Fase~2). La \textit{NetworkPolicy} no aisló al primario del plano de control, con lo cual la ausencia de promoción no expresó preferencia por la consistencia sino falta de detección: en un experimento independiente con aislamiento completo y configuración por defecto, CloudNativePG promovió y se perdieron escrituras confirmadas (Sivko, 2026). Y el inyector de E/S resultó incompatible con el endurecimiento del propio operador. De ahí la conclusión que este trabajo defiende con más firmeza: en operadores declarativos el mecanismo de inyección no es un detalle de implementación sino parte de lo que se mide, y acreditar que produce el fallo que nombra debe preceder a cualquier cifra de resiliencia.
+
+Se retira, por último, la regularidad que la versión anterior proponía —que la promoción dependiera de observar la desaparición del pod primario—: la contradicen la mecánica del desalojo por fallo de nodo y el experimento de Sivko (2026). El disparador documentado, detectar una instancia no sana, basta para lo observado. El vocabulario $S=(O,K,M,D)$ se ofrece con el mismo carácter: andamiaje para organizar la observación por capas, no un modelo predictivo. Con el paquete de ejecución depositado, lo que este artículo entrega es una medición defendible, un diagnóstico de por qué las otras tres no lo son y un diseño corregido para obtenerlas.
 
 \section*{Agradecimientos}
-En la preparación de este manuscrito se emplearon herramientas de inteligencia artificial generativa únicamente para mejorar la redacción, la gramática y el estilo; la concepción, el modelo, la ejecución experimental, el análisis y las conclusiones son obra de los autores —Herrera, M. y Parejo, A.—, que revisaron y validaron todo el contenido. La investigación no recibió financiamiento externo y los autores declaran no tener conflictos de interés. Los datos limpios de RTO/RPO, el paquete de ejecución (manifiestos, \textit{tx-verifier}, carga pgbench y scripts de análisis) y un material suplementario se depositan públicamente en Zenodo (DOI: 10.5281/\allowbreak zenodo.23004248); los registros crudos del verificador se facilitan a petición por el acceso restringido del clúster productivo, y el material depositado permite reproducir el diseño en un clúster equivalente.
+En la preparación de este manuscrito se emplearon herramientas de inteligencia artificial generativa únicamente para mejorar la redacción, la gramática y el estilo; la concepción, el modelo, la ejecución experimental, el análisis y las conclusiones son obra de los autores —Herrera, M. y Parejo, A.—, que revisaron y validaron todo el contenido. La investigación no recibió financiamiento externo y los autores declaran no tener conflictos de interés.
+
+Se depositan públicamente en Zenodo (DOI: 10.5281/\allowbreak zenodo.23004248) las series de RTO e indisponibilidad por repetición, el recuento de la tabla de verdad del que se deriva el RPO, los manifiestos del clúster y de cada inyección, el \textit{tx-verifier}, la carga pgbench, los scripts de análisis y el material suplementario. Con ellos se reproducen las cifras del artículo y se replica el diseño en un clúster equivalente. En cambio, los registros crudos del verificador, las marcas del arnés y los eventos del plano de control quedaron en el clúster productivo y no se conservaron: el entorno ya no está disponible y no pueden facilitarse. El alcance de lo que ello permite afirmar se declara en la Sección~\ref{sec:rtorpo}.
 
 % ============================================================================
 %  BIBLIOGRAFÍA — orden alfabético, formato Faraute (autor. año. título...)
@@ -375,42 +340,52 @@ En la preparación de este manuscrito se emplearon herramientas de inteligencia 
 \section*{Bibliografía}
 \begingroup
 \footnotesize
+% Las URL no admiten corte en muchos puntos: al justificar, el parrafo estiraba
+% los espacios y las URL salian como "https : / / dominio . tld". Se compone la
+% bibliografia en bandera (sin justificar), que elimina ese estiramiento, y se
+% anula la glue elastica entre caracteres de la URL.
+\raggedright
+\setlength{\Urlmuskip}{0mu}
+\emergencystretch=2em
+\hbadness=10000
+\def\UrlBreaks{\do\/\do\-\do\_\do\.\do\=\do\&\do\?\do\#\do\%\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z}
 \setlength{\parindent}{-1.2em}
 \setlength{\leftskip}{1.2em}
-\setlength{\parskip}{4pt}
+\setlength{\parskip}{0pt}
 % LaTeX suprime la sangria del primer parrafo tras un encabezado, asi que
 % la primera entrada se quedaba sin el saliente. \indent la fuerza.
 \indent
 
+Abadi, D. (2012). Consistency tradeoffs in modern distributed database system design: CAP is only part of the story. \textit{Computer} 45(2): 37--42.\par
 Alquraan, A., H. Takruri, M. Alfatafta \& S. Al-Kiswany. (2018). An analysis of network-partitioning failures in cloud systems. \textit{Proc. 13th USENIX Symp. Operating Systems Design and Implementation (OSDI~18)}. USENIX Association. Carlsbad, CA, USA. pp.~51--68.\par
 Alvaro, P. \& S. Tymon. (2018). Abstracting the geniuses away from failure testing. \textit{Commun. ACM} 61(1): 54--61.\par
 Avizienis, A., J.-C. Laprie, B. Randell \& C. Landwehr. (2004). Basic concepts and taxonomy of dependable and secure computing. \textit{IEEE Trans. Dependable Secure Comput.} 1(1): 11--33.\par
 Bailis, P. \& A. Ghodsi. (2013). Eventual consistency today: limitations, extensions, and beyond. \textit{Commun. ACM} 56(5): 55--63.\par
 Basiri, A., N. Behnam, R. de Rooij, L. Hochstein, L. Kosewski, J. Reynolds \& C. Rosenthal. (2016). Chaos engineering. \textit{IEEE Softw.} 33(3): 35--41.\par
-Burckhardt, S. (2014). Principles of eventual consistency. \textit{Found. Trends Program. Lang.} 1(1--2): 1--150.\par
 Burns, B., B. Grant, D. Oppenheimer, E. Brewer \& J. Wilkes. (2016). Borg, Omega, and Kubernetes. \textit{ACM Queue} 14(1): 70--93.\par
+Calico. (2026). Project Calico documentation: network policy, configuración de Felix y tratamiento de conexiones establecidas. \url{https://docs.tigera.io/calico/latest/} (Última visita, 07-10-2026).\par
+Chaos Mesh. (2026). Chaos Mesh documentation: simulating pod faults y principios de implementación de \texttt{PodChaos}. \url{https://chaos-mesh.org/docs/} (Última visita, 07-10-2026).\par
 Chen, Z., M. Goudarzi \& A. N. Toosi. (2026). An empirical evaluation of Kubernetes resilience in cloud--edge deployments using failure injection techniques. \textit{Proc. 2026 Australasian Computer Science Week (ACSW '26)}. ACM. pp.~22--31.\par
-CloudNativePG. (2026). CloudNativePG documentation. [En línea]. Disponible: \url{https://cloudnative-pg.io/docs/} [Consultado: 7 de julio de 2026].\par
-Crunchy Data. (2026). PGO: the Postgres Operator from Crunchy Data --- documentation. [En línea]. Disponible: \url{https://access.crunchydata.com/documentation/postgres-operator/latest/} [Consultado: 7 de julio de 2026].\par
+CloudNativePG. (2026). CloudNativePG documentation. \url{https://cloudnative-pg.io/docs/} (Última visita, 07-07-2026).\par
+Crunchy Data. (2026). PGO: the Postgres Operator from Crunchy Data --- documentation. \url{https://access.crunchydata.com/documentation/postgres-operator/latest/} (Última visita, 07-07-2026).\par
 Dobies, J. \& J. Wood. (2020). \textit{Kubernetes Operators: automating the container orchestration platform}. O'Reilly Media. Sebastopol, CA, USA.\par
-Drees, F. (2026). Chaos testing the CloudNativePG project. \textit{CloudNativePG Blog}. [En línea]. Disponible: \url{https://cloudnative-pg.io/blog/lfx-chaos-testing-yash-agarwal/} [Consultado: 8 de julio de 2026].\par
-Engelbert, C. (2024). How to choose your Kubernetes Postgres operator? \textit{simplyblock Blog}. [En línea]. Disponible: \url{https://simplyblock.io/blog/choosing-a-kubernetes-postgres-operator/} [Consultado: 7 de julio de 2026].\par
+Drees, F. (2026). Chaos testing the CloudNativePG project. \textit{CloudNativePG Blog}. \url{https://cloudnative-pg.io/blog/lfx-chaos-testing-yash-agarwal/} (Última visita, 08-07-2026).\par
 Gilbert, S. \& N. Lynch. (2002). Brewer's conjecture and the feasibility of consistent, available, partition-tolerant web services. \textit{ACM SIGACT News} 33(2): 51--59.\par
+Gu, J. T., X. Sun, W. Zhang, Y. Jiang, C. Wang, M. Vaziri, O. Legunsen \& T. Xu. (2023). Acto: automatic end-to-end testing for operation correctness of cloud system management. \textit{Proc. 29th ACM Symp. Operating Systems Principles (SOSP~'23)}. ACM. Koblenz, Germany. pp.~96--112.\par
 Han, F., H. Liu, B. Chen, D. Jia, J. Zhou, X. Teng, C. Yang, H. Xi, W. Tian, S. Tao, S. Wang, Q. Xu \& Z. Yang. (2024). PALF: replicated write-ahead logging for distributed databases. \textit{Proc. VLDB Endow.} 17(12): 3745--3758.\par
-Khan, W., T. Kumar, C. Zhang, K. Raj, A. M. Roy \& B. Luo. (2023). SQL and NoSQL database software architecture performance analysis and assessments --- a systematic literature review. \textit{Big Data Cogn. Comput.} 7(2): art. 97.\par
 Kingsbury, K. \& P. Alvaro. (2021). Elle: inferring isolation anomalies from experimental observations. \textit{Proc. VLDB Endow.} 14(3): 268--280.\par
-Kubernetes. (2024). Container storage interface (CSI). \textit{Kubernetes Documentation}. [En línea]. Disponible: \url{https://kubernetes.io/docs/concepts/storage/volumes/} y la especificación versionada en \url{https://github.com/container-storage-interface/spec} [Consultado: 7 de julio de 2026].\par
-Kubernetes. (2026a). Nodes: node controller, condiciones del nodo y desalojo basado en taints. \textit{Kubernetes Documentation}. [En línea]. Disponible: \url{https://kubernetes.io/docs/concepts/architecture/nodes/} [Consultado: 7 de julio de 2026].\par
-Kubernetes. (2026b). Operator pattern. \textit{Kubernetes Documentation}. [En línea]. Disponible: \url{https://kubernetes.io/docs/concepts/extend-kubernetes/operator/} [Consultado: 8 de julio de 2026].\par
+Kubernetes. (2024). Container storage interface (CSI). \textit{Kubernetes Documentation}. \url{https://kubernetes.io/docs/concepts/storage/volumes/} y la especificación versionada en \url{https://github.com/container-storage-interface/spec} (Última visita, 07-07-2026).\par
+Kubernetes. (2026a). Nodes: node controller, condiciones del nodo y desalojo basado en taints. \textit{Kubernetes Documentation}. \url{https://kubernetes.io/docs/concepts/architecture/nodes/} (Última visita, 07-07-2026).\par
+Kubernetes. (2026b). Operator pattern. \textit{Kubernetes Documentation}. \url{https://kubernetes.io/docs/concepts/extend-kubernetes/operator/} (Última visita, 08-07-2026).\par
+Kubernetes. (2026c). kube-controller-manager: \texttt{node-monitor-grace-period} y tolerancias por omisión ante nodo no listo o inalcanzable. \textit{Kubernetes Documentation}. \url{https://kubernetes.io/docs/reference/command-line-tools-reference/kube-controller-manager/} (Última visita, 07-10-2026).\par
 Mega, C. (2023). Orchestrating information governance workloads as stateful services using Kubernetes operator framework. \textit{Service-Oriented Computing (SummerSOC 2023), Commun. Comput. Inf. Sci.}, vol. 1847. Springer. Cham, Switzerland. pp.~125--143.\par
-Ongaro, D. \& J. Ousterhout. (2014). In search of an understandable consensus algorithm (Raft). \textit{Proc. USENIX Annual Technical Conf. (USENIX ATC)}. USENIX Association. pp.~305--319.\par
-Patroni. (2026). Patroni: a template for PostgreSQL HA with ZooKeeper, etcd or Consul --- documentation. [En línea]. Disponible: \url{https://patroni.readthedocs.io/} [Consultado: 7 de julio de 2026].\par
-Portworx. (2024). Kubernetes operator for PostgreSQL: how to choose and set up one. \textit{Portworx Blog}. [En línea]. Disponible: \url{https://portworx.com/blog/choosing-a-kubernetes-operator-for-postgresql/} [Consultado: 7 de julio de 2026].\par
-PostgreSQL Global Development Group. (2024). PostgreSQL 16 documentation: streaming replication y \texttt{synchronous\_commit}. [En línea]. Disponible: \url{https://www.postgresql.org/docs/16/} [Consultado: 7 de julio de 2026].\par
+Mohan, C., D. Haderle, B. Lindsay, H. Pirahesh \& P. Schwarz. (1992). ARIES: a transaction recovery method supporting fine-granularity locking and partial rollbacks using write-ahead logging. \textit{ACM Trans. Database Syst.} 17(1): 94--162.\par
+Natella, R., D. Cotroneo \& H. Madeira. (2016). Assessing dependability with software fault injection: a survey. \textit{ACM Comput. Surv.} 48(3): art. 44.\par
+Patroni. (2026). Patroni: a template for PostgreSQL HA with ZooKeeper, etcd or Consul --- documentation. \url{https://patroni.readthedocs.io/} (Última visita, 07-07-2026).\par
+PostgreSQL Global Development Group. (2024). PostgreSQL 16 documentation: streaming replication y \texttt{synchronous\_commit}. \url{https://www.postgresql.org/docs/16/} (Última visita, 07-07-2026).\par
 Schwarzkopf, M., A. Konwinski, M. Abd-El-Malek \& J. Wilkes. (2013). Omega: flexible, scalable schedulers for large compute clusters. \textit{Proc. EuroSys}. ACM. pp.~351--364.\par
-Stonebraker, M. \& G. Kemnitz. (1991). The POSTGRES next generation database management system. \textit{Commun. ACM} 34(10): 78--92.\par
-Taft, R., I. Sharif, A. Matei, N. VanBenschoten, J. Lewis, T. Grieger, K. Niemi, A. Woods, A. Birzin, R. Poss, P. Bardea, A. Ranade, B. Darnell, B. Gruneir, J. Jaffray, L. Zhang \& P. Mattis. (2020). CockroachDB: the resilient geo-distributed SQL database. \textit{Proc. ACM SIGMOD Int. Conf. Management of Data}. ACM. pp.~1493--1509.\par
-Van Renesse, R. \& F. B. Schneider. (2004). Chain replication for supporting high throughput and availability. \textit{Proc. OSDI}. USENIX Association. pp.~91--104.\par
+Sivko, N. (2026). Reproducing split brain on CloudNativePG. \textit{Coroot Blog}, 29 de julio de 2026. \url{https://coroot.com/blog/reproducing-split-brain-on-cloudnativepg/} (Última visita, 07-10-2026).\par
+Sun, X., W. Luo, J. T. Gu, A. Ganesan, R. Alagappan, M. Gasch, L. Suresh \& T. Xu. (2022). Automatic reliability testing for cluster management controllers. \textit{Proc. 16th USENIX Symp. Operating Systems Design and Implementation (OSDI~22)}. USENIX Association. Carlsbad, CA, USA. pp.~143--159.\par
 \endgroup
 
 \end{document}

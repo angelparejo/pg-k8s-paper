@@ -10,8 +10,8 @@ authors:
     given-names: "A."
     affiliation: "Universidad de Carabobo, Valencia, Venezuela"
     orcid: "https://orcid.org/0009-0001-9737-7116"
-version: "1.0-fase1"
-date-released: "2026-08-12"
+version: "1.1-fase1"
+date-released: "2026-10-07"
 license: CC-BY-4.0
 keywords:
   - Kubernetes
@@ -26,7 +26,7 @@ keywords:
 doi: "10.5281/zenodo.23004248"
 preferred-citation:
   type: article
-  title: "Análisis multicapa de operadores de PostgreSQL y almacenamiento CSI en Kubernetes: un marco de análisis y un estudio empírico de CloudNativePG bajo fallos inyectados"
+  title: "Caracterización empírica de la conmutación por error de CloudNativePG en Kubernetes: RTO, RPO y los límites de la inyección de fallos"
   authors:
     - family-names: "Herrera"
       given-names: "M."

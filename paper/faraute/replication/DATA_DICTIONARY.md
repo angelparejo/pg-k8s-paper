@@ -39,5 +39,17 @@ separador coma, encabezado en la primera fila. Tiempos en segundos; marcas de ti
   `tx-verifier`; los CSV resumen el RTO/indisponibilidad y la promoción.
 - **Exclusiones** (declaradas en el artículo y el suplemento): 1.ª inyección de F2 (~80,5 s,
   arranque en frío), las 2 inyecciones exploratorias de F3, y un identificador espurio negativo.
-  Los CSV contienen ya el conjunto analizado; el suplemento incluye el análisis de sensibilidad.
-- Reproducir todas las cifras: `python3 execution-package/manifiestos/scripts/analyze.py`
+  Los CSV principales contienen ya el conjunto analizado; el suplemento incluye el análisis de
+  sensibilidad.
+- **`f2_podfailure_cnpg_excluida.csv`**: la inyección de F2 descartada, en fichero aparte para
+  que la exclusión sea auditable sin alterar el conjunto analizado ni las cifras de `analyze.py`.
+  El valor (80,54 s) y la hora de inyección (22:11 UTC, previa a las diez retenidas, que van de
+  las 22:22 a las 23:03) proceden del registro del verificador y del mapa de trazabilidad del
+  proyecto; el registro crudo del que derivan no se publica por el acceso restringido al clúster.
+  `analyze.py` la lee, si está presente, solo para reportar la mediana de F2 con y sin ella
+  (36,745 s frente a 36,92 s).
+- **`truth_summary_cnpg.csv`**: el recuento de la tabla de verdad del `tx-verifier` al cierre del
+  piloto, del que se deriva el RPO nulo. Son los valores de la consulta registrada en su momento;
+  el registro crudo del verificador, línea a línea, no se publica por el acceso restringido al
+  clúster, pero estas cifras son las que sostienen la afirmación de contigüidad del artículo.
+- Reproducir las cifras de RTO e indisponibilidad: `python3 execution-package/manifiestos/scripts/analyze.py`

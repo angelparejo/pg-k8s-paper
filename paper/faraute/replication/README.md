@@ -61,7 +61,14 @@ El mismo DOI aparece en `CITATION.cff`, `.zenodo.json`, el suplemento y el manus
 concept DOI no cambia: no hay que reeditar el artículo.
 
 ## Nota de acceso
-El experimento se ejecutó sobre un clúster productivo bajo acceso restringido; por ello no se
-publican los registros crudos del verificador ni los eventos del operador (se facilitan a
-petición). Los datos limpios, el verificador, los manifiestos y el suplemento bastan para
-auditar los resultados y replicar el diseño en un clúster equivalente.
+El experimento se ejecutó sobre un clúster productivo bajo acceso restringido.
+
+**Los registros crudos del verificador (`verifier-cnpg.log`), las marcas del arnés de ejecución
+(`results.csv`) y los eventos del plano de control no se conservaron.** Quedaron en el clúster y el
+entorno ya no está disponible para volver a capturarlos. No se facilitan a petición: no existen.
+Lo depositado son las series ya procesadas de RTO e indisponibilidad por repetición, el recuento de
+la tabla de verdad del que se deriva el RPO, los manifiestos y los scripts. Esto acota lo que puede afirmarse sobre el *mecanismo* de cada
+escenario —véase la discusión de F2 en el artículo, donde el curso de los hechos se presenta como
+inferencia a partir de los manifiestos depositados y no como observación—. Los datos limpios, el
+verificador, los manifiestos y el suplemento bastan para auditar las **cifras** y replicar el
+diseño en un clúster equivalente.

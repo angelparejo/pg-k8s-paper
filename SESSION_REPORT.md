@@ -811,3 +811,26 @@ autor leyendo el PDF, no la herramienta.
   reduce la exposición futura, no deshace la pasada.
 
 **Nota:** cualquier clon anterior queda inservible; hay que volver a clonar, no hacer `pull`.
+
+## 2026-10-07 — Revisión profunda del artículo FARAUTE tras arbitraje
+
+**Operaciones:**
+- Despachados writer-critic (62/100), árbitro de dominio (70/100) y árbitro de métodos (64/100). Cada hallazgo verificado antes de aplicarse; dos descartados por erróneos.
+- `paper/faraute/main.tex`: reencuadre de F2 y F3, retirada de la hipótesis de visibilidad, corrección del redondeo de la mediana de F2 (36,745 → 36,7), cronología del fallo de nodo, retractación del «commit fantasma», poder de detección del RPO, confundido horario, `indentfirst`, bibliografía reordenada y ampliada (30 entradas).
+- `replication/supplement/suplemento.tex`: sincronizado (título, «débil», «cota inferior», permutación circular) y ampliado con las derivaciones trasladadas y el plan de Fase 2.
+- Depósito: `f2_podfailure_cnpg_excluida.csv` y `truth_summary_cnpg.csv` nuevos; `analyze.py` reporta valor exacto y reportable; metadatos a v1.1-fase1; zip reconstruido (57 ficheros).
+- `carta_respuesta_arbitros.md` redactada y después realineada con el artículo.
+- Nuevos: `scripts/check_ia_estilo.py`, `scripts/exportar_figuras_faraute.sh`, `paper/faraute/figuras_envio/Fig1.jpg`.
+
+**Decisiones:**
+- Mover al suplemento solo derivaciones, nunca afirmaciones ni salvedades — condición puesta por el autor para no perder integridad ante los árbitros.
+- No tocar el formato de los nombres de autor: la guía de la revista y la instrucción del jurado se contradicen, y prevalece el jurado.
+
+**Resultados:**
+- Artículo 12 pp, suplemento 6 pp, ambos con 0 errores, 0 overfull, 0 referencias sin resolver ni huérfanas. Resumen 148 palabras.
+- Verificado que `results.csv` y `verifier-cnpg.log` **nunca existieron** en el repositorio (243 revisiones, 808 rutas). Corregida en cinco artefactos la promesa de facilitarlos a petición.
+- **Detectados identificadores reales de infraestructura en los 2 commits locales sin empujar** (`origin/main` está limpio). Seudonimizados en el árbol de trabajo; los commits siguen sucios.
+
+**Estado:**
+- Hecho: artículo, suplemento, depósito, carta, figuras.
+- Pendiente: limpiar los 2 commits antes de empujar; publicar v1.1 en Zenodo; ORCID de la coautora.

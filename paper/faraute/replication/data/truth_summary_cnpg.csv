@@ -1,0 +1,8 @@
+metrica,valor,procedencia
+filas_totales,613253,consulta SQL sobre la tabla truth al cierre del piloto
+id_minimo,1,idem
+id_maximo,613253,idem
+ids_faltantes,0,"max - min + 1 - filas = 0: secuencia contigua, sin huecos"
+ids_frontera_presentes,11,"ids inmediatamente anterior y posterior a cada una de las 11 ventanas de inyeccion (F1, F2, F3): todos presentes"
+ids_espurios_descartados,1,"un id negativo registrado a las 04:56 UTC, fuera de toda ventana de inyeccion y ajeno a la secuencia monotona del verificador"
+rpo_transacciones_perdidas,0,"RPO = commits confirmados al cliente y no visibles tras el fallo = ids faltantes = 0"

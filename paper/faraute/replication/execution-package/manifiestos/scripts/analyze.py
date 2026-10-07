@@ -184,10 +184,25 @@ def main():
     print("Directorio de datos:", d)
     print("=" * 66)
 
+    # Sensibilidad a la exclusion del arranque en frio (E2 del arbitraje): si el
+    # fichero de la inyeccion descartada esta presente, se reporta la mediana con
+    # y sin ella. No entra en ningun otro calculo.
+    excl = d / "f2_podfailure_cnpg_excluida.csv"
+    if excl.exists():
+        f2_todas = f2 + [float(x) for x in col(excl, "rto_s")]
+        print(f"\n[F2 — sensibilidad a la exclusion]")
+        print(f"  mediana analizada (n={len(f2)})      = {median(f2):.3f} s"
+              f"  -> reportable {median(f2):.1f} s")
+        print(f"  mediana con la descartada (n={len(f2_todas)}) = {median(f2_todas):.3f} s"
+              f"  -> reportable {median(f2_todas):.1f} s")
+
     for name, v in (("F1 (pod-kill)", f1), ("F2 (pod-failure)", f2)):
         lo, hi, cov = order_stat_ci(v)
         print(f"\n[{name}]  n={len(v)}")
-        print(f"  mediana        = {median(v):.2f} s")
+        # Tres decimales a proposito: redondear primero a dos y luego a una decima
+        # (doble redondeo) desplaza la cifra reportada. La resolucion del
+        # instrumento es ~0.2 s, asi que lo publicable es una decima.
+        print(f"  mediana        = {median(v):.3f} s  -> reportable {median(v):.1f} s")
         print(f"  IQR            = [{quantile(v,0.25):.2f}, {quantile(v,0.75):.2f}] s")
         print(f"  rango          = [{min(v):.2f}, {max(v):.2f}] s")
         print(f"  IC mediana     = [{lo:.2f}, {hi:.2f}] s  (cobertura {cov*100:.1f}%)")
