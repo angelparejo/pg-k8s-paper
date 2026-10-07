@@ -18,12 +18,16 @@
 \usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs,array,tabularx}
+\usepackage{tikz}
+\usetikzlibrary{positioning,fit,backgrounds,calc}
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
 \usepackage{xurl}
 \setlength{\parskip}{4pt}
 \renewcommand{\thesection}{S\arabic{section}}
 \renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\addto\captionsspanish{\renewcommand{\tablename}{Tabla}\renewcommand{\figurename}{Fig.}}
 
 \title{\bfseries Material Suplementario --- Métodos y Resultados Extendidos\\[4pt]
 \large Caracterización empírica de la conmutación por error de CloudNativePG en Kubernetes:\\
@@ -139,6 +143,81 @@ En red: E/S bloqueada o degradada; distribuido: la pérdida de quórum puede con
 \label{tab:s1}
 \fignota{síntesis analítica del comportamiento documentado por capa ante cada tipo de fallo; no es una medición empírica. $O$ = operador, $K$ = plano de control de Kubernetes, $M$ = almacenamiento CSI. Fuente: documentación de CloudNativePG (CloudNativePG, 2026), Patroni (Patroni, 2026) y Crunchy (Crunchy Data, 2026); parámetros de desalojo de Kubernetes (Kubernetes, 2026a).}
 \end{table}
+
+\section{Banco de pruebas (Figura~S1)}
+El arbitraje señaló que la figura del banco de pruebas incluida en la versión anterior tenía
+texto ilegible al tamaño de impresión. Se rehízo en formato vectorial, donde la legibilidad no
+depende de la resolución, y se traslada aquí por el límite de extensión del artículo.
+
+\begin{figure}[htbp]
+\centering
+\footnotesize
+\begin{tikzpicture}[
+  font=\footnotesize,
+  caja/.style={draw=black!70, rounded corners=1.5pt, align=center, inner sep=4pt},
+  inst/.style={caja, fill=white, minimum width=1.75cm, minimum height=0.7cm},
+  cli/.style={caja, fill=white, minimum width=3.0cm, align=center},
+  iny/.style={caja, fill=black!12, align=center},
+  tit/.style={font=\footnotesize\bfseries, align=center, inner sep=1pt},
+  nota/.style={font=\scriptsize\itshape, text=black!65, align=center, inner sep=1pt},
+  flecha/.style={-latex, draw=black!70, thin},
+]
+% ---------- clúster CNPG ----------
+\node[inst] (p)  at (0,0) {primario};
+\node[inst] (r1) [right=2mm of p]  {réplica 1};
+\node[inst] (r2) [right=2mm of r1] {réplica 2};
+\node[nota]  (notacl) [below=1.5mm of r1] {3 instancias colocalizadas, replicación asíncrona};
+\node[tit]   (titcl)  [above=1.5mm of r1] {Clúster CNPG 1.28, PostgreSQL 16.13};
+\begin{scope}[on background layer]
+  \node[caja, fill=black!6, fit=(p)(r2)(notacl)(titcl), inner sep=4pt] (cl) {};
+\end{scope}
+
+% ---------- clientes ----------
+\node[cli] (pgb) [right=8mm of cl.north east, anchor=north west] {pgbench\\[-1pt]{\scriptsize\texttt{-s 10}, 4 clientes}};
+\node[cli] (txv) [below=3mm of pgb] {\textit{tx-verifier}\\[-1pt]{\scriptsize RTO / RPO}};
+\draw[flecha] (pgb.west) -- (pgb.west-|cl.east);
+\draw[flecha] (txv.west) -- (txv.west-|cl.east);
+
+% ---------- inyectores ----------
+\node[iny] (cm) [below=9mm of cl.south west, anchor=north west, text width=3.9cm]
+  {\textbf{Chaos Mesh 2.8.3}\\[-1pt]{\scriptsize PodChaos: \textit{pod-kill} (F1)}\\[-2pt]{\scriptsize\textit{pod-failure} (F2)}};
+\node[iny] (np) [right=4mm of cm, text width=3.9cm]
+  {\textbf{NetworkPolicy} (Calico)\\[-1pt]{\scriptsize partición de red (F3),}\\[-2pt]{\scriptsize aplicada con \texttt{kubectl}}};
+\draw[flecha] (cm.north) -- (cm.north|-cl.south);
+\draw[flecha, dashed] (np.north) -- (np.north|-cl.south);
+\node[nota] (dfiltro) [below=2mm of cm.south east, anchor=north] {doble filtro de selección (espacio de nombres + clúster) y \textit{dry-run} previo};
+\node[tit] (titns) [above=2mm of titcl] {espacio de nombres experimental (cuotas + RBAC restringido)};
+
+% ---------- namespace ----------
+\begin{scope}[on background layer]
+  \node[caja, draw=black!55, fill=black!4, fit=(cl)(pgb)(txv)(cm)(np)(dfiltro)(titns), inner sep=6pt] (nsbox) {};
+\end{scope}
+
+% ---------- cargas ajenas ----------
+\node[caja, draw=black!55, dashed, fill=white, right=5mm of nsbox, text width=2.7cm,
+      minimum height=3.6cm, align=center] (otras)
+  {otras cargas del clúster\\[2.5mm]\textit{fuera del dominio de fallo}\\[2mm]{\scriptsize\textit{(no seleccionables por los inyectores)}}};
+\node[tit] (titnodo) [above=2mm of titns] {nodo-lab-01 (\textit{worker} compartido del clúster productivo)};
+
+% ---------- nodo ----------
+\begin{scope}[on background layer]
+  \node[caja, draw=black!75, line width=0.5pt, fill=white, fit=(nsbox)(otras)(titnodo), inner sep=7pt] (nodo) {};
+\end{scope}
+
+% ---------- almacenamiento ----------
+\node[caja, fill=black!8, below=5mm of nodo, text width=\dimexpr\linewidth-14pt\relax, align=center] (san)
+  {SAN empresarial (\textit{Fibre Channel}), CSI Huawei 4.10.1, \textit{StorageClass} \textit{Retain} / \textit{WaitForFirstConsumer}};
+\draw[flecha, latex-latex] (nodo.south) -- (san.north);
+\end{tikzpicture}
+\caption{Banco de pruebas: aislamiento del experimento dentro de un clúster productivo. Las tres
+instancias de PostgreSQL, los clientes de carga y verificación y los inyectores residen en un
+espacio de nombres dedicado con cuotas y control de acceso, sobre un único nodo \textit{worker}
+compartido; las cargas ajenas al experimento quedan fuera del dominio de fallo y no son
+seleccionables por los inyectores. Las flechas continuas indican tráfico de la carga de trabajo;
+la discontinua, la política de red del escenario F3. Fuente: elaboración propia a partir de los
+manifiestos depositados.}
+\label{fig:s1}
+\end{figure}
 
 \section{Derivaciones trasladadas desde el artículo}
 

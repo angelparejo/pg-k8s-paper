@@ -51,7 +51,7 @@ El disparador documentado es más simple y da cuenta de los tres escenarios: el 
 | T1 | Patroni no despliega etcd propio en Kubernetes: emplea objetos nativos (`Endpoints`/`ConfigMaps`) como DCS, igual que Zalando (Spilo) y Crunchy PGO v5. Ambos enfoques descansan en el *API server*; lo que los separa es **quién decide** la promoción |
 | T2a | El *kubelet* no recrea el pod eliminado: CNPG gestiona los pods directamente, sin `StatefulSet` |
 | T2b | `node-monitor-grace-period` ≈50 s por defecto en Kubernetes v1.34; la documentación de CNPG sitúa en 40–55 s el intervalo hasta que el pod queda no listo |
-| T2c | Un volumen RWO de un nodo caído no se desasocia hasta vencer el temporizador de *attach/detach* (≈6 min) o aplicarse `node.kubernetes.io/out-of-service` (Tabla S1) |
+| T2c | Un volumen RWO de un nodo caído no se desasocia hasta vencer el temporizador de *attach/detach* (≈6 min) o aplicarse `node.kubernetes.io/out-of-service` (Tabla S2) |
 | T4 | CNPG es *shared-nothing*: cada instancia tiene su PVC y la réplica promovida ya lo tiene montado, de modo que la reasociación CSI **no está en el camino crítico del failover**. Se ha retirado por completo el argumento de que F2 fuera «cota inferior» del RTO ante fallo de nodo |
 
 ### Obligatorio 4 — Restringir F3, informar sobre el *API server* y la comprobación de aislamiento, incorporar Sivko (T3, O15; A2-2)
@@ -73,7 +73,7 @@ Añadimos una precisión que el informe no pedía: **la salvedad sobre el tráfi
 
 **ATENDIDO.**
 
-- **Ecuaciones (2)–(5): retiradas.** Compartimos su diagnóstico: una función no especificada no aporta información. Se conserva `S = (O, K, M, D)` como vocabulario descriptivo en prosa y el reparto por capas (Tabla S1), que es la única relación de la que damos cuenta. La Ec. (6) también se retira: era, como usted indica, una definición de conjunto.
+- **Ecuaciones (2)–(5): retiradas.** Compartimos su diagnóstico: una función no especificada no aporta información. Se conserva `S = (O, K, M, D)` como vocabulario descriptivo en prosa y el reparto por capas (Tabla S2), que es la única relación de la que damos cuenta. La Ec. (6) también se retira: era, como usted indica, una definición de conjunto.
 - **Dimensión de rendimiento: eliminada** (O6). No se midió, de modo que hemos optado por suprimirla en lugar de declararla.
 - **Título:** ajustado al alcance real.
 - **Taxonomía:** rehecha con criterios explícitos y excluyentes. Los operadores se ordenan por **quién decide la promoción** (central en CNPG; distribuida vía Patroni en Zalando y Crunchy v5), lo que resuelve la incoherencia que usted señalaba sobre Crunchy. El almacenamiento se ordena por **dónde reside el dominio de fallo del volumen** (adosado al nodo / replicado / externo al clúster), lo que elimina el solapamiento entre «distribuido» y «en red» que hacía ambiguos Ceph RBD y la SAN.
@@ -117,7 +117,7 @@ Sobre la antiafinidad: tiene usted razón. Era **preferente**, que es la modalid
 | **O6** — pgbench o eliminar P(S) | **Atendido:** dimensión eliminada |
 | **O14** — valores individuales en el texto principal | **Atendido:** la Fig. 1 es ahora un gráfico de puntos con las veinte ejecuciones y sus medianas. Confirmamos que el depósito está abierto y completo |
 | **E3, E4** — precisión y deriva | **Atendido** (véase abajo) |
-| **O8** — condensar las Secciones 3 y 4 | **Atendido:** fusionadas en una sola, suprimidas tres subsecciones especulativas y trasladada la tabla de responsabilidades al suplemento (Tabla S1) |
+| **O8** — condensar las Secciones 3 y 4 | **Atendido:** fusionadas en una sola, suprimidas tres subsecciones especulativas y trasladada la tabla de responsabilidades al suplemento (Tabla S2) |
 | **T6** — período de gracia de pod-kill | **Atendido:** F1 se inyectó sin `gracePeriod`, luego rigió el valor por defecto de Chaos Mesh: terminación abrupta, sin apagado ordenado |
 | **T5** — SAN frente a almacenamiento local | **Diferido** al estudio comparativo de la Fase 2 |
 | Aspectos formales | **Atendidos** (véase abajo) |
@@ -135,7 +135,7 @@ De acuerdo. Se ha reducido a la separación de los lotes y la diferencia de Hodg
 
 ### Aspectos formales
 1. **Ecuaciones:** retiradas (O5).
-2. **Figuras:** suprimida la del banco de pruebas (texto ilegible al tamaño de impresión); la línea temporal esquemática se sustituye por el gráfico de puntos que usted propone; suprimida la del predicado de visibilidad.
+2. **Figuras:** las tres observaciones están atendidas. La del banco de pruebas, que usted señaló por su texto ilegible al tamaño de impresión, se **rehízo en formato vectorial** —donde la legibilidad no depende de la resolución— y, por el límite de extensión, se traslada al material suplementario como Fig. S1, citada desde la Sección 4.1. La línea temporal esquemática se sustituye por el gráfico de puntos con las diez ejecuciones de F1 y F2 que usted propone. Y la del predicado de visibilidad se suprime, al haberse retirado el predicado.
 3. **Tabla 1:** la columna pasa a «Indisp. (mediana)», se añade la columna `n` y una nota aclara que **solo F1 es un tiempo de recuperación en sentido propio** (O16).
 4. **Terminología:** unificada; cuartiles como `Q1–Q3`; cursiva consistente en los términos en inglés.
 5. **Referencias:** corregidas, incorporadas y depuradas. La bibliografía se compone ahora en bandera, lo que elimina las URL separadas por espacios.
