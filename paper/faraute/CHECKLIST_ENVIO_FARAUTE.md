@@ -174,3 +174,23 @@ Todos satisfechos por la plantilla LaTeX; deja constancia al revisar el PDF:
 - La **versión de 12 pp es la que se envía**; la de 18 pp es solo tu referencia.
 - El **suplemento** (`replication/supplement/suplemento.pdf`) carga el detalle que el recorte quitó del cuerpo — respalda las respuestas a árbitros.
 - Informes de validación previos en `quality_reports/reviews/faraute_*.md`.
+
+---
+
+## Reenvío tras arbitraje (2026-10-07)
+
+- [x] Artículo revisado, **12 páginas** — `paper/faraute/main.pdf`
+- [x] Compila limpio con `xelatex` (3 pasadas): 0 errores, 0 overfull, 0 `Missing character`, 0 referencias sin resolver ni huérfanas
+- [x] Resumen 148 palabras (límite 150); 5 palabras clave en orden alfabético
+- [x] Sangría en el primer párrafo tras encabezado (`indentfirst`), medida contra el número publicado
+- [x] Orden de citas múltiples verificado: cronológico y luego alfabético, en las 12
+- [x] Figura exportada aparte en JPEG, escala de grises, 300 dpi (punto 9 de la guía) — `figuras_envio/Fig1.jpg`
+- [x] Suplemento, 6 páginas, sincronizado con el artículo
+- [x] Carta de respuesta punto por punto — `carta_respuesta_arbitros.md`
+- [x] **Paquete de entrega** — `paper/faraute/entrega-latex.zip`, reproducible con
+      `scripts/armar_entrega_faraute.sh`. Verificado: compila desde cero en un directorio
+      limpio, 12 pp, 0 errores
+- [x] Depósito actualizado a **v1.1-fase1** — `zenodo-deposito-fase1.zip`, 57 ficheros
+- [ ] Publicar la v1.1 en Zenodo (el concept DOI no cambia)
+- [ ] ORCID de la coautora
+- [ ] Limpiar los commits locales antes de empujar (llevan identificadores de infraestructura)
