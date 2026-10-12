@@ -3,6 +3,23 @@
 %% Para el arbitraje: \documentclass[revision]{faraute}
 \documentclass{faraute}
 \input{datos}
+
+%% ---------------------------------------------------------------------
+%%  La version corta es la entrega anterior trasladada a la plantilla, de
+%%  modo que conserva sus declaraciones tal como se enviaron. Estas dos
+%%  macros sobrescriben las de datos.tex, que son las de la version extensa.
+%%  Los nombres de los autores van tras \sianonimo porque la clase NO oculta
+%%  la declaracion de IA en modo [revision] y los filtrarian.
+%% ---------------------------------------------------------------------
+\declaracionIA{En la preparación de este manuscrito se emplearon herramientas
+de inteligencia artificial generativa únicamente para mejorar la redacción, la
+gramática y el estilo; la concepción, el modelo, la ejecución experimental, el
+análisis y las conclusiones son obra de los
+autores\sianonimo{}{ —Herrera C., M. y Parejo R., A.—}, que revisaron y
+validaron todo el contenido.}
+
+\conflictos{La investigación no recibió financiamiento externo y los autores
+declaran no tener conflictos de interés.}
 \begin{document}
 \maketitle
 \input{contenido-corta}
