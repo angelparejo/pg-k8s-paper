@@ -63,8 +63,21 @@
 %% Nota al pie de una tabla. La guía pide la fuente dentro de la leyenda,
 %% pero la nota de la Tabla 1 es extensa y arriba resultaría ilegible, de
 %% modo que la leyenda queda arriba (como manda la clase) y la nota debajo.
+%% Excepciones de guionado. Dos motivos:
+%%  - nombres propios y palabras clave que no deben partirse nunca;
+%%  - terminos ingleses de los titulos de la bibliografia, que babel silabea
+%%    con los patrones del espanol y produce cortes falsos («wor-kloads»
+%%    parte «work» por la mitad, «sta-teful» parte «state»).
+\hyphenation{%
+  COMMIT CloudNativePG PostgreSQL Kubernetes ZooKeeper SummerSOC
+  work-loads state-ful Data-base Pro-ceed-ings Lim-i-ta-tions
+  Doc-u-men-ta-tion tol-er-a-tions op-er-a-tor de-ploy-ments sup-port-ing
+}
+\usepackage{ragged2e}
+%% \justifying es imprescindible: el entorno table abre con \centering y la
+%% nota lo hereda, de modo que sin esto sale centrada en vez de justificada.
 \newcommand{\notatabla}[1]{%
-  \par\vspace{3pt}\begingroup\footnotesize\textbf{Nota:}~#1\par\endgroup}
+  \par\vspace{3pt}\begingroup\footnotesize\justifying\textbf{Nota:}~#1\par\endgroup}
 
 \usepackage{tikz}
 \usetikzlibrary{positioning,fit,backgrounds,calc}
