@@ -20,13 +20,13 @@
 %% El correo entre corchetes marca al autor de correspondencia.
 %% NOTA: la clase compone «Nombre Apellido»; no admite la forma
 %% «Apellido, N.» que pidió el jurado para la versión anterior.
-\autor[1]{Mirella}{Herrera}
-\autor[1]{Angel A.}{Parejo R.}[angelparejo@gmail.com]
+\autor[1]{Mirella}{Herrera C.}
+\autor[1]{Angel}{Parejo R.}[angelparejo@gmail.com]
 
 \afiliacion{1}{Facultad Experimental de Ciencias y Tecnología, Universidad de Carabobo. Valencia, Estado Carabobo, Venezuela}
 
 %% Encabezado de página
-\autorescortos{Herrera y Parejo}
+\autorescortos{Herrera C. y Parejo R.}
 
 %% --- Resumen y palabras clave ---------------------------------------
 \resumen{La adopción de Kubernetes para cargas con estado ha consolidado el uso de operadores de PostgreSQL, cuyo comportamiento ante fallos rara vez se mide en producción. Este artículo lo caracteriza empíricamente en CloudNativePG mediante inyección de fallos en un clúster productivo: eliminación del pod primario (F1), indisponibilidad sostenida del contenedor (F2) y partición de red (F3). F1 promovió una réplica en las diez repeticiones, con un RTO mediano de 7,9~s y sin pérdida de transacciones confirmadas. F2 no promovió, pero todo indica que los 36,7~s medidos corresponden a una reconciliación inducida por el propio inyector y no a la reacción ante una indisponibilidad genuina; y en F3 el fallo nunca llegó a ser visible para el plano de control, luego su ausencia de promoción no expresa preferencia por la consistencia. De ahí la contribución: en operadores declarativos, el mecanismo de inyección determina qué se mide.}
@@ -42,7 +42,7 @@
 
 %% CRediT. PENDIENTE DE REVISIÓN POR LOS AUTORES: este reparto refleja lo
 %% que consta en la bitácora del proyecto; confírmese antes de enviar.
-\contribuciones{A.~A.~Parejo~R.: conceptualización, metodología, software, investigación, curación de datos, análisis formal, visualización y redacción del borrador original. M.~Herrera: supervisión, validación y revisión y edición de la redacción (taxonomía CRediT).}
+\contribuciones{A.~Parejo~R.: conceptualización, metodología, software, investigación, curación de datos, análisis formal, visualización y redacción del borrador original. M.~Herrera~C.: supervisión, validación y revisión y edición de la redacción (taxonomía CRediT).}
 
 \conflictos{Los autores declaran no tener conflictos de intereses. La investigación no recibió financiamiento externo.}
 
@@ -53,6 +53,12 @@
 \declaracionIA{Durante la preparación de este trabajo los autores usaron Claude (Anthropic; modelos Claude Sonnet y Claude Opus) entre febrero y octubre de 2026, con asistencia que excedió la corrección ortográfica y gramatical. En concreto: redacción y edición del texto en español; escritura de los guiones de análisis en Python que calculan las medianas, los cuartiles y los contrastes reportados; verificación de las referencias bibliográficas contra sus fuentes primarias y obtención de los identificadores DOI; generación de las figuras a partir de los datos; y apoyo en la reinterpretación de los escenarios tras el arbitraje. El diseño experimental, la ejecución de las inyecciones sobre el clúster, la obtención de las mediciones y las conclusiones son obra de los autores. Después de usar la herramienta, los autores revisaron y editaron el contenido, comprobaron las cifras ejecutando los guiones depositados, verificaron una por una la existencia y exactitud de las referencias, y asumen la responsabilidad íntegra por el contenido del artículo.}
 
 %% --- Paquetes y macros propias ---------------------------------------
+%% Nota al pie de una tabla. La guía pide la fuente dentro de la leyenda,
+%% pero la nota de la Tabla 1 es extensa y arriba resultaría ilegible, de
+%% modo que la leyenda queda arriba (como manda la clase) y la nota debajo.
+\newcommand{\notatabla}[1]{%
+  \par\vspace{3pt}\begingroup\footnotesize\textbf{Nota:}~#1\par\endgroup}
+
 \usepackage{tikz}
 \usetikzlibrary{positioning,fit,backgrounds,calc}
 \usepackage{pgfplots}
