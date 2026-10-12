@@ -72,7 +72,7 @@ Ante el fallo del pod primario, $O$ detecta y promueve, $K$ restablece el enruta
 
 
 \section{Metodología experimental}\label{sec:metodo}
-Todo lo que se afirma en esta sección y en la siguiente es auditable: los manifiestos del clúster, de la carga y de cada inyección, el \textit{tx-verifier}, los scripts de análisis y las series de RTO y RPO por repetición están depositados en Zenodo \sianonimo{(DOI omitido por el anonimato del arbitraje)}{(DOI: 10.5281/\allowbreak zenodo.23004248)}, y se citan en adelante por su ruta dentro del paquete.
+Todo lo que se afirma en esta sección y en la siguiente es auditable: los manifiestos del clúster, de la carga y de cada inyección, el \textit{tx-verifier}, los scripts de análisis y las series de RTO y RPO por repetición están depositados en \sianonimo{un repositorio publico con identificador permanente (el DOI se omite por el anonimato del arbitraje)}{Zenodo (DOI: 10.5281/\allowbreak zenodo.23004248)}, y se citan en adelante por su ruta dentro del paquete.
 
 \subsection{Entorno, aislamiento y alcance}\label{sec:entorno}
 El experimento se ejecutó sobre un clúster Kubernetes en producción (v1.34.6) con PostgreSQL 16.13, CloudNativePG (CNPG) 1.28.0, red gestionada por Calico 3.31.4 y almacenamiento en red del controlador CSI de Huawei 4.10.1 (\texttt{csi.huawei.com}) sobre \textit{Fibre Channel}, aprovisionado por una \textit{StorageClass} con retención de volúmenes y enlace diferido al primer consumidor.
