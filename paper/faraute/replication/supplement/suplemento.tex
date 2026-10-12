@@ -134,7 +134,7 @@ Ordena la promoción de una réplica si el primario residía en el nodo afectado
 Marca el nodo \textit{NotReady} ($\approx$50~s por defecto en Kubernetes v1.34, \textit{node-monitor-grace-period}; la documentación de CNPG sitúa entre 40 y 55~s el intervalo hasta que el pod queda marcado como no listo) y desaloja los pods tras el umbral de tolerancia ($\approx$5~min por defecto, \textit{tolerationSeconds}) (Kubernetes, 2026a) &
 Local: datos inaccesibles hasta recuperar el nodo. En red o distribuido: un volumen RWO de un nodo caído no se desasocia hasta que vence el temporizador del controlador de \textit{attach/detach} ($\approx$6~min) o se aplica la marca \texttt{node.kubernetes.io/\allowbreak out-of-\allowbreak service} \\
 Partición de red &
-Debe evitar el \textit{split-brain}: cercado (\textit{fencing}) del antiguo primario (Patroni: expiración del \textit{lease} en el DCS, que en Kubernetes son objetos nativos —\textit{Endpoints} o \textit{ConfigMaps}— y no un etcd propio; CloudNativePG: estado reconciliado en el \textit{API server}) &
+Debe evitar el \textit{split-brain}: cercado (\textit{fencing}) del antiguo primario (Patroni: expiración de la clave de líder en el DCS, que en Kubernetes son objetos nativos —\textit{Endpoints} o \textit{ConfigMaps}— y no un etcd propio; CloudNativePG: estado reconciliado en el \textit{API server}) &
 El \textit{API server} actúa como punto único de coordinación; una minoría del plano de control bloquea la reconciliación &
 En red: E/S bloqueada o degradada; distribuido: la pérdida de quórum puede congelar las escrituras \\
 \bottomrule
