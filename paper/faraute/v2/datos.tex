@@ -1,0 +1,59 @@
+%% =====================================================================
+%%  datos.tex — Metadatos del artículo. Común a las dos versiones.
+%%  Revista FARAUTE de Ciencias y Tecnología (FACYT-UC), plantilla v2.
+%% =====================================================================
+
+%% --- Tipo de contribución -------------------------------------------
+%% PENDIENTE DE CONFIRMAR CON LA REVISTA: la clase admite «Artículo
+%% científico», «Artículo divulgativo de investigación», «Artículo de
+%% actualización científica», «Nota técnica» y «Carta al editor».
+\tipodecontribucion{Artículo científico}
+
+%% --- Títulos ---------------------------------------------------------
+\titulo{Caracterización empírica de la conmutación por error de CloudNativePG en Kubernetes: RTO, RPO y los límites de la inyección de fallos}
+
+\tituloingles{Empirical Characterization of CloudNativePG Failover in Kubernetes: RTO, RPO, and the Limits of Fault Injection}
+
+\titulocorto{Conmutación por error de CloudNativePG en Kubernetes}
+
+%% --- Autores ---------------------------------------------------------
+%% El correo entre corchetes marca al autor de correspondencia.
+%% NOTA: la clase compone «Nombre Apellido»; no admite la forma
+%% «Apellido, N.» que pidió el jurado para la versión anterior.
+\autor[1]{Mirella}{Herrera}
+\autor[1]{Angel A.}{Parejo R.}[angelparejo@gmail.com]
+
+\afiliacion{1}{Facultad Experimental de Ciencias y Tecnología, Universidad de Carabobo. Valencia, Estado Carabobo, Venezuela}
+
+%% Encabezado de página
+\autorescortos{Herrera y Parejo}
+
+%% --- Resumen y palabras clave ---------------------------------------
+\resumen{La adopción de Kubernetes para cargas con estado ha consolidado el uso de operadores de PostgreSQL, cuyo comportamiento ante fallos rara vez se mide en producción. Este artículo lo caracteriza empíricamente en CloudNativePG mediante inyección de fallos en un clúster productivo: eliminación del pod primario (F1), indisponibilidad sostenida del contenedor (F2) y partición de red (F3). F1 promovió una réplica en las diez repeticiones, con un RTO mediano de 7,9~s y sin pérdida de transacciones confirmadas. F2 no promovió, pero todo indica que los 36,7~s medidos corresponden a una reconciliación inducida por el propio inyector y no a la reacción ante una indisponibilidad genuina; y en F3 el fallo nunca llegó a ser visible para el plano de control, luego su ausencia de promoción no expresa preferencia por la consistencia. De ahí la contribución: en operadores declarativos, el mecanismo de inyección determina qué se mide.}
+
+\palabrasclave{CloudNativePG; conmutación por error; inyección de fallos; Kubernetes; PostgreSQL}
+
+\resumeningles{The adoption of Kubernetes for stateful workloads has consolidated the use of PostgreSQL operators, whose behaviour under failure is rarely measured in production. This paper empirically characterizes CloudNativePG failover through fault injection on a production cluster: primary pod deletion (F1), sustained container unavailability (F2), and network partition (F3). F1 promoted a replica in all ten repetitions, with a median RTO of 7.9~s and no loss of committed transactions. F2 did not promote, but the 36.7~s measured are most plausibly attributable to an operator reconciliation induced by the injector itself rather than to the reaction to genuine unavailability; and in F3 the fault never became visible to the control plane, so the absence of promotion does not express a preference for consistency. Hence the methodological contribution: in declarative operators, the injection mechanism determines what is measured.}
+
+\palabrasclaveingles{CloudNativePG; failover; fault injection; Kubernetes; PostgreSQL}
+
+%% --- Secciones finales ----------------------------------------------
+\agradecimientos{Los autores agradecen al equipo de operaciones del clúster, que autorizó la ejecución del experimento en un entorno productivo y delimitó sus condiciones de aislamiento.}
+
+%% CRediT. PENDIENTE DE REVISIÓN POR LOS AUTORES: este reparto refleja lo
+%% que consta en la bitácora del proyecto; confírmese antes de enviar.
+\contribuciones{A.~A.~Parejo~R.: conceptualización, metodología, software, investigación, curación de datos, análisis formal, visualización y redacción del borrador original. M.~Herrera: supervisión, validación y revisión y edición de la redacción (taxonomía CRediT).}
+
+\conflictos{Los autores declaran no tener conflictos de intereses. La investigación no recibió financiamiento externo.}
+
+\disponibilidad{Las series de RTO e indisponibilidad por repetición, el recuento de la tabla de verdad del que se deriva el RPO, los manifiestos del clúster y de cada inyección, el cliente verificador de transacciones, la carga de trabajo y los guiones de análisis se depositan públicamente en Zenodo (\url{https://doi.org/10.5281/zenodo.23004248}). Con ese material se reproducen las cifras del artículo y se replica el diseño en un clúster equivalente. Los registros crudos del verificador, las marcas del arnés de ejecución y los eventos del plano de control quedaron en el clúster productivo y no se conservaron: el entorno ya no está disponible y no pueden facilitarse. El alcance de lo que ello permite afirmar se declara en la sección de resultados.}
+
+%% Declaración de uso de IA, según la sección 7 de la guía.
+%% PENDIENTE DE REVISIÓN POR LOS AUTORES antes del envío.
+\declaracionIA{Durante la preparación de este trabajo los autores usaron Claude (Anthropic; modelos Claude Sonnet y Claude Opus) entre febrero y octubre de 2026, con asistencia que excedió la corrección ortográfica y gramatical. En concreto: redacción y edición del texto en español; escritura de los guiones de análisis en Python que calculan las medianas, los cuartiles y los contrastes reportados; verificación de las referencias bibliográficas contra sus fuentes primarias y obtención de los identificadores DOI; generación de las figuras a partir de los datos; y apoyo en la reinterpretación de los escenarios tras el arbitraje. El diseño experimental, la ejecución de las inyecciones sobre el clúster, la obtención de las mediciones y las conclusiones son obra de los autores. Después de usar la herramienta, los autores revisaron y editaron el contenido, comprobaron las cifras ejecutando los guiones depositados, verificaron una por una la existencia y exactitud de las referencias, y asumen la responsabilidad íntegra por el contenido del artículo.}
+
+%% --- Paquetes y macros propias ---------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{positioning,fit,backgrounds,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
