@@ -1,0 +1,25 @@
+%% =====================================================================
+%%  articulo.tex — Archivo principal. NO es necesario modificarlo.
+%%
+%%  Compile este archivo (pdfLaTeX + Biber):
+%%     latexmk -pdf articulo.tex
+%%  o, a mano:  pdflatex articulo  ->  biber articulo  ->  pdflatex articulo (x2)
+%%
+%%  Opciones de la clase (entre corchetes):
+%%     revision   versión anónima y con líneas numeradas, para el arbitraje
+%%     anonimo    solo oculta la identidad de los autores
+%%     lineas     solo numera las líneas
+%%     ingles     el artículo está escrito en inglés
+%%     bibmanual  referencias escritas a mano en referencias.tex
+%%                (thebibliography) en lugar de referencias.bib
+%%  Ejemplo:  \documentclass[revision]{faraute}
+%% =====================================================================
+\documentclass{faraute}
+
+\input{datos}          % título, autores, resumen, palabras clave, macros propias
+
+\begin{document}
+\maketitle
+\input{contenido}      % cuerpo del artículo
+\finaldelarticulo      % agradecimientos, declaraciones, nota y referencias
+\end{document}

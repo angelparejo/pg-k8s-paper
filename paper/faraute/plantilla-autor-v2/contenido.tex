@@ -1,0 +1,107 @@
+%% =====================================================================
+%%  contenido.tex — Cuerpo del artículo (lo escribe el AUTOR)
+%%  Empieza en la Introducción y termina en las Conclusiones.
+%%  No incluya aquí título, resumen, agradecimientos ni referencias.
+%% =====================================================================
+
+\section{Introducción}
+\label{sec:intro}
+
+Muchas matrices que aparecen en la práctica, como imágenes, paneles de series de tiempo o tablas de mediciones, están gobernadas por pocos patrones dominantes, de modo que admiten una buena aproximación de rango bajo \citep{fessler2024linear}. La herramienta central para construirla es la descomposición en valores singulares (SVD), cuya optimalidad establece el teorema de \citet{eckart1936approximation}.
+
+Este documento sirve de plantilla: su estructura es la que exige la guía para autores (introducción, cuerpo con materiales y métodos, resultados y discusión, y conclusiones) y cada elemento tipográfico aparece al menos una vez. Las citas se escriben con \verb|\citep{clave}| (entre paréntesis) o \verb|\citet{clave}| (narrativa); varias obras se separan con comas dentro de la misma orden, como en \citep{golub2013matrix,candes2009exact}. Para apoyar un resultado concreto se añade el localizador: \citep[cap.~7]{fessler2024linear}.
+
+\section{Fundamentos teóricos}
+\label{sec:teoria}
+
+\subsection{Descomposición en valores singulares}
+
+Sea $X\in\R^{m\times n}$ con $r=\rango(X)$. Existen matrices $U\in\R^{m\times r}$ y $V\in\R^{n\times r}$ de columnas ortonormales y $\Sigma=\operatorname{diag}(\sigma_1,\dots,\sigma_r)$, con $\sigma_1\ge\dots\ge\sigma_r>0$, tales que
+\begin{equation}
+  X = U\Sigma V^{\top} = \sum_{i=1}^{r}\sigma_i\,u_i v_i^{\top}.
+  \label{eq:svd}
+\end{equation}
+Las ecuaciones se numeran solas y se citan como \refec{eq:svd}, con la orden \verb|\refec{etiqueta}|.
+
+\subsection{Aproximación óptima de rango bajo}
+
+\begin{teorema}[Eckart--Young]
+\label{teo:ey}
+Para $k<r$, la matriz $X_k=\sum_{i=1}^{k}\sigma_i u_i v_i^{\top}$ cumple
+\begin{equation}
+  X_k \in \argmin_{\rango(Z)\le k}\norm{X-Z}_F,
+  \qquad
+  \norm{X-X_k}_F^2=\sum_{i>k}\sigma_i^2 .
+  \label{eq:ey}
+\end{equation}
+\end{teorema}
+
+\begin{demostracion}
+Véase \citet{eckart1936approximation} o \citet[sec.~2.4]{golub2013matrix}.
+\end{demostracion}
+
+La clase ofrece los entornos \texttt{teorema}, \texttt{lema}, \texttt{proposicion}, \texttt{corolario}, \texttt{definicion}, \texttt{ejemplo}, \texttt{observacion} y \texttt{demostracion}, con numeración compartida.
+
+\section{Datos y método}
+\label{sec:metodo}
+
+\subsection{Datos sintéticos}
+
+Se genera $X=U\,\operatorname{diag}(10,8,6,4,2)\,V^{\top}\in\R^{200\times120}$, con $U$ y $V$ obtenidas por factorización QR de matrices gaussianas, y se observa $Y=X+\sigma_\varepsilon E$, con $E$ de entradas normales estándar independientes y $\sigma_\varepsilon\in\{0;\;0{,}02;\;0{,}05\}$. La semilla del generador es 2026. Como la verdad $X$ es conocida, el error de recuperación puede medirse directamente.
+
+\subsection{Algoritmo}
+
+Los algoritmos se escriben en el entorno \texttt{algorithm} con \texttt{algpseudocode}; se numeran solos y se citan con \verb|\refalg{etiqueta}|, como el \refalg{alg:svdt}.
+
+\begin{algorithm}[htbp]
+\caption{Aproximación de rango $k$ por SVD truncada.}
+\label{alg:svdt}
+\begin{algorithmic}[1]
+\Require $Y\in\R^{m\times n}$, rango objetivo $k$
+\Ensure $\widehat{X}_k$
+\State $[U,\Sigma,V]\gets\operatorname{svd}(Y)$ \Comment{SVD compacta}
+\State $\widehat{X}_k\gets U_{:,1:k}\,\Sigma_{1:k,1:k}\,V_{:,1:k}^{\top}$
+\State \Return $\widehat{X}_k$
+\end{algorithmic}
+\end{algorithm}
+
+\section{Resultados}
+\label{sec:resultados}
+
+La Fig.~\ref{fig:valores} muestra los veinte primeros valores singulares de $Y$ para cada nivel de ruido. Los cinco primeros apenas cambian; a partir del sexto aparece el ruido, cuyo mayor valor singular es del orden de $\sigma_\varepsilon(\sqrt{m}+\sqrt{n})$, es decir, $0{,}50$ y $1{,}26$, por debajo de $\sigma_5=2$. Por eso el rango verdadero sigue siendo visible.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\columnwidth]{valores-singulares}
+  \caption{Valores singulares de $Y$ para tres niveles de ruido (escala logarítmica). La línea vertical separa el rango verdadero $r=5$; las horizontales marcan $\sigma_\varepsilon(\sqrt{m}+\sqrt{n})$. Fuente: elaboración propia.}
+  \label{fig:valores}
+\end{figure}
+
+La Tabla~\ref{tab:errores} compara el error relativo de la observación, $\norm{Y-X}_F/\norm{X}_F$, con el de la aproximación de rango 5. La SVD truncada reduce el error a cerca de la cuarta parte en ambos casos con ruido, como anticipa \refec{eq:ey}.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Error relativo en norma de Frobenius frente a la verdad $X$ (semilla 2026).}
+  \label{tab:errores}
+  \begin{tabular}{@{}ccc@{}}
+    \toprule
+    $\sigma_\varepsilon$ & $\norm{Y-X}_F/\norm{X}_F$ & $\norm{\widehat{X}_5-X}_F/\norm{X}_F$ \\
+    \midrule
+    0      & 0      & 0      \\
+    0,02   & 0,2076 & 0,0546 \\
+    0,05   & 0,5233 & 0,1349 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Las figuras llevan la leyenda debajo y las tablas encima; ambas terminan indicando la fuente. Una figura o tabla que ocupe las dos columnas se escribe con \texttt{figure*} o \texttt{table*}. Las imágenes van en la carpeta \texttt{figuras/}, a 300~ppp como mínimo; pueden ser a color, pero la información no debe depender solo del color (use también marcadores o tipos de línea, como en la Fig.~\ref{fig:valores}).
+
+\section{Discusión}
+\label{sec:discusion}
+
+El ejemplo ilustra la condición práctica para que la truncación funcione: que el menor valor singular de la señal supere el nivel del ruido. Cuando esa brecha no existe, la elección de $k$ requiere un criterio, como el umbral óptimo de \citet{gavish2014optimal}. Los cálculos se hicieron con NumPy \citep{harris2020array}; la versión del software y la semilla deben declararse para que el experimento sea reproducible.
+
+\section{Conclusiones}
+\label{sec:conclusiones}
+
+La plantilla separa lo que es del autor (\texttt{datos.tex} y \texttt{contenido.tex}) de lo que es del editor (volumen, número, páginas, fechas y banner). El autor compila su artículo tal como se verá en la revista, sin preocuparse por los datos de publicación.

@@ -1,0 +1,87 @@
+%% =====================================================================
+%%  datos.tex — Datos del artículo (los completa el AUTOR)
+%%
+%%  Aquí NO van: volumen, número, año, páginas, banner, ISSN ni fechas
+%%  de recepción/aceptación. Esos datos los coloca el editor.
+%% =====================================================================
+
+%% ---------------------------------------------------------------------
+%% 1. Tipo de contribución (uno de los de la guía para autores)
+%%    Artículo científico | Artículo divulgativo de investigación |
+%%    Artículo de actualización científica | Nota técnica |
+%%    Artículo de invitado especial | Carta al editor
+%% ---------------------------------------------------------------------
+\tipodecontribucion{Artículo divulgativo de investigación}
+
+%% ---------------------------------------------------------------------
+%% 2. Títulos
+%%    \titulocorto va en el encabezado de las páginas pares/impares
+%%    (máximo unas 8 palabras).
+%% ---------------------------------------------------------------------
+\titulo{Aproximación de rango bajo mediante la SVD truncada: ejemplo de uso de la plantilla FARAUTE}
+\tituloingles{Low-rank approximation via the truncated SVD: an example of the FARAUTE template}
+\titulocorto{Aproximación de rango bajo mediante la SVD}
+
+%% ---------------------------------------------------------------------
+%% 3. Autores y afiliaciones
+%%    \autor[afiliaciones]{Nombre(s)}{Apellido(s)}[correo]
+%%    - Las afiliaciones son números separados por comas: [1,2]
+%%    - Si se escribe [correo] al final, ese autor queda marcado con *
+%%      como autor de correspondencia (puede haber más de uno).
+%%    - Nombre completo, inicial del segundo nombre, primer apellido
+%%      completo e inicial del segundo (guía para autores).
+%% ---------------------------------------------------------------------
+\autor[1]{Nombre A.}{Apellido B.}[autor.uno@uc.edu.ve]
+\autor[1,2]{Nombre C.}{Apellido D.}
+
+\afiliacion{1}{Departamento de Matemáticas, Facultad Experimental de Ciencias y Tecnología, Universidad de Carabobo. Naguanagua, Edo. Carabobo, Venezuela}
+\afiliacion{2}{Centro Multidisciplinario de Visualización y Cómputo Científico (CEMVICC), Facultad Experimental de Ciencias y Tecnología, Universidad de Carabobo}
+
+% Opcional: forma corta de los autores para el encabezado. Si se omite,
+% se genera sola: "Apellido", "Apellido1 y Apellido2" o "Apellido1 et al."
+% \autorescortos{Apellido B. y Apellido D.}
+
+%% ---------------------------------------------------------------------
+%% 4. Resumen y abstract: máximo 150 palabras, sin referencias.
+%%    Palabras clave: de 3 a 5, en orden alfabético, separadas por ";".
+%%    (La clase avisa en el registro de compilación si no se cumple.)
+%% ---------------------------------------------------------------------
+\resumen{Este documento es a la vez un ejemplo y una guía de la plantilla de la revista FARAUTE. Se ilustra el uso de la descomposición en valores singulares (SVD) truncada para aproximar una matriz de rango bajo contaminada con ruido gaussiano. Sobre una matriz sintética de $200\times120$ y rango 5, con semilla fija, la aproximación de rango 5 reduce el error relativo de 0,208 a 0,055 cuando la desviación del ruido es 0,02, y de 0,523 a 0,135 cuando es 0,05. El texto muestra, sobre este caso, cómo se escriben las ecuaciones, los teoremas, los algoritmos, las figuras, las tablas y las citas autor-año en la revista.}
+\palabrasclave{aproximación de rango bajo; descomposición en valores singulares; plantilla; teorema de Eckart--Young}
+
+\resumeningles{This document is both an example and a guide to the FARAUTE journal template. It illustrates the use of the truncated singular value decomposition (SVD) to approximate a low-rank matrix corrupted by Gaussian noise. On a synthetic $200\times120$ matrix of rank 5 with a fixed seed, the rank-5 approximation reduces the relative error from 0.208 to 0.055 when the noise standard deviation is 0.02, and from 0.523 to 0.135 when it is 0.05. Using this case, the text shows how equations, theorems, algorithms, figures, tables and author--year citations are written in the journal.}
+\palabrasclaveingles{Eckart--Young theorem; low-rank approximation; singular value decomposition; template}
+
+%% ---------------------------------------------------------------------
+%% 5. Secciones finales. Se imprimen solas, en este orden, antes de las
+%%    referencias. Obligatorias: \conflictos, \disponibilidad y, si se usó
+%%    IA, \declaracionIA; \contribuciones si hay más de un autor.
+%%    Borre o comente las que no use.
+%% ---------------------------------------------------------------------
+\agradecimientos{Los autores agradecen a ... por ...}
+\contribuciones{N.~A.~Apellido: conceptualización, software, redacción del borrador. N.~C.~Apellido: metodología, supervisión, revisión y edición (taxonomía CRediT).}
+\conflictos{Los autores declaran que no tienen conflictos de intereses.}
+\disponibilidad{El código y los datos sintéticos que reproducen la Tabla~\ref{tab:errores} y la Fig.~\ref{fig:valores} están disponibles en \url{https://github.com/usuario/repositorio} (semilla 2026).}
+% Obligatoria si se usó IA (ver la guía para autores, sección 6). Modelo:
+\declaracionIA{Durante la preparación de este trabajo los autores usaron [herramienta] ([proveedor], versión o modelo [...]) entre [mes y año] y [mes y año] para [tareas concretas, p. ej., revisar la redacción de las secciones 1 y 5 y depurar el código del experimento]. Después de usarla, los autores revisaron y editaron el contenido, verificaron [cálculos, referencias, código] y asumen la responsabilidad íntegra por el contenido del artículo.}
+% \nota{Texto de una nota final, por ejemplo el contexto académico del trabajo.}
+
+%% ---------------------------------------------------------------------
+%% 6. Referencias: por defecto se usa referencias.bib (APA 7, Biber).
+%%    Si usa otro archivo .bib, declárelo aquí:
+%% ---------------------------------------------------------------------
+% \bibliografia{otro-archivo.bib}
+
+%% ---------------------------------------------------------------------
+%% 7. Paquetes y macros propios del artículo
+%%    La clase YA carga: amsmath, mathtools, amsthm, símbolos AMS,
+%%    graphicx, xcolor, booktabs, tabularx, multirow, array, colortbl,
+%%    float, placeins, caption, subcaption, enumitem, xurl, hyperref,
+%%    algorithm + algpseudocode, biblatex (APA). No los vuelva a cargar
+%%    con opciones distintas. Puede agregar otros (tikz, pgfplots,
+%%    siunitx, listings, algorithm2e, ...).
+%% ---------------------------------------------------------------------
+\newcommand{\R}{\mathbb{R}}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclareMathOperator{\rango}{rango}
+\DeclareMathOperator*{\argmin}{arg\,min}
