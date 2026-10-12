@@ -4,6 +4,8 @@
 
 **Título revisado:** «Caracterización empírica de la conmutación por error de CloudNativePG en Kubernetes: RTO, RPO y los límites de la inyección de fallos»
 
+**Formato:** el manuscrito se ha rehecho sobre la plantilla `plantilla-autor-v2` que nos hicieron llegar. Se adjunta el PDF compilado con la opción `revision` (anónimo y con líneas numeradas), según indica el apartado «Qué enviar» de las instrucciones.
+
 **Autores:** Herrera, M.; Parejo, A. (autor de correspondencia)
 **Fecha:** 7 de octubre de 2026
 
@@ -40,7 +42,7 @@ Como usted anticipaba, el hallazgo central desaparece y el aporte pasa a ser la 
 
 La primera es la que usted mismo apuntó en O10: ante un fallo de nodo el objeto Pod **no desaparece** —permanece en `Terminating` hasta que se borre el objeto Node o se aplique `node.kubernetes.io/out-of-service`— y, sin embargo, CloudNativePG promueve. La segunda procede de la fuente que incorporamos a petición suya: en el experimento de aislamiento completo de Sivko (2026) hubo promoción con el pod del primario intacto y corriendo. Citábamos esa fuente sin advertir que refutaba nuestra propia hipótesis.
 
-El disparador documentado es más simple y da cuenta de los tres escenarios: el operador promueve cuando detecta la instancia primaria como no sana, sujeto a `failoverDelay`. Se ha retirado, en consecuencia, el predicado de la lista de contribuciones, de la Sección 5.3, de las conclusiones y la figura que lo ilustraba, junto con las afirmaciones sobre «herramienta reutilizable» y sobre «acercar la teoría a la práctica».
+El disparador documentado es más simple y da cuenta de los tres escenarios: el operador promueve cuando detecta la instancia primaria como no sana, sujeto a `failoverDelay`. Se ha retirado, en consecuencia, el predicado de la lista de contribuciones, de la Sección 5.4, de las conclusiones y la figura que lo ilustraba, junto con las afirmaciones sobre «herramienta reutilizable» y sobre «acercar la teoría a la práctica».
 
 ### Obligatorio 3 — Imprecisiones técnicas (T1, T2, T4; A2-4)
 
@@ -160,7 +162,7 @@ Los siguientes requieren un entorno no productivo, desarrollo de instrumentació
 **Por qué se difiere:** las `NetworkPolicy` de Calico mantienen activo el tráfico de *host* por diseño.
 **Plan:** partición estricta mediante iptables/eBPF que aísle al primario del *API server* y de las réplicas, para ejercitar `isolationCheck` y caracterizar si se producen *split-brain* o escrituras fantasma, incorporando el protocolo de Sivko (2026).
 
-### 3.4 F4 mediante cgroups v2 (Sección 5.2)
+### 3.4 F4 mediante cgroups v2 (Sección 5.3)
 **Por qué se difiere:** incompatibilidad entre el inyector IOChaos basado en FUSE y `readOnlyRootFilesystem: true`, con el que CNPG endurece sus contenedores.
 **Plan:** estrangulamiento de E/S por la interfaz `io.max` de cgroups v2 en el nodo, sin sistemas de archivos en espacio de usuario.
 

@@ -46,13 +46,20 @@
 
 \conflictos{Los autores declaran no tener conflictos de intereses. La investigación no recibió financiamiento externo.}
 
-\disponibilidad{Las series de RTO e indisponibilidad por repetición, el recuento de la tabla de verdad del que se deriva el RPO, los manifiestos del clúster y de cada inyección, el cliente verificador de transacciones, la carga de trabajo y los guiones de análisis se depositan públicamente en Zenodo (\url{https://doi.org/10.5281/zenodo.23004248}). Con ese material se reproducen las cifras del artículo y se replica el diseño en un clúster equivalente. Los registros crudos del verificador, las marcas del arnés de ejecución y los eventos del plano de control quedaron en el clúster productivo y no se conservaron: el entorno ya no está disponible y no pueden facilitarse. El alcance de lo que ello permite afirmar se declara en la sección de resultados.}
+\disponibilidad{Las series de RTO e indisponibilidad por repetición, el recuento de la tabla de verdad del que se deriva el RPO, los manifiestos del clúster y de cada inyección, el cliente verificador de transacciones, la carga de trabajo y los guiones de análisis se depositan públicamente en un repositorio de datos con identificador permanente \sianonimo{(el DOI se omite en esta versión para preservar el anonimato del arbitraje; se ha facilitado al editor en la carta de envío)}{(Zenodo, \url{https://doi.org/10.5281/zenodo.23004248})}. Con ese material se reproducen las cifras del artículo y se replica el diseño en un clúster equivalente. Los registros crudos del verificador, las marcas del arnés de ejecución y los eventos del plano de control quedaron en el clúster productivo y no se conservaron: el entorno ya no está disponible y no pueden facilitarse. El alcance de lo que ello permite afirmar se declara en la sección de resultados.}
 
 %% Declaración de uso de IA, según la sección 7 de la guía.
 %% PENDIENTE DE REVISIÓN POR LOS AUTORES antes del envío.
 \declaracionIA{Durante la preparación de este trabajo los autores usaron Claude (Anthropic; modelos Claude Sonnet y Claude Opus) entre febrero y octubre de 2026, con asistencia que excedió la corrección ortográfica y gramatical. En concreto: redacción y edición del texto en español; escritura de los guiones de análisis en Python que calculan las medianas, los cuartiles y los contrastes reportados; verificación de las referencias bibliográficas contra sus fuentes primarias y obtención de los identificadores DOI; generación de las figuras a partir de los datos; y apoyo en la reinterpretación de los escenarios tras el arbitraje. El diseño experimental, la ejecución de las inyecciones sobre el clúster, la obtención de las mediciones y las conclusiones son obra de los autores. Después de usar la herramienta, los autores revisaron y editaron el contenido, comprobaron las cifras ejecutando los guiones depositados, verificaron una por una la existencia y exactitud de las referencias, y asumen la responsabilidad íntegra por el contenido del artículo.}
 
 %% --- Paquetes y macros propias ---------------------------------------
+%% \sianonimo{A}{B}: imprime A con la opción [anonimo] o [revision], y B en
+%% la versión normal. Sirve para que el PDF de arbitraje no filtre la
+%% identidad por el DOI del depósito ni por la institución.
+\makeatletter
+\newcommand{\sianonimo}[2]{\iffar@anonimo #1\else #2\fi}
+\makeatother
+
 %% Nota al pie de una tabla. La guía pide la fuente dentro de la leyenda,
 %% pero la nota de la Tabla 1 es extensa y arriba resultaría ilegible, de
 %% modo que la leyenda queda arriba (como manda la clase) y la nota debajo.

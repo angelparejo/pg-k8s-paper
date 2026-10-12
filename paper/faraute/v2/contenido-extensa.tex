@@ -72,7 +72,7 @@ Ante el fallo del pod primario, $O$ detecta y promueve, $K$ restablece el enruta
 
 
 \section{Metodología experimental}\label{sec:metodo}
-Todo lo que se afirma en esta sección y en la siguiente es auditable: los manifiestos del clúster, de la carga y de cada inyección, el \textit{tx-verifier}, los scripts de análisis y las series de RTO y RPO por repetición están depositados en Zenodo (DOI: 10.5281/\allowbreak zenodo.23004248), y se citan en adelante por su ruta dentro del paquete.
+Todo lo que se afirma en esta sección y en la siguiente es auditable: los manifiestos del clúster, de la carga y de cada inyección, el \textit{tx-verifier}, los scripts de análisis y las series de RTO y RPO por repetición están depositados en Zenodo \sianonimo{(DOI omitido por el anonimato del arbitraje)}{(DOI: 10.5281/\allowbreak zenodo.23004248)}, y se citan en adelante por su ruta dentro del paquete.
 
 \subsection{Entorno, aislamiento y alcance}\label{sec:entorno}
 El experimento se ejecutó sobre un clúster Kubernetes en producción (v1.34.6) con PostgreSQL 16.13, CloudNativePG (CNPG) 1.28.0, red gestionada por Calico 3.31.4 y almacenamiento en red del controlador CSI de Huawei 4.10.1 (\texttt{csi.huawei.com}) sobre \textit{Fibre Channel}, aprovisionado por una \textit{StorageClass} con retención de volúmenes y enlace diferido al primer consumidor.
@@ -243,7 +243,7 @@ Spearman. Fuente: \texttt{data/f1\_rto\_cnpg.csv} y
 Los tres escenarios se articulan en torno a una misma variable, aunque no la que se anticipó. En F1 la eliminación del pod deja al plano de control sin primario; el operador registra el evento «\textit{Current primary isn't healthy, initiating a failover}» y promueve una réplica en $\approx 7{,}9$~s: es el único de los tres en que hubo una decisión de \textit{failover} que tomar. En F2 y F3 no hubo promoción porque no hubo fallo visible que la motivara —en F2 porque el inyector planteó una deriva de especificación en lugar de una indisponibilidad; en F3 porque el aislamiento fue parcial—. La variable que gobierna lo observado no es, entonces, el fallo nominal que el experimento pretende inducir, sino el estado en que el plano de control ve al primario; y ese estado lo fija tanto el fallo como el mecanismo de inyección empleado. De los cuatro escenarios diseñados, solo F1 produjo el fallo que decía producir: F4 ni siquiera llegó a ejecutarse (\refsec{sec:io}).
 
 \subsection{Alcance de las mediciones}
-\subsection{Poder de detección del RPO}
+\textit{Poder de detección del RPO.}
 El \texttt{tx-verifier} escribe de forma estrictamente secuencial: cada inserción es una invocación
 independiente de \texttt{psql} que espera su confirmación antes de lanzar la siguiente, de modo que
 hay, a lo sumo, \textbf{una transacción en ejecución}. La pérdida máxima detectable por inyección es, por
@@ -260,7 +260,7 @@ podría haber pasado inadvertido en diez repeticiones. Añádase que \textbf{sol
 transacciones del verificador}: las de pgbench, con cuatro clientes concurrentes, no se
 comprobaron, de modo que la afirmación de ausencia de pérdida no se extiende a ellas.
 
-\subsection{Rejilla de muestreo dependiente del escenario (F3)}
+\textit{Rejilla de muestreo dependiente del escenario (F3).}
 La nota de la \reftab{tab:rto} declara una granularidad de instrumento de $\approx 0{,}2$~s. Es
 correcta para F1 y F2, y \textbf{no} lo es para F3. El verificador espera 0,2~s tras un fallo y
 reintenta, pero su tiempo de espera de conexión es de 2~s (\texttt{PGCONNECT\_TIMEOUT}). Cuál de
@@ -278,7 +278,7 @@ Por eso la indisponibilidad de F3 se reporta como indistinguible de la duración
 dos decimales: la precisión aparente de las repeticiones no procede de la resolución del
 instrumento, sino de que lo medido es la duración de la propia política.
 
-\subsection{Conexiones establecidas y \textit{conntrack} (F3)}
+\textit{Conexiones establecidas y conntrack (F3).}
 Calico aplica la política a las conexiones \emph{nuevas}; las ya establecidas sobreviven hasta que
 se reinicien o expiren, porque las cadenas de política del \textit{workload endpoint} aceptan el
 tráfico ya seguido por \textit{conntrack}. Felix ofrece una opción experimental para purgar ese
@@ -289,7 +289,7 @@ siguieron con toda probabilidad activas. \textbf{Consecuencia para la Fase~2:} u
 iptables o eBPF seguirá siendo insuficiente si no purga el estado de \textit{conntrack} o emplea
 reglas que no exceptúen las conexiones establecidas.
 
-\subsection{Ventana efectiva de F2}
+\textit{Ventana efectiva de F2.}
 El manifiesto de F2 declara \texttt{duration: 10m}, pero el arnés (\texttt{run-experiment.sh})
 retira la inyección en cuanto agota su bucle de detección de promoción, de 240 sondeos a 0,5~s
 ($\approx$120~s). Como en F2 nunca hay cambio de primario, el bucle se agota siempre y la ventana
@@ -312,7 +312,7 @@ El piloto deja una lección que no se buscaba: el camino de un fallo hasta el mo
 
 El alcance es una fase piloto acotada por el entorno productivo (\refsec{sec:metodo}). Cuatro limitaciones, por orden de peso. La primera, y la que más condiciona la lectura, es la \textit{fidelidad de la inyección}: F2 no reprodujo una indisponibilidad genuina y F3 no logró aislar al primario, por lo que ninguno de los dos sostiene conclusión alguna sobre la lógica de promoción del operador; la única medición de \textit{failover} que se sostiene es la de F1. La segunda: el fallo de nodo no se reprodujo —las tres instancias residían en un único nodo elegible—, por lo que el \textit{failover} medido es intranodo y el RPO nulo de F1 debe leerse como acotado por la ausencia de enlace de red internodo. La tercera: un solo operador y una sola categoría de almacenamiento, con el contraste entre operadores sostenido analíticamente (\reftab{tab:responsabilidad}) y no medido. La cuarta: F4 no fue ejecutable (\refsec{sec:io}). El valor del piloto no está, pues, en cuántos comportamientos caracteriza, sino en haber medido uno con precisión y haber identificado por qué los otros tres no eran medibles con el instrumental empleado.
 
-Lo que este piloto no pudo resolver queda asignado a una Fase~2 ya diseñada, que se ejecutará en un clúster multinodo dedicado y fuera de producción, en el marco del Trabajo de Especialización en Desarrollo de Software de la FaCyT-UC. Su requisito previo es un protocolo de validación del inyector: cada escenario deberá acreditar, mediante los eventos del operador y el estado del pod ante el plano de control, que indujo el fallo que nombra antes de que su medición se dé por válida. Sobre esa base se abordan seis cuestiones. F2 se repetirá con terminación directa del proceso (\texttt{container-kill} o \texttt{SIGKILL} periódico), sin tocar la especificación del pod, para contrastar el resultado con los 36,7~s de la reconciliación. F3 se reconstruirá con aislamiento completo por iptables o eBPF, que cierre también el tráfico de \textit{host}, y permitirá ejercitar la comprobación \texttt{isolationCheck}. El fallo de nodo se probará con antiafinidad \emph{obligatoria}, midiendo el desalojo y la reasociación del volumen. F4 se inyectará por \texttt{io.max} de \textit{cgroups}~v2, sin FUSE. El retardo de replicación se instrumentará registrando \texttt{pg\_current\_wal\_lsn()} y \texttt{pg\_last\_wal\_replay\_lsn()} bajo una carga de escritura intensiva, para dar poder de detección al RPO. Y el contraste entre operadores y clases de almacenamiento, hoy solo analítico, pasará a ser empírico. Todo ello bajo un diseño factorial 2$\times$2: replicación asíncrona frente a síncrona por quórum, y topología colocalizada frente a distribuida.
+Lo que este piloto no pudo resolver queda asignado a una Fase~2 ya diseñada, que se ejecutará en un clúster multinodo dedicado y fuera de producción, \sianonimo{en el marco de un trabajo de especialización}{en el marco del Trabajo de Especialización en Desarrollo de Software de la FaCyT-UC}. Su requisito previo es un protocolo de validación del inyector: cada escenario deberá acreditar, mediante los eventos del operador y el estado del pod ante el plano de control, que indujo el fallo que nombra antes de que su medición se dé por válida. Sobre esa base se abordan seis cuestiones. F2 se repetirá con terminación directa del proceso (\texttt{container-kill} o \texttt{SIGKILL} periódico), sin tocar la especificación del pod, para contrastar el resultado con los 36,7~s de la reconciliación. F3 se reconstruirá con aislamiento completo por iptables o eBPF, que cierre también el tráfico de \textit{host}, y permitirá ejercitar la comprobación \texttt{isolationCheck}. El fallo de nodo se probará con antiafinidad \emph{obligatoria}, midiendo el desalojo y la reasociación del volumen. F4 se inyectará por \texttt{io.max} de \textit{cgroups}~v2, sin FUSE. El retardo de replicación se instrumentará registrando \texttt{pg\_current\_wal\_lsn()} y \texttt{pg\_last\_wal\_replay\_lsn()} bajo una carga de escritura intensiva, para dar poder de detección al RPO. Y el contraste entre operadores y clases de almacenamiento, hoy solo analítico, pasará a ser empírico. Todo ello bajo un diseño factorial 2$\times$2: replicación asíncrona frente a síncrona por quórum, y topología colocalizada frente a distribuida.
 
 \section{Conclusiones}\label{sec:concl}
 Este trabajo midió el coste del \textit{failover} de CloudNativePG en un clúster productivo, con inyección controlada de fallos y un verificador que registra, a nivel de \textit{commit}, qué escrituras confirmadas sobreviven. Ante la eliminación del pod primario promovió una réplica en las diez repeticiones, con un RTO mediano de 7,9~s y sin pérdida detectada: la tabla de verdad resultó contigua a lo largo de 613\,253 identificadores. Es una cifra de producción, con las restricciones que se declaran en la \refsec{sec:disc}.

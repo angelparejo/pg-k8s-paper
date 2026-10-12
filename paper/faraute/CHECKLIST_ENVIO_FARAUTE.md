@@ -194,3 +194,21 @@ Todos satisfechos por la plantilla LaTeX; deja constancia al revisar el PDF:
 - [ ] Publicar la v1.1 en Zenodo (el concept DOI no cambia)
 - [ ] ORCID de la coautora
 - [ ] Limpiar los commits locales antes de empujar (llevan identificadores de infraestructura)
+
+---
+
+## Reenvío en la plantilla v2 (2026-10-11)
+
+- [x] Cadena de herramientas instalada y verificada — `scripts/instalar_toolchain_faraute.sh`
+- [x] Bibliografía migrada a BibTeX/APA 7: 30 entradas, 15 con DOI verificado contra Crossref
+- [x] **Versión extensa, 11 páginas** (límite 20): 0 errores, 0 overfull, 0 refs sin resolver, 0 avisos de la clase
+- [x] Versión corta conservada (9 páginas) por si la revista confirma otro límite
+- [x] PDF de arbitraje con la opción `revision`: anónimo y con líneas numeradas
+- [x] **Auditoría de anonimato automática**: el script aborta si el PDF filtra autores, correo, institución o el DOI del depósito
+- [x] Carta de envío con tipo de contribución, originalidad, formato y declaración de IA
+- [x] Carta de respuesta punto por punto, con las referencias de sección actualizadas
+- [x] **Paquete** — `paper/faraute/v2/envio-faraute.zip`, reproducible con `scripts/armar_envio_faraute_v2.sh`.
+      Verificado: las fuentes compilan desde cero en un directorio limpio (11 pp, 0 errores)
+- [ ] Confirmar con la revista el **tipo de contribución** y dónde quieren el **ORCID** (la clase no tiene campo)
+- [ ] Validar el reparto **CRediT** y la **declaración de IA** entre los dos autores
+- [ ] Limpiar los commits locales antes de empujar (llevan identificadores de infraestructura)
